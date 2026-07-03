@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Codex 部署故障解决库</title>
+<style>
+:root{
+  --bg:#f5f8fc;
+  --panel:#ffffff;
+  --ink:#102033;
+  --muted:#607086;
+  --line:#dbe6f1;
+  --brand:#0f63ff;
+  --brand2:#13c7bd;
+  --dark:#071527;
+  --danger:#ef4444;
+  --warn:#f59e0b;
+  --ok:#10b981;
+  --shadow:0 18px 50px rgba(15,35,70,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(19,199,189,.16),transparent 30%),
+    radial-gradient(circle at 90% 5%,rgba(15,99,255,.14),transparent 32%),
+    var(--bg);
+  color:var(--ink);
+}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit}
+.nav{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter: blur(18px);
+  background:rgba(245,248,252,.82);
+  border-bottom:1px solid rgba(219,230,241,.9);
+}
+.nav-inner{
+  max-width:1280px;margin:auto;padding:12px 22px;display:flex;gap:16px;align-items:center;justify-content:space-between
+}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900;letter-spacing:.2px}
+.logo-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 10px 25px rgba(15,99,255,.25)}
+.nav-links{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{padding:8px 10px;border-radius:999px;font-size:13px;color:#31445c}
+.nav-links a:hover{background:white;box-shadow:0 8px 20px rgba(10,30,60,.08)}
+.container{max-width:1280px;margin:0 auto;padding:26px 22px 80px}
+.hero{
+  margin-top:20px;
+  border-radius:32px;
+  padding:44px;
+  background:
+    linear-gradient(135deg,rgba(7,21,39,.98),rgba(12,41,82,.96)),
+    radial-gradient(circle at 20% 20%,rgba(19,199,189,.3),transparent 35%);
+  color:white;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:relative;
+}
+.hero:after{
+  content:"";position:absolute;right:-100px;top:-100px;width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(19,199,189,.28),transparent 65%);
+}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08);font-size:13px;color:#d9f7ff}
+h1{font-size:clamp(34px,5vw,66px);line-height:1.04;margin:20px 0 16px;letter-spacing:-1.8px}
+.hero p{font-size:18px;color:#dbeafe;line-height:1.8;max-width:880px}
+.search-row{display:flex;gap:12px;margin-top:28px;position:relative;z-index:2}
+.search{flex:1;background:white;border:0;border-radius:18px;padding:18px 20px;font-size:16px;outline:none;box-shadow:0 16px 35px rgba(0,0,0,.18)}
+.primary-btn{border:0;border-radius:18px;padding:0 24px;font-weight:800;color:white;background:linear-gradient(135deg,var(--brand),var(--brand2));cursor:pointer;box-shadow:0 14px 34px rgba(15,99,255,.35)}
+.secondary-btn{border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:white;color:var(--ink);cursor:pointer;font-weight:700}
+.secondary-btn:hover{border-color:#b7c8d9;box-shadow:0 8px 20px rgba(10,30,60,.08)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px;position:relative;z-index:2}
+.kpi{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:18px}
+.kpi strong{display:block;font-size:24px}
+.kpi span{font-size:13px;color:#c7d9ee}
+.section{margin-top:28px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 16px}
+.section h2{font-size:28px;margin:0;letter-spacing:-.5px}
+.section .desc{color:var(--muted);line-height:1.7;margin:8px 0 0;max-width:760px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 10px 30px rgba(10,30,60,.06)}
+.platform-card{position:relative;overflow:hidden}
+.platform-card:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.platform-card h3{margin:8px 0 8px;font-size:20px}
+.platform-card p,.card p{color:var(--muted);line-height:1.65}
+.tagline{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{font-size:12px;padding:5px 8px;border-radius:999px;background:#edf5ff;color:#28507e;border:1px solid #dbeafe}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.select,input.filter,textarea{
+  width:100%;border:1px solid var(--line);background:white;border-radius:14px;padding:12px 14px;color:var(--ink);outline:none;
+}
+textarea{min-height:110px;resize:vertical;line-height:1.65}
+.diagnosis-result{margin-top:16px;background:linear-gradient(180deg,#ffffff,#f7fbff);border:1px solid var(--line);border-radius:22px;padding:20px}
+.steps{counter-reset:step;display:grid;gap:10px;margin:12px 0 0}
+.step{display:flex;gap:12px;align-items:flex-start;background:#f8fbff;border:1px solid #e4edf7;border-radius:14px;padding:12px}
+.step:before{counter-increment:step;content:counter(step);min-width:26px;height:26px;border-radius:999px;background:var(--dark);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.filterbar{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:12px;margin-bottom:16px}
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.case-card{cursor:pointer;transition:.18s transform,.18s box-shadow;position:relative;overflow:hidden}
+.case-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.case-title{font-weight:900;font-size:17px;line-height:1.35;margin:10px 0}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-size:12px;padding:5px 8px;border-radius:999px;border:1px solid var(--line);background:#f9fbfe;color:#455a72}
+.level-低{background:#ecfdf5;color:#047857;border-color:#bbf7d0}
+.level-中{background:#fffbeb;color:#b45309;border-color:#fde68a}
+.level-高,.level-致命{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+.mock{
+  background:#0b1220;color:#dbeafe;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);margin-top:14px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)
+}
+.mock-top{display:flex;gap:6px;align-items:center;padding:10px 12px;background:#111827;border-bottom:1px solid rgba(255,255,255,.08)}
+.dot{width:9px;height:9px;border-radius:50%;background:#ef4444}.dot:nth-child(2){background:#f59e0b}.dot:nth-child(3){background:#10b981}
+.mock-body{padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.65;min-height:116px}
+.err{color:#fb7185}.ok{color:#34d399}.warn{color:#fbbf24}.cyan{color:#67e8f9}
+.case-actions{display:flex;gap:8px;margin-top:14px}
+.icon-btn{border:1px solid var(--line);background:white;border-radius:12px;padding:8px 10px;cursor:pointer;font-size:13px}
+.icon-btn.active{background:#eaf3ff;border-color:#b9d6ff;color:#0f63ff;font-weight:800}
+.command-list{display:grid;gap:12px}
+.command-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.code{white-space:pre-wrap;background:#09111f;color:#dbeafe;border-radius:14px;padding:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;overflow:auto}
+.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.prompt-card details{cursor:pointer}
+.prompt-card summary{font-weight:900;margin-bottom:10px}
+.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.check-item{display:flex;gap:10px;align-items:center;background:#f8fbff;border:1px solid #e4edf7;border-radius:14px;padding:12px}
+.check-item input{width:18px;height:18px}
+.glossary{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.glossary div{background:#f8fbff;border:1px solid #e4edf7;border-radius:14px;padding:14px}
+.glossary b{display:block;margin-bottom:5px}
+.side-panels{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.empty{color:var(--muted);padding:18px;background:#f8fbff;border-radius:14px;border:1px dashed #c9d8e8}
+.toast{position:fixed;right:18px;bottom:18px;background:#071527;color:white;padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;z-index:100}
+.toast.show{opacity:1;transform:translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(5,12,24,.64);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:42px 18px;z-index:90;overflow:auto}
+.modal.show{display:flex}
+.modal-box{background:white;border-radius:28px;max-width:980px;width:100%;box-shadow:0 40px 100px rgba(0,0,0,.34);overflow:hidden}
+.modal-head{padding:24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.modal-body{padding:24px;display:grid;gap:18px}
+.close{border:0;background:#f1f5f9;border-radius:12px;width:38px;height:38px;cursor:pointer;font-size:22px}
+.footer{margin-top:40px;text-align:center;color:var(--muted);font-size:13px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.full{grid-column:1/-1}
+.small{font-size:12px;color:var(--muted)}
+.price-band{display:inline-flex;gap:8px;align-items:center;background:#ecfeff;color:#0e7490;border:1px solid #a5f3fc;border-radius:999px;padding:8px 12px;font-weight:800}
+@media (max-width:980px){
+  .grid-4,.grid-3,.case-grid,.prompt-grid,.side-panels{grid-template-columns:1fr 1fr}
+  .controls,.filterbar{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+}
+@media (max-width:680px){
+  .hero{padding:28px 22px;border-radius:24px}
+  .search-row{flex-direction:column}
+  .primary-btn{padding:16px}
+  .grid-4,.grid-3,.grid-2,.case-grid,.prompt-grid,.side-panels,.controls,.filterbar,.checklist,.glossary,.form-grid{grid-template-columns:1fr}
+  .nav-inner{align-items:flex-start;flex-direction:column}
+  .nav-links{justify-content:flex-start}
+  .command-card{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo"><span class="logo-mark"></span><span>Codex Deploy Fix Library</span></a>
+    <div class="nav-links">
+      <a href="#diagnose">诊断器</a><a href="#cases">案例库</a><a href="#screenshots">错误截图</a><a href="#commands">命令库</a><a href="#prompts">Codex 提示词</a><a href="#config">配置生成器</a><a href="#checklist">检查清单</a><a href="#collect">案例收集</a>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <section class="hero">
+    <span class="badge">HTML 检索工具 · 错误截图库 · 修复命令库 · 299–799 元虚拟产品</span>
+    <h1>Codex 部署故障解决库</h1>
+    <p>用 Codex 做完项目不会上线？把报错关键词、平台名称、日志片段输入进来，直接找到修复路径、复制命令、复制 Codex 提示词。小白也能从“看不懂红字”走到“知道下一步怎么修”。</p>
+    <div class="search-row">
+      <input id="heroSearch" class="search" placeholder="输入错误关键词，例如：dist not found、404、env、npm run build、blank page、Jekyll、output directory" />
+      <button class="primary-btn" onclick="jumpSearch()">开始诊断</button>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><strong id="caseCount">45+</strong><span>高频部署错误案例</span></div>
+      <div class="kpi"><strong>4</strong><span>主流部署平台覆盖</span></div>
+      <div class="kpi"><strong>15</strong><span>Codex 修复提示词</span></div>
+      <div class="kpi"><strong>本地保存</strong><span>收藏 / 已解决 / 自建案例</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><h2>四大平台入口</h2><p class="desc">先判断你正在用哪个平台，再看项目类型和故障表现。小白最容易错的不是代码，而是 Build Command、Output Directory、环境变量和路由 fallback。</p></div>
+      <span class="price-band">建议售价：299–799 元</span>
+    </div>
+    <div class="grid-4">
+      <div class="card platform-card"><h3>Vercel</h3><p>适合 Next.js、Vite、React、落地页。常见坑：Output Directory、Root Directory、环境变量、SPA rewrite。</p><div class="tagline"><span class="tag">build logs</span><span class="tag">dist</span><span class="tag">rewrite</span></div></div>
+      <div class="card platform-card"><h3>Netlify</h3><p>适合静态站和前端 SPA。常见坑：Publish directory、_redirects、Node 版本、环境变量作用域。</p><div class="tagline"><span class="tag">publish</span><span class="tag">_redirects</span><span class="tag">404</span></div></div>
+      <div class="card platform-card"><h3>Cloudflare Pages</h3><p>适合静态站、轻量 Functions、全球 CDN。常见坑：build output、wrangler、分支、缓存。</p><div class="tagline"><span class="tag">Pages</span><span class="tag">wrangler</span><span class="tag">env</span></div></div>
+      <div class="card platform-card"><h3>GitHub Pages</h3><p>适合纯 HTML、文档页、静态项目。常见坑：index.html、branch/folder、Vite base、.nojekyll。</p><div class="tagline"><span class="tag">branch</span><span class="tag">base</span><span class="tag">Jekyll</span></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="diagnose">
+    <div class="section-head"><div><h2>部署故障快速诊断器</h2><p class="desc">选择平台、项目类型和故障表现，立即得到排查顺序、修复命令和可复制给 Codex 的提示词。</p></div></div>
+    <div class="card">
+      <div class="controls">
+        <select class="select" id="diagPlatform"><option>不确定</option><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option></select>
+        <select class="select" id="diagProject"><option>不确定</option><option>纯 HTML</option><option>Vite</option><option>React</option><option>Vue</option><option>Next.js</option><option>Astro</option><option>Tailwind 静态页</option></select>
+        <select class="select" id="diagSymptom"><option>构建失败</option><option>页面空白</option><option>404</option><option>路径错误</option><option>环境变量错误</option><option>域名异常</option><option>依赖安装失败</option><option>本地能跑线上不行</option><option>上传后没有更新</option></select>
+        <select class="select" id="diagSkill"><option>完全小白</option><option>会复制命令</option><option>会看一点日志</option><option>有 GitHub 基础</option></select>
+      </div>
+      <div id="diagnosis" class="diagnosis-result"></div>
+    </div>
+  </section>
+
+  <section class="section" id="cases">
+    <div class="section-head"><div><h2>错误案例检索库</h2><p class="desc">输入报错关键词，按平台、难度、项目类型筛选。每个案例都有模拟错误截图、典型日志、根因解释、修复步骤、命令和 Codex 提示词。</p></div></div>
+    <div class="filterbar">
+      <input class="filter" id="q" placeholder="搜索：dist、404、env、blank、node、router、Jekyll..." />
+      <select class="select" id="platformFilter"><option value="all">全部平台</option><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option></select>
+      <select class="select" id="levelFilter"><option value="all">全部难度</option><option>低</option><option>中</option><option>高</option><option>致命</option></select>
+      <select class="select" id="typeFilter"><option value="all">全部项目</option><option>Vite</option><option>React</option><option>Next.js</option><option>纯 HTML</option><option>通用</option><option>Monorepo</option></select>
+    </div>
+    <div id="caseGrid" class="case-grid"></div>
+  </section>
+
+  <section class="section" id="screenshots">
+    <div class="section-head"><div><h2>错误截图库</h2><p class="desc">用 CSS 模拟真实部署后台错误面板。适合后续持续替换为你收集的真实错误截图、日志和修复路径。</p></div></div>
+    <div id="shotGrid" class="grid-3"></div>
+  </section>
+
+  <section class="section side-panels">
+    <div class="card">
+      <h2>我的收藏</h2>
+      <p class="desc">收藏你经常遇到的部署错误，方便私域交付、售后答疑和案例复盘。</p>
+      <div id="favList"></div>
+    </div>
+    <div class="card">
+      <h2>最近查看</h2>
+      <p class="desc">自动记录最近打开的案例。</p>
+      <div id="recentList"></div>
+    </div>
+  </section>
+
+  <section class="section" id="commands">
+    <div class="section-head"><div><h2>修复命令库</h2><p class="desc">每条命令都说明在哪里用、解决什么问题、有什么风险。小白不要复制不理解的危险命令。</p></div></div>
+    <div id="commandList" class="command-list"></div>
+  </section>
+
+  <section class="section" id="prompts">
+    <div class="section-head"><div><h2>Codex 修复提示词库</h2><p class="desc">把日志、文件结构、package.json 和平台信息粘进去，让 Codex 先定位根因，再做最小修复。</p></div></div>
+    <div id="promptGrid" class="prompt-grid"></div>
+  </section>
+
+  <section class="section" id="config">
+    <div class="section-head"><div><h2>平台配置生成器</h2><p class="desc">选择平台和项目类型，自动生成 build command、output/publish directory、Node 设置和特殊文件建议。</p></div></div>
+    <div class="card">
+      <div class="controls">
+        <select class="select" id="cfgPlatform"><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option></select>
+        <select class="select" id="cfgProject"><option>Vite</option><option>React SPA</option><option>Next.js</option><option>纯 HTML</option><option>Vue</option><option>Astro</option></select>
+        <input class="filter" id="repoName" placeholder="GitHub Pages 仓库名，可选，例如 codex-tool" />
+        <button class="primary-btn" onclick="generateConfig()">生成配置</button>
+      </div>
+      <div id="configResult" class="diagnosis-result"></div>
+    </div>
+  </section>
+
+  <section class="section" id="checklist">
+    <div class="section-head"><div><h2>部署前检查清单</h2><p class="desc">勾选状态会保存在浏览器本地。适合交付给小白用户，每次上线前照着检查。</p></div></div>
+    <div class="card"><div id="checklistBox" class="checklist"></div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><h2>小白术语解释</h2><p class="desc">把专业部署术语翻译成人话，降低售后沟通成本。</p></div></div>
+    <div id="glossary" class="glossary"></div>
+  </section>
+
+  <section class="section" id="collect">
+    <div class="section-head"><div><h2>真实案例持续收集系统</h2><p class="desc">护城河来自真实错误截图、真实日志、真实修复路径。这里可以把新案例保存到浏览器本地，并导出成 JSON 继续扩容。</p></div></div>
+    <div class="card">
+      <div class="form-grid">
+        <input class="filter" id="newTitle" placeholder="错误标题，例如：Vercel dist not found" />
+        <select class="select" id="newPlatform"><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option></select>
+        <input class="filter" id="newType" placeholder="项目类型，例如 Vite / React / 纯 HTML" />
+        <select class="select" id="newLevel"><option>低</option><option>中</option><option>高</option><option>致命</option></select>
+        <textarea class="full" id="newLog" placeholder="粘贴错误日志 / 错误截图 OCR 文本"></textarea>
+        <textarea class="full" id="newFix" placeholder="记录修复路径：第 1 步、第 2 步、第 3 步..."></textarea>
+        <button class="primary-btn" onclick="saveCustomCase()">保存为本地案例</button>
+        <button class="secondary-btn" onclick="exportCustomCases()">复制本地案例 JSON</button>
+      </div>
+      <div id="customList" style="margin-top:16px"></div>
+    </div>
+  </section>
+
+  <div class="footer">Codex 部署故障解决库 · 可直接保存为 index.html 部署上线 · 本地数据保存在你的浏览器里</div>
+</main>
+
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <div class="meta" id="modalMeta"></div>
+        <h2 id="modalTitle" style="margin:10px 0 0"></h2>
+      </div>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div id="toast" class="toast">已复制</div>
+
+<script>
+const baseCases = [["vercel-build-failed-code-1", "Vercel", "Vite / React", "Build failed：npm run build exited with 1", "build failed npm run build exit code 1 vite react", "高", "构建阶段失败，部署记录显示红色 Failed。", "Error: Command \"npm run build\" exited with 1", "package.json 的 build 脚本执行失败，通常是代码报错、依赖缺失或类型检查失败。", "平台不是在“打开网页”时报错，而是在把项目打包成线上文件时就停住了。", ["在本地项目根目录执行 npm run build，复现同样错误。", "从日志最后 20 行找第一个 Error，不要只看 Failed。", "让 Codex 根据 package.json、vite.config.js 和报错日志先定位根因。", "修复后再次执行 npm run build，成功后再 git push。"], ["npm install", "npm run build", "git add . && git commit -m \"fix build error\" && git push"], "你是部署排障专家。我的项目在 Vercel 部署时 npm run build exited with 1。请先阅读我粘贴的 package.json、构建日志和相关源码，只分析根因，不要直接大面积重构。请输出：根因、必须修改的文件、最小修改方案、本地验证命令、重新部署步骤。日志如下：", "部署前永远先在本地跑一次 npm run build。", ["build", "npm", "vite"], "15-40 分钟"], ["vercel-output-dist-missing", "Vercel", "Vite / Vue / React", "No Output Directory named dist found", "no output directory dist found output directory", "中", "构建看似结束，但平台找不到要发布的 dist 文件夹。", "Error: No Output Directory named \"dist\" found after the Build completed", "构建产物目录和 Vercel 配置的 Output Directory 不一致，或者 build 没有真正生成 dist。", "平台像快递员，知道要送货，但你告诉它去 dist 取包裹，结果这个文件夹不存在。", ["本地执行 npm run build，看根目录是否生成 dist。", "Vercel Project Settings → Build & Development Settings → Output Directory 改成真实产物目录。", "Vite 默认一般是 dist，Next 不要手动填 dist。", "如果是 monorepo，确认 Root Directory 指向子项目。"], ["npm run build", "ls dist"], "你是 Vercel 部署专家。我的部署报错 No Output Directory named dist found。请检查 package.json scripts、项目框架、构建产物目录、vercel 设置应该如何填写。请给我小白可执行步骤。项目文件如下：", "不要凭感觉填 output directory，先本地构建确认产物目录。", ["dist", "output", "vercel"], "10-25 分钟"], ["vercel-next-wrong-preset", "Vercel", "Next.js", "Next.js 项目 Framework Preset 配置错误", "nextjs framework preset wrong vercel", "中", "Next 项目部署后 404、函数异常或构建配置很怪。", "Detected framework mismatch / invalid output directory for Next.js", "Next.js 应使用 Vercel 自动识别，不应当手动设置成静态站点模式。", "Next 项目不是普通 HTML 文件夹，它需要平台按 Next 的规则构建。", ["取消手动 Output Directory override。", "Framework Preset 选择 Next.js 或让 Vercel 自动检测。", "确认 package.json 有 next build。", "重新部署。"], ["cat package.json", "npm run build"], "请作为 Next.js + Vercel 专家，检查我的项目是否错误使用了静态部署配置。请重点检查 vercel.json、package.json、next.config.js 和 Vercel build settings，输出最小修复步骤。", "Next 项目部署到 Vercel 时尽量使用零配置。", ["next", "preset", "vercel"], "15-30 分钟"], ["vercel-env-missing", "Vercel", "Next.js / React", "环境变量缺失导致线上接口报错", "env environment variable undefined api key vercel", "高", "本地正常，线上报 500、接口失败或页面数据为空。", "ReferenceError: process.env.API_KEY is undefined", "本地 .env 文件没有同步到 Vercel 的 Environment Variables。", "你电脑里有钥匙，但线上服务器没有这把钥匙。", ["打开 Vercel Project Settings → Environment Variables。", "把 .env 中需要上线的变量逐个添加。", "注意前端变量可能需要 VITE_ 或 NEXT_PUBLIC_ 前缀。", "保存后重新部署。"], ["cat .env.example", "npm run build"], "我的项目本地正常，Vercel 线上环境变量 undefined。请检查变量命名、前端变量前缀、服务端变量使用位置，并给出 Vercel 后台应该怎么配置。", "维护 .env.example，不要把真实密钥提交到 GitHub。", ["env", "api", "500"], "20-45 分钟"], ["vercel-blank-page", "Vercel", "Vite / React", "部署成功但页面空白", "blank page white screen vite assets vercel", "中", "部署状态是 Ready，但打开网址只有白屏。", "Failed to load module script / assets not found", "资源路径、base、路由或 JS 构建错误导致页面加载失败。", "网页外壳打开了，但里面的 JS 文件没加载成功。", ["打开浏览器开发者工具 Console 和 Network。", "检查是否有 404 的 JS/CSS 资源。", "Vite 项目检查 vite.config.js 的 base。", "确认路由 fallback。"], ["npm run build", "npm run preview"], "我的 Vercel 部署成功但页面白屏。请根据浏览器 Console、Network 404、vite.config.js、路由配置判断原因，并给最小修复代码。", "上线后用无痕窗口和手机都打开检查。", ["blank", "vite", "assets"], "15-35 分钟"], ["vercel-react-router-404", "Vercel", "React Router", "React Router 刷新页面 404", "react router refresh 404 vercel rewrite", "中", "首页能打开，进入子页面后刷新就 404。", "404: NOT_FOUND /dashboard", "SPA 路由需要把所有路径重写到 index.html。", "你访问 /dashboard 时，服务器以为真有 dashboard 文件夹。", ["在项目根目录创建 vercel.json。", "添加 rewrites 到 /index.html。", "提交后重新部署。"], ["cat > vercel.json <<EOF\n{\"rewrites\":[{\"source\":\"/(.*)\",\"destination\":\"/index.html\"}]}\nEOF", "git add vercel.json && git commit -m \"add spa rewrite\" && git push"], "请帮我修复 Vercel 上 React Router 刷新 404。请生成正确的 vercel.json，并说明文件放在哪、为什么这样写、如何验证。", "所有 SPA 项目上线前都测试刷新子路由。", ["router", "404", "rewrite"], "8-15 分钟"], ["vercel-node-version", "Vercel", "通用", "Node 版本不匹配导致构建失败", "node version mismatch engine vercel", "中", "本地能 build，Vercel 失败，日志出现 node/npm engine。", "error Unsupported engine: wanted node >=18", "线上 Node 版本与项目依赖要求不一致。", "你本地用的是一台新机器，平台默认可能用另一台机器。", ["查看本地 node -v。", "在 package.json 加 engines 或在 Vercel 设置 Node 版本。", "确保锁文件重新生成。"], ["node -v", "npm -v", "npm run build"], "请检查我的 Node 版本不匹配问题。根据错误日志和 package.json，告诉我应该在 engines 中写什么，并给出 Vercel 配置步骤。", "新项目固定 Node 版本，避免换电脑/平台后失败。", ["node", "engine"], "10-20 分钟"], ["vercel-lock-conflict", "Vercel", "通用", "pnpm-lock 与 package-lock 冲突", "pnpm lock package-lock conflict vercel", "低", "构建安装依赖阶段很慢或失败。", "Found multiple lockfiles / package manager mismatch", "仓库里存在多个包管理器锁文件，平台不知道按哪个装依赖。", "你同时给了平台两份购物清单。", ["确定使用 npm / pnpm / yarn 之一。", "删除不用的锁文件。", "重新安装依赖并提交。"], ["rm -f package-lock.json yarn.lock pnpm-lock.yaml", "npm install", "git add . && git commit -m \"normalize lockfile\""], "请帮我检查包管理器锁文件冲突。请判断项目应该使用 npm/pnpm/yarn 哪一个，告诉我应该保留和删除哪些文件。", "团队或个人项目统一包管理器。", ["lockfile", "npm", "pnpm"], "8-15 分钟"], ["vercel-missing-dep", "Vercel", "通用", "依赖没有写进 package.json", "module not found dependency package json vercel", "中", "本地能跑，Vercel 提示 Cannot find module。", "Module not found: Can't resolve 'xxx'", "依赖可能只装在本地 node_modules，没有保存到 package.json。", "你电脑里有这个插件，但仓库清单里没写，线上不会自动安装。", ["执行 npm install 包名 --save。", "确认 package.json dependencies 出现该依赖。", "提交 package.json 和 lock 文件。"], ["npm install <package-name>", "npm run build"], "我的 Vercel 构建提示 Module not found。请根据日志找出缺失依赖，并告诉我 npm install 哪个包，哪些文件需要提交。", "不要手动复制 node_modules；依赖必须进 package.json。", ["module", "dependency"], "10-20 分钟"], ["vercel-ts-error", "Vercel", "TypeScript", "TypeScript 类型错误导致构建失败", "typescript type error tsc build vercel", "中", "开发环境没报错，部署构建时 TypeScript 报错。", "Type error: Property 'x' does not exist on type", "构建时执行了更严格的类型检查。", "本地预览可能能跑，但正式打包会考试，类型错就不过。", ["本地执行 npm run build。", "定位第一个 TS error。", "让 Codex 做最小类型修复，不要 any 满天飞。"], ["npm run build", "npx tsc --noEmit"], "请作为 TypeScript 审查员，帮我修复部署时的类型错误。要求最小改动、解释每个类型修改原因、保留功能不变。", "上线前执行类型检查。", ["typescript", "type"], "20-60 分钟"], ["vercel-eslint-error", "Vercel", "Next.js / React", "ESLint 报错导致构建失败", "eslint build failed vercel", "低", "Vercel 日志显示 lint error，构建中断。", "Failed to compile. ESLint: no-unused-vars", "生产构建把 lint 当作阻断项。", "代码能跑不代表风格检查通过。", ["先修复真正的未使用变量、未定义变量。", "不要优先关闭 lint。", "紧急情况下可调整构建配置，但要记录风险。"], ["npm run lint", "npm run build"], "请帮我修复 Vercel 构建中的 ESLint 错误。请不要直接关闭 ESLint，先给出最小代码清理方案。", "开发时保持 lint 通过。", ["eslint", "lint"], "10-30 分钟"], ["vercel-case-path", "Vercel", "通用", "图片路径大小写问题", "image path case sensitive vercel", "低", "本地图片正常，线上图片 404。", "GET /Images/logo.png 404", "Windows/Mac 对大小写不敏感，线上 Linux 区分大小写。", "你本地叫 Logo.png 也能找，线上必须一字不差。", ["检查真实文件名大小写。", "修正 import 或 src 路径。", "提交重命名时注意 Git 可能忽略大小写变化。"], ["git mv Logo.png logo-temp.png && git mv logo-temp.png logo.png", "npm run build"], "请检查我的静态资源路径大小写问题。根据报错路径和文件树，输出需要改的 import/src 路径。", "文件名统一小写加短横线。", ["image", "case", "404"], "10-25 分钟"], ["vercel-api-key-leak", "Vercel", "通用", "API Key 写死导致安全和运行问题", "api key exposed hardcoded vercel env", "高", "部署后接口异常，或密钥暴露在前端代码里。", "API key is invalid / request unauthorized", "密钥不应直接写进前端仓库，应通过环境变量或服务端代理。", "你把银行卡密码写在公开网页里了。", ["搜索代码中的 key/token/secret。", "移入环境变量。", "前端只能使用公开变量，私密 key 放服务端。"], ["grep -R \"API_KEY\\|SECRET\\|TOKEN\" ."], "请审查我的项目是否把 API Key 写死或暴露在前端。请给安全修复方案，说明哪些变量能 NEXT_PUBLIC/VITE_，哪些必须服务端保存。", "任何私密密钥都不要提交到 GitHub。", ["security", "env"], "30-90 分钟"], ["vercel-monorepo-root", "Vercel", "Monorepo", "Monorepo Root Directory 配置错误", "monorepo root directory vercel", "中", "仓库里有多个项目，Vercel 在错误目录执行 build。", "No package.json found / command not found", "Vercel 的 Root Directory 没指向真正项目目录。", "平台进错房间了，所以找不到你的项目。", ["确认项目真实目录，例如 apps/web。", "Vercel Settings → Root Directory 改成该目录。", "Build command 以该目录为基准。"], ["pwd", "ls", "find . -maxdepth 3 -name package.json"], "我的仓库是 monorepo，Vercel 找不到 package.json 或构建失败。请根据文件树判断 Root Directory 应该填什么。", "多项目仓库上线前画清目录结构。", ["monorepo", "root"], "15-30 分钟"], ["vercel-preset-wrong", "Vercel", "通用", "Framework Preset 选错", "framework preset wrong vercel vite static", "低", "平台自动填了奇怪的 build/output 配置。", "Build settings do not match project framework", "框架预设不匹配导致命令或输出目录错误。", "你用 Vite，却让平台按 Next 或静态 HTML 来处理。", ["检查 package.json 确认框架。", "Vercel Settings 中改回正确 preset 或 Other。", "手动确认 build command/output。"], ["cat package.json"], "请根据 package.json 判断我的项目框架，并告诉我 Vercel Framework Preset、Build Command、Output Directory 应该怎么填。", "不要只看页面类型，要看构建工具。", ["preset", "framework"], "8-15 分钟"], ["netlify-publish-dir", "Netlify", "Vite / React", "Publish directory 填错", "netlify publish directory dist 404", "中", "部署成功但打开是 Page not found。", "Page not found: Looks like you've followed a broken link", "Netlify 发布的不是构建产物目录。", "你把源代码文件夹发布出去了，而不是打包后的网页。", ["Site configuration → Build & deploy。", "Build command 填 npm run build。", "Publish directory 填 dist 或 build。", "重新部署。"], ["npm run build", "ls dist"], "请帮我判断 Netlify Publish directory 应该填什么。我的项目类型、package.json 和构建日志如下：", "每次换框架都重新确认 publish directory。", ["netlify", "publish", "404"], "10-20 分钟"], ["netlify-build-command", "Netlify", "通用", "Build command 填错", "netlify build command wrong", "中", "Netlify 构建直接失败，提示 command not found。", "Command failed with exit code 127: npm run deploy", "Build command 写了不存在的 script。", "平台照你写的命令执行，但你的项目没有这个命令。", ["打开 package.json 看 scripts。", "Build command 必须对应 scripts 中存在的命令。", "常见为 npm run build。"], ["cat package.json", "npm run build"], "请检查我的 Netlify Build command 是否写错。根据 package.json scripts 输出正确配置。", "不要复制别人项目的 build command。", ["command", "scripts"], "8-15 分钟"], ["netlify-npm-build-fail", "Netlify", "Vite / React", "npm run build command failed", "netlify npm run build failed", "高", "构建日志出现 failed during stage building site。", "Build script returned non-zero exit code: 2", "代码或依赖在生产构建中失败。", "Netlify 没坏，是你的项目打包考试没通过。", ["先本地 npm run build。", "修复第一个 error。", "清理依赖后重试。"], ["npm install", "npm run build"], "我的 Netlify 日志显示 npm run build failed。请先定位第一个真实错误，再给修复方案。", "提交前本地构建。", ["build", "netlify"], "15-45 分钟"], ["netlify-vite-blank", "Netlify", "Vite", "Vite 部署后白屏", "vite blank page netlify assets path", "中", "站点打开白屏，控制台资源 404。", "Failed to load module script: Expected a JavaScript module", "Vite base 或静态资源路径配置不对。", "网页加载不到自己的 JS 文件。", ["检查浏览器 Console。", "确认 vite.config.js base 是否需要改。", "确认 Publish directory 是 dist。"], ["npm run build", "npm run preview"], "我的 Vite 项目在 Netlify 上白屏。请检查 base、资源路径、publish directory 和 Console 报错，给最小修复。", "上线后一定检查 Console。", ["vite", "blank", "assets"], "15-30 分钟"], ["netlify-spa-refresh-404", "Netlify", "React Router / Vue Router", "SPA 路由刷新 404", "netlify redirects spa refresh 404", "低", "首页正常，刷新 /about 就 404。", "Netlify 404 page on refresh", "缺少 _redirects fallback。", "服务器找不到 /about 文件，需要转回 index.html。", ["在 public 目录创建 _redirects。", "写入 /* /index.html 200。", "重新 build 并部署。"], ["echo \"/* /index.html 200\" > public/_redirects", "npm run build"], "请为我的 Netlify SPA 项目生成 _redirects 文件，并告诉我放在 public 还是 dist，以及为什么。", "SPA 项目部署 Netlify 必备 redirects。", ["redirects", "404"], "5-12 分钟"], ["netlify-env-scope", "Netlify", "通用", "环境变量名称或作用域错误", "netlify env variable context production", "中", "预览环境正常，生产环境异常，或变量 undefined。", "process.env.MY_KEY is undefined", "变量没有配置到正确环境，或前端变量前缀错误。", "你可能只给测试环境配了钥匙，正式环境没配。", ["Netlify Site configuration → Environment variables。", "确认 Production / Deploy Preview 作用域。", "Vite 前端变量用 VITE_ 前缀。"], ["cat .env.example", "npm run build"], "请检查 Netlify 环境变量配置问题。请说明 Production/Deploy Preview 作用域、VITE_ 前缀和安全风险。", "环境变量写入清单化。", ["env", "production"], "20-45 分钟"], ["netlify-node-version", "Netlify", "通用", "Node 版本不一致", "netlify node version mismatch", "中", "本地构建成功，Netlify 构建失败。", "The engine \"node\" is incompatible", "Netlify 构建环境 Node 版本与依赖要求不一致。", "线上机器的 Node 太旧或太新。", ["添加 .nvmrc 或 NODE_VERSION 环境变量。", "版本与本地 node -v 保持一致。"], ["node -v", "echo \"20\" > .nvmrc"], "请根据日志判断 Netlify 应该使用哪个 Node 版本，并给 .nvmrc 或环境变量配置方案。", "固定 Node 版本。", ["node", "version"], "10-20 分钟"], ["netlify-base-dir", "Netlify", "Monorepo", "Base directory 配置错误", "netlify base directory monorepo", "中", "Netlify 找不到 package.json 或 src。", "No build command found / package.json missing", "Base directory 没有指向真正项目。", "平台从仓库根目录开始找，但项目在子文件夹。", ["查找 package.json 所在目录。", "Base directory 填 apps/web 等子目录。", "Publish directory 相对 base directory 填 dist。"], ["find . -maxdepth 3 -name package.json"], "我的 Netlify monorepo 部署失败。请根据目录树判断 Base directory、Build command、Publish directory 应该怎么填。", "monorepo 先定位项目根。", ["base", "monorepo"], "15-30 分钟"], ["netlify-functions-dir", "Netlify", "Functions", "函数目录配置错误", "netlify functions directory", "中", "前端正常，接口函数 404 或 500。", "Function not found / functions directory does not exist", "Netlify Functions 目录位置或 netlify.toml 配置错误。", "网页有了，但后端小接口没被平台识别。", ["确认 functions 目录。", "在 netlify.toml 配置 [functions] directory。", "检查函数导出格式。"], ["cat > netlify.toml <<EOF\n[build]\n  command = \"npm run build\"\n  publish = \"dist\"\n[functions]\n  directory = \"netlify/functions\"\nEOF"], "请检查我的 Netlify Functions 目录配置。请根据文件树生成 netlify.toml，并说明函数访问路径。", "函数目录保持固定规范。", ["functions", "api"], "20-50 分钟"], ["netlify-case-assets", "Netlify", "通用", "大小写路径导致资源丢失", "netlify asset case sensitive", "低", "图片、CSS 或 JS 在线上 404。", "GET /assets/Logo.svg 404", "文件名大小写不一致。", "线上服务器比你的电脑更严格。", ["统一资源文件小写。", "修正 import。", "Git 重命名大小写要用 git mv。"], ["git status", "npm run build"], "请检查我的资源文件大小写导致 Netlify 404 的问题，输出需要重命名和修改的路径。", "文件命名规范化。", ["case", "asset"], "10-25 分钟"], ["cf-exit-code", "Cloudflare Pages", "通用", "Build command 返回非 0 exit code", "cloudflare pages build command non zero exit code", "高", "Cloudflare Pages 构建失败，日志显示 exit code。", "Failed: build command exited with code: 1", "构建命令失败，常见原因是依赖、脚本或类型错误。", "平台执行命令时失败了，需要看失败前的第一条 Error。", ["打开 Pages → Deployments → View details。", "看 build command 和第一条 error。", "本地执行同一命令。"], ["npm install", "npm run build"], "Cloudflare Pages 构建失败，exit code 1。请根据日志定位第一条真正错误，并给最小修复方案。", "本地复现同样 build command。", ["cloudflare", "build"], "15-45 分钟"], ["cf-output-dir", "Cloudflare Pages", "Vite / React", "Output directory 填错", "cloudflare pages output directory dist", "中", "构建成功但页面 404 或空白。", "Build completed but output directory not found", "Pages 的 Build output directory 与实际产物不一致。", "平台不知道应该把哪个文件夹发布成网站。", ["本地 npm run build。", "确认 dist/build/out。", "Pages Settings → Build configurations 改 output directory。"], ["npm run build", "ls dist"], "请判断 Cloudflare Pages 的 Build output directory 应该填什么。请根据框架和构建产物给配置。", "别默认 public，先看构建产物。", ["output", "dist"], "10-20 分钟"], ["cf-github-auth", "Cloudflare Pages", "GitHub", "GitHub 授权或仓库连接失败", "cloudflare pages github auth repository", "中", "Cloudflare Pages 选不到仓库或无法拉取代码。", "Repository access denied", "GitHub App 授权范围不包含该仓库。", "Cloudflare 没有权限进入你的 GitHub 仓库。", ["到 GitHub Applications 检查 Cloudflare Pages 授权。", "允许访问目标仓库。", "重新连接项目。"], ["git remote -v"], "我的 Cloudflare Pages 连接 GitHub 仓库失败。请给 GitHub 授权检查步骤和重新连接步骤。", "组织仓库要确认 owner 权限。", ["github", "auth"], "10-25 分钟"], ["cf-env-missing", "Cloudflare Pages", "通用", "环境变量没有设置", "cloudflare pages environment variables missing", "高", "构建或运行时变量 undefined。", "ReferenceError: API_TOKEN is not defined", "变量未添加到 Pages 项目环境变量。", "线上没有你本地 .env 里的配置。", ["Pages Settings → Environment variables。", "区分 Production 与 Preview。", "保存后重新部署。"], ["cat .env.example"], "请检查 Cloudflare Pages 环境变量缺失问题。请说明变量在哪配置、生产/预览如何区分、哪些变量不能暴露到前端。", "建立变量清单。", ["env", "cloudflare"], "20-45 分钟"], ["cf-wrangler-conflict", "Cloudflare Pages", "Functions", "Wrangler / Pages Functions 配置混乱", "wrangler pages_build_output_dir functions cloudflare", "高", "使用 wrangler 后部署目录或函数行为异常。", "pages_build_output_dir is required / invalid wrangler config", "wrangler.toml 与 Pages dashboard 设置冲突或缺少 pages_build_output_dir。", "你同时用两套配置告诉平台不同答案。", ["检查 wrangler.toml。", "确认 pages_build_output_dir 指向 dist。", "删除无关 Workers 配置。"], ["cat > wrangler.toml <<EOF\nname = \"my-pages-app\"\npages_build_output_dir = \"./dist\"\ncompatibility_date = \"2026-06-30\"\nEOF"], "请审查我的 wrangler.toml 和 Cloudflare Pages 配置是否冲突。请给最小可用配置。", "Pages 和 Workers 配置不要混用。", ["wrangler", "functions"], "25-60 分钟"], ["cf-node-compat", "Cloudflare Pages", "通用", "Node compatibility 问题", "cloudflare pages node compatibility", "中", "依赖使用 Node API，Cloudflare 环境报错。", "ReferenceError: process is not defined / Buffer is not defined", "前端或函数使用了运行环境不支持的 Node 特性。", "浏览器/边缘环境不是完整 Node 服务器。", ["确认错误发生在构建期还是运行期。", "替换浏览器不支持的 Node 包。", "必要时开启 compatibility flags。"], ["grep -R \"Buffer\\|process\\|fs\" src"], "请分析我的 Cloudflare Pages Node compatibility 问题。请判断是构建期还是运行期，给出替代方案。", "前端项目避免使用 Node-only 包。", ["node", "compatibility"], "30-90 分钟"], ["cf-assets-path", "Cloudflare Pages", "Vite / React", "静态资源路径错误", "cloudflare pages static assets path", "中", "页面打开但资源 404。", "GET /my-repo/assets/index.js 404", "base path 或资源引用路径不正确。", "网页请求了错误地址的文件。", ["查看 Network 中 404 资源路径。", "检查 vite.config.js base。", "确认 output directory。"], ["npm run build", "npm run preview"], "我的 Cloudflare Pages 静态资源 404。请根据 Network 路径和 vite.config.js 判断 base 如何设置。", "尽量使用相对资源路径或正确 base。", ["assets", "path"], "15-30 分钟"], ["cf-cache-old", "Cloudflare Pages", "通用", "构建缓存导致旧版本没有更新", "cloudflare pages cache old version", "低", "GitHub 已 push，但线上还是旧页面。", "Deployment succeeded but old assets served", "缓存、分支、构建产物或浏览器缓存导致看不到新版本。", "你可能看到的是旧快照。", ["确认最新 commit 是否触发部署。", "清浏览器缓存或无痕访问。", "在 Pages 重新部署 latest commit。"], ["git log --oneline -5"], "Cloudflare Pages 线上没有更新。请帮我排查分支、commit、部署记录和缓存问题。", "每次部署记录版本号。", ["cache", "old"], "10-20 分钟"], ["cf-branch-wrong", "Cloudflare Pages", "GitHub", "分支选择错误", "cloudflare pages branch production wrong", "低", "你 push 到 main，但 Pages 部署的是 master/dev。", "No new deployment triggered", "Production branch 与实际开发分支不一致。", "你把代码发到 A 分支，平台盯着 B 分支。", ["Pages Settings → Builds & deployments。", "确认 Production branch。", "切换到 main 或对应分支。"], ["git branch", "git status"], "请检查我的 Cloudflare Pages 分支配置。告诉我 production branch 应该选哪个，如何触发重新部署。", "统一 main 分支。", ["branch", "github"], "8-15 分钟"], ["cf-preset-mismatch", "Cloudflare Pages", "通用", "框架预设不匹配", "cloudflare pages framework preset mismatch", "低", "自动配置的 build command/output directory 不对。", "Framework preset output mismatch", "选择了错误的 framework preset。", "平台按错误框架的习惯来打包。", ["根据 package.json 判断框架。", "手动设置 Build command 和 output directory。", "重新部署。"], ["cat package.json"], "请根据 package.json 判断 Cloudflare Pages 框架预设和构建配置应该怎么填。", "不要盲选预设。", ["preset", "framework"], "8-15 分钟"], ["gh-pages-branch-folder", "GitHub Pages", "静态站", "选择了错误 branch 或 folder", "github pages branch folder wrong", "中", "Settings 显示已启用，但访问 404。", "There isn't a GitHub Pages site here", "Pages Source 的 branch/folder 不是网站文件所在位置。", "GitHub 正在发布一个没有网页的文件夹。", ["Repo → Settings → Pages。", "确认 Source branch 和 folder。", "纯 HTML 通常 root 或 docs。"], ["git branch", "ls"], "请检查我的 GitHub Pages branch/folder 配置。根据仓库结构告诉我应该选哪个。", "发布源要和 index.html 所在位置一致。", ["branch", "folder"], "10-20 分钟"], ["gh-index-root", "GitHub Pages", "纯 HTML", "index.html 不在根目录", "github pages index html root 404", "低", "仓库有文件，但打开是 404。", "404 File not found", "GitHub Pages 找不到入口 index.html。", "网站首页必须有门牌号 index.html。", ["把 index.html 放在发布目录根部。", "或者 Settings Pages folder 选择 docs。", "等待重新发布。"], ["find . -maxdepth 2 -name index.html"], "请根据我的文件树判断 index.html 是否放对位置，并给 GitHub Pages 正确发布目录。", "每个静态站都要有入口文件。", ["index", "404"], "5-15 分钟"], ["gh-vite-base", "GitHub Pages", "Vite", "Vite base 没设仓库名导致白屏", "github pages vite base repo name blank page", "中", "GitHub Pages 打开白屏，资源路径 404。", "GET /assets/index.js 404 on /repo-name/", "Vite 默认根路径与 GitHub Pages 项目路径不一致。", "GitHub Pages 项目站点通常住在 /仓库名/ 下面。", ["在 vite.config.js 设置 base:'/仓库名/'。", "重新 npm run build。", "部署 dist 到 Pages。"], ["npm run build"], "请帮我修复 Vite + GitHub Pages 白屏。仓库名是【填仓库名】。请生成 vite.config.js 的 base 配置和部署步骤。", "GitHub Pages 项目站点必须考虑 base。", ["vite", "base", "blank"], "10-25 分钟"], ["gh-jekyll-underscore", "GitHub Pages", "静态站 / Vite", "Jekyll 处理下划线文件导致资源缺失", "github pages jekyll underscore nojekyll", "低", "以 _ 开头的文件夹或资源没有发布。", "Jekyll build skipped files beginning with underscore", "GitHub Pages 默认可能按 Jekyll 规则处理，忽略下划线目录。", "你的资源被 Jekyll 当成特殊文件夹跳过了。", ["在发布目录加入 .nojekyll 文件。", "重新提交部署。"], ["touch .nojekyll", "git add .nojekyll && git commit -m \"disable jekyll\" && git push"], "请判断我的 GitHub Pages 是否需要 .nojekyll。请说明文件放在哪，以及对 Vite/静态资源有什么影响。", "非 Jekyll 静态站建议加 .nojekyll。", ["jekyll", "nojekyll"], "5-12 分钟"], ["gh-actions-fail", "GitHub Pages", "Actions", "GitHub Actions build failed", "github actions pages build failed", "高", "Actions 里 Pages build and deployment 红色失败。", "Error: Process completed with exit code 1", "构建工作流命令、权限、依赖或产物路径错误。", "GitHub 的自动部署流水线没有跑通。", ["打开 Actions 失败记录。", "看第一个红色步骤。", "检查 workflow 中 build 和 artifact 路径。"], ["git status", "npm run build"], "我的 GitHub Actions Pages 部署失败。请根据 workflow yaml 和日志找出错误，并给最小修复版本。", "Actions 文件变更后先小步提交。", ["actions", "workflow"], "20-60 分钟"], ["gh-dns-domain", "GitHub Pages", "自定义域名", "自定义域名 DNS 配置错误", "github pages custom domain dns cname a record", "高", "默认 pages 地址能打开，自定义域名打不开。", "DNS_PROBE_FINISHED_NXDOMAIN / 404 custom domain", "DNS 记录、CNAME 文件或 HTTPS 设置不正确。", "域名还没有正确指向 GitHub Pages。", ["检查 DNS CNAME/A 记录。", "Settings → Pages → Custom domain。", "确认仓库里 CNAME 文件。", "等待 DNS 生效。"], ["nslookup example.com"], "请帮我检查 GitHub Pages 自定义域名 DNS。请告诉我 CNAME/A 记录、CNAME 文件和 HTTPS 设置怎么配置。", "域名变更需要等待 DNS 传播。", ["dns", "domain"], "30-120 分钟"], ["gh-wait-cache", "GitHub Pages", "通用", "发布后等待时间误判", "github pages deployment delay cache", "低", "刚 push 就访问，还是旧页面或 404。", "Your site is live but changes may take time", "GitHub Pages 发布和缓存需要时间。", "你按下发布后，外网不一定立刻刷新。", ["查看 Actions 是否完成。", "等待几分钟。", "清浏览器缓存或无痕访问。"], ["git log --oneline -3"], "请帮我判断 GitHub Pages 是真的部署失败，还是发布延迟/缓存。请给检查顺序。", "用 Actions 状态判断，不要只刷新页面。", ["delay", "cache"], "5-15 分钟"], ["gh-spa-404", "GitHub Pages", "React Router", "404.html 缺失导致 SPA 路由不可用", "github pages spa 404 html react router", "中", "首页可以，直接打开子路由 404。", "404 There isn't a GitHub Pages site here", "GitHub Pages 不支持服务器 rewrite，只能用 404 fallback 或 hash router。", "服务器不知道 /about 是前端路由。", ["改用 HashRouter，或增加 404.html fallback 脚本。", "测试直接访问子路由。"], ["npm run build"], "请帮我修复 GitHub Pages 的 React Router 子路由 404。请比较 HashRouter 和 404 fallback，并给最适合小白的方案。", "GitHub Pages 上 SPA 路由要提前设计。", ["spa", "404"], "20-45 分钟"], ["gh-relative-path", "GitHub Pages", "静态站", "静态资源相对路径写错", "github pages relative path assets", "低", "CSS/图片不加载，页面样式丢失。", "GET /style.css 404", "资源路径以 / 开头，部署到仓库子路径后失效。", "你写的是从网站根找，但 GitHub Pages 项目站点还有仓库名这层路径。", ["把 /assets 改为 ./assets 或设置 base。", "检查所有 img/script/link 路径。"], ["grep -R \"src=\\\"/\\|href=\\\"/\" ."], "请检查我的 GitHub Pages 静态资源路径。请找出以 / 开头导致失效的路径并给修改方案。", "静态 HTML 尽量用相对路径。", ["path", "assets"], "10-25 分钟"], ["gh-private-permission", "GitHub Pages", "仓库权限", "仓库权限或 visibility 导致发布异常", "github pages private repo permission visibility", "中", "Pages 设置不可用或访问受限。", "Pages is not available for this repository", "账号计划、组织策略或仓库权限限制 Pages 发布。", "不是代码问题，是仓库权限/产品权限问题。", ["检查仓库 visibility。", "检查组织 Pages policy。", "确认账号计划是否支持私有 Pages。"], ["git remote -v"], "请帮我排查 GitHub Pages 权限/visibility 问题。请列出我需要检查的仓库设置和组织策略。", "商业项目提前确认权限。", ["permission", "visibility"], "15-30 分钟"]];
+const COMMANDS = [{"title": "安装依赖", "cmd": "npm install", "platform": "全部", "issue": "首次部署、依赖缺失、package-lock 更新", "explain": "在项目根目录执行。它会根据 package.json 安装线上也需要的依赖。", "risk": "不要把 node_modules 提交到 GitHub。"}, {"title": "本地构建测试", "cmd": "npm run build", "platform": "全部", "issue": "构建失败、上线前检查", "explain": "部署平台基本也会执行这个命令。它本地成功，线上才更可能成功。", "risk": "失败时先修第一个 Error。"}, {"title": "本地预览构建产物", "cmd": "npm run preview", "platform": "Vite", "issue": "白屏、资源路径错误", "explain": "先 build，再 preview，模拟线上打开效果。", "risk": "不是所有项目都有 preview script。"}, {"title": "查看 Node 版本", "cmd": "node -v", "platform": "全部", "issue": "Node 版本不匹配", "explain": "确认你本地使用的 Node 版本，和部署平台保持一致。", "risk": "不要在不了解依赖要求时随意升级大版本。"}, {"title": "清理 npm 依赖", "cmd": "rm -rf node_modules package-lock.json && npm install", "platform": "全部", "issue": "依赖混乱、锁文件异常", "explain": "删除本地依赖和锁文件后重新安装。", "risk": "团队项目不要随意删锁文件，先确认包管理器。"}, {"title": "Git 提交并推送", "cmd": "git add . && git commit -m \"fix deploy\" && git push", "platform": "全部", "issue": "修改后重新触发部署", "explain": "把修复后的文件推送到 GitHub，平台才会重新部署。", "risk": "提交前用 git diff 看看是否误提交密钥。"}, {"title": "查看远程仓库", "cmd": "git remote -v", "platform": "GitHub 相关", "issue": "仓库连接错误", "explain": "确认当前项目推送到哪个 GitHub 仓库。", "risk": "不要把私有项目推到错误仓库。"}, {"title": "检查 scripts", "cmd": "cat package.json", "platform": "全部", "issue": "build command 填错", "explain": "查看 scripts 里是否真的有 build、dev、preview。", "risk": "Windows 用户可直接打开 package.json 查看。"}, {"title": "Netlify SPA redirects", "cmd": "echo \"/* /index.html 200\" > public/_redirects", "platform": "Netlify", "issue": "React/Vue 子路由刷新 404", "explain": "让 Netlify 把所有前端路由交给 index.html。", "risk": "适合 SPA，不适合需要真实多页面 404 的项目。"}, {"title": "Vercel SPA rewrite", "cmd": "cat > vercel.json <<EOF\n{\"rewrites\":[{\"source\":\"/(.*)\",\"destination\":\"/index.html\"}]}\nEOF", "platform": "Vercel", "issue": "React Router 刷新 404", "explain": "把所有路径重写到首页，让前端路由接管。", "risk": "Next.js 项目不要随便套这个规则。"}, {"title": "Cloudflare Pages wrangler 输出目录", "cmd": "cat > wrangler.toml <<EOF\nname = \"my-pages-app\"\npages_build_output_dir = \"./dist\"\ncompatibility_date = \"2026-06-30\"\nEOF", "platform": "Cloudflare Pages", "issue": "wrangler 配置混乱、输出目录错误", "explain": "明确告诉 Cloudflare Pages 构建产物在哪。", "risk": "name 要改成你的项目名。"}, {"title": "GitHub Pages 禁用 Jekyll", "cmd": "touch .nojekyll", "platform": "GitHub Pages", "issue": "下划线目录资源丢失", "explain": "告诉 GitHub Pages 不要按 Jekyll 规则忽略下划线文件。", "risk": "如果你就是 Jekyll 项目，不要使用。"}];
+const PROMPTS = [["通用部署报错诊断提示词", "你是资深部署排障专家。我的项目由 Codex/AI 生成，现在部署失败。请根据我提供的【平台】【项目类型】【package.json】【构建日志】【目录结构】先判断根因，不要臆测。输出：1）错误关键词；2）最可能根因；3）需要检查的文件；4）最小修改方案；5）本地验证命令；6）重新部署步骤；7）防止下次再犯的方法。以下是日志："], ["Vercel build failed 专用提示词", "你是 Vercel 部署专家。我的项目在 Vercel 构建失败。请重点检查 Build Command、Output Directory、Root Directory、Node 版本、package.json scripts、依赖和环境变量。请先分析第一条真实错误，再给修复方案。不要直接重构项目。"], ["Netlify publish directory 错误提示词", "你是 Netlify 排障专家。我的站点部署后 404 或 Page not found。请根据项目类型和构建产物判断 Publish directory 应该填 dist、build、out、public 还是根目录，并告诉我后台具体路径在哪里改。"], ["Cloudflare Pages build command 错误提示词", "你是 Cloudflare Pages 专家。我的构建命令失败或 output directory 不对。请检查 framework preset、build command、build output directory、environment variables、wrangler.toml，并给出正确配置。"], ["GitHub Pages 白屏提示词", "你是 GitHub Pages + Vite/React 静态部署专家。我的页面上线后白屏。请检查 vite.config.js base、资源路径、index.html 位置、.nojekyll、Actions 日志，并给出小白步骤。"], ["Vite 项目部署白屏提示词", "你是 Vite 部署排障专家。我的项目部署后白屏。请根据浏览器 Console/Network、vite.config.js、资源路径、base 配置判断原因。请输出最小修复代码和验证命令。"], ["React Router 404 修复提示词", "你是前端路由部署专家。我的 React Router 项目首页正常，刷新子页面 404。请根据部署平台生成正确的 rewrite/redirect/hash router 方案，并告诉我文件放在哪。"], ["环境变量缺失修复提示词", "你是环境变量安全专家。我的线上项目变量 undefined 或 API 调用失败。请检查变量命名、前端变量前缀、平台后台配置、生产/预览作用域，并指出哪些密钥不能暴露到前端。"], ["package.json scripts 修复提示词", "你是 package.json 审查专家。请检查我的 scripts 是否适合部署，build/dev/preview 是否正确，依赖是否缺失，包管理器是否混乱，并输出修复后的 package.json 片段。"], ["Node 版本不匹配修复提示词", "你是 Node 构建环境专家。请根据日志判断 Node 版本不匹配问题，给出 package.json engines、.nvmrc 或平台环境变量设置方案，并说明风险。"], ["图片路径大小写修复提示词", "你是静态资源排障专家。我的图片/CSS/JS 本地正常，线上 404。请检查文件名大小写、import/src 路径、Git 重命名问题，并输出需要修改的路径清单。"], ["部署前代码审查提示词", "你是上线前代码审查员。请检查这个项目是否具备部署条件：package.json、build script、输出目录、路由 fallback、环境变量、资源路径、密钥泄露、移动端显示。输出部署前检查报告。"], ["生成部署说明文档提示词", "你是技术文档作者。请根据我的项目生成一份小白可读的部署说明，包括本地运行、构建命令、平台选择、环境变量、常见报错和回滚方案。"], ["根据日志输出修复方案提示词", "你是日志分析专家。我会粘贴一段部署日志。请提取错误关键词，判断错误阶段，列出 3 个可能根因并按概率排序，最后给最小修复路径。"], ["生成平台配置文件提示词", "你是部署配置专家。请根据我的项目类型和目标平台，生成 vercel.json、netlify.toml、wrangler.toml、_redirects、404.html 或 vite.config.js base 配置。只生成必要文件，不要过度配置。"]];
+const CHECKLIST = ["是否有 package.json", "是否有 scripts.build", "本地 npm run build 是否成功", "是否确认 dist / build / out 输出目录", "是否确认图片路径大小写", "是否确认环境变量", "是否确认 API key 没写死", "是否确认路由刷新不 404", "是否确认部署平台选对框架", "是否确认 GitHub 仓库已推送最新代码", "是否确认域名 DNS 记录", "是否确认移动端显示正常"];
+const GLOSSARY = {"Build command": "让平台把你的代码打包成网页的命令，常见是 npm run build。", "Output directory": "打包完成后真正要发布的网站文件夹，Vite 常见是 dist。", "Publish directory": "Netlify 对 Output directory 的叫法，填错就可能 404。", "Environment variables": "不能直接写在代码里的密钥和配置，例如 API Key。", "404": "平台找不到你访问的页面或资源。", "Blank page": "网页打开了，但关键 JS/CSS 没加载成功，常见是路径错。", "Node version": "构建项目时用的 Node 运行环境版本。", "SPA fallback": "单页应用刷新子路由时，把请求交回 index.html 的规则。", "Root directory": "平台从仓库的哪个文件夹开始构建项目。", "Framework preset": "平台根据框架自动设置构建命令和输出目录的预设。"};
+
+const $ = (id)=>document.getElementById(id);
+const store = {
+  fav: new Set(JSON.parse(localStorage.getItem('deployFixFav')||'[]')),
+  solved: new Set(JSON.parse(localStorage.getItem('deployFixSolved')||'[]')),
+  recent: JSON.parse(localStorage.getItem('deployFixRecent')||'[]'),
+  custom: JSON.parse(localStorage.getItem('deployFixCustom')||'[]'),
+  checks: JSON.parse(localStorage.getItem('deployFixChecks')||'{}')
+};
+let allCases = [...baseCases.map(toCase), ...store.custom];
+
+function toCase(row){
+  const [id,platform,projectType,errorTitle,errorKeywords,errorLevel,symptom,screenshotMock,logExample,rootCause,beginnerExplanation,fixSteps,commands,codexPrompt,prevention,tags,estimatedTime] = row;
+  return {id,platform,projectType,errorTitle,errorKeywords,errorLevel,symptom,screenshotMock,logExample,rootCause,beginnerExplanation,fixSteps,commands,codexPrompt,prevention,tags,estimatedTime};
+}
+function escapeHTML(str){
+  return String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function toast(msg='已复制'){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);
+}
+function copyText(text){
+  navigator.clipboard.writeText(text).then(()=>toast('已复制到剪贴板')).catch(()=>toast('复制失败，请手动选择'));
+}
+function saveSets(){
+  localStorage.setItem('deployFixFav', JSON.stringify([...store.fav]));
+  localStorage.setItem('deployFixSolved', JSON.stringify([...store.solved]));
+  localStorage.setItem('deployFixRecent', JSON.stringify(store.recent));
+  localStorage.setItem('deployFixCustom', JSON.stringify(store.custom));
+  localStorage.setItem('deployFixChecks', JSON.stringify(store.checks));
+}
+function levelClass(level){ return 'level-'+level; }
+function mockHTML(c){
+  return `<div class="mock">
+    <div class="mock-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px;color:#94a3b8">${escapeHTML(c.platform)} Deploy Log</span></div>
+    <div class="mock-body"><span class="cyan">platform:</span> ${escapeHTML(c.platform)}<br><span class="warn">project:</span> ${escapeHTML(c.projectType)}<br><span class="err">${escapeHTML(c.screenshotMock)}</span><br><span class="ok">识别：</span>${escapeHTML(c.symptom)}</div>
+  </div>`;
+}
+function caseCard(c){
+  const fav = store.fav.has(c.id) ? 'active' : '';
+  const solved = store.solved.has(c.id) ? 'active' : '';
+  return `<div class="card case-card" onclick="openCase('${c.id}')">
+    <div class="meta"><span class="pill">${escapeHTML(c.platform)}</span><span class="pill ${levelClass(c.errorLevel)}">${escapeHTML(c.errorLevel)}</span><span class="pill">${escapeHTML(c.estimatedTime)}</span></div>
+    <div class="case-title">${escapeHTML(c.errorTitle)}</div>
+    <p>${escapeHTML(c.beginnerExplanation)}</p>
+    ${mockHTML(c)}
+    <div class="tagline">${(c.tags||[]).map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
+    <div class="case-actions" onclick="event.stopPropagation()">
+      <button class="icon-btn ${fav}" onclick="toggleFav('${c.id}')">★ 收藏</button>
+      <button class="icon-btn ${solved}" onclick="toggleSolved('${c.id}')">✓ 已解决</button>
+      <button class="icon-btn" data-copy="${encodeURIComponent(c.codexPrompt)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制提示词</button>
+    </div>
+  </div>`;
+}
+function filterCases(){
+  const q = $('q').value.trim().toLowerCase();
+  const pf = $('platformFilter').value;
+  const lf = $('levelFilter').value;
+  const tf = $('typeFilter').value;
+  const res = allCases.filter(c=>{
+    const hay = [c.errorTitle,c.errorKeywords,c.symptom,c.logExample,c.rootCause,c.beginnerExplanation,c.platform,c.projectType,(c.tags||[]).join(' ')].join(' ').toLowerCase();
+    const typeMatch = tf==='all' || c.projectType.includes(tf) || (tf==='通用' && c.projectType.includes('通用'));
+    return (!q || hay.includes(q)) && (pf==='all'||c.platform===pf) && (lf==='all'||c.errorLevel===lf) && typeMatch;
+  });
+  $('caseGrid').innerHTML = res.length ? res.map(caseCard).join('') : `<div class="empty">没有找到匹配案例。换一个关键词试试，例如 dist、404、env、blank、node。</div>`;
+  $('caseCount').textContent = allCases.length + '+';
+}
+function renderShots(){
+  const top = allCases.slice(0,12);
+  $('shotGrid').innerHTML = top.map(c=>`<div class="card">${mockHTML(c)}<h3>${escapeHTML(c.errorTitle)}</h3><p>${escapeHTML(c.symptom)}</p><button class="secondary-btn" onclick="openCase('${c.id}')">查看修复路径</button></div>`).join('');
+}
+function openCase(id){
+  const c = allCases.find(x=>x.id===id); if(!c) return;
+  store.recent = [id, ...store.recent.filter(x=>x!==id)].slice(0,6); saveSets(); renderSide();
+  $('modalMeta').innerHTML = `<span class="pill">${escapeHTML(c.platform)}</span><span class="pill">${escapeHTML(c.projectType)}</span><span class="pill ${levelClass(c.errorLevel)}">${escapeHTML(c.errorLevel)}</span><span class="pill">${escapeHTML(c.estimatedTime)}</span>`;
+  $('modalTitle').textContent = c.errorTitle;
+  $('modalBody').innerHTML = `
+    ${mockHTML(c)}
+    <div class="grid-2">
+      <div class="card"><h3>典型日志</h3><div class="code">${escapeHTML(c.logExample)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(c.logExample)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制日志片段</button></div>
+      <div class="card"><h3>根因解释</h3><p>${escapeHTML(c.rootCause)}</p><h3>小白解释</h3><p>${escapeHTML(c.beginnerExplanation)}</p></div>
+    </div>
+    <div class="card"><h3>修复步骤</h3><div class="steps">${(c.fixSteps||[]).map(s=>`<div class="step">${escapeHTML(s)}</div>`).join('')}</div></div>
+    <div class="card"><h3>可复制命令</h3>${(c.commands||[]).map(cmd=>`<div class="command-card"><div class="code">${escapeHTML(cmd)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(cmd)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制</button></div>`).join('')}</div>
+    <div class="card"><h3>复制给 Codex 的提示词</h3><div class="code">${escapeHTML(c.codexPrompt)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(c.codexPrompt)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制提示词</button></div>
+    <div class="card"><h3>预防方法</h3><p>${escapeHTML(c.prevention)}</p><div class="case-actions"><button class="icon-btn ${store.fav.has(c.id)?'active':''}" onclick="toggleFav('${c.id}')">★ 收藏</button><button class="icon-btn ${store.solved.has(c.id)?'active':''}" onclick="toggleSolved('${c.id}')">✓ 标记已解决</button></div></div>
+    <div class="card"><h3>相关错误</h3><div class="tagline">${(c.tags||[]).map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}</div></div>
+  `;
+  $('modal').classList.add('show');
+}
+function closeModal(){ $('modal').classList.remove('show'); }
+function toggleFav(id){ store.fav.has(id)?store.fav.delete(id):store.fav.add(id); saveSets(); filterCases(); renderSide(); }
+function toggleSolved(id){ store.solved.has(id)?store.solved.delete(id):store.solved.add(id); saveSets(); filterCases(); renderSide(); }
+function renderSide(){
+  const favCases = [...store.fav].map(id=>allCases.find(c=>c.id===id)).filter(Boolean);
+  $('favList').innerHTML = favCases.length ? favCases.map(c=>`<div class="step" onclick="openCase('${c.id}')" style="cursor:pointer">${escapeHTML(c.errorTitle)} · ${escapeHTML(c.platform)}</div>`).join('') : `<div class="empty">还没有收藏案例。</div>`;
+  const recentCases = store.recent.map(id=>allCases.find(c=>c.id===id)).filter(Boolean);
+  $('recentList').innerHTML = recentCases.length ? recentCases.map(c=>`<div class="step" onclick="openCase('${c.id}')" style="cursor:pointer">${escapeHTML(c.errorTitle)}</div>`).join('') : `<div class="empty">打开案例后自动记录。</div>`;
+}
+function renderCommands(){
+  $('commandList').innerHTML = COMMANDS.map(c=>`<div class="card command-card"><div><div class="meta"><span class="pill">${escapeHTML(c.platform)}</span><span class="pill">${escapeHTML(c.issue)}</span></div><h3>${escapeHTML(c.title)}</h3><div class="code">${escapeHTML(c.cmd)}</div><p>${escapeHTML(c.explain)}</p><p class="small">风险提示：${escapeHTML(c.risk)}</p></div><button class="secondary-btn" data-copy="${encodeURIComponent(c.cmd)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制命令</button></div>`).join('');
+}
+function renderPrompts(){
+  $('promptGrid').innerHTML = PROMPTS.map(([title,body])=>`<div class="card prompt-card"><details open><summary>${escapeHTML(title)}</summary><div class="code">${escapeHTML(body)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(body)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制提示词</button></details></div>`).join('');
+}
+function diagnose(){
+  const p=$('diagPlatform').value, proj=$('diagProject').value, s=$('diagSymptom').value, skill=$('diagSkill').value;
+  let reasons=[], steps=[], cmd='npm run build', prompt=PROMPTS[0][1];
+  if(s.includes('页面空白')){reasons=['资源路径/base 配置错误','输出目录发布错','前端路由或 JS 构建产物加载失败']; steps=['打开浏览器 Console 和 Network，看是否有红色 404。','本地执行 npm run build && npm run preview。','检查 vite.config.js base、平台 output/publish directory。'];}
+  else if(s.includes('404')){reasons=['发布目录没有 index.html','SPA 子路由缺少 fallback','平台 branch/folder 或 Root Directory 配错']; steps=['确认平台发布目录中是否有 index.html。','如果是 React/Vue Router，添加 rewrite/redirect。','检查平台选择的分支、目录、输出文件夹。'];}
+  else if(s.includes('环境变量')){reasons=['平台后台没有添加变量','.env 没有上传到平台','前端变量缺少 VITE_/NEXT_PUBLIC_ 前缀']; steps=['打开平台 Environment Variables。','对照 .env.example 添加变量。','保存后重新部署，不是刷新页面。']; cmd='cat .env.example'; prompt=PROMPTS[7][1];}
+  else if(s.includes('上传后没有更新')){reasons=['部署监听的分支不对','构建缓存或浏览器缓存','最新 commit 没有 push 成功']; steps=['查看部署记录对应的 commit。','无痕窗口访问。','手动 redeploy latest commit。']; cmd='git log --oneline -5';}
+  else {reasons=['build command 执行失败','依赖或 Node 版本不一致','TypeScript/ESLint/代码错误阻断构建']; steps=['本地执行和平台相同的 build command。','找到日志中第一条 Error。','让 Codex 根据日志做最小修复。'];}
+  if(p==='Netlify' && s.includes('404')){ steps.push('Netlify SPA 可在 public/_redirects 写入 /* /index.html 200。'); cmd='echo "/* /index.html 200" > public/_redirects'; prompt=PROMPTS[2][1]; }
+  if(p==='Vercel' && s.includes('404')){ steps.push('Vercel SPA 可添加 vercel.json rewrites。'); cmd='cat > vercel.json <<EOF\n{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}\nEOF'; prompt=PROMPTS[1][1]; }
+  if(p==='GitHub Pages' && proj==='Vite'){ steps.push('GitHub Pages 项目站点通常需要 vite.config.js base="/仓库名/"。'); prompt=PROMPTS[4][1]; }
+  $('diagnosis').innerHTML = `<h3>最可能的 3 个原因</h3><div class="steps">${reasons.map(x=>`<div class="step">${escapeHTML(x)}</div>`).join('')}</div>
+  <h3>优先排查顺序</h3><div class="steps">${steps.map(x=>`<div class="step">${escapeHTML(x)}</div>`).join('')}</div>
+  <div class="grid-2" style="margin-top:16px"><div><h3>推荐执行命令</h3><div class="code">${escapeHTML(cmd)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(cmd)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制命令</button></div>
+  <div><h3>复制给 Codex</h3><div class="code">${escapeHTML(prompt)}</div><button class="secondary-btn" data-copy="${encodeURIComponent(prompt)}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制提示词</button></div></div>
+  <p class="small">用户水平：${escapeHTML(skill)}。小白建议：不要一次改很多文件；先用最小修改让 npm run build 成功。</p>`;
+}
+function generateConfig(){
+  const p=$('cfgPlatform').value, proj=$('cfgProject').value, repo=($('repoName').value||'你的仓库名').trim();
+  let build='npm run build', out='dist', extra=[], files='';
+  if(proj==='Next.js'){ build='next build'; out='由 Vercel/平台自动识别，不建议手动填 dist'; extra.push('优先使用 Vercel；不要把 Next 当普通静态站。'); }
+  if(proj==='纯 HTML'){ build='不需要 build command'; out='根目录 / 或 docs'; extra.push('index.html 必须在发布目录根部。'); }
+  if(p==='Netlify'){ extra.push('Publish directory 通常填 dist；React Router/Vue Router 需要 public/_redirects。'); files='public/_redirects：/* /index.html 200'; }
+  if(p==='Vercel'){ extra.push('Vite/React SPA 子路由刷新 404 时加 vercel.json rewrites。'); files='vercel.json：{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}'; }
+  if(p==='Cloudflare Pages'){ extra.push('Build output directory 不要默认 public，Vite 通常是 dist。'); files='wrangler.toml 可设置 pages_build_output_dir = "./dist"'; }
+  if(p==='GitHub Pages'){ 
+    if(proj.includes('Vite')||proj.includes('React')) extra.push(`vite.config.js 建议设置 base: '/${repo}/'。`);
+    extra.push('非 Jekyll 静态站建议添加 .nojekyll。');
+    files=`vite.config.js: base: '/${repo}/'\n.nojekyll：禁用 Jekyll 特殊处理`;
+  }
+  $('configResult').innerHTML = `<div class="grid-2"><div class="card"><h3>推荐配置</h3><p><b>平台：</b>${escapeHTML(p)}</p><p><b>项目：</b>${escapeHTML(proj)}</p><p><b>Build command：</b>${escapeHTML(build)}</p><p><b>Output / Publish directory：</b>${escapeHTML(out)}</p><p><b>Node version：</b>优先与你本地 node -v 一致，建议 18/20 LTS。</p></div><div class="card"><h3>特殊文件建议</h3><div class="code">${escapeHTML(files || '无特殊文件。')}</div><button class="secondary-btn" data-copy="${encodeURIComponent(files || '无特殊文件')}" onclick="copyText(decodeURIComponent(this.dataset.copy))">复制配置建议</button></div></div><h3>小白部署步骤</h3><div class="steps">${['本地执行 npm install。','本地执行 '+build+'。','确认产物目录是 '+out+'。','把代码 push 到 GitHub。','在平台后台填写上述配置并重新部署。',...extra].map(x=>`<div class="step">${escapeHTML(x)}</div>`).join('')}</div>`;
+}
+function renderChecklist(){
+  $('checklistBox').innerHTML = CHECKLIST.map((item,i)=>`<label class="check-item"><input type="checkbox" ${store.checks[i]?'checked':''} onchange="store.checks[${i}]=this.checked;saveSets()"><span>${escapeHTML(item)}</span></label>`).join('');
+}
+function renderGlossary(){
+  $('glossary').innerHTML = Object.entries(GLOSSARY).map(([k,v])=>`<div><b>${escapeHTML(k)}</b><span>${escapeHTML(v)}</span></div>`).join('');
+}
+function saveCustomCase(){
+  const title=$('newTitle').value.trim(), platform=$('newPlatform').value, type=$('newType').value.trim()||'通用', level=$('newLevel').value, log=$('newLog').value.trim(), fix=$('newFix').value.trim();
+  if(!title || !log){ toast('请至少填写标题和日志'); return; }
+  const id='custom-'+Date.now();
+  const c={id,platform,projectType:type,errorTitle:title,errorKeywords:title+' '+log,errorLevel:level,symptom:'用户自建案例：等待补充表现',screenshotMock:log.slice(0,120),logExample:log,rootCause:'这是你收集的真实案例，请在复盘后补充根因。',beginnerExplanation:'真实案例越多，这个库越有护城河。',fixSteps:fix?fix.split(/\n+/):['补充修复路径'],commands:['npm run build'],codexPrompt:'请根据这段真实部署日志分析根因，并输出最小修复方案：'+log,prevention:'将该案例沉淀为标准排障条目。',tags:['自建案例'],estimatedTime:'待评估'};
+  store.custom.unshift(c); allCases=[...baseCases.map(toCase),...store.custom]; saveSets(); renderCustom(); filterCases(); renderShots(); toast('已保存本地案例');
+  ['newTitle','newType','newLog','newFix'].forEach(id=>$(id).value='');
+}
+function renderCustom(){
+  $('customList').innerHTML = store.custom.length ? store.custom.map(c=>`<div class="step"><span>${escapeHTML(c.errorTitle)} · ${escapeHTML(c.platform)}</span></div>`).join('') : `<div class="empty">还没有自建案例。粘贴真实日志后保存，就能持续扩充护城河。</div>`;
+}
+function exportCustomCases(){
+  copyText(JSON.stringify(store.custom,null,2));
+}
+function jumpSearch(){
+  $('q').value = $('heroSearch').value;
+  location.hash = '#cases';
+  filterCases();
+}
+['q','platformFilter','levelFilter','typeFilter'].forEach(id=>$(id).addEventListener('input',filterCases));
+['diagPlatform','diagProject','diagSymptom','diagSkill'].forEach(id=>$(id).addEventListener('change',diagnose));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+$('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
+
+filterCases(); renderShots(); renderSide(); renderCommands(); renderPrompts(); renderChecklist(); renderGlossary(); renderCustom(); diagnose(); generateConfig();
+</script>
+</body>
+</html>

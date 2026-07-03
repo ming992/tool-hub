@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 安装配置保姆包｜国内直连 WorkBuddy 版</title>
+  <meta name="description" content="面向中国国内不会科学上网用户的 Codex 安装配置保姆包：WorkBuddy 带装、CodeBuddy 替代路线、国内网络自测、环境配置、报错修复、HTML 产品实战。" />
+  <style>
+    :root{
+      --bg:#f6f4ef;
+      --bg2:#fffdf8;
+      --card:rgba(255,255,255,.78);
+      --solid:#ffffff;
+      --text:#15120f;
+      --muted:#6d675f;
+      --soft:#9b9288;
+      --line:rgba(21,18,15,.10);
+      --line2:rgba(21,18,15,.06);
+      --accent:#15120f;
+      --red:#e85d4f;
+      --gold:#d99b35;
+      --green:#17b978;
+      --blue:#536dfe;
+      --purple:#8b5cf6;
+      --shadow:0 26px 80px rgba(28,22,15,.12);
+      --shadow2:0 12px 34px rgba(28,22,15,.08);
+      --radius:28px;
+      --radius2:18px;
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+    }
+    html[data-theme="dark"]{
+      --bg:#0f1117;
+      --bg2:#161922;
+      --card:rgba(25,29,38,.78);
+      --solid:#191d27;
+      --text:#f6f1e8;
+      --muted:#b6aea4;
+      --soft:#81796f;
+      --line:rgba(255,255,255,.12);
+      --line2:rgba(255,255,255,.07);
+      --accent:#f6f1e8;
+      --shadow:0 26px 80px rgba(0,0,0,.35);
+      --shadow2:0 12px 34px rgba(0,0,0,.24);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;font-family:var(--sans);color:var(--text);line-height:1.68;
+      background:
+        radial-gradient(circle at 8% 6%,rgba(232,93,79,.18),transparent 30%),
+        radial-gradient(circle at 88% 10%,rgba(83,109,254,.13),transparent 28%),
+        radial-gradient(circle at 54% 42%,rgba(23,185,120,.10),transparent 32%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 52%,var(--bg));
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+    .shell{width:min(1200px,calc(100% - 36px));margin:0 auto}
+    .nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(24px);border-bottom:1px solid var(--line2)}
+    .nav-inner{width:min(1200px,calc(100% - 36px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.035em}
+    .logo{width:38px;height:38px;border-radius:15px;background:linear-gradient(135deg,#15120f,#e85d4f 52%,#d99b35);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow2)}
+    .nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a,.mini-btn{padding:9px 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:.2s}
+    .nav-links a:hover,.mini-btn:hover{background:var(--card);border-color:var(--line);color:var(--text)}
+    .cta{background:var(--accent)!important;color:var(--bg2)!important;border-color:var(--accent)!important}
+    .hero{padding:72px 0 38px}
+    .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:34px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 12px;color:var(--muted);margin-bottom:18px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 6px color-mix(in srgb,var(--green) 16%,transparent)}
+    h1{font-size:clamp(42px,7vw,82px);line-height:.98;letter-spacing:-.075em;margin:0 0 22px;font-weight:950}
+    .lead{font-size:clamp(17px,2vw,22px);color:var(--muted);max-width:760px;margin:0 0 26px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+    .btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:13px 18px;border-radius:999px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.22s}
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+    .btn-primary{background:var(--accent);color:var(--bg2);border-color:var(--accent)}
+    .btn-red{background:linear-gradient(135deg,var(--red),var(--gold));color:#fff;border-color:transparent}
+    .btn-soft{background:color-mix(in srgb,var(--red) 10%,var(--card))}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi{padding:16px;border:1px solid var(--line);background:var(--card);border-radius:20px}
+    .kpi strong{display:block;font-size:24px;letter-spacing:-.04em}
+    .kpi span{font-size:13px;color:var(--muted)}
+    .mock{border:1px solid var(--line);border-radius:34px;background:linear-gradient(180deg,color-mix(in srgb,var(--solid) 88%,transparent),var(--card));box-shadow:var(--shadow);padding:18px;overflow:hidden}
+    .mock-top{display:flex;gap:8px;margin-bottom:14px}
+    .mock-top i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+    .dashboard{display:grid;gap:12px}
+    .status-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 58%,transparent);border-radius:18px;padding:13px 14px}
+    .ok{color:var(--green);font-weight:900}.warn{color:var(--gold);font-weight:900}.bad{color:var(--red);font-weight:900}
+    .meter{height:12px;background:color-mix(in srgb,var(--text) 9%,transparent);border-radius:999px;overflow:hidden}
+    .meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--red),var(--gold),var(--green));transition:.25s}
+    .section{padding:48px 0}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}
+    h2{font-size:clamp(29px,4vw,48px);line-height:1.05;letter-spacing:-.055em;margin:0}
+    .desc{color:var(--muted);margin:10px 0 0;max-width:780px}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .card{border:1px solid var(--line);background:var(--card);backdrop-filter:blur(18px);border-radius:var(--radius);box-shadow:var(--shadow2);padding:22px}
+    .card h3{font-size:20px;letter-spacing:-.025em;margin:0 0 8px}
+    .card p{margin:0;color:var(--muted)}
+    .tag,.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 62%,transparent);border-radius:999px;padding:5px 10px;font-size:12px;color:var(--muted);margin:0 6px 6px 0}
+    .route-card{cursor:pointer;position:relative;overflow:hidden;transition:.22s}
+    .route-card:hover,.route-card.active{transform:translateY(-3px);border-color:color-mix(in srgb,var(--red) 55%,var(--line));box-shadow:var(--shadow)}
+    .route-card.active:after{content:"推荐";position:absolute;right:16px;top:16px;background:var(--accent);color:var(--bg2);padding:5px 10px;border-radius:999px;font-size:12px;font-weight:900}
+    .icon{width:46px;height:46px;border-radius:17px;display:grid;place-items:center;font-weight:950;background:linear-gradient(135deg,color-mix(in srgb,var(--red) 48%,transparent),color-mix(in srgb,var(--gold) 48%,transparent))}
+    .steps{display:grid;gap:12px}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:12px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--bg2) 58%,transparent);padding:16px}
+    .num{width:32px;height:32px;border-radius:12px;background:var(--accent);color:var(--bg2);display:grid;place-items:center;font-weight:950}
+    .step strong{display:block;margin-bottom:4px}.step small{color:var(--muted)}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+    .check-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 65%,transparent);border-radius:16px;padding:14px;cursor:pointer}
+    input[type="checkbox"]{width:18px;height:18px;accent-color:var(--red)}
+    .meter-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .notice{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:color-mix(in srgb,var(--gold) 13%,var(--card));color:var(--muted)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .tab{padding:10px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer;color:var(--muted)}
+    .tab.active{background:var(--accent);border-color:var(--accent);color:var(--bg2)}
+    .flow{display:none}.flow.active{display:block}
+    details{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:4px 16px;margin-bottom:12px}
+    summary{cursor:pointer;padding:14px 0;font-weight:900;letter-spacing:-.02em}
+    .detail-body{padding:0 0 16px;color:var(--muted)}
+    .codebar{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--text) 7%,transparent);border-radius:16px;margin:10px 0 12px;overflow:hidden}
+    pre{margin:0;padding:14px;overflow:auto;font-family:var(--mono);font-size:13px;color:var(--text);flex:1;white-space:pre-wrap}
+    .copy-btn,.fav-btn{border:1px solid var(--line);background:var(--solid);color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer;margin-right:10px;font-size:12px;font-weight:900}
+    .copy-btn.done{background:var(--green);color:#06130d;border-color:transparent}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .input,.select,textarea{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:16px;padding:12px 14px;outline:none}
+    .toolbar .input{max-width:430px}.toolbar .select{max-width:210px}
+    .input:focus,.select:focus,textarea:focus{border-color:color-mix(in srgb,var(--red) 58%,var(--line));box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 13%,transparent)}
+    .error-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .error-card{border:1px solid var(--line);background:var(--card);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .error-card h3{font-size:17px;margin:0;line-height:1.25}.error-card p{margin:0;color:var(--muted);font-size:14px}
+    .error-actions{margin-top:auto;display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .prompt-card{border:1px solid var(--line);border-radius:22px;background:var(--card);padding:18px;display:flex;flex-direction:column;gap:10px}
+    .prompt-card h3{font-size:18px;margin:0}.prompt-text{font-size:14px;color:var(--muted);border-left:3px solid var(--red);padding-left:12px}
+    .diag-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label.field span{display:block;font-size:13px;color:var(--muted);margin:0 0 6px 2px}
+    .result-box{min-height:210px;border:1px solid var(--line);border-radius:24px;background:color-mix(in srgb,var(--green) 8%,var(--card));padding:20px}
+    .timeline{position:relative;display:grid;gap:14px}
+    .timeline-item{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+    .timeline-item .num{background:linear-gradient(135deg,var(--red),var(--gold))}
+    .resource{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:22px;background:var(--card);padding:16px}
+    .glossary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .term{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px}
+    .term strong{display:block;margin-bottom:4px}.term span{font-size:13px;color:var(--muted)}
+    .risk{border-left:4px solid var(--red);background:color-mix(in srgb,var(--red) 9%,var(--card))}
+    .footer{padding:40px 0 70px;color:var(--muted)}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--bg2);padding:12px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:var(--shadow2)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:960px){
+      .hero-grid,.grid-2,.grid-3,.grid-4,.diag-grid{grid-template-columns:1fr}
+      .error-grid{grid-template-columns:1fr 1fr}
+      .checklist{grid-template-columns:1fr}
+      .glossary{grid-template-columns:1fr 1fr}
+      .nav-links a{display:none}
+    }
+    @media(max-width:620px){
+      .shell,.nav-inner{width:min(100% - 24px,1200px)}
+      .hero{padding-top:44px}.error-grid,.glossary{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.section-head{display:block}.toolbar .input,.toolbar .select{max-width:none}.resource{grid-template-columns:1fr}
+      h1{font-size:45px}
+    }
+    @media print{
+      body{background:#fff;color:#000}.nav,.hero-actions,.btn,.copy-btn,.fav-btn,.toolbar,.tabs{display:none!important}
+      .card,.error-card,.prompt-card,.term,details{box-shadow:none;background:#fff;border-color:#ddd}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top"><span class="logo">国</span><span>Codex 安装配置保姆包 · 国内版</span></a>
+      <div class="nav-links">
+        <a href="#routes">路线</a>
+        <a href="#network">网络自测</a>
+        <a href="#workbuddy">WorkBuddy</a>
+        <a href="#errors">报错库</a>
+        <a href="#diagnose">诊断器</a>
+        <button class="mini-btn" id="themeBtn">深色</button>
+        <a class="cta" href="#network">开始自测</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> 国内直连优先 · 不教科学上网 · 适合普通上班族</div>
+          <h1>不会科学上网，也能开始做 Codex 风格的 AI 编程产品。</h1>
+          <p class="lead">这个版本不把用户卡死在 OpenAI 官方入口，而是提供“WorkBuddy 带装 + CodeBuddy 编程路线 + 纯 HTML 离线路线 + 官方 Codex 可用时再切换”的保姆式方案。</p>
+          <div class="hero-actions">
+            <a class="btn btn-red" href="#network">先测你能走哪条路 →</a>
+            <a class="btn btn-soft" href="#workbuddy">WorkBuddy 带装流程</a>
+            <a class="btn" href="#errors">查国内常见卡点</a>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><strong>4 条</strong><span>国内可用优先路线</span></div>
+            <div class="kpi"><strong>42+</strong><span>国内高频卡点修复</span></div>
+            <div class="kpi"><strong>0 门槛</strong><span>小白照着点就能走</span></div>
+          </div>
+        </div>
+        <div class="mock">
+          <div class="mock-top"><i></i><i></i><i></i></div>
+          <div class="dashboard">
+            <div class="status-row"><span>OpenAI 官方 Codex</span><span class="warn">可选，不强依赖</span></div>
+            <div class="status-row"><span>WorkBuddy 桌面助手</span><span class="ok">国内优先路线</span></div>
+            <div class="status-row"><span>CodeBuddy / IDE / CLI</span><span class="ok">编程替代路线</span></div>
+            <div class="status-row"><span>纯 HTML 产品</span><span class="ok">无需复杂环境</span></div>
+            <div class="status-row"><span>科学上网教程</span><span class="bad">不提供</span></div>
+            <div class="card" style="box-shadow:none;padding:16px;border-radius:20px">
+              <div class="meter-row"><strong>国内小白可用度</strong><span>88%</span></div>
+              <div class="meter"><span style="width:88%"></span></div>
+              <p style="margin-top:10px">优先目标：让用户先完成环境、文件夹、HTML 页面、部署认知，而不是卡在海外账号和网络。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell">
+      <div class="grid grid-4">
+        <div class="card"><h3>国内直连优先</h3><p>默认不要求科学上网。能用官方 Codex 就走官方，不能用就走 WorkBuddy/CodeBuddy/HTML 备用路线。</p></div>
+        <div class="card"><h3>WorkBuddy 带装</h3><p>把安装 VS Code、Node、创建文件夹、整理项目这些动作写成可复制指令，让桌面智能体辅助执行。</p></div>
+        <div class="card"><h3>安全边界清楚</h3><p>告诉用户哪些文件不能授权、哪些命令不要乱点、如何保护微信、文档、网银和隐私目录。</p></div>
+        <div class="card"><h3>能卖给小白</h3><p>用户不是来学计算机的，是要把 AI 编程工具装好，然后做出 HTML 产品。</p></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="routes">
+      <div class="section-head">
+        <div>
+          <h2>国内用户先选路线</h2>
+          <p class="desc">不要一上来就让用户安装官方 Codex。先判断网络、账号、电脑水平，再给最稳的路线。</p>
+        </div>
+      </div>
+      <div class="grid grid-4" id="routeCards"></div>
+      <div class="card" id="routeDetail" style="margin-top:16px"></div>
+    </section>
+
+    <section class="section shell" id="network">
+      <div class="section-head">
+        <div>
+          <h2>国内网络与电脑基础自测</h2>
+          <p class="desc">这套自测决定用户该走“官方 Codex”“WorkBuddy 带装”“CodeBuddy 编程”还是“纯 HTML 离线”。</p>
+        </div>
+        <button class="btn" id="exportChecklist">导出自测结果</button>
+      </div>
+      <div class="card">
+        <div class="meter-row">
+          <strong>可用准备度：<span id="checkPercent">0%</span></strong>
+          <span class="pill" id="checkStatus">还没开始</span>
+        </div>
+        <div class="meter"><span id="checkBar" style="width:0%"></span></div>
+        <div class="checklist" id="checklist"></div>
+        <div class="notice" id="checkAdvice">先完成自测，系统会自动推荐路线。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="workbuddy">
+      <div class="section-head">
+        <div>
+          <h2>WorkBuddy 带装保姆流程</h2>
+          <p class="desc">适合国内不会科学上网、不懂终端、不敢自己安装环境的用户。核心思路：先让 WorkBuddy 辅助完成“电脑环境准备”，再进入 AI 编程。</p>
+        </div>
+      </div>
+      <div class="tabs" id="flowTabs">
+        <button class="tab active" data-flow="wb">WorkBuddy 带装</button>
+        <button class="tab" data-flow="cb">CodeBuddy 编程</button>
+        <button class="tab" data-flow="html">纯 HTML 离线</button>
+        <button class="tab" data-flow="official">官方 Codex 可用时</button>
+      </div>
+      <div class="flow active" id="flow-wb"></div>
+      <div class="flow" id="flow-cb"></div>
+      <div class="flow" id="flow-html"></div>
+      <div class="flow" id="flow-official"></div>
+    </section>
+
+    <section class="section shell" id="safety">
+      <div class="section-head">
+        <div>
+          <h2>桌面智能体安全边界</h2>
+          <p class="desc">国内小白使用 WorkBuddy 这类桌面智能体时，最重要的不是“能不能自动操作”，而是“哪些不能让它碰”。</p>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card risk"><h3>不要授权隐私目录</h3><p>不要让智能体随意访问微信文件、身份证照片、网银截图、合同原件、公司机密文件夹。</p></div>
+        <div class="card risk"><h3>不要让它操作付款</h3><p>涉及购买、充值、扫码、付款、登录企业系统时，必须人工确认，不让 AI 自动点击。</p></div>
+        <div class="card risk"><h3>不要复制陌生命令</h3><p>遇到删除、格式化、清空、权限提升命令，先暂停。小白只执行本产品给出的低风险检查命令。</p></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="templates">
+      <div class="section-head">
+        <div>
+          <h2>复制给 WorkBuddy / CodeBuddy 的任务模板</h2>
+          <p class="desc">用户不会表达需求，就让他复制模板。模板必须具体、边界清楚、能验收。</p>
+        </div>
+      </div>
+      <div class="grid grid-3" id="promptGrid"></div>
+    </section>
+
+    <section class="section shell" id="errors">
+      <div class="section-head">
+        <div>
+          <h2>国内常见卡点与修复库</h2>
+          <p class="desc">覆盖官网打不开、下载慢、Node 安装、npm 镜像、杀毒拦截、中文路径、登录失败、桌面智能体授权等问题。</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input class="input" id="errorSearch" placeholder="搜索：官网打不开 / npm慢 / WorkBuddy / 360 / 中文路径 / Node..." />
+        <select class="select" id="systemFilter">
+          <option value="all">全部类型</option>
+          <option value="网络">网络</option>
+          <option value="Windows">Windows</option>
+          <option value="macOS">macOS</option>
+          <option value="WorkBuddy">WorkBuddy</option>
+          <option value="CodeBuddy">CodeBuddy</option>
+          <option value="HTML">HTML</option>
+          <option value="部署">部署</option>
+        </select>
+        <select class="select" id="favFilter">
+          <option value="all">全部卡片</option>
+          <option value="fav">只看收藏</option>
+        </select>
+      </div>
+      <div class="error-grid" id="errorGrid"></div>
+    </section>
+
+    <section class="section shell" id="diagnose">
+      <div class="section-head">
+        <div>
+          <h2>国内小白路线诊断器</h2>
+          <p class="desc">选择你的情况，自动生成下一步：走 WorkBuddy、CodeBuddy、纯 HTML，还是官方 Codex。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="diag-grid">
+          <div class="grid">
+            <label class="field"><span>你能打开 OpenAI/Codex 官方页面吗？</span><select class="select" id="diagOfficial"><option>打不开</option><option>能打开但不稳定</option><option>能稳定打开</option><option>不知道</option></select></label>
+            <label class="field"><span>你能使用 WorkBuddy 吗？</span><select class="select" id="diagWB"><option>可以安装或已经安装</option><option>不会安装</option><option>公司电脑不允许安装</option><option>不知道</option></select></label>
+            <label class="field"><span>你的电脑系统</span><select class="select" id="diagSystem"><option>Windows</option><option>macOS</option><option>不知道</option></select></label>
+            <label class="field"><span>你现在卡在哪里</span><select class="select" id="diagStage"><option>不知道用什么工具</option><option>软件下载/安装</option><option>Node.js / npm</option><option>VS Code / 编辑器</option><option>创建 HTML 产品</option><option>部署上线</option><option>报错看不懂</option></select></label>
+            <label class="field"><span>看到的关键词</span><input class="input" id="diagKeyword" placeholder="例如：打不开、npm、权限、白屏、404、登录失败" /></label>
+            <button class="btn btn-red" id="runDiag">生成路线建议</button>
+          </div>
+          <div class="result-box" id="diagResult">
+            <h3>诊断结果会显示在这里</h3>
+            <p>这个诊断器不会让你强行走官方 Codex。国内小白优先选择能稳定完成交付的路线。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="delivery">
+      <div class="section-head">
+        <div>
+          <h2>最终交付验收表</h2>
+          <p class="desc">用户买的不是“安装教程”，而是“我终于能做出一个 AI 编程产品”。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="checklist" id="acceptList"></div>
+        <div class="notice" id="acceptAdvice">勾选全部后，说明这个用户已经能进入实战。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="monetize">
+      <div class="section-head">
+        <div>
+          <h2>适合小红书销售的产品包装</h2>
+          <p class="desc">这版更适合国内小白成交：不承诺海外官方工具一定可用，而是承诺“给你一条能落地的 AI 编程上手路线”。</p>
+        </div>
+      </div>
+      <div class="grid" id="resourceList"></div>
+    </section>
+
+    <section class="section shell" id="glossary">
+      <div class="section-head">
+        <div>
+          <h2>国内小白术语表</h2>
+          <p class="desc">把“Codex / WorkBuddy / CodeBuddy / Node / HTML / 部署”都讲成人话。</p>
+        </div>
+      </div>
+      <div class="glossary" id="glossaryGrid"></div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="card" style="box-shadow:none">
+      <p><strong>重要说明：</strong>本产品不提供科学上网教程，不承诺任何海外服务在中国大陆网络环境下一定可用。产品采用“国内直连优先”的交付策略：WorkBuddy/CodeBuddy/纯 HTML 路线优先，官方 Codex 作为可用用户的增强路线。</p>
+      <p><strong>推荐售价：</strong>基础 HTML 工具版 299 元；含真实国内报错截图和视频演示版 499–799 元；含一对一远程带装服务可做 999 元以上。</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">已复制</div>
+
+<script>
+const $=(q,r=document)=>r.querySelector(q);
+const $$=(q,r=document)=>[...r.querySelectorAll(q)];
+const toast=(msg='已复制')=>{const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)};
+const copyText=async(text)=>{try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板')}catch(e){toast('复制失败，请手动复制')}};
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function attr(s){return esc(s).replace(/\n/g,'&#10;')}
+function codeBlock(code){return `<div class="codebar"><pre>${esc(code)}</pre><button class="copy-btn" data-copy="${attr(code)}">复制</button></div>`}
+
+const routes=[
+ {id:'workbuddy',icon:'W',title:'WorkBuddy 带装路线',desc:'国内小白首选。让桌面智能体辅助下载安装、创建文件夹、整理项目和执行低风险步骤。',steps:['先安装/打开 WorkBuddy','只授权测试文件夹，不授权隐私目录','让 WorkBuddy 帮你安装 VS Code、Node.js LTS','创建英文路径 codex-test 文件夹','让它生成一个 HTML 测试页','再进入 CodeBuddy 或官方 Codex 可用路线']},
+ {id:'codebuddy',icon:'C',title:'CodeBuddy 编程路线',desc:'适合想要“国内可用 AI 编程”的用户。走 IDE/CLI/插件路线，不把 OpenAI 官方入口当唯一方案。',steps:['安装 VS Code 或 CodeBuddy 相关工具','确认 Node.js 和 npm 可用','打开项目根目录','让 CodeBuddy 解释项目结构','先改一个小功能','最后生成部署说明']},
+ {id:'html',icon:'H',title:'纯 HTML 离线路线',desc:'最稳的交付路线。不会环境也能先做单页产品，双击 HTML 即可运行。',steps:['创建一个英文文件夹','新建 index.html','复制产品代码','双击浏览器打开','用 AI 持续修改视觉和功能','后续再学习部署']},
+ {id:'official',icon:'O',title:'官方 Codex 增强路线',desc:'只有当用户能稳定访问官方入口、能登录账号时再走。否则不要作为唯一交付路径。',steps:['确认官方页面可打开','下载桌面 App 或使用 IDE/CLI 入口','登录账号','选择测试项目','运行首次任务','遇到网络问题立即切回国内路线']}
+];
+
+const checklist=[
+ '我不要求一定使用海外官方入口，只要能做出产品即可',
+ '我可以正常下载国内软件或使用腾讯系账号登录',
+ '我愿意安装 WorkBuddy 或已经安装过 WorkBuddy',
+ '我的电脑是 Windows 或 macOS，不是手机/平板',
+ '我知道不要把微信文件、合同、身份证照片授权给 AI',
+ '我能接受先做纯 HTML 测试项目，不直接改重要文件',
+ '我能安装 VS Code，或者让 WorkBuddy 辅助安装',
+ '我能安装 Node.js LTS，或者愿意按步骤检查',
+ '我知道项目文件夹最好用英文路径，例如 codex-test',
+ '我能复制粘贴一段提示词给 AI 工具',
+ '我能打开浏览器双击预览 HTML 文件',
+ '我希望最终能做出网页工具、资料库、导航器或生成器'
+];
+
+const flows={
+ wb:[
+  ['安装/打开 WorkBuddy','WorkBuddy 是国内路线的“带装助手”，核心不是替代所有编程工具，而是帮小白完成下载、整理文件、打开网页、创建目录、辅助执行步骤。','能打开 WorkBuddy 主界面，并能输入自然语言任务。','打不开或登录失败：先换网络、确认账号方式，或走纯 HTML 离线路线。','无'],
+  ['先设安全边界','不要一上来让桌面智能体全盘操作。先告诉它：只操作指定测试文件夹，不访问隐私文件，不自动付款，不删除文件。','它能明确回复只在指定目录操作。','如果它要求过多权限，暂停，改用手动流程。','你只能操作这个测试文件夹：桌面/codex-test。不要打开微信、网银、公司资料、身份证照片、合同原件，不要删除任何文件，不要自动付款。'],
+  ['让它辅助安装基础软件','让 WorkBuddy 帮你打开官方/可信下载页面，辅助安装 VS Code、Node.js LTS。用户要自己确认安装按钮。','VS Code 能打开；终端输入 node -v 有版本号。','下载慢：换浏览器或稍后重试；公司电脑禁止安装就换纯 HTML 路线。','请帮我检查这台电脑是否已经安装 VS Code 和 Node.js LTS。如果没有，请引导我去官方可信页面下载，安装过程每一步都先问我确认。'],
+  ['创建干净测试文件夹','小白项目不要放微信文件夹、中文路径、网盘同步目录。建议桌面创建 codex-test。','桌面出现 codex-test 文件夹。','路径有中文、空格、权限问题：换到用户目录英文路径。','请在桌面帮我创建一个名为 codex-test 的测试文件夹，只用于 AI 编程练习。'],
+  ['生成第一个 HTML 产品','先做单文件 HTML，最适合国内小白。无需 npm、无需部署、双击能看。','codex-test 里出现 index.html，双击浏览器能打开。','白屏：复制代码不完整；重新生成完整 HTML。','请在 codex-test 文件夹里创建一个 index.html，做一个高级美观的“个人效率工具导航页”，要求单文件 HTML，包含 CSS 和 JS，双击即可打开。'],
+  ['再进入编程工具路线','当用户已经能看到 HTML 页面后，再让他学 CodeBuddy、Codex、部署。先有成果再学环境。','用户有一个可打开的页面，并知道文件在哪里。','直接上复杂项目会劝退：回到单 HTML。','请检查这个 HTML 页面还能增加哪些实用功能，比如搜索、收藏、导出、深色模式和移动端适配。']
+ ],
+ cb:[
+  ['确认 CodeBuddy 使用形态','CodeBuddy 更偏编程工具，可通过 IDE/CLI 等形态进入。小白优先 IDE，进阶用户再 CLI。','能打开编辑器或终端入口。','如果 CLI 看不懂，退回 IDE 或纯 HTML。','无'],
+  ['检查 Node.js 与 npm','很多 AI 编程 CLI 或前端项目需要 Node/npm。先检查，不要盲装。','node -v 和 npm -v 能返回版本号。','没有版本号：安装 Node.js LTS 后重启终端。','node -v\nnpm -v'],
+  ['可选：安装 CodeBuddy Code CLI','适合能使用终端的用户。安装前确认 npm 可用，并以官方包信息为准。','终端能识别 codebuddy 相关命令。','安装失败通常是网络、npm 源、权限或 Node 版本问题。','npm install -g @tencent-ai/codebuddy-code'],
+  ['打开项目根目录','根目录通常有 index.html、package.json、README、src。不要打开 dist 或单个文件。','工具能读取项目多个文件。','读不到文件：目录选错或权限不足。','pwd\nls'],
+  ['首次任务：只读不改','第一次让它解释项目，避免直接大改。','它能说明项目类型、启动方式、关键文件。','如果它开始大规模改代码，要求先列计划。','请只阅读项目，不要修改代码。告诉我项目结构、启动方式、主要文件作用和适合小白的下一步。'],
+  ['小改动验收','先让它改一个按钮、加一个搜索框、优化移动端。','页面有可见变化，且没有破坏原功能。','改坏：让它回滚或只给 diff。','请只添加一个搜索功能，不要重构全站。完成后告诉我改了哪些文件以及如何验证。']
+ ],
+ html:[
+  ['先做单文件 HTML','国内小白最稳路线：一个 HTML 文件包含结构、样式、交互，双击就能打开。','桌面有 index.html，浏览器能打开。','打开乱码：保存编码改为 UTF-8。','无'],
+  ['产品结构固定','标题区、功能区、资料库、搜索、复制按钮、移动端适配、深色模式，是高客单 HTML 产品基础配置。','页面看起来像工具，不像文章。','太像普通文档：增强卡片、交互和状态反馈。','无'],
+  ['用 AI 迭代','每次只让 AI 改一个功能，避免越改越乱。','功能逐步增加且可测试。','一次性提太多需求容易失败：拆小任务。','请在不改变原功能的前提下，只增加“搜索+分类筛选”功能，并保证手机端好看。'],
+  ['本地验收','不部署也能交付给用户，压缩包发给客户即可。','客户能双击打开。','客户打不开：告诉对方用 Chrome/Edge 打开。','无'],
+  ['再考虑部署','用户熟练后再部署到静态托管平台。','能访问线上链接。','404 或白屏：查部署报错库。','无']
+ ],
+ official:[
+  ['先判断可访问性','官方 Codex 可用时是增强路线，不可用时不要卡死。','能打开官方页面并登录。','打不开或不稳定：切回 WorkBuddy/CodeBuddy/HTML。','无'],
+  ['下载官方 App 或使用 IDE/CLI','官方入口以 OpenAI 最新说明为准。小白优先桌面 App。','能打开应用并登录。','登录失败：不要反复折腾，先使用国内路线完成产品。','无'],
+  ['选择测试项目','不要上来选择公司项目或重要项目。','Codex 能读取测试项目。','读取失败：权限或路径问题。','无'],
+  ['首次任务','先解释项目结构，再小改动。','能看到清晰计划或代码修改。','网络波动：保存当前结果，切回国内替代路线。','请阅读这个测试项目，先不要修改代码。告诉我项目结构和下一步可做的小功能。']
+ ]
+};
+
+const prompts=[
+ ['WorkBuddy 安全授权模板','第一次使用桌面智能体前复制。','你只能在我指定的测试文件夹内操作，不要访问微信、QQ、网银、公司资料、身份证照片、合同、下载目录里的私人文件。涉及安装、删除、付款、登录、授权时，必须先停下来问我确认。'],
+ ['WorkBuddy 帮我装基础环境','适合不会自己装 VS Code / Node 的用户。','请帮我检查电脑是否安装 VS Code、Node.js LTS、Git。没有安装时，引导我打开官方可信页面下载。每一步只做一个动作，并在点击安装前等我确认。'],
+ ['WorkBuddy 创建测试项目','适合国内小白第一步。','请在桌面创建一个 codex-test 文件夹，并在里面创建 index.html。这个文件夹只用于练习 AI 编程，不要读取或修改其他目录。'],
+ ['WorkBuddy 生成 HTML 产品','适合直接看到成果。','请在 codex-test 文件夹生成一个单文件 HTML 产品，主题是“AI 工具导航器”。要求高级审美、卡片布局、搜索、分类、复制按钮、深色模式、手机端适配，双击即可运行。'],
+ ['CodeBuddy 只读项目','适合第一次打开项目。','请只阅读这个项目，不要修改代码。告诉我项目类型、主要文件作用、启动方式、可能风险和最适合小白做的第一个改动。'],
+ ['CodeBuddy 小改动','适合避免一上来改崩。','请只完成一个小功能：给页面增加搜索框。不要重构全站。完成后告诉我改了哪些文件、如何验证、如果失败如何回滚。'],
+ ['HTML 美化升级','适合高客单虚拟产品。','请把这个 HTML 页面升级成高级付费产品质感：留白舒服、卡片清晰、圆角细腻、移动端好看、按钮有反馈、功能区有层次。不要删除已有功能。'],
+ ['国内报错求助词','适合复制给 AI 分析。','我在中国大陆网络环境下使用 AI 编程工具，不会科学上网。现在遇到这个报错：【粘贴报错】。请不要给我科学上网教程，请给我国内可执行的排查路径、替代方案和最低门槛解决办法。'],
+ ['部署前检查','适合准备上线。','请帮我检查这个 HTML/前端项目是否适合部署。重点看：入口文件、静态资源路径、移动端、构建命令、输出目录、404、白屏、中文路径和文件名问题。'],
+ ['给客户交付说明','适合卖资料包。','请生成一份给小白客户看的交付说明：如何打开 HTML 文件、如何收藏、如何搜索、如何复制内容、打不开怎么办、不要随便删除哪些文件。'],
+ ['从官方切回国内路线','适合官方入口打不开。','官方 Codex 入口我打不开或不稳定。请帮我把当前任务改成国内可执行路线：优先 WorkBuddy、CodeBuddy、纯 HTML 单文件方案，目标是先做出可运行产品。'],
+ ['30分钟实战任务','适合买家快速获得成就感。','请设计一个 30 分钟内能完成的 HTML 小产品任务，适合完全不会代码的人，包含目标、步骤、验收标准和失败后的修复方案。']
+];
+
+const errors=[
+ ['OpenAI/Codex 官网打不开','浏览器无法访问或一直转圈。','海外服务在大陆网络环境下可能不可达或不稳定。','网络','不要把官方入口作为唯一方案；切换 WorkBuddy/CodeBuddy/HTML 路线。','无命令'],
+ ['官方账号登录失败','账号页面打不开、验证码失败、跳转失败。','网络、浏览器缓存、账号地区或服务可用性问题。','网络','换浏览器只能作为尝试；仍失败就切国内路线，不要反复消耗时间。','无命令'],
+ ['WorkBuddy 下载慢','安装包下载很慢或中断。','网络波动、下载源拥堵、公司网络限制。','WorkBuddy','换浏览器、换网络，优先使用官网/可信下载入口。公司电脑禁止安装则走纯 HTML。','无命令'],
+ ['WorkBuddy 登录失败','企业微信/QQ/账号登录异常。','账号授权、网络、版本或企业权限问题。','WorkBuddy','检查账号方式，重启软件；不行先用纯 HTML 路线完成项目。','无命令'],
+ ['桌面智能体要很多权限','软件要求读取大量文件或控制电脑。','桌面自动化需要权限，但小白不能无脑授权。','WorkBuddy','只授权测试文件夹，涉及隐私和付款一律人工确认。','无命令'],
+ ['WorkBuddy 误打开隐私文件','AI 操作到了微信、合同、下载目录。','任务边界没写清楚。','WorkBuddy','立即暂停任务，重新限定只操作 codex-test 文件夹。','只操作桌面/codex-test，不访问任何其他目录。'],
+ ['公司电脑不让安装软件','没有管理员权限或被 IT 限制。','企业安全策略限制安装。','Windows','走纯 HTML 离线路线，使用浏览器和记事本/VS Code 绿色版。','无命令'],
+ ['360/安全软件拦截','安装包或脚本被拦截。','安全软件对新工具或脚本敏感。','Windows','只从可信来源下载；不确定时不要关闭安全软件，先走纯 HTML。','无命令'],
+ ['Windows SmartScreen 提示','提示未知发布者或阻止运行。','Windows 对新安装包的安全提醒。','Windows','确认来源可信再继续；不确定就停止。','无命令'],
+ ['macOS 阻止打开应用','提示无法打开或来自未知开发者。','macOS 安全策略限制。','macOS','系统设置 → 隐私与安全性中确认来源后再打开；不确定就停止。','无命令'],
+ ['Node.js 下载慢','Node 官网或下载包不稳定。','网络、镜像、浏览器限制。','网络','先确认是否必须 Node。纯 HTML 不需要 Node；必须时使用 LTS 安装包。','node -v'],
+ ['node 不是内部命令','安装 Node 后终端仍不识别。','PATH 未生效或终端没重启。','Windows','关闭 PowerShell/VS Code 终端，重新打开再检查。','node -v\nnpm -v'],
+ ['npm install 很慢','安装依赖卡很久。','网络慢、包很多、registry 访问不稳定。','CodeBuddy','先不要反复中断；必要时切换国内 npm 镜像。','npm config get registry'],
+ ['设置 npm 国内镜像','npm 下载包太慢。','默认源访问慢。','CodeBuddy','可切到 npmmirror；后续需要恢复时再切回默认源。','npm config set registry https://registry.npmmirror.com'],
+ ['npm 权限错误','全局安装 CLI 报 permission denied。','权限不足或全局目录不可写。','CodeBuddy','Windows 用普通安装路径；macOS 避免 sudo 乱装，优先 IDE 路线。','npm config get prefix'],
+ ['安装 CodeBuddy CLI 失败','npm install -g 失败。','Node 版本、网络、权限或包源问题。','CodeBuddy','先确认 node/npm 版本，再重试；小白优先 IDE/HTML。','node -v\nnpm -v\nnpm install -g @tencent-ai/codebuddy-code'],
+ ['中文路径报错','项目在“新建文件夹/微信文件/桌面资料”等中文目录。','部分工具对中文、空格、特殊符号路径兼容差。','Windows','移动到英文路径 codex-test。','mkdir "%USERPROFILE%\\Desktop\\codex-test"'],
+ ['OneDrive/网盘同步干扰','文件正在同步，工具读写异常。','云同步目录锁文件或权限变化。','Windows','把项目移动到本机普通目录，不放网盘同步目录。','无命令'],
+ ['微信下载目录打不开','项目放在微信 Files 或临时目录。','路径复杂、权限不稳定、文件可能被清理。','Windows','复制到桌面 codex-test 再操作。','无命令'],
+ ['VS Code 打开了单个文件','AI 工具读不到项目结构。','没有打开文件夹根目录。','HTML','用 File → Open Folder 打开 codex-test。','无命令'],
+ ['找不到 index.html','双击后页面打不开。','文件名错、后缀隐藏、保存到别的目录。','HTML','确认文件叫 index.html，不是 index.html.txt。','无命令'],
+ ['HTML 打开乱码','中文显示乱码。','编码不是 UTF-8。','HTML','用 VS Code 重新保存为 UTF-8。','无命令'],
+ ['页面白屏','浏览器打开没有内容。','代码没复制完整、JS 报错、标签未闭合。','HTML','先用浏览器控制台看红色报错，或回滚到上一版。','无命令'],
+ ['复制按钮无效','点击复制没反应。','浏览器权限、file 协议限制或 JS 错误。','HTML','用 Chrome/Edge 打开；检查控制台报错。','无命令'],
+ ['手机端排版乱','小红书用户手机打开体验差。','没有响应式 CSS。','HTML','增加 max-width、媒体查询、按钮高度和卡片单列。','无命令'],
+ ['部署后 404','本地能开，线上链接 404。','入口文件、输出目录或路由配置错误。','部署','纯 HTML 项目确保 index.html 在根目录。','无命令'],
+ ['部署后样式丢失','页面有内容但很丑。','CSS 路径错误或文件没上传。','部署','单文件 HTML 最稳；外部资源改为内联。','无命令'],
+ ['部署后白屏','线上打开空白。','JS 路径、构建输出、浏览器报错。','部署','先看控制台；纯 HTML 用相对路径。','无命令'],
+ ['GitHub 打不开或慢','访问 GitHub 困难。','网络环境影响。','网络','不把 GitHub 当唯一交付方式；可先本地 HTML 交付。','无命令'],
+ ['Git 安装失败','下载或安装 Git 卡住。','网络、权限或公司电脑限制。','Windows','HTML 单文件不强依赖 Git；需要版本管理时再装。','git --version'],
+ ['PowerShell 看不懂','用户害怕命令行。','终端门槛高。','Windows','优先 WorkBuddy 带装或纯 HTML，不强行 CLI。','无命令'],
+ ['终端粘贴失败','复制命令粘贴不进去。','终端快捷键不熟。','Windows','PowerShell 可右键粘贴，或 Ctrl+V。','无命令'],
+ ['端口被占用','npm run dev 报 port in use。','本地已有服务占用端口。','CodeBuddy','换端口或关掉旧终端；纯 HTML 可跳过。','npm run dev -- --port 3001'],
+ ['没有 package.json','npm install 报找不到 package.json。','这不是 Node 项目，或目录选错。','CodeBuddy','纯 HTML 不需要 npm；有项目时打开根目录。','dir'],
+ ['AI 改坏项目','让工具一次性改太多。','任务边界不清晰，没有备份。','通用','每次只改一个功能，改前复制备份。','无命令'],
+ ['不知道如何回滚','改坏后不会恢复。','没有版本管理或备份。','通用','每次改之前复制一份 index-backup.html。','无命令'],
+ ['提示词太泛','AI 给一堆空话不落地。','需求不具体、没有验收标准。','通用','按“目标、文件、限制、验收标准”提问。','无命令'],
+ ['国内模型答非所问','工具生成内容像文章，不像产品。','提示词没有要求完整 HTML 和交互。','通用','明确要求输出完整单文件 HTML，不要只给方案。','无命令'],
+ ['文件被杀毒软件隔离','生成的脚本或 exe 被隔离。','安全策略或误报。','Windows','小白产品尽量只交付 HTML，不交付可执行文件。','无命令'],
+ ['客户电脑打不开文件','客户双击没有反应。','默认浏览器异常或文件后缀问题。','HTML','让客户右键 → 打开方式 → Chrome/Edge。','无命令'],
+ ['客户不会部署','买家只会本地打开。','部署门槛高。','部署','卖基础版时承诺本地 HTML 可用；部署作为进阶服务。','无命令'],
+ ['客户以为必须 Codex 官方','被热点词误导。','产品名用了 Codex，但国内网络不可控。','网络','销售页写清楚：官方可用就增强，不可用走国内替代路线。','无命令'],
+ ['WorkBuddy 操作太慢','桌面智能体执行时间长。','任务过大、界面复杂、指令不清楚。','WorkBuddy','拆成小任务：打开页面、下载、创建文件夹、生成 HTML，不要一次做完。','无命令'],
+ ['WorkBuddy 不适合写复杂代码','桌面智能体更适合办公自动化和带装。','工具定位不等于专业编码。','WorkBuddy','复杂代码走 CodeBuddy/IDE，WorkBuddy 做带装和流程辅助。','无命令']
+];
+
+const acceptance=[
+ '用户知道：官方 Codex 不是唯一入口，不可用时可以走国内路线',
+ '用户能打开或安装 WorkBuddy，或知道公司电脑不能安装时走纯 HTML',
+ '用户已经创建一个英文路径测试文件夹 codex-test',
+ '用户知道不要授权隐私文件、付款操作和公司机密目录',
+ '用户能生成或打开一个 index.html 单文件产品',
+ '用户能复制提示词给 WorkBuddy/CodeBuddy 继续迭代',
+ '用户知道 Node/npm/Git 不是所有 HTML 产品的必需项',
+ '用户能识别“官网打不开、npm慢、中文路径、白屏、404”等常见问题',
+ '用户能完成一次小功能修改并验收',
+ '用户知道基础版可以本地交付，部署属于进阶服务'
+];
+
+const resources=[
+ ['产品卖点标题','不会科学上网，也能学会 AI 编程做网页工具。','强转化'],
+ ['适合人群','国内上班族、教师、运营、文科生、自由职业者、小红书资料卖家。','精准'],
+ ['交付承诺','不是保证官方 Codex 可用，而是给出国内可执行的 AI 编程上手路线。','合规'],
+ ['护城河','持续收集国内真实报错截图、不同电脑安装视频、客户远程带装案例。','长期'],
+ ['加价包','499 元增加视频演示；799 元增加真实报错库；999 元以上做远程带装。','变现'],
+ ['售后边界','不提供科学上网、不代注册海外账号、不碰客户隐私文件、不承诺所有公司电脑可安装。','低风险']
+];
+
+const glossary=[
+ ['Codex','OpenAI 的 AI 编程工具/能力，适合读代码、改代码、做工程任务，但国内网络可用性不一定稳定。'],
+ ['WorkBuddy','腾讯云代码助手推出的桌面 AI Agent 办公工具，更适合国内用户做带装、文件处理和流程辅助。'],
+ ['CodeBuddy','腾讯云代码助手，偏 AI 编程，可通过 IDE、CLI 等方式辅助开发。'],
+ ['国内直连','不依赖科学上网，普通网络环境下优先可用。'],
+ ['科学上网','本产品不提供这类教程，也不把它作为交付前提。'],
+ ['HTML 单文件','一个 .html 文件同时包含页面、样式、交互，双击就能打开。'],
+ ['VS Code','代码编辑器，小白可以把它当成高级记事本和项目文件夹查看器。'],
+ ['Node.js','很多前端工具运行需要的环境，但纯 HTML 不一定需要。'],
+ ['npm','Node.js 的包管理工具，用于安装编程工具或项目依赖。'],
+ ['npm 镜像','让依赖下载更快的国内源，例如 npmmirror。'],
+ ['Git','管理代码版本的工具，小白初期不是必需，但进阶会用到。'],
+ ['CLI','命令行工具，适合愿意复制命令的用户。'],
+ ['IDE','集成开发环境，比如 VS Code/CodeBuddy IDE。'],
+ ['项目根目录','项目最外层文件夹，通常能看到 index.html 或 package.json。'],
+ ['中文路径','文件夹名含中文，部分工具可能兼容差。'],
+ ['权限','软件能不能读取或操作某个文件夹。'],
+ ['桌面智能体','能理解指令并操作电脑的软件，例如 WorkBuddy 这类工具。'],
+ ['安全边界','提前告诉 AI 哪些目录不能碰，哪些动作必须先问你。'],
+ ['白屏','页面打开什么都没有，通常是代码报错或复制不完整。'],
+ ['404','网页找不到，多见于部署路径错误。'],
+ ['部署','把本地网页放到网上，让别人用链接访问。'],
+ ['本地交付','不部署，直接把 HTML 文件发给客户，客户双击打开。'],
+ ['高客单','价格较高的数字产品，需要更强功能、审美、案例和售后边界。'],
+ ['真实报错库','收集用户真实失败截图、日志和修复步骤，是这个产品的护城河。']
+];
+
+function renderRoutes(){
+ const wrap=$('#routeCards');
+ wrap.innerHTML=routes.map((r,i)=>`<div class="card route-card ${i===0?'active':''}" data-route="${r.id}"><div class="icon">${r.icon}</div><h3>${r.title}</h3><p>${r.desc}</p></div>`).join('');
+ $$('.route-card').forEach(c=>c.addEventListener('click',()=>{$$('.route-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');renderRouteDetail(c.dataset.route)}));
+ renderRouteDetail('workbuddy');
+}
+function renderRouteDetail(id){
+ const r=routes.find(x=>x.id===id);
+ $('#routeDetail').innerHTML=`<h3>${r.title}｜执行顺序</h3><div class="steps">${r.steps.map((s,i)=>`<div class="step"><span class="num">${i+1}</span><div><strong>${s}</strong><small>完成后再进入下一步，不跳步，不同时开多条路线。</small></div></div>`).join('')}</div>`;
+}
+function renderChecklist(){
+ $('#checklist').innerHTML=checklist.map((c,i)=>`<label class="check-item"><input type="checkbox" data-check="${i}"><span>${c}</span></label>`).join('');
+ $$('#checklist input').forEach(i=>i.addEventListener('change',updateChecklist));
+ updateChecklist();
+}
+function updateChecklist(){
+ const checked=$$('#checklist input:checked').length,total=checklist.length,pct=Math.round(checked/total*100);
+ $('#checkPercent').textContent=pct+'%';$('#checkBar').style.width=pct+'%';
+ let status='还没开始',advice='先完成自测，系统会自动推荐路线。';
+ if(pct>0&&pct<45){status='先走纯 HTML';advice='准备度偏低。先不要折腾官方 Codex 或 CLI，直接走纯 HTML 单文件路线，先看到成果。'}
+ if(pct>=45&&pct<70){status='WorkBuddy 带装';advice='适合走 WorkBuddy 带装路线：辅助安装 VS Code/Node，创建测试文件夹，再生成 HTML。'}
+ if(pct>=70&&pct<90){status='CodeBuddy/HTML';advice='可以走 CodeBuddy 编程路线，也可以继续用 HTML 单文件快速出产品。'}
+ if(pct>=90){status='可用官方增强';advice='准备度很高。如果你能稳定打开官方 Codex，可作为增强路线；否则国内路线已经足够开始实战。'}
+ $('#checkStatus').textContent=status;$('#checkAdvice').textContent=advice;
+}
+function renderFlows(){
+ Object.keys(flows).forEach(key=>{
+  $('#flow-'+key).innerHTML=flows[key].map((f,i)=>`<details ${i===0?'open':''}><summary>${i+1}. ${f[0]}</summary><div class="detail-body"><p><strong>小白解释：</strong>${f[1]}</p><p><strong>成功标志：</strong>${f[2]}</p><p><strong>失败表现：</strong>${f[3]}</p><p><strong>操作建议：</strong>${f[4]==='无'||f[4]==='无命令'?'按文字步骤操作，不需要复制命令。':'复制下面内容执行或发给 AI。'}</p>${f[4]!=='无'&&f[4]!=='无命令'?codeBlock(f[4]):''}</div></details>`).join('');
+ });
+ $$('#flowTabs .tab').forEach(tab=>tab.addEventListener('click',()=>{$$('#flowTabs .tab').forEach(t=>t.classList.remove('active'));$$('.flow').forEach(f=>f.classList.remove('active'));tab.classList.add('active');$('#flow-'+tab.dataset.flow).classList.add('active')}));
+}
+function renderPrompts(){
+ $('#promptGrid').innerHTML=prompts.map(p=>`<div class="prompt-card"><span class="tag">${p[1]}</span><h3>${p[0]}</h3><div class="prompt-text">${p[2]}</div><button class="btn" data-copy="${attr(p[2])}">复制模板</button></div>`).join('');
+}
+function renderErrors(){
+ const q=($('#errorSearch').value||'').toLowerCase().trim(),sys=$('#systemFilter').value,favOnly=$('#favFilter').value==='fav',favs=JSON.parse(localStorage.getItem('domestic_favs')||'[]');
+ const filtered=errors.filter((e,idx)=>{const text=e.join(' ').toLowerCase();return(!q||text.includes(q))&&(sys==='all'||e[3]===sys)&&(!favOnly||favs.includes(idx))});
+ $('#errorGrid').innerHTML=filtered.map(e=>{const idx=errors.indexOf(e),isFav=favs.includes(idx);return `<div class="error-card"><span class="pill">${e[3]}</span><h3>${e[0]}</h3><p><strong>表现：</strong>${e[1]}</p><p><strong>原因：</strong>${e[2]}</p><p><strong>解决：</strong>${e[4]}</p>${e[5]!=='无命令'?codeBlock(e[5]):'<span class="pill">无需命令，按步骤检查</span>'}<div class="error-actions"><button class="fav-btn" data-fav="${idx}">${isFav?'★ 已收藏':'☆ 收藏'}</button><button class="copy-btn" data-copy="${attr('我在国内网络环境下遇到问题：'+e[0]+'。表现：'+e[1]+'。请给我国内可执行的解决步骤，不要提供科学上网教程。')}">复制求助词</button></div></div>`}).join('')||'<div class="card"><h3>没有找到匹配卡点</h3><p>换关键词试试：WorkBuddy、npm、中文路径、白屏、官网打不开、360。</p></div>';
+}
+function renderAcceptance(){
+ $('#acceptList').innerHTML=acceptance.map((a,i)=>`<label class="check-item"><input type="checkbox" data-accept="${i}"><span>${a}</span></label>`).join('');
+ $$('#acceptList input').forEach(i=>i.addEventListener('change',()=>{const total=acceptance.length,checked=$$('#acceptList input:checked').length;$('#acceptAdvice').textContent=checked===total?'验收完成：用户已经能用国内路线完成 AI 编程入门和 HTML 产品交付。':`已完成 ${checked}/${total}，剩下的就是售后最容易卡住的环节。`}));
+}
+function renderResources(){
+ $('#resourceList').innerHTML=resources.map((r,i)=>`<div class="resource"><div class="icon">${i+1}</div><div><h3 style="margin:0">${r[0]}</h3><p style="margin:0;color:var(--muted)">${r[1]}</p></div><span class="pill">${r[2]}</span></div>`).join('');
+}
+function renderGlossary(){
+ $('#glossaryGrid').innerHTML=glossary.map(g=>`<div class="term"><strong>${g[0]}</strong><span>${g[1]}</span></div>`).join('');
+}
+function runDiag(){
+ const official=$('#diagOfficial').value,wb=$('#diagWB').value,sys=$('#diagSystem').value,stage=$('#diagStage').value,kw=$('#diagKeyword').value.trim()||'没有明确关键词';
+ let route='纯 HTML 离线路线',why='先做出能打开的网页产品，降低失败率。',steps=['创建 codex-test 文件夹','生成 index.html','双击浏览器打开','再逐步美化和加功能'];
+ if(wb.includes('可以')){route='WorkBuddy 带装路线';why='你能使用 WorkBuddy，适合让它辅助安装环境和创建项目，但必须设置安全边界。';steps=['复制安全授权模板','创建 codex-test 文件夹','让 WorkBuddy 检查 VS Code/Node','生成一个 HTML 测试产品'];}
+ if(official.includes('稳定')){route='官方 Codex 增强路线 + 国内备用路线';why='你可以使用官方 Codex，但仍建议保留 WorkBuddy/HTML 备用方案，避免网络波动影响交付。';steps=['官方 Codex 处理代码任务','WorkBuddy 处理桌面带装和文件操作','纯 HTML 作为最低交付方案'];}
+ if(stage.includes('Node')||kw.toLowerCase().includes('npm')){route='先修 Node/npm，再进 CodeBuddy';why='你当前卡在基础环境，先不要做复杂项目。';steps=['检查 node -v/npm -v','必要时安装 Node.js LTS','npm 慢时检查 registry','仍失败就退回纯 HTML'];}
+ const prompt=`我在中国大陆网络环境下，不会科学上网。我的系统是${sys}，官方 Codex 情况：${official}，WorkBuddy 情况：${wb}，现在卡在：${stage}，关键词：${kw}。请给我一条国内可执行路线，优先让我先做出一个可打开的 HTML 产品，再逐步升级，不要提供科学上网教程。`;
+ $('#diagResult').innerHTML=`<h3>推荐路线：${route}</h3><p><strong>原因：</strong>${why}</p><ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol><p><strong>不要做：</strong>不要反复折腾打不开的官方入口，不要把公司资料和隐私文件交给桌面智能体。</p>${codeBlock(prompt)}`;
+}
+document.addEventListener('click',e=>{
+ const c=e.target.closest('[data-copy]');if(c){copyText(c.getAttribute('data-copy'));c.classList.add('done');setTimeout(()=>c.classList.remove('done'),1000)}
+ const f=e.target.closest('[data-fav]');if(f){const idx=Number(f.dataset.fav);let favs=JSON.parse(localStorage.getItem('domestic_favs')||'[]');favs=favs.includes(idx)?favs.filter(x=>x!==idx):[...favs,idx];localStorage.setItem('domestic_favs',JSON.stringify(favs));renderErrors();toast(favs.includes(idx)?'已收藏':'已取消收藏')}
+});
+$('#themeBtn').addEventListener('click',()=>{const html=document.documentElement,next=html.dataset.theme==='dark'?'light':'dark';html.dataset.theme=next;$('#themeBtn').textContent=next==='dark'?'浅色':'深色';localStorage.setItem('domestic_theme',next)});
+$('#exportChecklist').addEventListener('click',()=>{const checked=$$('#checklist input').map((i,idx)=>`${i.checked?'[x]':'[ ]'} ${checklist[idx]}`).join('\n');const blob=new Blob([`Codex 安装配置保姆包｜国内直连 WorkBuddy 版自测结果\n\n${checked}\n\n建议：${$('#checkAdvice').textContent}`],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='codex-domestic-checklist.txt';a.click();URL.revokeObjectURL(a.href)});
+$('#errorSearch').addEventListener('input',renderErrors);$('#systemFilter').addEventListener('change',renderErrors);$('#favFilter').addEventListener('change',renderErrors);$('#runDiag').addEventListener('click',runDiag);
+const savedTheme=localStorage.getItem('domestic_theme');if(savedTheme){document.documentElement.dataset.theme=savedTheme;$('#themeBtn').textContent=savedTheme==='dark'?'浅色':'深色'}
+renderRoutes();renderChecklist();renderFlows();renderPrompts();renderErrors();renderAcceptance();renderResources();renderGlossary();
+</script>
+</body>
+</html>

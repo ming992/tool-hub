@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex Mac 安装避坑库</title>
+  <style>
+    :root{
+      --bg:#f7f8fc;--bg2:#eef4ff;--card:rgba(255,255,255,.82);--text:#142033;--muted:#657189;--line:rgba(30,41,59,.12);
+      --primary:#4f46e5;--primary2:#06b6d4;--good:#16a34a;--warn:#f59e0b;--bad:#ef4444;--shadow:0 24px 80px rgba(31,41,55,.12);
+      --code:#101828;--codeText:#ecfeff;--chip:#eef2ff;--chipText:#3730a3;
+    }
+    [data-theme="dark"]{--bg:#0b1020;--bg2:#121a33;--card:rgba(15,23,42,.82);--text:#e5e7eb;--muted:#9aa7bd;--line:rgba(255,255,255,.1);--chip:#1f2a56;--chipText:#c7d2fe;--shadow:0 24px 80px rgba(0,0,0,.35);--code:#020617;--codeText:#d1fae5;}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at 20% 0%,#dbeafe 0,transparent 36%),radial-gradient(circle at 80% 8%,#ede9fe 0,transparent 34%),linear-gradient(180deg,var(--bg2),var(--bg));color:var(--text);line-height:1.6}a{color:inherit}.wrap{max-width:1240px;margin:0 auto;padding:0 20px}.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);background:color-mix(in srgb,var(--card) 86%,transparent);border-bottom:1px solid var(--line)}.nav{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:70px}.brand{display:flex;gap:12px;align-items:center;font-weight:900;letter-spacing:-.03em}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:white;box-shadow:0 12px 30px rgba(79,70,229,.35)}.navlinks{display:flex;gap:6px;align-items:center;overflow:auto;white-space:nowrap;max-width:780px;padding:8px}.navlinks a,.ghost{border:1px solid var(--line);background:rgba(255,255,255,.42);color:var(--muted);padding:9px 12px;border-radius:999px;text-decoration:none;font-size:13px;cursor:pointer}.navlinks a:hover,.ghost:hover{color:var(--text);border-color:color-mix(in srgb,var(--primary) 48%,var(--line))}.theme{border:0;border-radius:999px;padding:10px 14px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;font-weight:700;cursor:pointer}.hero{padding:58px 0 34px}.hero-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:24px;align-items:stretch}.hero-card,.card{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:28px}.hero-card{padding:38px;position:relative;overflow:hidden}.hero-card:before{content:"";position:absolute;inset:-80px -110px auto auto;width:340px;height:340px;border-radius:999px;background:linear-gradient(135deg,rgba(79,70,229,.24),rgba(6,182,212,.2));filter:blur(4px)}.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.45);padding:7px 12px;border-radius:999px;color:var(--muted);font-size:13px}.h1{font-size:52px;line-height:1.06;letter-spacing:-.055em;margin:18px 0 12px}.sub{font-size:18px;color:var(--muted);max-width:760px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:16px;padding:13px 18px;font-weight:800;cursor:pointer;background:var(--text);color:var(--bg);box-shadow:0 12px 26px rgba(15,23,42,.16)}.btn.secondary{background:rgba(255,255,255,.48);color:var(--text);border:1px solid var(--line);box-shadow:none}.btn.good{background:var(--good);color:white}.btn.warn{background:var(--warn);color:#111827}.btn.bad{background:var(--bad);color:white}.btn.small{padding:8px 10px;border-radius:11px;font-size:12px}.panel{padding:22px}.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:20px;padding:16px;background:rgba(255,255,255,.36)}.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:13px}.progress{height:12px;border-radius:999px;background:rgba(100,116,139,.2);overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:999px;transition:.4s}.section{padding:28px 0}.section-title{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px}.section-title h2{font-size:30px;letter-spacing:-.04em;margin:0}.section-title p{margin:4px 0 0;color:var(--muted)}.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}.card{padding:22px}.mini{font-size:13px;color:var(--muted)}.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:var(--chip);color:var(--chipText);font-size:12px;font-weight:800;margin:2px}.tag.good{background:rgba(22,163,74,.12);color:#15803d}.tag.warn{background:rgba(245,158,11,.15);color:#b45309}.tag.bad{background:rgba(239,68,68,.13);color:#b91c1c}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:13px;font-weight:800;margin:0 0 6px}.field input,.field select,.field textarea,.searchbox{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.55);color:var(--text);outline:none}.field textarea{min-height:86px;resize:vertical}.chips{display:flex;flex-wrap:wrap;gap:8px}.choice{padding:9px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.42);cursor:pointer;color:var(--muted);font-size:13px}.choice.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;border-color:transparent}.checkitem{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:18px;padding:15px;background:rgba(255,255,255,.35);margin-bottom:10px}.checkitem input{width:19px;height:19px;margin-top:4px}.checkitem h4{margin:0 0 5px}.accordion{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.34);margin-bottom:10px}.acc-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px;cursor:pointer}.acc-body{display:none;padding:0 16px 16px;color:var(--muted)}.accordion.open .acc-body{display:block}.route-card{border:1px solid var(--line);border-radius:22px;padding:18px;background:rgba(255,255,255,.36)}.route-card.recommended{outline:3px solid rgba(79,70,229,.24)}.code{background:var(--code);color:var(--codeText);padding:12px;border-radius:14px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;overflow:auto;white-space:pre-wrap}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{border:1px solid var(--line);border-radius:999px;padding:9px 12px;cursor:pointer;color:var(--muted);background:rgba(255,255,255,.38)}.tab.active{background:var(--text);color:var(--bg)}.notice{border-left:4px solid var(--primary);padding:13px 14px;border-radius:14px;background:rgba(79,70,229,.08);color:var(--muted)}.risk{font-weight:900}.risk.low{color:var(--good)}.risk.mid{color:var(--warn)}.risk.high{color:var(--bad)}.timeline{position:relative}.node{display:grid;grid-template-columns:48px 1fr;gap:14px;margin-bottom:14px}.node .dot{height:48px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:white;font-weight:900}.node .box{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.36)}.toast{position:fixed;right:18px;bottom:18px;z-index:100;background:var(--text);color:var(--bg);padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}.footer{padding:36px 0 50px;color:var(--muted);font-size:13px}.table{width:100%;border-collapse:collapse}.table th,.table td{border-bottom:1px solid var(--line);text-align:left;padding:10px;font-size:13px;vertical-align:top}.mobile-menu{display:none}@media(max-width:920px){.hero-grid,.grid.two,.grid.three,.grid.four,.form-grid{grid-template-columns:1fr}.h1{font-size:38px}.navlinks{display:none}.mobile-menu{display:inline-flex}.hero-card{padding:28px}.section-title{align-items:flex-start;flex-direction:column}.stat-grid{grid-template-columns:1fr 1fr}.checkitem{grid-template-columns:auto 1fr}.checkitem .btn{grid-column:1/-1}}@media print{.topbar,.actions,.btn,.ghost,.theme{display:none!important}body{background:white}.card,.hero-card{box-shadow:none;break-inside:avoid}.section{padding:14px 0}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap nav">
+      <div class="brand"><div class="logo">⌘</div><div>Codex Mac 安装避坑库<br><span class="mini">安装导航 · 报错排查 · 客户交付</span></div></div>
+      <div class="navlinks" id="navlinks"></div>
+      <button class="ghost mobile-menu" onclick="toggleMobileNav()">菜单</button>
+      <button class="theme" onclick="toggleTheme()">暗色</button>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="hero" id="home">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <span class="eyebrow">面向中国 Mac 用户 · 小白可用 · 可交付售卖</span>
+          <h1 class="h1">Codex Mac 安装避坑库</h1>
+          <p class="sub">把“安装 Codex 到处踩坑”变成一套可点击、可填写、可搜索、可导出、可同步的工具。适合 AI 学习者、博主、一人公司、售后陪跑和虚拟产品交付。</p>
+          <div class="actions">
+            <button class="btn" onclick="scrollToId('profile')">开始填写我的情况</button>
+            <button class="btn secondary" onclick="generateRoute()">一键生成路线</button>
+            <button class="btn secondary" onclick="scrollToId('errors')">搜索报错</button>
+            <button class="btn secondary" onclick="exportReport()">导出安装报告</button>
+          </div>
+          <div class="grid four" style="margin-top:24px">
+            <div class="notice"><b>选对入口</b><br>App / CLI / IDE extension 分流</div>
+            <div class="notice"><b>看懂报错</b><br>英文错误转中文排查</div>
+            <div class="notice"><b>命令安全</b><br>高风险操作显著提示</div>
+            <div class="notice"><b>可售卖</b><br>飞书、WorkBuddy、售后资料</div>
+          </div>
+        </div>
+        <div class="card panel">
+          <h3 style="margin-top:0">当前仪表盘</h3>
+          <div class="stat-grid">
+            <div class="stat"><b id="progressNum">0%</b><span>安装准备完成度</span></div>
+            <div class="stat"><b id="doneCount">0</b><span>已完成检查项</span></div>
+            <div class="stat"><b id="riskText">待评估</b><span>当前风险等级</span></div>
+            <div class="stat"><b id="routeText">未选择</b><span>推荐路线</span></div>
+          </div>
+          <p class="mini" style="margin:18px 0 8px">进度条</p>
+          <div class="progress"><div class="bar" id="progressBar"></div></div>
+          <div class="notice" style="margin-top:18px" id="dailyTip">建议先填写 Mac 型号、芯片类型、安装目标，再执行环境检测，不要直接复制陌生教程里的命令。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="profile">
+      <div class="section-title"><div><h2>我的安装情况编辑器</h2><p>客户根据自己的 Mac、网络、技术基础填写，页面会自动生成安装路线和排错提示词。</p></div><button class="btn secondary" onclick="loadSample(0)">套用小白案例</button></div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="field"><label>用户昵称</label><input id="nickname" placeholder="例如：小红书 AI 学习者" /></div>
+          <div class="field"><label>Mac 型号</label><input id="macModel" placeholder="例如：MacBook Air M2 13寸" /></div>
+          <div class="field"><label>芯片类型</label><select id="chip"><option value="">请选择</option><option>Apple Silicon M1/M2/M3/M4</option><option>Intel</option><option>不确定</option></select></div>
+          <div class="field"><label>macOS 版本</label><input id="macos" placeholder="例如：macOS 15 / 14 / 13" /></div>
+          <div class="field"><label>终端能力</label><select id="terminalLevel"><option>完全不会</option><option>会复制命令</option><option>能看懂基础命令</option><option>熟练</option></select></div>
+          <div class="field"><label>当前网络</label><select id="network"><option>国内网络不稳定</option><option>家庭宽带</option><option>公司网络</option><option>校园网</option><option>手机热点</option><option>海外网络</option></select></div>
+          <div class="field"><label>安装目标</label><select id="goal"><option>只想安装 Codex App</option><option>想使用 Codex CLI</option><option>想在 VS Code 使用</option><option>想在 Cursor 使用</option><option>想配合 GitHub 使用</option><option>想用 Codex 做 HTML 产品</option><option>想做安装陪跑交付</option></select></div>
+          <div class="field"><label>当前卡住位置</label><select id="stuck"><option>不知道从哪里开始</option><option>Homebrew 安装失败</option><option>Git 安装失败</option><option>Node 安装失败</option><option>npm 报错</option><option>Codex 登录失败</option><option>终端命令找不到</option><option>编辑器识别不到</option><option>GitHub 连接失败</option><option>运行项目失败</option></select></div>
+        </div>
+        <div style="margin-top:16px" class="field"><label>已安装工具</label><div class="chips" id="toolChips"></div></div>
+        <div class="field" style="margin-top:16px"><label>特殊情况 / 客户备注</label><textarea id="notes" placeholder="例如：公司网络不能访问 GitHub；之前复制过很多教程；终端里出现 permission denied。"></textarea></div>
+        <div class="actions"><button class="btn" onclick="saveProfile()">保存我的情况</button><button class="btn secondary" onclick="generateRoute()">生成推荐路径</button><button class="btn secondary" onclick="resetProfile()">重置</button></div>
+        <div class="notice" id="profileResult" style="margin-top:16px">填写后点击“生成推荐路径”。所有信息默认只保存在本地浏览器。</div>
+      </div>
+      <div class="grid three" style="margin-top:16px" id="samples"></div>
+    </section>
+
+    <section class="section" id="checklist">
+      <div class="section-title"><div><h2>Mac 环境检测清单</h2><p>每项都有检查命令、正常结果、异常处理和备注，适合交付给客户逐项完成。</p></div><button class="btn secondary" onclick="resetChecks()">重置检查项</button></div>
+      <div class="grid two"><div class="card" id="checklistBox"></div><div class="card"><h3>检测结果说明</h3><div id="checkSummary" class="notice"></div><h3>安装前安全提醒</h3><ul class="mini"><li>不要把 API Key、Token、邮箱验证码、SSH 私钥发给陌生人。</li><li>不要执行来源不明的删除、重装、权限提升命令。</li><li>安装前把重要项目、桌面文件、客户资料做好备份。</li><li>报错截图前先遮挡邮箱、密钥、Token、个人路径。</li><li>不要购买来路不明账号，不做规避风控或绕过平台限制的操作。</li></ul></div></div>
+    </section>
+
+    <section class="section" id="routes">
+      <div class="section-title"><div><h2>安装路线选择器</h2><p>根据客户目标选择路径：小白体验、CLI、编辑器、GitHub、中文学习、交付陪跑。</p></div><button class="btn secondary" onclick="generateRoute()">按我的情况推荐</button></div>
+      <div class="grid three" id="routeCards"></div>
+    </section>
+
+    <section class="section" id="commands">
+      <div class="section-title"><div><h2>命令复制中心</h2><p>命令按场景分类，小白可以先看解释，再一键复制到终端。</p></div><input class="searchbox" style="max-width:320px" id="cmdSearch" placeholder="搜索命令：git / node / brew" oninput="renderCommands()"></div>
+      <div class="tabs" id="cmdTabs"></div>
+      <div class="grid two" id="commandList"></div>
+    </section>
+
+    <section class="section" id="errors">
+      <div class="section-title"><div><h2>报错检索库</h2><p>内置 50+ 个常见 Mac 安装避坑场景，支持搜索、筛选、点击展开。</p></div><button class="btn secondary" onclick="exportCSV()">导出 CSV 报错库</button></div>
+      <input class="searchbox" id="errorSearch" placeholder="输入报错原文或关键词：permission / brew / node / PATH" oninput="renderErrors()">
+      <div class="filters" id="errorFilters"></div>
+      <div id="errorList"></div>
+    </section>
+
+    <section class="section" id="map">
+      <div class="section-title"><div><h2>小白避坑地图</h2><p>从准备账号到复盘交付，每个节点都能点击展开。</p></div></div>
+      <div class="card timeline" id="mapBox"></div>
+    </section>
+
+    <section class="section" id="terms">
+      <div class="section-title"><div><h2>看不懂就点这里：术语词典</h2><p>用大白话解释 Mac 安装 Codex 常见词汇。</p></div></div>
+      <div class="grid three" id="termsBox"></div>
+    </section>
+
+    <section class="section" id="ai">
+      <div class="section-title"><div><h2>AI 辅助排错生成器</h2><p>客户把自己的情况填进去，一键生成可复制给 ChatGPT / Codex / DeepSeek / Kimi 的排错提示词。</p></div><button class="btn secondary" onclick="fillFromProfile()">从我的情况填入</button></div>
+      <div class="grid two">
+        <div class="card">
+          <div class="field"><label>执行到第几步</label><input id="aiStep" placeholder="例如：安装 Homebrew 第 2 步"></div>
+          <div class="field"><label>我输入的命令</label><textarea id="aiCmd" placeholder="粘贴你在终端输入的命令"></textarea></div>
+          <div class="field"><label>终端返回的报错</label><textarea id="aiErr" placeholder="完整粘贴英文报错，不要只截图"></textarea></div>
+          <div class="field"><label>已经尝试过的方法</label><textarea id="aiTried" placeholder="例如：重启终端、换网络、重新安装 Node"></textarea></div>
+          <div class="field"><label>希望 AI 怎么回答</label><select id="aiStyle"><option>小白版</option><option>一步一步版</option><option>专业版</option><option>表格版</option><option>只给命令版</option></select></div>
+          <button class="btn" onclick="generatePrompt()">生成排错提示词</button>
+        </div>
+        <div class="card"><h3>生成结果</h3><textarea id="promptOut" style="min-height:330px;width:100%;border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.55);color:var(--text)"></textarea><div class="actions"><button class="btn secondary" onclick="copyById('promptOut')">复制提示词</button><button class="btn secondary" onclick="downloadText('codex-mac-ai-prompt.txt', document.getElementById('promptOut').value)">下载 TXT</button></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="domestic">
+      <div class="section-title"><div><h2>国产 AI 辅助区</h2><p>把英文报错、安装步骤、客户售后资料，交给不同 AI 工具辅助理解和整理。</p></div></div>
+      <div class="grid three" id="domesticBox"></div>
+    </section>
+
+    <section class="section" id="sync">
+      <div class="section-title"><div><h2>飞书同步 & WorkBuddy 工作流</h2><p>纯前端模拟同步，生成可复制的数据结构，方便放入团队知识库和客户售后流程。</p></div></div>
+      <div class="grid two">
+        <div class="card"><h3>同步到飞书知识库</h3><p class="mini">生成文档目录、多维表格字段、客户安装记录和报错库 CSV。</p><div class="actions"><button class="btn" onclick="genFeishu()">生成飞书导入内容</button><button class="btn secondary" onclick="copyById('feishuOut')">复制飞书内容</button></div><textarea id="feishuOut" style="min-height:300px;width:100%;margin-top:14px;border-radius:16px;padding:14px;background:rgba(255,255,255,.55);color:var(--text);border:1px solid var(--line)"></textarea></div>
+        <div class="card"><h3>WorkBuddy 安装陪跑工作流</h3><p class="mini">创建安装任务、售后工单、复盘报告、知识库更新和小红书内容素材。</p><div class="actions"><button class="btn" onclick="genWorkBuddy()">同步到 WorkBuddy</button><button class="btn secondary" onclick="copyById('workOut')">复制工作流</button></div><textarea id="workOut" style="min-height:300px;width:100%;margin-top:14px;border-radius:16px;padding:14px;background:rgba(255,255,255,.55);color:var(--text);border:1px solid var(--line)"></textarea></div>
+      </div>
+    </section>
+
+    <section class="section" id="downloads">
+      <div class="section-title"><div><h2>下载导出中心</h2><p>把页面、用户配置、报错库、安装报告、飞书内容和小红书文案导出给客户。</p></div></div>
+      <div class="grid four">
+        <button class="btn secondary" onclick="exportHTML()">导出 HTML</button>
+        <button class="btn secondary" onclick="exportMarkdown()">导出 Markdown 手册</button>
+        <button class="btn secondary" onclick="exportJSON()">导出 JSON 用户配置</button>
+        <button class="btn secondary" onclick="exportCSV()">导出 CSV 报错库</button>
+        <button class="btn secondary" onclick="exportReport()">导出安装报告</button>
+        <button class="btn secondary" onclick="window.print()">打印 / 保存 PDF</button>
+        <button class="btn secondary" onclick="copyWord()">复制 Word 版内容</button>
+        <button class="btn secondary" onclick="copyXHS()">复制小红书文案</button>
+      </div>
+      <div class="notice" style="margin-top:16px">PDF 导出方式：点击“打印 / 保存 PDF”，在浏览器打印窗口中选择“另存为 PDF”。Word 导出方式：点击复制 Word 版内容后粘贴到 WPS / Word。</div>
+    </section>
+
+    <section class="section" id="delivery">
+      <div class="section-title"><div><h2>客户交付资料 & 小红书营销素材</h2><p>适合把这个产品包装成 299—799 元的安装避坑资料、陪跑服务或售后工具。</p></div></div>
+      <div class="grid two"><div class="card" id="deliveryBox"></div><div class="card" id="xhsBox"></div></div>
+    </section>
+
+    <section class="section" id="log">
+      <div class="section-title"><div><h2>更新日志与官方入口</h2><p>Codex 相关能力会更新，最终下载和安装方式以 OpenAI 官方页面为准。</p></div></div>
+      <div class="card">
+        <table class="table"><tr><th>版本</th><th>更新内容</th><th>建议</th></tr><tr><td>v1.0</td><td>安装路线、报错库、命令中心、AI 排错、飞书/WorkBuddy、导出中心。</td><td>适合作为首次交付版。</td></tr><tr><td>v1.1 建议</td><td>持续补充真实客户报错截图、终端日志、修复路径和售后话术。</td><td>把护城河放在“真实案例库”。</td></tr><tr><td>v1.2 建议</td><td>增加会员登录、云端报错库、客户工单、案例投稿。</td><td>适合升级为小程序或 SaaS。</td></tr></table>
+        <p class="mini">官方参考：OpenAI Codex 页面、Codex App、Codex CLI Quickstart、Codex IDE extension。页面中的命令和排错建议主要用于学习与安全排查，不替代官方文档。</p>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast">已复制</div>
+
+<script>
+const navs=[['home','首页'],['profile','我的情况'],['checklist','环境检测'],['routes','安装路线'],['commands','命令中心'],['errors','报错检索'],['map','避坑地图'],['terms','术语'],['ai','AI排错'],['domestic','国产AI'],['sync','飞书/WorkBuddy'],['downloads','下载'],['delivery','交付素材']];
+const tools=['Homebrew','Git','Node.js','npm','pnpm','VS Code','Cursor','Windsurf','GitHub Desktop'];
+let selectedTools=new Set(JSON.parse(localStorage.getItem('codexTools')||'[]'));
+const checks=[
+ ['macOS 版本','确认系统版本，避免下载或安装不兼容工具。','sw_vers','正常能看到 ProductVersion。异常时先更新系统或记录版本给 AI。','低'],
+ ['芯片架构','Apple Silicon 与 Intel 的 Homebrew 路径不同，选错会导致命令失效。','uname -m','arm64 通常是 Apple Silicon；x86_64 通常是 Intel。','中'],
+ ['终端是否可用','所有 CLI、Git、Node 安装都需要终端。','echo "Terminal OK"','能显示 Terminal OK 就说明终端可执行基础命令。','低'],
+ ['Shell 类型','Mac 新系统多为 zsh，配置文件通常是 .zshrc。','echo $SHELL','看到 /bin/zsh 说明是 zsh。','低'],
+ ['Git 是否安装','GitHub 协作、项目克隆、版本管理需要 Git。','git --version','能看到 git version 即正常。','中'],
+ ['Xcode Command Line Tools','很多编译、Git、Homebrew 依赖它。','xcode-select -p','能看到路径即正常；异常可执行 xcode-select --install。','中'],
+ ['Homebrew 是否安装','Mac 上常用包管理工具，方便安装依赖。','brew --version','能看到版本号即正常。','中'],
+ ['Homebrew 路径','Apple Silicon 常见路径是 /opt/homebrew，Intel 常见路径是 /usr/local。','which brew','路径与芯片匹配更稳定。','高'],
+ ['Node.js 是否安装','很多前端项目、插件和构建工具依赖 Node。','node -v','能看到 v18/v20/v22 等版本即正常。','中'],
+ ['npm 是否可用','安装 JS 依赖常用 npm。','npm -v','能看到版本号即正常。','中'],
+ ['pnpm 是否可用','部分项目更推荐 pnpm 管理依赖。','pnpm -v','能看到版本号即正常；没有可暂时跳过。','低'],
+ ['VS Code / Cursor 是否安装','如果走编辑器路线，需要提前安装并能打开项目文件夹。','code --version','如果 code 不存在，也可从编辑器内打开终端。','低'],
+ ['GitHub 登录状态','克隆私有仓库或推送代码需要登录。','git config --global user.email','能看到邮箱不代表完全登录，但可作为基础检查。','中'],
+ ['网络稳定性','下载、登录、拉取依赖都可能受网络影响。','ping -c 4 github.com','如果失败，记录网络环境，不要盲目重装。','中'],
+ ['项目目录权限','项目文件夹没有读写权限会导致安装依赖失败。','pwd && ls -la','查看当前目录与权限，优先使用用户目录下项目文件夹。','中']
+];
+const routes=[
+ {id:'A',name:'Codex App 小白路线',fit:'完全不懂命令行，只想先体验 Codex。',not:'想深度改项目、跑命令、做自动化的人。',level:'低',time:'10—25 分钟',steps:['确认 Mac 芯片类型','到官方页面下载对应版本','拖入 Applications','首次打开并登录','处理 macOS 安全弹窗','创建或打开一个测试项目','验证能正常启动'],risks:['Intel 与 Apple Silicon 下载错','App 被系统安全策略拦截','账号登录状态不稳定'],done:'能打开 App 并完成一次基础对话或项目操作。'},
+ {id:'B',name:'Codex CLI 终端路线',fit:'想在本地项目里用 Codex 辅助开发的人。',not:'完全害怕终端且不愿学习复制命令的人。',level:'中',time:'30—60 分钟',steps:['检查终端和 Shell','检查 Git / Node / npm','阅读官方 CLI 安装入口','执行安装命令','登录 ChatGPT','进入项目目录','运行 codex 并验证'],risks:['PATH 配置错误','Node/npm 版本冲突','国内网络导致下载失败'],done:'终端中能启动 Codex，并能读取当前项目。'},
+ {id:'C',name:'VS Code / Cursor 编辑器路线',fit:'想在编辑器里使用 Codex 修改项目、生成 HTML 产品的人。',not:'没有项目目录、不知道编辑器是什么的人。',level:'中',time:'20—50 分钟',steps:['安装 VS Code 或 Cursor','打开项目文件夹','确认内置终端可用','安装相关扩展或按官方 IDE 路径连接','登录账号','让 Codex 读取当前项目','生成一个测试文件'],risks:['编辑器终端找不到 brew/node','扩展未登录','项目目录没权限'],done:'编辑器里能让 Codex 修改或创建文件。'},
+ {id:'D',name:'GitHub 项目协作路线',fit:'要克隆、提交、推送项目，或者做团队协作的人。',not:'只想本地体验 App 的用户。',level:'中高',time:'45—90 分钟',steps:['检查 Git','设置 Git 用户名邮箱','登录 GitHub','配置 SSH Key 或 HTTPS','克隆测试仓库','提交一次测试修改','推送到远程仓库'],risks:['SSH Key 权限错误','仓库不存在','公司网络限制 GitHub'],done:'能 clone、commit、push。'},
+ {id:'E',name:'中文小白学习路线',fit:'想先学会整体流程，不急着复杂开发的人。',not:'已经熟练开发、追求极简命令的人。',level:'低',time:'3—7 天练习',steps:['先理解 App / CLI / IDE 区别','每天只练一个命令','用国产 AI 翻译报错','截图记录安装过程','完成一个 HTML 小项目','整理自己的避坑笔记'],risks:['一次性学太多','看不懂就重装','忽略隐私泄露'],done:'能解释每一步在做什么。'},
+ {id:'F',name:'产品交付 / 陪跑路线',fit:'AI 博主、资料卖家、售后陪跑、一人公司。',not:'只想自己装一次的人。',level:'中',time:'1—2 天整理',steps:['建立客户采集表','让客户填写 Mac 信息','按路线陪跑安装','记录报错和修复','导出安装报告','沉淀到飞书/WorkBuddy','生成小红书素材'],risks:['没有标准化售后','客户隐私未遮挡','报错记录不完整'],done:'能把一次安装变成可复用的交付 SOP。'}
+];
+const commands=[
+ ['系统','查看 macOS 版本','sw_vers','确认当前 macOS 版本，方便判断兼容性。','低'],['系统','查看芯片架构','uname -m','arm64 多为 Apple Silicon，x86_64 多为 Intel。','低'],['系统','查看 Shell','echo $SHELL','确认使用 zsh 还是 bash，决定配置文件位置。','低'],['系统','查看当前路径','pwd','确认你现在在哪个文件夹执行命令。','低'],['系统','打开当前目录','open .','在 Finder 中打开当前终端目录。','低'],
+ ['Git','检查 Git','git --version','查看 Git 是否安装。','低'],['Git','安装命令行工具','xcode-select --install','Git 或编译工具缺失时常用。','中'],['Git','查看 Git 邮箱','git config --global user.email','检查 Git 全局邮箱配置。','低'],['Git','设置 Git 用户名','git config --global user.name "你的名字"','设置提交代码时显示的名字。','低'],['Git','设置 Git 邮箱','git config --global user.email "你的邮箱"','设置提交代码时显示的邮箱。','低'],
+ ['Homebrew','检查 brew','brew --version','确认 Homebrew 是否安装。','低'],['Homebrew','查看 brew 路径','which brew','确认 brew 命令路径是否正确。','中'],['Homebrew','更新 brew','brew update','更新 Homebrew 索引；网络差时可能慢。','中'],['Homebrew','检查 brew 状态','brew doctor','让 Homebrew 自检并提示问题。','中'],['Homebrew','查看环境 PATH','echo $PATH','查看命令搜索路径，排查 command not found。','中'],
+ ['Node','检查 Node','node -v','确认 Node.js 版本。','低'],['Node','检查 npm','npm -v','确认 npm 是否可用。','低'],['Node','检查 pnpm','pnpm -v','确认 pnpm 是否可用。','低'],['Node','清理 npm 缓存','npm cache verify','校验 npm 缓存，比强制删除更安全。','低'],['Node','安装项目依赖','npm install','在项目目录执行，安装 package.json 中的依赖。','中'],['Node','启动常见前端项目','npm run dev','Vite/Next/React 项目常见启动命令，以 package.json 为准。','中'],
+ ['权限','查看目录权限','ls -la','查看当前文件夹权限和所有者。','中'],['权限','查看当前用户','whoami','确认当前终端用户。','低'],['权限','安全提醒','不要随便执行 sudo rm -rf 或未知 chmod 命令','高危命令可能删除文件或破坏权限。','高'],
+ ['项目','查看文件列表','ls','查看当前目录有哪些文件。','低'],['项目','查看隐藏文件','ls -la','检查 .env、.zshrc 等隐藏文件。','低'],['项目','查找 package.json','find . -maxdepth 2 -name package.json','确认当前目录附近是否有前端项目配置。','中'],['项目','查看占用端口','lsof -i :3000','排查 localhost 端口被占用。','中'],['项目','停止进程提示','在终端按 Control + C 停止当前运行任务','停止 dev server 或卡住的命令。','低']
+];
+const errorTypes=['全部','命令缺失','权限','网络','版本','路径','GitHub','编辑器','项目运行','安全'];
+const baseErrors=[
+ ['zsh: command not found','命令缺失','终端找不到你输入的命令。','检查是否安装、PATH 是否生效、是否重启终端。'],['command not found: brew','命令缺失','Homebrew 未安装或路径没写入 Shell。','先确认芯片类型，再检查 which brew 和 echo $PATH。'],['command not found: git','命令缺失','Git 未安装或命令行工具缺失。','执行 xcode-select --install 或安装 Git。'],['command not found: node','命令缺失','Node.js 未安装或路径不生效。','检查 node -v，必要时通过稳定方式安装 Node。'],['command not found: npm','命令缺失','npm 通常随 Node 安装，可能 Node 安装异常。','先检查 node -v，再检查 npm -v。'],
+ ['permission denied','权限','当前用户没有执行或写入权限。','不要盲目 sudo，先确认目录位置和文件所有者。'],['operation not permitted','权限','macOS 隐私或系统权限阻止操作。','检查系统设置、终端权限、文件位置。'],['EACCES permission denied','权限','npm 或项目目录权限异常。','优先使用用户目录项目，不建议全局乱改权限。'],['mkdir permission denied','权限','创建文件夹失败，多见于系统目录。','把项目放到 ~/Projects 或桌面测试目录。'],['App 无法打开','权限','macOS 安全机制拦截未知来源或未验证 App。','在系统设置隐私与安全中确认来源，优先官方安装包。'],
+ ['Homebrew 安装卡住','网络','下载脚本或依赖时网络不稳定。','先记录卡住位置，换网络或稍后重试，不要连续乱装。'],['brew update 很慢','网络','Homebrew 索引更新依赖网络。','判断是否只是慢，不要误以为安装坏了。'],['network timeout','网络','连接超时，常见于下载依赖、访问 GitHub。','换网络、确认 DNS、记录完整报错。'],['SSL certificate problem','网络','证书验证失败，可能是网络代理或系统证书问题。','不要关闭安全校验，先换网络和检查时间。'],['GitHub clone 失败','网络','GitHub 连接失败或仓库权限不足。','区分网络失败、认证失败、仓库不存在。'],
+ ['node version too old','版本','Node 版本过低导致项目无法安装或启动。','查看项目要求，升级到 LTS 或项目指定版本。'],['ERESOLVE dependency tree','版本','依赖版本冲突。','先阅读冲突包，不要第一时间强制安装。'],['package lock conflict','版本','lock 文件与当前依赖环境不一致。','记录项目来源，谨慎删除 lock 文件。'],['pnpm version mismatch','版本','pnpm 版本与项目要求不一致。','根据 packageManager 字段选择版本。'],['xcode-select: error','版本','命令行工具路径异常或未安装。','执行 xcode-select -p 和 xcode-select --install。'],
+ ['PATH 配置错误','路径','命令安装了但终端找不到。','检查 echo $PATH 和 Shell 配置文件。'],['.zshrc 写错','路径','配置文件写入错误导致终端加载异常。','先备份 .zshrc，再逐行检查。'],['/opt/homebrew 和 /usr/local 混用','路径','Apple Silicon 与 Intel 的 brew 路径混乱。','确认芯片架构和 which brew。'],['终端重启后命令消失','路径','配置未持久化或写错文件。','确认写入 ~/.zshrc 而不是临时 export。'],['项目目录找错','路径','不在项目根目录执行 npm install。','用 ls 检查是否有 package.json。'],
+ ['authentication failed','GitHub','GitHub 认证失败，密码方式可能不可用。','使用官方推荐的登录、Token 或 SSH 方式。'],['repository not found','GitHub','仓库不存在或没有权限。','确认 URL、组织权限、是否登录正确账号。'],['SSH permission denied','GitHub','SSH Key 未配置或未授权。','检查 ssh -T 和 GitHub SSH Keys。'],['git push rejected','GitHub','本地分支落后或无权限推送。','先 pull 或确认分支权限。'],['git clone private repo failed','GitHub','私有仓库需要认证。','确认账号权限，不要把 Token 发给别人。'],
+ ['VS Code 终端找不到 node','编辑器','系统终端可用，但编辑器终端 PATH 不一致。','重启编辑器，从应用内重新打开终端。'],['Cursor 识别不到项目','编辑器','没有打开项目根目录或权限不足。','用 File > Open Folder 打开包含 package.json 的目录。'],['扩展无法安装','编辑器','网络、版本或 marketplace 连接问题。','确认编辑器版本和网络环境。'],['Codex 登录失败','编辑器','登录态、浏览器跳转或网络异常。','换默认浏览器、重启 App/编辑器，记录登录错误。'],['IDE extension 无响应','编辑器','扩展未启动或项目上下文未加载。','重载窗口、检查扩展状态、打开有效项目。'],
+ ['package.json not found','项目运行','不在前端项目根目录。','进入有 package.json 的文件夹再执行。'],['npm run dev missing script','项目运行','package.json 没有 dev 脚本。','查看 scripts 字段，不要套用固定命令。'],['localhost 打不开','项目运行','服务没启动、端口不对或浏览器地址错。','查看终端输出的 Local 地址。'],['port already in use','项目运行','端口被其他程序占用。','换端口或停止占用进程。'],['Vite 启动失败','项目运行','依赖、Node 版本或配置错误。','先 npm install，再看完整错误。'],['Next.js 启动失败','项目运行','Node 版本、依赖或环境变量问题。','检查 Node LTS 和 .env。'],['Tailwind 样式不生效','项目运行','配置、入口 CSS 或构建流程不正确。','检查 tailwind.config、postcss、CSS 引入。'],['环境变量未读取','项目运行','.env 文件名或位置错误，变量前缀不符合框架要求。','确认 .env 在项目根目录并重启服务。'],['API Key 暴露风险','安全','密钥出现在截图、GitHub 或前端代码。','立即撤销泄露密钥并重新生成。'],['复制陌生命令导致配置污染','安全','多教程混用导致路径和版本混乱。','先停止操作，保存日志，逐项排查。']
+];
+while(baseErrors.length<56){baseErrors.push(['补充场景 '+(baseErrors.length+1),'项目运行','这是可扩展报错记录位，可用于持续沉淀真实客户案例。','把报错原文、截图、修复步骤加入飞书多维表格。']);}
+const terms=[['终端','Mac 上输入命令的地方，就像和电脑底层对话的窗口。'],['命令行','一行一行输入指令，让电脑执行检查、安装、运行。'],['Shell','终端背后的解释器，Mac 常见是 zsh。'],['zsh','Mac 默认 Shell，很多配置写在 ~/.zshrc。'],['PATH','电脑寻找命令的位置清单，错了就会 command not found。'],['环境变量','给命令和项目读取的配置，例如路径、密钥、运行环境。'],['Homebrew','Mac 常用包管理器，能安装 Git、Node 等工具。'],['Git','代码版本管理工具，用于克隆、提交、推送项目。'],['GitHub','放代码仓库的平台，常用于项目协作。'],['Node.js','运行 JavaScript 工具链的环境，前端项目常用。'],['npm','Node 自带的包管理器，用于安装依赖。'],['pnpm','更快的包管理器，部分项目指定使用。'],['CLI','Command Line Interface，命令行工具。'],['App','图形界面应用，适合小白先体验。'],['IDE extension','编辑器扩展，让 Codex 在 VS Code/Cursor 中工作。'],['项目目录','你的代码文件夹，命令通常要在这里执行。'],['依赖','项目需要的第三方包。'],['权限','你是否有资格读写文件或执行命令。'],['端口','本地网页服务入口，例如 3000、5173。'],['API Key','调用服务的密钥，不要泄露。'],['Token','登录或调用接口的凭证，要保密。'],['SSH Key','安全连接 GitHub 的钥匙，私钥不能发给别人。'],['clone','把远程仓库复制到本地。'],['commit','提交一次代码修改记录。'],['push','把本地提交推送到远程仓库。'],['branch','代码分支，用于并行开发。']];
+const domestic=[['ChatGPT','适合综合排错、解释报错、生成安装报告和客户话术。'],['Codex','适合在项目目录内读代码、改文件、执行开发任务。'],['DeepSeek','适合中文解释命令、把英文报错拆成步骤。'],['Kimi','适合长文档总结、安装日志整理、生成知识库。'],['通义千问','适合中文教程改写、表格化输出、企业知识整理。'],['豆包','适合小白解释、短视频脚本、小红书文案。'],['文心一言','适合中文材料润色、培训课程文本。'],['智谱清言','适合结构化分析和排错逻辑梳理。'],['腾讯元宝','适合中文总结、办公资料整理。'],['讯飞星火','适合口播文案、培训讲稿、问答资料。'],['WorkBuddy','适合把客户安装任务、报错工单、复盘报告串成流程。']];
+const samples=[{name:'完全小白用户',macModel:'MacBook Air M2',chip:'Apple Silicon M1/M2/M3/M4',macos:'macOS 最新版',terminalLevel:'完全不会',network:'家庭宽带',goal:'只想安装 Codex App',stuck:'不知道从哪里开始',tools:[],notes:'想先体验，不想折腾命令行。'}, {name:'AI 博主用户',macModel:'MacBook Pro M3',chip:'Apple Silicon M1/M2/M3/M4',macos:'macOS 15',terminalLevel:'会复制命令',network:'国内网络不稳定',goal:'想用 Codex 做 HTML 产品',stuck:'编辑器识别不到',tools:['VS Code','Cursor','Git','Node.js','npm'],notes:'准备做小红书教程和虚拟产品交付。'}, {name:'安装失败用户',macModel:'MacBook Pro 2019',chip:'Intel',macos:'macOS 13',terminalLevel:'会复制命令',network:'公司网络',goal:'想使用 Codex CLI',stuck:'Homebrew 安装失败',tools:['Git'],notes:'终端提示 command not found，之前复制过多个教程。'}];
+function $(id){return document.getElementById(id)}
+function toast(msg='已完成'){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function toggleMobileNav(){const n=$('navlinks');n.style.display=n.style.display==='flex'?'none':'flex'}
+function toggleTheme(){document.body.dataset.theme=document.body.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',document.body.dataset.theme);document.querySelector('.theme').textContent=document.body.dataset.theme==='dark'?'亮色':'暗色'}
+function initNav(){ $('navlinks').innerHTML=navs.map(n=>`<a href="#${n[0]}">${n[1]}</a>`).join('') }
+function initTools(){ $('toolChips').innerHTML=tools.map(t=>`<button class="choice ${selectedTools.has(t)?'active':''}" onclick="toggleTool('${t}',this)">${t}</button>`).join('') }
+function toggleTool(t,el){selectedTools.has(t)?selectedTools.delete(t):selectedTools.add(t);el.classList.toggle('active');localStorage.setItem('codexTools',JSON.stringify([...selectedTools]));}
+function profile(){return {nickname:$('nickname').value,macModel:$('macModel').value,chip:$('chip').value,macos:$('macos').value,terminalLevel:$('terminalLevel').value,network:$('network').value,goal:$('goal').value,stuck:$('stuck').value,tools:[...selectedTools],notes:$('notes').value}}
+function saveProfile(){localStorage.setItem('codexProfile',JSON.stringify(profile()));localStorage.setItem('codexTools',JSON.stringify([...selectedTools]));toast('已保存到本地浏览器')}
+function loadProfile(){const p=JSON.parse(localStorage.getItem('codexProfile')||'{}');Object.keys(p).forEach(k=>{if($(k)&&k!=='tools')$(k).value=p[k]}); if(p.tools){selectedTools=new Set(p.tools);initTools()} }
+function resetProfile(){['nickname','macModel','macos','notes'].forEach(id=>$(id).value='');selectedTools.clear();initTools();localStorage.removeItem('codexProfile');localStorage.removeItem('codexTools');toast('已重置')}
+function recommend(){const p=profile();if(p.goal.includes('App')||p.terminalLevel==='完全不会')return 'A';if(p.goal.includes('CLI'))return 'B';if(p.goal.includes('VS Code')||p.goal.includes('Cursor')||p.goal.includes('HTML'))return 'C';if(p.goal.includes('GitHub'))return 'D';if(p.goal.includes('陪跑'))return 'F';return 'E'}
+function generateRoute(){const rid=recommend();const r=routes.find(x=>x.id===rid);$('routeText').textContent=r.name.replace('路线','');let risk='中'; if(profile().terminalLevel==='完全不会'&&rid!=='A')risk='高'; if(profile().network.includes('不稳定')||profile().stuck.includes('失败'))risk='中高'; if(rid==='A')risk='低'; $('riskText').textContent=risk; $('profileResult').innerHTML=`<b>推荐路线：${r.name}</b><br>适合原因：${r.fit}<br>下一步：先完成环境检测，再按路线步骤执行。当前卡点是「${profile().stuck}」，建议优先在报错库搜索相关关键词。`;renderRoutes(rid);toast('已生成推荐路线')}
+function renderSamples(){ $('samples').innerHTML=samples.map((s,i)=>`<div class="card"><h3>${s.name}</h3><p class="mini">${s.macModel}｜${s.chip}｜${s.goal}</p><button class="btn secondary" onclick="loadSample(${i})">一键套用此案例</button></div>`).join('') }
+function loadSample(i){const s=samples[i];['macModel','chip','macos','terminalLevel','network','goal','stuck','notes'].forEach(k=>$(k).value=s[k]);$('nickname').value=s.name;selectedTools=new Set(s.tools);initTools();saveProfile();generateRoute();scrollToId('profile')}
+function renderChecklist(){const saved=JSON.parse(localStorage.getItem('checks')||'{}');$('checklistBox').innerHTML=checks.map((c,i)=>`<div class="checkitem"><input type="checkbox" id="ck${i}" ${saved[i]?'checked':''} onchange="updateProgress()"><div><h4>${c[0]} <span class="tag ${c[4]==='高'?'bad':c[4]==='中'?'warn':'good'}">${c[4]}风险</span></h4><p class="mini">${c[1]}</p><div class="code">${c[2]}</div><p class="mini"><b>正常/异常：</b>${c[3]}</p><input class="searchbox" id="note${i}" placeholder="客户备注：执行结果、截图编号、异常现象" value="${saved['n'+i]||''}" oninput="saveCheckNotes()"></div><button class="btn secondary small" onclick="copyText('${c[2].replace(/'/g,"\\'")}')">复制命令</button></div>`).join('');updateProgress()}
+function saveCheckNotes(){const obj=JSON.parse(localStorage.getItem('checks')||'{}');checks.forEach((_,i)=>{if($('note'+i))obj['n'+i]=$('note'+i).value});localStorage.setItem('checks',JSON.stringify(obj))}
+function updateProgress(){const obj={};let done=0;checks.forEach((_,i)=>{if($('ck'+i)?.checked){obj[i]=true;done++} if($('note'+i))obj['n'+i]=$('note'+i).value});localStorage.setItem('checks',JSON.stringify(obj));const pct=Math.round(done/checks.length*100);$('progressNum').textContent=pct+'%';$('doneCount').textContent=done;$('progressBar').style.width=pct+'%';$('checkSummary').innerHTML=`已完成 ${done}/${checks.length} 项。${pct<40?'建议先不要安装 Codex CLI，优先把 Git、Homebrew、Node 和网络状态查清楚。':pct<80?'可以进入推荐路线，但遇到报错要先记录完整日志。':'准备度较高，可以进行安装并导出验收报告。'}`}
+function resetChecks(){localStorage.removeItem('checks');renderChecklist();toast('检查项已重置')}
+function renderRoutes(rec){$('routeCards').innerHTML=routes.map(r=>`<div class="route-card ${r.id===rec?'recommended':''}"><h3>${r.id}. ${r.name}</h3><span class="tag ${r.level.includes('高')?'bad':r.level==='中'?'warn':'good'}">难度 ${r.level}</span><span class="tag">${r.time}</span><p><b>适合：</b>${r.fit}</p><p class="mini"><b>不适合：</b>${r.not}</p><div class="accordion"><div class="acc-head" onclick="this.parentElement.classList.toggle('open')"><b>查看步骤与避坑</b><span>展开</span></div><div class="acc-body"><ol>${r.steps.map(s=>`<li>${s}</li>`).join('')}</ol><p><b>常见风险：</b>${r.risks.join('、')}</p><p><b>完成标志：</b>${r.done}</p></div></div></div>`).join('')}
+let activeCmdCat='全部';function renderCmdTabs(){const cats=['全部',...new Set(commands.map(c=>c[0]))];$('cmdTabs').innerHTML=cats.map(c=>`<button class="tab ${c===activeCmdCat?'active':''}" onclick="activeCmdCat='${c}';renderCmdTabs();renderCommands()">${c}</button>`).join('')}
+function renderCommands(){const q=$('cmdSearch').value.toLowerCase();const data=commands.filter(c=>(activeCmdCat==='全部'||c[0]===activeCmdCat)&&(c.join(' ').toLowerCase().includes(q)));$('commandList').innerHTML=data.map(c=>`<div class="card"><h3>${c[1]} <span class="tag ${c[4]==='高'?'bad':c[4]==='中'?'warn':'good'}">${c[4]}风险</span></h3><div class="code">${c[2]}</div><p class="mini">${c[3]}<br>复制后打开“终端”，粘贴命令，按 Enter 执行；执行后先看终端返回，不要连续乱输入。</p><button class="btn secondary small" onclick="copyText('${c[2].replace(/'/g,"\\'")}')">复制命令</button></div>`).join('')}
+let activeErrType='全部';function renderErrorFilters(){ $('errorFilters').innerHTML=errorTypes.map(t=>`<button class="tab ${t===activeErrType?'active':''}" onclick="activeErrType='${t}';renderErrorFilters();renderErrors()">${t}</button>`).join('') }
+function renderErrors(){const q=$('errorSearch').value.toLowerCase();let list=baseErrors.filter(e=>(activeErrType==='全部'||e[1]===activeErrType)&&e.join(' ').toLowerCase().includes(q));$('errorList').innerHTML=list.map((e,i)=>`<div class="accordion"><div class="acc-head" onclick="this.parentElement.classList.toggle('open')"><div><b>${e[0]}</b><br><span class="tag">${e[1]}</span><span class="mini">${e[2]}</span></div><span>展开</span></div><div class="acc-body"><p><b>中文解释：</b>${e[2]}</p><p><b>排查顺序：</b>1）保存完整报错；2）确认出现场景；3）检查环境检测清单；4）只执行一个修复动作；5）把结果记录到售后表。</p><p><b>修复方法：</b>${e[3]}</p><div class="code">请帮我排查 Mac 安装 Codex 问题。报错是：${e[0]}。出现场景：${e[1]}。请用小白能懂的话解释原因，并给出逐步排查方法。</div><button class="btn secondary small" onclick="copyText('请帮我排查 Mac 安装 Codex 问题。报错是：${e[0]}。出现场景：${e[1]}。请用小白能懂的话解释原因，并给出逐步排查方法。')">复制 AI 提问模板</button></div></div>`).join('') || '<div class="notice">没有找到，建议换关键词，例如 brew、node、permission、PATH、GitHub。</div>'}
+function renderMap(){const nodes=['准备账号与隐私保护','填写 Mac 情况','检查系统与芯片','选择 App / CLI / IDE 路线','执行安装前置工具','首次运行 Codex','接入编辑器或 GitHub','遇到报错先搜索库','生成 AI 排错提示词','导出安装报告并沉淀案例'];$('mapBox').innerHTML=nodes.map((n,i)=>`<div class="node"><div class="dot">${i+1}</div><div class="box accordion"><div class="acc-head" onclick="this.parentElement.classList.toggle('open')"><b>${n}</b><span>点击查看</span></div><div class="acc-body">本节点目标：${n}。操作建议：先记录现状，再执行一项操作，完成后勾选清单并截图保存。客户交付时要写清楚“做了什么、结果是什么、下一步是什么”。</div></div></div>`).join('')}
+function renderTerms(){ $('termsBox').innerHTML=terms.map(t=>`<div class="card"><h3>${t[0]}</h3><p class="mini">${t[1]}</p></div>`).join('') }
+function fillFromProfile(){const p=profile();$('aiStep').value=p.stuck;$('aiTried').value=p.notes;toast('已填入我的情况')}
+function generatePrompt(){const p=profile();const out=`你是一名 Mac 技术支持工程师和 Codex 安装排错专家，请帮我排查 Codex Mac 安装问题。\n\n我的基本情况：\n- 用户昵称：${p.nickname||'未填写'}\n- Mac 型号：${p.macModel||'未填写'}\n- 芯片类型：${p.chip||'未填写'}\n- macOS 版本：${p.macos||'未填写'}\n- 终端能力：${p.terminalLevel}\n- 当前网络：${p.network}\n- 安装目标：${p.goal}\n- 已安装工具：${p.tools.join('、')||'未填写'}\n\n我执行到这一步时卡住：${$('aiStep').value||p.stuck}\n我输入的命令：\n${$('aiCmd').value||'未填写'}\n\n终端返回的报错：\n${$('aiErr').value||'未填写'}\n\n我已经尝试过：\n${$('aiTried').value||p.notes||'未填写'}\n\n请你按“${$('aiStyle').value}”回答。要求：\n1. 先用小白能听懂的话解释可能原因。\n2. 按优先级给排查步骤，不要一次给太多命令。\n3. 每条命令说明复制到哪里、执行后正常结果是什么、异常怎么办。\n4. 明确告诉我哪些操作有风险。\n5. 不要让我执行来源不明、可能删除文件或泄露密钥的命令。\n6. 最后给我一段可记录到飞书/WorkBuddy 的售后复盘。`; $('promptOut').value=out;toast('提示词已生成')}
+function renderDomestic(){ $('domesticBox').innerHTML=domestic.map(d=>`<div class="card"><h3>${d[0]}</h3><p class="mini">${d[1]}</p><button class="btn secondary small" onclick="copyText('请把 Codex Mac 安装报错翻译成小白能懂的中文，并按原因、排查步骤、风险提醒、下一步建议输出。')">复制通用投喂模板</button></div>`).join('') }
+function genFeishu(){const p=profile();$('feishuOut').value=`# Codex Mac 安装记录\n\n## 1. 客户基础信息\n昵称：${p.nickname}\nMac：${p.macModel}\n芯片：${p.chip}\n系统：${p.macos}\n目标：${p.goal}\n当前卡点：${p.stuck}\n\n## 2. 飞书多维表格字段\n客户姓名｜Mac 型号｜芯片类型｜macOS 版本｜安装目标｜当前阶段｜报错类型｜报错原文｜修复状态｜负责人｜下次跟进时间｜是否完成｜是否需要人工介入｜备注\n\n## 3. 知识库目录\n客户基础信息 / Mac 环境检测结果 / 安装路径选择 / 执行步骤记录 / 报错截图记录 / 修复方案记录 / 最终安装结果 / 后续学习建议 / 售后 FAQ / 更新日志`;toast('飞书内容已生成')}
+function genWorkBuddy(){const p=profile();$('workOut').value=JSON.stringify({workflow:'Codex Mac 安装陪跑',customer:p.nickname,goal:p.goal,tasks:['创建安装前问卷','执行 Mac 环境检测','选择安装路线','记录报错与截图','生成 AI 排错提示词','输出客户复盘报告','沉淀到知识库','生成小红书素材'],status:'模拟同步成功，可复制到 WorkBuddy 使用'},null,2);toast('WorkBuddy 工作流已生成')}
+function renderDelivery(){ $('deliveryBox').innerHTML=`<h3>交付清单</h3><ul><li>安装流程导航</li><li>Mac 环境检查清单</li><li>50+ 报错检索库</li><li>命令复制中心</li><li>AI 排错提示词</li><li>飞书字段模板</li><li>WorkBuddy 工作流</li><li>安装报告导出</li></ul><h3>版本权益</h3><p><b>基础版：</b>流程 + 清单 + 常见报错。</p><p><b>进阶版：</b>AI 排错 + 飞书同步 + 下载中心。</p><p><b>陪跑版：</b>客户采集 + 售后工单 + 复盘报告 + WorkBuddy。</p><h3>不适合谁</h3><p class="mini">不愿意填写自己情况、不愿意保存报错原文、期待“一键永久解决所有安装问题”的用户。</p>`; const titles=['Mac 小白安装 Codex，最怕的不是不会，而是乱装','看不懂英文报错？这套 Codex Mac 避坑库帮你拆开','别再复制一堆命令了，先判断你的 Mac 属于哪条路线','Codex 安装失败后，真正该发给 AI 的不是一句“报错了”','给 AI 学习者做了一套 Mac 安装 Codex 排雷工具','文科生也能用的 Codex Mac 安装导航','Homebrew、Node、Git、PATH，一页帮你理清','Codex 安装陪跑怎么标准化？这套工具可以直接交付','AI 博主做教程前，先准备一套报错库','把一次安装失败，沉淀成你的付费资料']; $('xhsBox').innerHTML=`<h3>小红书标题</h3><ol>${titles.map(t=>`<li>${t}</li>`).join('')}</ol><h3>口播脚本示例</h3><p class="mini">你是不是也想在 Mac 上用 Codex，但一打开终端就开始报错？什么 command not found、permission denied、brew 找不到、node 版本不对，看得人头大。我做了一个 Codex Mac 安装避坑库，你先填写自己的 Mac 型号、芯片、系统版本和卡住的位置，它会自动推荐安装路线，还能搜索报错、复制命令、生成 AI 排错提示词，最后导出安装报告。它不是一篇教程，而是一套可以反复用的排雷工具。</p>` }
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('已复制'))}
+function copyById(id){navigator.clipboard.writeText($(id).value).then(()=>toast('已复制'))}
+function downloadText(name,text,type='text/plain'){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);toast('已下载 '+name)}
+function exportCSV(){let csv='报错名称,类型,中文解释,修复建议\n'+baseErrors.map(e=>e.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');downloadText('codex-mac-errors.csv',csv,'text/csv;charset=utf-8')}
+function exportJSON(){downloadText('codex-mac-profile.json',JSON.stringify(profile(),null,2),'application/json')}
+function exportMarkdown(){const p=profile();const md=`# Codex Mac 安装避坑手册\n\n## 我的情况\n${JSON.stringify(p,null,2)}\n\n## 推荐路线\n${routes.find(r=>r.id===recommend()).name}\n\n## 安全提醒\n- 不泄露 API Key / Token / SSH 私钥。\n- 不执行来源不明的高危命令。\n- 遇到报错先保存完整日志。\n\n## 常见命令\n${commands.map(c=>`### ${c[1]}\n\`${c[2]}\`\n${c[3]}`).join('\n\n')}`;downloadText('codex-mac-install-guide.md',md,'text/markdown')}
+function exportReport(){const p=profile();const r=routes.find(x=>x.id===recommend());const text=`Codex Mac 安装报告\n\n客户：${p.nickname}\nMac：${p.macModel}\n芯片：${p.chip}\n系统：${p.macos}\n目标：${p.goal}\n卡点：${p.stuck}\n推荐路线：${r.name}\n建议：先完成环境检测清单，再按 ${r.name} 执行。遇到报错先保存完整终端返回，不要连续重装。\n备注：${p.notes}`;downloadText('codex-mac-install-report.txt',text)}
+function exportHTML(){downloadText('codex_mac_install_avoid_pit_library.html',document.documentElement.outerHTML,'text/html')}
+function copyWord(){const p=profile();copyText(`《Codex Mac 安装避坑库》客户交付文档\n\n一、客户情况\n${JSON.stringify(p,null,2)}\n\n二、推荐路线\n${routes.find(r=>r.id===recommend()).name}\n\n三、售后说明\n请客户提供 Mac 型号、系统版本、完整报错原文和已经尝试过的方法。`)}
+function copyXHS(){const text=[...document.querySelectorAll('#xhsBox li')].map(x=>x.textContent).join('\n');copyText(text)}
+function init(){if(localStorage.getItem('theme'))document.body.dataset.theme=localStorage.getItem('theme');initNav();initTools();loadProfile();renderSamples();renderChecklist();renderRoutes();renderCmdTabs();renderCommands();renderErrorFilters();renderErrors();renderMap();renderTerms();renderDomestic();renderDelivery();}
+init();
+</script>
+</body>
+</html>

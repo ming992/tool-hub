@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 小白安装配置导航器</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;--surface:#ffffff;--surface2:#f8fafc;--text:#172033;--muted:#64748b;--line:#e2e8f0;
+      --brand:#2563eb;--brand2:#7c3aed;--good:#10b981;--warn:#f59e0b;--bad:#ef4444;--ink:#0f172a;
+      --shadow:0 20px 60px rgba(15,23,42,.08);--shadow2:0 10px 28px rgba(15,23,42,.07);--radius:22px;
+    }
+    [data-theme="dark"]{--bg:#0b1020;--surface:#111827;--surface2:#0f172a;--text:#e5e7eb;--muted:#94a3b8;--line:#263246;--brand:#60a5fa;--brand2:#a78bfa;--ink:#f8fafc;--shadow:0 20px 60px rgba(0,0,0,.35);--shadow2:0 10px 28px rgba(0,0,0,.25)}
+    [data-theme="eye"]{--bg:#f4f1e8;--surface:#fffaf0;--surface2:#fbf3df;--text:#2d261b;--muted:#77694f;--line:#eadfca;--brand:#8b5e34;--brand2:#256d57;--ink:#2d261b}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(37,99,235,.10),transparent 32%),radial-gradient(circle at top right,rgba(124,58,237,.10),transparent 34%),var(--bg);color:var(--text);line-height:1.65}
+    a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+    .topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:color-mix(in srgb,var(--surface) 88%,transparent);border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1440px;margin:auto;display:flex;align-items:center;gap:18px;padding:14px 24px}.logo{display:flex;align-items:center;gap:10px;font-weight:900;white-space:nowrap}.logo-mark{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:white;box-shadow:0 10px 20px rgba(37,99,235,.25)}
+    .nav{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a{padding:8px 12px;border-radius:999px;color:var(--muted);font-size:14px;white-space:nowrap}.nav a:hover,.nav a.active{background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand)}
+    .menu-btn{display:none;background:var(--surface2);color:var(--text);border:1px solid var(--line);padding:8px 12px;border-radius:12px}.wrap{max-width:1440px;margin:0 auto;padding:26px 24px 80px;display:grid;grid-template-columns:280px minmax(0,1fr);gap:22px}
+    .sidebar{position:sticky;top:78px;align-self:start;background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow2);padding:18px}.progress-box{padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(124,58,237,.10));border:1px solid color-mix(in srgb,var(--brand) 18%,var(--line))}.progress-title{font-weight:800;margin-bottom:8px}.progress-track{height:10px;background:rgba(148,163,184,.25);border-radius:999px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:999px;transition:.3s}.progress-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:var(--muted)}
+    .side-links{margin-top:14px;display:grid;gap:8px}.side-links a{padding:10px 12px;border-radius:14px;color:var(--muted);font-size:14px}.side-links a:hover{background:var(--surface2);color:var(--text)}.content{min-width:0}.section{background:color-mix(in srgb,var(--surface) 94%,transparent);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:28px;margin-bottom:22px}.hero{position:relative;overflow:hidden;min-height:420px;background:linear-gradient(135deg,color-mix(in srgb,var(--surface) 96%,transparent),color-mix(in srgb,var(--brand) 8%,var(--surface))),radial-gradient(circle at 92% 8%,rgba(124,58,237,.18),transparent 36%)}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand);font-size:13px;font-weight:800}.hero h1{font-size:clamp(34px,5vw,64px);line-height:1.05;margin:22px 0 16px;letter-spacing:-.04em}.hero p{max-width:780px;color:var(--muted);font-size:18px}.hero-actions,.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:14px;background:var(--surface2);border:1px solid var(--line);color:var(--text);box-shadow:none;transition:.18s}.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow2)}.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;border-color:transparent}.btn.good{background:color-mix(in srgb,var(--good) 14%,var(--surface));color:var(--good);border-color:color-mix(in srgb,var(--good) 24%,var(--line))}.btn.warn{background:color-mix(in srgb,var(--warn) 14%,var(--surface));color:var(--warn);border-color:color-mix(in srgb,var(--warn) 24%,var(--line))}.btn.bad{background:color-mix(in srgb,var(--bad) 12%,var(--surface));color:var(--bad);border-color:color-mix(in srgb,var(--bad) 24%,var(--line))}.btn.small{padding:7px 10px;border-radius:11px;font-size:13px}.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:var(--surface2);border:1px solid var(--line);border-radius:22px;padding:18px;transition:.18s}.card:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}.card h3{margin:0 0 8px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px}.metric{font-size:30px;font-weight:900;letter-spacing:-.03em}.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand);font-size:12px;font-weight:800}.tag.good{background:rgba(16,185,129,.12);color:var(--good)}.tag.warn{background:rgba(245,158,11,.14);color:var(--warn)}.tag.bad{background:rgba(239,68,68,.12);color:var(--bad)}.section-title{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.section-title h2{margin:0;font-size:28px;letter-spacing:-.03em}.section-title p{margin:6px 0 0;color:var(--muted);max-width:760px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:grid;gap:7px}.field label{font-size:13px;font-weight:800;color:var(--muted)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:14px;padding:11px 12px;outline:0}.field textarea{min-height:96px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 13%,transparent)}
+    .notice{padding:14px 16px;border-radius:18px;border:1px solid var(--line);background:var(--surface2);color:var(--muted);margin:14px 0}.notice.info{background:color-mix(in srgb,var(--brand) 9%,var(--surface));border-color:color-mix(in srgb,var(--brand) 20%,var(--line));color:var(--text)}.notice.warn{background:color-mix(in srgb,var(--warn) 12%,var(--surface));border-color:color-mix(in srgb,var(--warn) 22%,var(--line));color:var(--text)}.notice.danger{background:color-mix(in srgb,var(--bad) 10%,var(--surface));border-color:color-mix(in srgb,var(--bad) 22%,var(--line));color:var(--text)}
+    .route-card{border-left:5px solid var(--brand)}.steps{display:grid;gap:10px;margin-top:12px}.step{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}.step-index{flex:0 0 28px;height:28px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;display:grid;place-items:center;font-weight:900;font-size:13px}.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.check-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:14px}.check-item input{width:20px;height:20px;accent-color:var(--brand)}.status-select{padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:12px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab{padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface2);color:var(--muted)}.tab.active{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;border-color:transparent}.tutorial{display:none}.tutorial.active{display:block}.command{position:relative;background:#0b1220;color:#dbeafe;border-radius:16px;padding:14px 104px 14px 14px;margin:10px 0;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;white-space:pre}.command .copycmd{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.16);padding:6px 9px;border-radius:10px}.accordion{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--surface2);margin:10px 0}.acc-head{width:100%;display:flex;justify-content:space-between;align-items:center;background:transparent;color:var(--text);padding:15px 16px;text-align:left;font-weight:900}.acc-body{display:none;padding:0 16px 16px;color:var(--muted)}.accordion.open .acc-body{display:block}.filters{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:12px;margin-bottom:14px}.error-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.error-card{background:var(--surface2);border:1px solid var(--line);border-radius:20px;padding:16px}.error-card h3{margin:0 0 8px}.error-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.prompt-output,.report-output{background:var(--surface2);border:1px dashed color-mix(in srgb,var(--brand) 35%,var(--line));border-radius:18px;padding:16px;white-space:pre-wrap;color:var(--text);min-height:160px}.download-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.faq-grid{display:grid;gap:10px}.toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);z-index:90;opacity:0;transform:translateY(10px);pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:translateY(0)}.floating-save{position:fixed;right:22px;bottom:82px;z-index:60}.kbd{display:inline-block;background:var(--surface);border:1px solid var(--line);border-bottom-width:2px;border-radius:8px;padding:1px 6px;font-size:12px;color:var(--muted)}
+    @media(max-width:1080px){.wrap{grid-template-columns:1fr}.sidebar{position:static}.grid.four,.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.download-grid{grid-template-columns:1fr 1fr}.error-list{grid-template-columns:1fr}}
+    @media(max-width:760px){.topbar-inner{padding:12px}.menu-btn{display:block}.nav{display:none;position:absolute;left:12px;right:12px;top:62px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:var(--shadow);flex-direction:column;overflow:visible}.nav.open{display:flex}.wrap{padding:16px 12px 70px}.section{padding:18px;border-radius:22px}.form-grid,.grid.two,.grid.three,.grid.four,.checklist,.filters,.download-grid{grid-template-columns:1fr}.hero h1{font-size:36px}.hero-actions,.toolbar{display:grid}.btn{width:100%}.section-title{display:block}.command{padding-right:14px;padding-top:48px}.command .copycmd{left:10px;right:auto}.floating-save{display:none}}
+  </style>
+</head>
+<body data-theme="light">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="#home"><span class="logo-mark">C</span><span>Codex 导航器</span></a>
+      <button id="menuBtn" class="menu-btn">菜单</button>
+      <nav id="topNav" class="nav">
+        <a href="#home">首页</a><a href="#profile">我的情况</a><a href="#route">安装路线</a><a href="#check">环境检测</a><a href="#tutorials">安装教程</a><a href="#api">API Key</a><a href="#errors">报错修复</a><a href="#ai">国产 AI</a><a href="#workbuddy">WorkBuddy</a><a href="#feishu">飞书同步</a><a href="#downloads">下载中心</a><a href="#faq">常见问题</a><a href="#settings">设置中心</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <aside class="sidebar">
+      <div class="progress-box">
+        <div class="progress-title">我的安装进度</div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="progress-meta"><span id="progressText">0%</span><span id="doneText">0/0 项</span></div>
+      </div>
+      <div class="side-links">
+        <a href="#profile">① 填写情况</a><a href="#route">② 生成路线</a><a href="#check">③ 环境自检</a><a href="#tutorials">④ 执行安装</a><a href="#errors">⑤ 修复报错</a><a href="#downloads">⑥ 导出资料</a>
+      </div>
+      <div class="notice info"><b>安全提示：</b>本工具默认只使用浏览器本地存储，不上传数据。不要在页面中保存真实 API Key。</div>
+    </aside>
+    <div class="content">
+      <section id="home" class="section hero">
+        <span class="eyebrow">中文小白友好 · 可交互 · 可导出 · 可同步</span>
+        <h1>Codex 小白安装配置导航器</h1>
+        <p>把复杂的 Codex 安装、终端命令、Node/Git 环境、API Key 配置、报错排查，做成一套可以点击、填写、生成、复制、下载和同步的中文导航工具。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#profile">开始填写我的情况</a>
+          <button class="btn" onclick="generateRoute(true)">生成我的安装路线</button>
+          <a class="btn" href="#errors">进入报错修复库</a>
+          <button class="btn good" onclick="downloadReport('markdown')">下载配置清单</button>
+        </div>
+        <div class="grid three" style="margin-top:28px">
+          <div class="card"><h3>按人生成路线</h3><p>根据系统、技术水平、账号状态、网络条件，生成 Windows/Mac/Linux/急救/协作路线。</p></div>
+          <div class="card"><h3>命令一键复制</h3><p>每条命令都配小白解释、成功判断、失败入口，减少输错和误操作。</p></div>
+          <div class="card"><h3>资料可下载</h3><p>支持 Markdown、HTML、JSON、CSV、Word、PDF 打印等格式导出。</p></div>
+        </div>
+      </section>
+
+      <section class="section" id="profile">
+        <div class="section-title"><div><h2>我的情况填写</h2><p>客户可以按自己的真实情况填写，系统会根据差异自动生成安装路线、风险项和下一步建议。</p></div><span class="tag">本地自动保存</span></div>
+        <form id="profileForm" class="form-grid">
+          <div class="field"><label>用户昵称</label><input name="nickname" placeholder="例如：小白老板 / AI博主 / 张老师" /></div>
+          <div class="field"><label>使用目的</label><select name="purpose"><option>学习 Codex</option><option>做 HTML 产品</option><option>做微信小程序</option><option>做小红书虚拟产品</option><option>做 AI 工具</option><option>公司内部使用</option><option>课程/训练营交付</option><option>其他</option></select></div>
+          <div class="field"><label>技术水平</label><select name="level"><option>完全小白</option><option>会复制命令</option><option>懂一点前端</option><option>会 GitHub</option><option>有开发经验</option></select></div>
+          <div class="field"><label>使用设备/系统</label><select name="os"><option>Windows</option><option>Mac</option><option>Linux</option><option>公司电脑</option><option>临时电脑</option><option>不确定</option></select></div>
+          <div class="field"><label>管理员权限</label><select name="admin"><option>不确定</option><option>有</option><option>没有</option></select></div>
+          <div class="field"><label>GitHub 访问</label><select name="github"><option>不确定</option><option>可以</option><option>不可以</option><option>不稳定</option></select></div>
+          <div class="field"><label>OpenAI / ChatGPT 账号</label><select name="account"><option>有 ChatGPT 账号</option><option>没有账号</option><option>正在注册</option><option>只想用 API Key</option></select></div>
+          <div class="field"><label>API Key 状态</label><select name="apikey"><option>没有</option><option>有，但不会配置</option><option>已配置但没测试</option><option>已测试成功</option><option>不想保存真实 Key</option></select></div>
+          <div class="field"><label>终端熟悉程度</label><select name="terminal"><option>完全不会</option><option>会打开</option><option>会复制命令</option><option>比较熟悉</option></select></div>
+          <div class="field"><label>国产 AI 辅助</label><select name="cnai"><option>需要</option><option>不需要</option><option>可能需要</option></select></div>
+          <div class="field"><label>电脑型号/系统版本</label><input name="device" placeholder="例如：Windows 11 / MacBook M2 / Ubuntu 22.04" /></div>
+          <div class="field"><label>现在卡在哪一步</label><input name="stuck" placeholder="例如：npm 不识别 / API Key 不生效 / 不会打开终端" /></div>
+          <div class="field"><label>已经安装过哪些工具</label><input name="installed" placeholder="例如：Node.js、Git、VS Code、Windows Terminal" /></div>
+          <div class="field"><label>希望同步到哪里</label><select name="syncTarget"><option>暂不需要</option><option>飞书文档</option><option>飞书多维表格</option><option>WorkBuddy</option><option>飞书 + WorkBuddy</option><option>复制给老师/客户</option></select></div>
+          <div class="field"><label>我的错误提示</label><textarea name="errorText" placeholder="把报错原文粘贴到这里，方便生成排错提示词。"></textarea></div>
+          <div class="field"><label>特殊要求/不同点</label><textarea name="special" placeholder="例如：公司电脑不能安装软件；网络不稳定；想用国产 AI 帮我一步一步排错；要交付给客户。"></textarea></div>
+        </form>
+        <div class="toolbar">
+          <button class="btn primary" onclick="saveProfile();generateRoute(true)">保存并生成路线</button>
+          <button class="btn" onclick="exportState()">导出我的配置 JSON</button>
+          <label class="btn">导入 JSON<input id="importState" type="file" accept="application/json" class="hidden" /></label>
+          <button class="btn bad" onclick="resetAll()">清空本地数据</button>
+        </div>
+      </section>
+
+      <section class="section" id="route">
+        <div class="section-title"><div><h2>个性化安装路线</h2><p>点击生成后，系统会根据“我的情况”给出适合当前用户的安装路线、风险提醒、准备清单和任务步骤。</p></div><button class="btn primary" onclick="generateRoute(true)">重新生成</button></div>
+        <div id="routeOutput" class="grid two"></div>
+      </section>
+
+      <section class="section" id="check">
+        <div class="section-title"><div><h2>环境检测清单</h2><p>这是“小白手动自检 + 本地记录”，不会读取电脑隐私。你只需要按真实情况勾选或选择状态。</p></div><span class="tag warn">手动自检</span></div>
+        <div id="checklist" class="checklist"></div>
+        <div class="toolbar"><button class="btn primary" onclick="generateCheckReport()">生成检测报告</button><button class="btn" onclick="copyText(getCheckReport())">复制检测报告</button><button class="btn good" onclick="downloadNamed('环境检测报告.md', getCheckReport(), 'text/markdown')">下载检测报告</button></div>
+        <div id="checkReport" class="report-output">检测报告会显示在这里。</div>
+      </section>
+
+      <section class="section" id="tutorials">
+        <div class="section-title"><div><h2>安装教程</h2><p>每个步骤都包含目的、小白解释、操作命令、完成勾选、常见错误和备注区。</p></div><span class="tag good">命令可复制</span></div>
+        <div class="tabs"><button class="tab active" data-tab="win">Windows</button><button class="tab" data-tab="mac">Mac</button><button class="tab" data-tab="linux">Linux</button><button class="tab" data-tab="common">通用检查</button></div>
+        <div id="tutorialContainer"></div>
+      </section>
+
+      <section class="section" id="api">
+        <div class="section-title"><div><h2>API Key 安全配置导航</h2><p>只记录“是否配置”和用途备注，不保存真实 API Key。敏感密钥不要上传、截图或写入前端代码。</p></div><span class="tag bad">不要保存真实 Key</span></div>
+        <div class="grid two">
+          <div class="card"><h3>配置状态</h3><div class="field"><label>API Key 是否已配置</label><select id="apiStatus"><option>未配置</option><option>已配置但未测试</option><option>已测试成功</option><option>无效/额度不足</option></select></div><div class="field" style="margin-top:10px"><label>Key 用途备注</label><input id="apiNote" placeholder="例如：只用于本机 Codex 测试，不保存真实 Key" /></div><button class="btn primary" style="margin-top:12px" onclick="saveApiStatus()">保存状态</button></div>
+          <div class="card"><h3>安全清单</h3><ul><li>不要把 API Key 发给陌生人。</li><li>不要把 Key 写进 HTML/JS 前端代码。</li><li>不要上传到 GitHub、网盘公开链接或截图。</li><li>发现泄露后立即删除/轮换密钥。</li><li>用环境变量或系统登录方式配置，优先不明文保存。</li></ul></div>
+        </div>
+        <div class="accordion open"><button class="acc-head">Windows 环境变量参考 <span>⌄</span></button><div class="acc-body"><div class="command">setx OPENAI_API_KEY "你的真实Key不要粘贴到本工具里"<button class="copycmd" onclick="copyCommand(this)">复制</button></div><p>设置后建议重新打开终端，再运行测试命令。</p></div></div>
+        <div class="accordion"><button class="acc-head">Mac/Linux 环境变量参考 <span>⌄</span></button><div class="acc-body"><div class="command">export OPENAI_API_KEY="你的真实Key不要粘贴到本工具里"<button class="copycmd" onclick="copyCommand(this)">复制</button></div><p>要长期生效，可以写入 shell 配置文件，但请谨慎保管。</p></div></div>
+      </section>
+
+      <section class="section" id="errors">
+        <div class="section-title"><div><h2>报错修复库</h2><p>搜索错误关键词，筛选系统、严重程度、分类。每个错误都可以加入“我的问题清单”。</p></div><button class="btn" onclick="downloadNamed('Codex报错修复库.json', JSON.stringify(errorData,null,2),'application/json')">下载错误库</button></div>
+        <div class="filters"><input id="errorSearch" placeholder="搜索：npm / API Key / PowerShell / command not found" /><select id="errorSystem"><option value="all">全部系统</option><option>Windows</option><option>Mac</option><option>Linux</option><option>通用</option></select><select id="errorLevel"><option value="all">全部严重程度</option><option>低</option><option>中</option><option>高</option></select><select id="errorCat"><option value="all">全部分类</option><option>安装</option><option>权限</option><option>网络</option><option>API</option><option>路径</option><option>终端</option></select></div>
+        <div id="errorList" class="error-list"></div>
+      </section>
+
+      <section class="section" id="ai">
+        <div class="section-title"><div><h2>国产 AI 辅助排错提示词生成器</h2><p>把系统情况、命令、报错、已经尝试的方法，整理成可复制给 DeepSeek、Kimi、通义千问、豆包等工具的高质量提示词。</p></div><span class="tag">可复制</span></div>
+        <div class="form-grid">
+          <div class="field"><label>选择 AI 工具</label><select id="aiTool"><option>DeepSeek</option><option>Kimi</option><option>通义千问</option><option>豆包</option><option>文心一言</option><option>腾讯元宝</option><option>智谱清言</option><option>MiniMax</option><option>讯飞星火</option></select></div>
+          <div class="field"><label>希望回答方式</label><select id="aiStyle"><option>小白一步一步指导</option><option>工程师严谨排查</option><option>急救模式，只给最短路径</option><option>老师讲解模式</option><option>生成可复制命令</option></select></div>
+          <div class="field"><label>我执行的命令</label><textarea id="aiCommand" placeholder="例如：npm install -g @openai/codex"></textarea></div>
+          <div class="field"><label>完整报错</label><textarea id="aiError" placeholder="把终端报错完整粘贴到这里"></textarea></div>
+          <div class="field"><label>已经尝试过</label><textarea id="aiTried" placeholder="例如：重启终端、重新安装 Node、换网络"></textarea></div>
+          <div class="field"><label>额外要求</label><textarea id="aiExtra" placeholder="例如：不要一次给太多命令；每一步都告诉我成功标志"></textarea></div>
+        </div>
+        <div class="toolbar"><button class="btn primary" onclick="generateAIPrompt()">生成排错提示词</button><button class="btn" onclick="copyText(document.getElementById('aiPromptOutput').innerText)">复制提示词</button><button class="btn good" onclick="downloadNamed('国产AI排错提示词.md', document.getElementById('aiPromptOutput').innerText, 'text/markdown')">下载提示词</button><button class="btn" onclick="addCurrentPromptToIssues()">加入我的问题</button></div>
+        <div id="aiPromptOutput" class="prompt-output">生成后的提示词会显示在这里。</div>
+      </section>
+
+      <section class="section" id="workbuddy">
+        <div class="section-title"><div><h2>WorkBuddy 协作工作流</h2><p>把安装配置任务变成可追踪清单。真实同步需要 WorkBuddy 接口、Webhook 或后端代理；本页面提供可复制和可下载模板。</p></div><span class="tag warn">可配置模式</span></div>
+        <div class="form-grid"><div class="field"><label>项目名称</label><input id="wbProject" placeholder="例如：Codex 小白安装训练营" /></div><div class="field"><label>负责人</label><input id="wbOwner" placeholder="例如：我 / 助教 / 客户名" /></div><div class="field"><label>WorkBuddy 链接</label><input id="wbLink" placeholder="https://..." /></div><div class="field"><label>Webhook 地址（可选）</label><input id="wbWebhook" placeholder="真实同步建议走后端代理" /></div></div>
+        <div class="toolbar"><button class="btn primary" onclick="generateWorkbuddy()">生成工作流</button><button class="btn" onclick="copyText(document.getElementById('wbOutput').innerText)">复制 Markdown</button><button class="btn good" onclick="downloadNamed('WorkBuddy任务清单.md', document.getElementById('wbOutput').innerText, 'text/markdown')">下载 Markdown</button><button class="btn warn" onclick="simulateSync('WorkBuddy')">模拟同步</button></div>
+        <div id="wbOutput" class="prompt-output">WorkBuddy 任务清单会显示在这里。</div>
+      </section>
+
+      <section class="section" id="feishu">
+        <div class="section-title"><div><h2>飞书同步中心</h2><p>支持纯前端复制到飞书文档、CSV 导入飞书多维表格、Webhook/API 配置入口。敏感密钥不要保存在前端。</p></div><span class="tag good">飞书模板</span></div>
+        <div class="grid three"><div class="card"><h3>模式 A：复制到文档</h3><p>生成 Markdown 报告，复制到飞书文档。</p></div><div class="card"><h3>模式 B：CSV 导入</h3><p>下载 CSV，导入飞书多维表格。</p></div><div class="card"><h3>模式 C：API/Webhook</h3><p>真实同步建议通过后端代理，不在前端保存密钥。</p></div></div>
+        <div class="form-grid" style="margin-top:14px"><div class="field"><label>飞书文档/表格 Token 备注</label><input id="fsToken" placeholder="只写备注，不建议填写真实密钥" /></div><div class="field"><label>Webhook URL（可选）</label><input id="fsWebhook" placeholder="真实同步需自行确认安全性" /></div></div>
+        <div class="toolbar"><button class="btn primary" onclick="generateFeishu()">生成飞书同步内容</button><button class="btn" onclick="copyText(document.getElementById('fsOutput').innerText)">复制到飞书</button><button class="btn good" onclick="downloadNamed('飞书安装进度表.csv', getCsvReport(), 'text/csv;charset=utf-8')">下载 CSV</button><button class="btn warn" onclick="simulateSync('飞书')">模拟同步</button></div>
+        <div id="fsOutput" class="prompt-output">飞书同步内容会显示在这里。</div>
+      </section>
+
+      <section class="section" id="downloads">
+        <div class="section-title"><div><h2>下载中心</h2><p>所有下载均由浏览器本地生成，适合交付给客户、老师、社群学员或团队协作。</p></div><span class="tag">真实下载按钮</span></div>
+        <div class="download-grid">
+          <button class="btn" onclick="downloadReport('markdown')">下载 Markdown 报告</button><button class="btn" onclick="downloadReport('html')">下载 HTML 报告</button><button class="btn" onclick="downloadReport('json')">下载 JSON 配置</button><button class="btn" onclick="downloadReport('csv')">下载 CSV 进度表</button><button class="btn" onclick="downloadReport('word')">下载 Word 文档</button><button class="btn" onclick="window.print()">PDF 打印/另存为</button><button class="btn" onclick="downloadNamed('Codex命令速查表.md', getCommandCheatsheet(),'text/markdown')">下载命令速查表</button><button class="btn" onclick="downloadNamed('API-Key安全清单.md', getApiSafety(),'text/markdown')">下载 API Key 安全清单</button><button class="btn" onclick="downloadNamed('完整错误记录.json', JSON.stringify(getState().issues||[],null,2),'application/json')">下载错误记录</button>
+        </div>
+      </section>
+
+      <section class="section" id="faq"><div class="section-title"><div><h2>常见问题</h2><p>覆盖小白安装 Codex 过程中最常见的 30 个问题。</p></div></div><div id="faqList" class="faq-grid"></div></section>
+
+      <section class="section" id="settings">
+        <div class="section-title"><div><h2>设置中心</h2><p>调整主题、指导模式、字体、风险提示和本地数据。</p></div></div>
+        <div class="grid two">
+          <div class="card"><div class="field"><label>页面主题</label><select id="themeSelect"><option value="light">浅色</option><option value="dark">深色</option><option value="eye">护眼</option></select></div><div class="field" style="margin-top:10px"><label>指导模式</label><select id="guideMode"><option>小白详细</option><option>极简模式</option><option>工程师模式</option><option>急救模式</option></select></div><button class="btn primary" style="margin-top:12px" onclick="saveSettings()">保存设置</button></div>
+          <div class="card"><h3>本地数据</h3><p>所有表单、进度、问题清单默认保存在当前浏览器 localStorage 中。</p><div class="toolbar"><button class="btn" onclick="exportState()">导出数据</button><button class="btn bad" onclick="resetAll()">清空数据</button></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <button class="btn primary floating-save" onclick="saveProfile();showToast('已保存当前页面数据')">保存当前数据</button>
+  <div id="toast" class="toast">已完成</div>
+
+  <script>
+    const officialCommands = {
+      win: `powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"`,
+      macLinux: `curl -fsSL https://chatgpt.com/codex/install.sh | sh`,
+      npm: `npm install -g @openai/codex`,
+      brew: `brew install --cask codex`,
+      run: `codex`
+    };
+    const checkItems = ['操作系统已确认','浏览器可用','终端工具可打开','Node.js 已安装','npm 可识别','Git 已安装','GitHub 可访问','OpenAI/ChatGPT 账号可用','API Key 状态已确认','网络/代理可用','项目文件夹已准备','VS Code/编辑器已安装','管理员权限已确认','环境变量已配置','Codex 已成功运行'];
+    const tutorialData = {
+      win:[
+        ['安装/打开 Windows Terminal','让命令行环境更稳定，方便复制粘贴命令。','在开始菜单搜索 Windows Terminal 或 PowerShell。','无命令，先确认能打开终端。'],
+        ['安装 Codex 官方脚本','使用 OpenAI 官方 Windows PowerShell 安装脚本。','复制命令到 PowerShell，看到安装进度后等待完成。',officialCommands.win],
+        ['备用 npm 安装','如果官方脚本不适合，确认 Node.js/npm 可用后用 npm。','适合已经安装 Node.js 的用户。',officialCommands.npm],
+        ['启动 Codex','安装后重新打开终端，输入 codex。','如果提示登录或 API Key，说明安装基本成功。',officialCommands.run],
+        ['建立项目文件夹','不要在桌面乱放项目，建议用英文路径。','避免中文路径、空格路径导致工具找不到文件。','mkdir C:\\codex-projects']
+      ],
+      mac:[
+        ['安装 Codex 官方脚本','macOS 推荐使用官方安装脚本。','复制命令到终端，等待安装完成。',officialCommands.macLinux],
+        ['备用 Homebrew 安装','如果你常用 Homebrew，可以用 cask 安装。','适合 Mac 用户。',officialCommands.brew],
+        ['备用 npm 安装','适合已经装过 Node.js 的用户。','安装失败时检查 npm 权限。',officialCommands.npm],
+        ['启动 Codex','进入项目目录后运行 codex。','第一次运行会要求登录或配置 API Key。',officialCommands.run],
+        ['创建英文项目目录','减少中文路径和权限问题。','建议所有项目放在 ~/Projects。','mkdir -p ~/Projects/codex-demo && cd ~/Projects/codex-demo']
+      ],
+      linux:[
+        ['安装 Codex 官方脚本','Linux 推荐使用官方安装脚本。','复制命令到终端执行。',officialCommands.macLinux],
+        ['更新系统包','避免 curl/git/node 依赖缺失。','Ubuntu/Debian 可用这条。','sudo apt update'],
+        ['安装基础工具','安装 curl、git、nodejs、npm。','不同发行版命令可能不同。','sudo apt install -y curl git nodejs npm'],
+        ['备用 npm 安装','如果官方脚本不适合，用 npm 安装。','权限问题可以检查 npm 全局目录。',officialCommands.npm],
+        ['启动 Codex','进入项目目录后运行。','看到登录或交互界面即成功。',officialCommands.run]
+      ],
+      common:[
+        ['检查 Node 版本','部分生态工具需要 Node 18+。','如果版本过低，重新安装 LTS。','node -v'],
+        ['检查 npm','确认 npm 是否可识别。','如果 not recognized，通常是 Node 未安装或 PATH 未生效。','npm -v'],
+        ['检查 Git','Codex 改代码前建议用 Git 记录版本。','不会 Git 的小白也至少要能运行 git --version。','git --version'],
+        ['进入项目目录','Codex 会在当前目录读写文件。','不要在系统目录运行，建议新建项目文件夹。','cd your-project-folder'],
+        ['创建 Git 检查点','改代码前后做版本记录，便于回退。','小白也要养成这个习惯。','git init && git add . && git commit -m "before codex"']
+      ]
+    };
+    const errorData = [
+      {name:'command not found: codex', keywords:'command not found codex 找不到命令', system:'通用', level:'高', cat:'安装', why:'Codex 没安装成功，或安装路径没有加入 PATH。', fixes:['重新打开终端再试','重新运行官方安装脚本','检查 PATH 环境变量是否包含安装目录'], cmd:'codex --version'},
+      {name:'npm not recognized', keywords:'npm 不是内部或外部命令 not recognized', system:'Windows', level:'高', cat:'安装', why:'Node.js 未安装，或安装后 PATH 未生效。', fixes:['安装 Node.js LTS','重启终端/电脑','运行 node -v 和 npm -v 检查'], cmd:'node -v && npm -v'},
+      {name:'PowerShell 禁止运行脚本', keywords:'ExecutionPolicy scripts disabled PowerShell', system:'Windows', level:'中', cat:'权限', why:'Windows 执行策略阻止脚本运行。', fixes:['使用 ByPass 参数运行单次命令','右键管理员打开 PowerShell','不要随意永久放宽策略'], cmd:'powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"'},
+      {name:'权限不足 EACCES / EPERM', keywords:'EACCES EPERM permission denied 权限不足', system:'通用', level:'中', cat:'权限', why:'当前用户没有写入安装目录或项目目录权限。', fixes:['不要在系统目录安装项目','Mac/Linux 检查 npm 全局目录','Windows 使用管理员终端或换到用户目录'], cmd:'pwd'},
+      {name:'node 版本过低', keywords:'node version too low node 版本过低', system:'通用', level:'中', cat:'安装', why:'工具链需要较新 Node.js。', fixes:['安装 Node.js LTS','检查 node -v','重启终端后再安装'], cmd:'node -v'},
+      {name:'npm install 失败', keywords:'npm install failed npm ERR', system:'通用', level:'高', cat:'安装', why:'网络、权限、缓存、依赖冲突都可能导致失败。', fixes:['复制完整 npm ERR 日志','换网络或镜像','清理 npm 缓存后重试'], cmd:'npm cache verify'},
+      {name:'Git 未安装', keywords:'git not recognized git command not found', system:'通用', level:'中', cat:'安装', why:'系统没有 Git 或 PATH 未生效。', fixes:['安装 Git','重启终端','运行 git --version 验证'], cmd:'git --version'},
+      {name:'GitHub 无法访问', keywords:'github 访问失败 timeout refused', system:'通用', level:'中', cat:'网络', why:'网络环境无法稳定访问 GitHub。', fixes:['先测试 github.com','换网络','把错误交给国产 AI 辅助排查'], cmd:'git ls-remote https://github.com/openai/codex'},
+      {name:'API Key 无效', keywords:'invalid api key authentication unauthorized 401', system:'通用', level:'高', cat:'API', why:'Key 填错、过期、权限不足或账号不可用。', fixes:['重新复制 Key','检查是否多了空格','不要把 Key 粘贴到本工具保存'], cmd:'echo $OPENAI_API_KEY'},
+      {name:'额度不足 / billing 问题', keywords:'quota billing insufficient credits payment', system:'通用', level:'高', cat:'API', why:'账户额度、计费或套餐权限不满足。', fixes:['检查账号状态','确认使用 ChatGPT 登录还是 API Key','更换可用账号/Key'], cmd:'codex'},
+      {name:'模型不可用', keywords:'model not found unavailable model', system:'通用', level:'中', cat:'API', why:'所选模型当前不可用、无权限或配置错误。', fixes:['使用默认配置运行','检查 Codex 登录状态','不要随意改模型名'], cmd:'codex'},
+      {name:'网络连接失败', keywords:'network timeout ECONNRESET ETIMEDOUT connection', system:'通用', level:'高', cat:'网络', why:'网络、代理、DNS 或防火墙阻断。', fixes:['换网络测试','关闭/切换代理','检查公司防火墙限制'], cmd:'ping openai.com'},
+      {name:'代理配置错误', keywords:'proxy http_proxy https_proxy 代理', system:'通用', level:'中', cat:'网络', why:'代理地址错误或环境变量冲突。', fixes:['检查 HTTP_PROXY/HTTPS_PROXY','临时取消代理后测试','不要同时配置多个冲突代理'], cmd:'echo $HTTPS_PROXY'},
+      {name:'Windows 中文路径问题', keywords:'中文路径 space path encoding', system:'Windows', level:'中', cat:'路径', why:'部分工具链对中文路径、空格路径处理不稳定。', fixes:['新建英文目录 C:\\codex-projects','把项目移动到英文路径','避免 OneDrive/桌面路径'], cmd:'mkdir C:\\codex-projects'},
+      {name:'路径包含空格', keywords:'path space quote 路径 空格', system:'通用', level:'低', cat:'路径', why:'命令未加引号导致路径被拆分。', fixes:['项目目录改成英文无空格','路径加英文引号','避免临时下载目录'], cmd:'cd "C:\\my project"'},
+      {name:'环境变量未生效', keywords:'env environment variable OPENAI_API_KEY not set', system:'通用', level:'高', cat:'API', why:'设置环境变量后旧终端未刷新。', fixes:['关闭并重新打开终端','确认变量名没有拼错','Windows 用 setx 后重启终端'], cmd:'echo $OPENAI_API_KEY'},
+      {name:'终端乱码', keywords:'乱码 encoding utf8 GBK', system:'Windows', level:'低', cat:'终端', why:'终端编码和输出语言不一致。', fixes:['使用 Windows Terminal','设置 UTF-8','尽量复制文本而不是截图'], cmd:'chcp 65001'},
+      {name:'登录失败', keywords:'sign in login failed auth', system:'通用', level:'中', cat:'API', why:'浏览器登录状态、网络或账号权限异常。', fixes:['换默认浏览器','退出重登 ChatGPT','改用 API Key 或账号登录'], cmd:'codex'},
+      {name:'安装成功但运行失败', keywords:'installed but failed run crash', system:'通用', level:'高', cat:'安装', why:'安装文件存在，但依赖、权限、账号或项目目录不满足。', fixes:['在空英文目录测试','重新登录','导出错误日志后进入排错库'], cmd:'mkdir codex-test && cd codex-test && codex'},
+      {name:'依赖冲突', keywords:'dependency conflict peer deps resolve', system:'通用', level:'中', cat:'安装', why:'项目已有依赖版本冲突。', fixes:['不要在复杂旧项目里首次测试','新建空目录测试 Codex','把完整日志复制给 AI 排查'], cmd:'npm ls'}
+    ];
+    const faqData = ['我不会用终端怎么办？先只做“打开终端、复制命令、看提示”三件事，不需要理解全部原理。','Windows 和 Mac 命令一样吗？不一样，Windows 多用 PowerShell，Mac/Linux 多用 shell。','为什么 npm 不识别？通常是 Node.js 没安装，或安装后没有重启终端。','为什么 Git 无法使用？可能没有安装 Git，或者 PATH 没生效。','为什么 API Key 配置了还不能用？可能变量名错误、Key 有空格、旧终端没刷新或账号额度不足。','为什么安装成功但运行失败？可能当前目录、权限、账号登录或网络仍有问题。','为什么报网络错误？常见原因是公司网络、防火墙、代理、DNS 或连接不稳定。','为什么复制命令后没反应？确认是否按了回车，终端是否有权限，命令是否复制完整。','为什么 PowerShell 报权限问题？Windows 执行策略可能拦截脚本，可使用 ByPass 单次执行。','为什么中文路径会出问题？部分开发工具链对中文和空格路径兼容较差。','我能不能不用 OpenAI？Codex 官方能力通常需要 ChatGPT 账号或 API Key；国产 AI 可辅助排错但不是等价替代。','国产 AI 能不能代替 Codex？可以辅助解释报错、生成方案，但不能完全替代 Codex 的本地代码代理流程。','Codex 和 ChatGPT 有什么区别？Codex 更偏本地/云端代码任务代理，ChatGPT 更偏对话和通用助手。','如何保存我的安装记录？使用下载中心导出 Markdown、JSON 或 CSV。','如何把报告发给老师或客户？下载 Markdown/Word，或复制到飞书文档。','如何同步到飞书？纯前端可复制 Markdown 或下载 CSV；API 同步需要后端代理。','WorkBuddy 怎么配合使用？把安装任务清单复制或导出为 JSON，再导入/粘贴到你的 WorkBuddy 工作流。','是否会泄露 API Key？本工具不要求保存真实 Key，用户也不应填写真实 Key。','换电脑怎么办？导出 JSON 配置，再在新电脑导入。','安装失败要不要重装？先看错误类型，不要盲目重装。','公司电脑不能安装怎么办？先确认权限，可用便携/云端/管理员协助方案。','GitHub 访问不了怎么办？先区分是网络问题还是 Git 配置问题。','Node.js 应该装哪个版本？优先安装官方 LTS 稳定版本。','第一次运行 Codex 应该在哪个目录？在英文路径的项目文件夹，不要在系统目录。','怎么判断安装成功？运行 codex 后能进入登录/交互流程或显示版本信息。','报错要截图还是复制文字？优先复制完整文字日志，AI 排查更准确。','为什么建议做 Git 检查点？Codex 会改文件，Git 可以帮助回退。','可以给学员批量使用吗？可以，导出飞书/CSV 模板适合训练营管理。','这个工具能自动扫描电脑吗？不能，纯前端版本是手动自检，不读取隐私。','PDF 怎么导出？点击 PDF 打印/另存为，浏览器选择“保存为 PDF”。'];
+
+    function getState(){try{return JSON.parse(localStorage.getItem('codexNavigatorState')||'{}')}catch(e){return {}}}
+    function setState(s){localStorage.setItem('codexNavigatorState',JSON.stringify(s));updateProgress()}
+    function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+    async function copyText(text){await navigator.clipboard.writeText(text||'');showToast('已复制到剪贴板')}
+    function copyCommand(btn){copyText(btn.parentElement.childNodes[0].textContent.trim())}
+    function saveProfile(){const fd=new FormData(document.getElementById('profileForm'));const profile=Object.fromEntries(fd.entries());const s=getState();s.profile=profile;setState(s);showToast('我的情况已保存')}
+    function loadProfile(){const s=getState(); if(s.profile){Object.entries(s.profile).forEach(([k,v])=>{const el=document.querySelector(`[name="${k}"]`); if(el) el.value=v})} if(s.settings){document.getElementById('themeSelect').value=s.settings.theme||'light';document.body.dataset.theme=s.settings.theme||'light';document.getElementById('guideMode').value=s.settings.guide||'小白详细'} if(s.api){document.getElementById('apiStatus').value=s.api.status||'未配置';document.getElementById('apiNote').value=s.api.note||''}}
+    function generateRoute(scroll){saveProfile();const p=getState().profile||{};const routes=[];const os=p.os||'Windows';const level=p.level||'完全小白';const needsAI=p.cnai!=='不需要'||(p.errorText&&p.errorText.length>5);const sync=p.syncTarget||'暂不需要';
+      const baseSteps=['确认系统与权限','准备英文项目文件夹','安装/检查终端工具','安装 Codex','登录 ChatGPT 或配置 API Key','运行 codex 测试','记录结果并导出报告'];
+      if(os.includes('Windows')) routes.push(makeRoute('Windows 小白安装路线','Windows 用户、不会终端或刚开始学习 Codex 的用户','中等','30–60 分钟',['Windows Terminal 或 PowerShell','稳定网络','英文项目目录','ChatGPT 账号或 API Key'],['打开 PowerShell/Windows Terminal','运行官方 Windows 安装脚本','如果失败，检查 Node.js/npm/Git','重启终端后输入 codex','完成登录或 API Key 配置','在英文项目目录运行测试','导出安装报告'],['PowerShell 权限','中文路径','npm/PATH 未生效']));
+      if(os.includes('Mac')) routes.push(makeRoute('Mac 快速安装路线','Mac 用户、能打开终端、希望快速完成配置','较低','20–45 分钟',['终端','Homebrew 可选','英文项目目录'],['运行官方 macOS/Linux 安装脚本','备用方案：brew 或 npm','进入项目目录','输入 codex','完成登录/API Key','创建 Git 检查点','导出配置清单'],['终端权限','shell 配置文件','网络连接']));
+      if(os.includes('Linux')) routes.push(makeRoute('Linux 工程路线','Linux 用户、服务器/本地开发环境用户','中等','30–60 分钟',['curl','git','node/npm 可选','项目目录'],['更新软件源','运行官方 Linux 安装脚本','备用 npm 安装','检查 codex 命令','配置 API Key','在项目目录测试','导出日志'],['权限','依赖缺失','代理配置']));
+      if(level==='完全小白'||p.terminal==='完全不会') routes.push(makeRoute('低基础一步一步路线','完全小白、害怕命令行、需要手把手说明的用户','低','45–90 分钟',['只需要会复制粘贴','不要保存真实 API Key','遇错先复制日志'],baseSteps.map((x,i)=>`第 ${i+1} 步：${x}`),['一次只执行一条命令','不要连续乱试','遇错先记录']));
+      if(needsAI) routes.push(makeRoute('国产 AI 辅助排错路线','习惯使用 DeepSeek/Kimi/通义千问/豆包排错的中文用户','低','10–30 分钟',['完整错误日志','系统信息','已尝试操作'],['收集系统和错误信息','打开国产 AI 提示词生成器','生成结构化排错提示词','复制到国产 AI','把建议回填到问题清单','完成修复后导出记录'],['不要泄露 API Key','不要只发截图','不要让 AI 一次给太多命令']));
+      if(sync.includes('飞书')) routes.push(makeRoute('飞书协作同步路线','训练营、课程交付、团队学习、客户交付场景','低','10–20 分钟',['飞书文档或多维表格','安装报告','CSV/Markdown 模板'],['生成安装进度报告','复制 Markdown 到飞书文档','下载 CSV 导入多维表格','把错误记录同步为表格','定期归档复盘'],['真实 API 同步需要后端','不要在前端保存密钥']));
+      if(sync.includes('WorkBuddy')) routes.push(makeRoute('WorkBuddy 工作流路线','一人公司、项目管理、AI 工具交付用户','低','10–20 分钟',['项目名称','负责人','任务清单','Webhook 可选'],['生成任务清单','生成问题跟踪表','生成验收清单','导出 Markdown/JSON','复制到 WorkBuddy 或配置接口'],['Webhook 安全','接口权限','任务状态维护']));
+      if(routes.length===0) routes.push(makeRoute('通用安装配置路线','当前信息不足时使用的默认路线','中等','30–60 分钟',['终端','网络','账号/API Key'],baseSteps,['网络','权限','API Key']));
+      document.getElementById('routeOutput').innerHTML=routes.map(renderRoute).join('');const s=getState();s.routes=routes;setState(s);if(scroll) location.hash='route';showToast('已生成专属路线')}
+    function makeRoute(title,audience,difficulty,time,prepare,steps,risks){return{title,audience,difficulty,time,prepare,steps,risks}}
+    function renderRoute(r){return `<div class="card route-card"><h3>${r.title}</h3><p>${r.audience}</p><div class="error-meta"><span class="tag">难度：${r.difficulty}</span><span class="tag good">${r.time}</span></div><b>准备：</b><ul>${r.prepare.map(x=>`<li>${x}</li>`).join('')}</ul><b>步骤：</b><div class="steps">${r.steps.map((x,i)=>`<div class="step"><span class="step-index">${i+1}</span><div>${x}</div></div>`).join('')}</div><div class="notice warn"><b>风险提醒：</b>${r.risks.join('、')}</div><div class="toolbar"><button class="btn small" onclick='copyText(${JSON.stringify(routeToMd(r))})'>复制路线</button><button class="btn small good" onclick='downloadNamed(${JSON.stringify(r.title+'.md')}, ${JSON.stringify(routeToMd(r))}, "text/markdown")'>下载路线</button></div></div>`}
+    function routeToMd(r){return `# ${r.title}\n\n适合人群：${r.audience}\n难度：${r.difficulty}\n预计耗时：${r.time}\n\n## 准备\n${r.prepare.map(x=>'- '+x).join('\n')}\n\n## 步骤\n${r.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}\n\n## 风险\n${r.risks.map(x=>'- '+x).join('\n')}`}
+    function renderChecklist(){const s=getState();const checks=s.checks||{};document.getElementById('checklist').innerHTML=checkItems.map((item,i)=>{const c=checks[item]||{};return `<div class="check-item"><input type="checkbox" ${c.done?'checked':''} onchange="updateCheck('${item}',this.checked,null)"><div><b>${item}</b><br><small style="color:var(--muted)">请按真实情况确认</small></div><select class="status-select" onchange="updateCheck('${item}',null,this.value)"><option ${c.status==='未确认'?'selected':''}>未确认</option><option ${c.status==='已具备'?'selected':''}>已具备</option><option ${c.status==='需要安装'?'selected':''}>需要安装</option><option ${c.status==='有风险'?'selected':''}>有风险</option></select></div>`}).join('');updateProgress()}
+    function updateCheck(item,done,status){const s=getState();s.checks=s.checks||{};s.checks[item]=s.checks[item]||{};if(done!==null)s.checks[item].done=done;if(status!==null)s.checks[item].status=status;setState(s)}
+    function updateProgress(){const s=getState();const checks=s.checks||{};const total=checkItems.length;const done=checkItems.filter(x=>checks[x]?.done).length;const pct=Math.round(done/total*100)||0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressText').textContent=pct+'%';document.getElementById('doneText').textContent=`${done}/${total} 项`}
+    function getCheckReport(){const s=getState();const checks=s.checks||{};const p=s.profile||{};const ready=[],missing=[],risk=[],unknown=[];checkItems.forEach(x=>{const c=checks[x]||{};if(c.done||c.status==='已具备')ready.push(x);else if(c.status==='需要安装')missing.push(x);else if(c.status==='有风险')risk.push(x);else unknown.push(x)});return `# Codex 环境检测报告\n\n用户：${p.nickname||'未填写'}\n系统：${p.os||'未填写'}\n用途：${p.purpose||'未填写'}\n生成时间：${new Date().toLocaleString()}\n\n## 已具备\n${ready.map(x=>'- '+x).join('\n')||'- 暂无'}\n\n## 需要安装/确认\n${missing.map(x=>'- '+x).join('\n')||'- 暂无'}\n\n## 风险项\n${risk.map(x=>'- '+x).join('\n')||'- 暂无'}\n\n## 未确认\n${unknown.map(x=>'- '+x).join('\n')||'- 暂无'}\n\n## 下一步建议\n${risk.length?'优先处理风险项，再继续安装。':missing.length?'先补齐缺失项，再运行 Codex。':'可以进入安装教程或运行 codex 测试。'}`}
+    function generateCheckReport(){document.getElementById('checkReport').innerText=getCheckReport();showToast('检测报告已生成')}
+    function renderTutorials(){const container=document.getElementById('tutorialContainer');container.innerHTML=Object.entries(tutorialData).map(([key,steps])=>`<div class="tutorial ${key==='win'?'active':''}" data-panel="${key}">${steps.map((s,i)=>`<div class="accordion ${i===0?'open':''}"><button class="acc-head">${i+1}. ${s[0]} <span>⌄</span></button><div class="acc-body"><p><b>目的：</b>${s[1]}</p><p><b>小白解释：</b>${s[2]}</p><div class="command">${s[3]}<button class="copycmd" onclick="copyCommand(this)">复制</button></div><label><input type="checkbox" onchange="showToast('步骤状态已记录')"> 我已完成这一步</label><div class="field" style="margin-top:10px"><label>我的备注</label><input placeholder="记录你的结果、截图说明或失败原因"></div></div></div>`).join('')}</div>`).join('');}
+    function renderErrors(){const q=document.getElementById('errorSearch').value.toLowerCase();const sys=document.getElementById('errorSystem').value;const lvl=document.getElementById('errorLevel').value;const cat=document.getElementById('errorCat').value;const list=errorData.filter(e=>(!q||(e.name+e.keywords+e.why).toLowerCase().includes(q))&&(sys==='all'||e.system===sys||e.system==='通用')&&(lvl==='all'||e.level===lvl)&&(cat==='all'||e.cat===cat));document.getElementById('errorList').innerHTML=list.map((e,i)=>`<div class="error-card"><h3>${e.name}</h3><div class="error-meta"><span class="tag">${e.system}</span><span class="tag ${e.level==='高'?'bad':e.level==='中'?'warn':'good'}">${e.level}风险</span><span class="tag">${e.cat}</span></div><p><b>小白解释：</b>${e.why}</p><p><b>解决方向：</b></p><ul>${e.fixes.map(f=>`<li>${f}</li>`).join('')}</ul><div class="command">${e.cmd}<button class="copycmd" onclick="copyCommand(this)">复制</button></div><div class="toolbar"><button class="btn small" onclick='addIssue(${JSON.stringify(e)})'>我遇到这个错误</button><button class="btn small good" onclick='downloadNamed(${JSON.stringify(e.name+'.md')}, ${JSON.stringify(errorToMd(e))}, "text/markdown")'>导出</button></div></div>`).join('')||'<div class="notice warn">没有匹配结果，请换关键词搜索。</div>'}
+    function errorToMd(e){return `# ${e.name}\n\n系统：${e.system}\n严重程度：${e.level}\n分类：${e.cat}\n\n## 小白解释\n${e.why}\n\n## 解决方向\n${e.fixes.map(x=>'- '+x).join('\n')}\n\n## 修复/检测命令\n\n\`${e.cmd}\``}
+    function addIssue(e){const s=getState();s.issues=s.issues||[];s.issues.push({...e,time:new Date().toLocaleString()});setState(s);showToast('已加入我的问题清单')}
+    function generateAIPrompt(){saveProfile();const p=getState().profile||{};const tool=document.getElementById('aiTool').value;const style=document.getElementById('aiStyle').value;const cmd=document.getElementById('aiCommand').value||'未填写';const err=document.getElementById('aiError').value||p.errorText||'未填写';const tried=document.getElementById('aiTried').value||'未填写';const extra=document.getElementById('aiExtra').value||'请不要一次给太多命令，每一步都说明成功标志。';const out=`请你扮演一名耐心、严谨的 Codex 安装配置工程师，用中文帮我排查问题。\n\n我正在使用：${tool}\n希望回答方式：${style}\n我的系统：${p.os||'未填写'}\n我的技术水平：${p.level||'未填写'}\n我的设备/版本：${p.device||'未填写'}\n我的目标：${p.purpose||'安装配置 Codex'}\n\n我执行的命令：\n${cmd}\n\n完整报错：\n${err}\n\n我已经尝试过：\n${tried}\n\n额外要求：\n${extra}\n\n请按以下格式回答：\n1. 先判断最可能的 3 个原因；\n2. 给我小白能执行的修复步骤，每次只给一条命令；\n3. 每一步说明“为什么做、怎么判断成功、失败怎么办”；\n4. 如果需要我补充信息，请明确告诉我复制哪一段日志；\n5. 不要让我泄露 API Key，不要让我把密钥发给任何人。`;document.getElementById('aiPromptOutput').innerText=out;const s=getState();s.lastPrompt=out;setState(s);showToast('排错提示词已生成')}
+    function addCurrentPromptToIssues(){const text=document.getElementById('aiPromptOutput').innerText;if(!text||text.includes('显示在这里'))return showToast('请先生成提示词');const s=getState();s.issues=s.issues||[];s.issues.push({name:'国产 AI 排错提示词',system:'通用',level:'中',cat:'AI',why:text,fixes:['复制到国产 AI 工具','按步骤回填结果'],cmd:'',time:new Date().toLocaleString()});setState(s);showToast('已加入我的问题')}
+    function generateWorkbuddy(){const p=getState().profile||{};const project=document.getElementById('wbProject').value||'Codex 安装配置项目';const owner=document.getElementById('wbOwner').value||p.nickname||'我';const link=document.getElementById('wbLink').value||'未填写';const out=`# WorkBuddy 安装配置工作流\n\n项目：${project}\n负责人：${owner}\nWorkBuddy 链接：${link}\n生成时间：${new Date().toLocaleString()}\n\n## 任务清单\n- [ ] 收集用户基础情况：系统、账号、网络、技术水平\n- [ ] 完成环境检测：Node/npm/Git/终端/API Key\n- [ ] 选择安装路线：Windows/Mac/Linux/急救/协作\n- [ ] 执行 Codex 安装命令\n- [ ] 启动 codex 并完成登录/API Key 配置\n- [ ] 记录报错并进入修复库\n- [ ] 生成国产 AI 排错提示词\n- [ ] 导出安装配置报告\n- [ ] 同步到飞书文档/多维表格\n- [ ] 完成验收和复盘\n\n## 验收标准\n1. 能在项目目录运行 codex；\n2. 用户知道如何保护 API Key；\n3. 报错有记录、有解决步骤；\n4. 安装报告可交付给客户/老师/团队。\n\n> 真实自动同步需要 WorkBuddy 接口、Webhook 或后端代理。本页面只生成可复制/可下载模板。`;document.getElementById('wbOutput').innerText=out;showToast('WorkBuddy 工作流已生成')}
+    function generateFeishu(){const report=getFullMarkdownReport();document.getElementById('fsOutput').innerText=`# 飞书同步模板\n\n复制以下内容到飞书文档，或下载 CSV 导入飞书多维表格。\n\n${report}`;showToast('飞书同步内容已生成')}
+    function simulateSync(name){showToast(`${name} 模拟同步完成：真实同步需配置接口或后端代理`)}
+    function saveApiStatus(){const s=getState();s.api={status:document.getElementById('apiStatus').value,note:document.getElementById('apiNote').value,time:new Date().toLocaleString()};setState(s);showToast('API Key 状态已保存')}
+    function saveSettings(){const theme=document.getElementById('themeSelect').value;const guide=document.getElementById('guideMode').value;document.body.dataset.theme=theme;const s=getState();s.settings={theme,guide};setState(s);showToast('设置已保存')}
+    function getFullMarkdownReport(){const s=getState();const p=s.profile||{};return `# Codex 小白安装配置报告\n\n生成时间：${new Date().toLocaleString()}\n\n## 用户情况\n- 昵称：${p.nickname||'未填写'}\n- 用途：${p.purpose||'未填写'}\n- 系统：${p.os||'未填写'}\n- 技术水平：${p.level||'未填写'}\n- 当前卡点：${p.stuck||'未填写'}\n- 特殊要求：${p.special||'未填写'}\n\n## 环境检测\n${getCheckReport()}\n\n## 安装路线\n${(s.routes||[]).map(routeToMd).join('\n\n')||'尚未生成路线'}\n\n## 问题记录\n${(s.issues||[]).map((x,i)=>`${i+1}. ${x.name}｜${x.time||''}`).join('\n')||'暂无'}\n\n## API Key 安全提醒\n不要在本工具、截图、公开仓库、前端代码里保存真实 API Key。`}
+    function getCsvReport(){const s=getState();const p=s.profile||{};const rows=[['类型','项目','状态/内容','时间'],['用户','昵称',p.nickname||'',new Date().toLocaleString()],['用户','系统',p.os||'',new Date().toLocaleString()]];checkItems.forEach(x=>{const c=(s.checks||{})[x]||{};rows.push(['环境检测',x,c.done?'已完成':(c.status||'未确认'),''])});(s.issues||[]).forEach(x=>rows.push(['问题',x.name,x.level||'',x.time||'']));return rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n')}
+    function downloadReport(type){if(type==='markdown')downloadNamed('Codex安装配置报告.md',getFullMarkdownReport(),'text/markdown');if(type==='html')downloadNamed('Codex安装配置报告.html',`<!doctype html><meta charset="utf-8"><body><pre>${escapeHtml(getFullMarkdownReport())}</pre></body>`,'text/html');if(type==='json')exportState();if(type==='csv')downloadNamed('Codex安装进度.csv',getCsvReport(),'text/csv;charset=utf-8');if(type==='word')downloadNamed('Codex安装配置报告.doc',`<html><head><meta charset="utf-8"></head><body><pre>${escapeHtml(getFullMarkdownReport())}</pre></body></html>`,'application/msword')}
+    function downloadNamed(filename, content, mime){const blob=new Blob([content],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);showToast('文件已生成下载')}
+    function exportState(){const s=getState();downloadNamed('Codex导航器我的配置.json',JSON.stringify(s,null,2),'application/json')}
+    function resetAll(){if(confirm('确认清空本地保存的数据吗？')){localStorage.removeItem('codexNavigatorState');location.reload()}}
+    function escapeHtml(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
+    function getCommandCheatsheet(){return `# Codex 命令速查表\n\n## Windows 官方脚本\n\`${officialCommands.win}\`\n\n## macOS/Linux 官方脚本\n\`${officialCommands.macLinux}\`\n\n## npm 安装\n\`${officialCommands.npm}\`\n\n## Homebrew 安装\n\`${officialCommands.brew}\`\n\n## 启动\n\`${officialCommands.run}\`\n\n## 检查基础工具\n\`node -v\`\n\`npm -v\`\n\`git --version\``}
+    function getApiSafety(){return `# API Key 安全清单\n\n- 不要在本工具保存真实 API Key。\n- 不要截图公开 API Key。\n- 不要把 Key 上传 GitHub。\n- 不要写入 HTML/JS 前端代码。\n- 使用环境变量、系统登录或后端安全代理。\n- 发现泄露后立即删除或轮换密钥。`}
+    document.getElementById('importState').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;const text=await f.text();try{localStorage.setItem('codexNavigatorState',text);showToast('导入成功');location.reload()}catch(err){showToast('导入失败，请检查 JSON')}})
+    document.getElementById('menuBtn').onclick=()=>document.getElementById('topNav').classList.toggle('open');
+    document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.tutorial').forEach(p=>p.classList.toggle('active',p.dataset.panel===btn.dataset.tab))}));
+    document.addEventListener('click',e=>{if(e.target.classList.contains('acc-head'))e.target.parentElement.classList.toggle('open')});
+    ['errorSearch','errorSystem','errorLevel','errorCat'].forEach(id=>document.getElementById(id).addEventListener('input',renderErrors));
+    document.getElementById('profileForm').addEventListener('input',()=>{const fd=new FormData(document.getElementById('profileForm'));const s=getState();s.profile=Object.fromEntries(fd.entries());setState(s)});
+    document.querySelectorAll('.nav a,.side-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('topNav').classList.remove('open')));
+    function init(){loadProfile();renderChecklist();renderTutorials();renderErrors();document.getElementById('faqList').innerHTML=faqData.map((q,i)=>`<div class="accordion"><button class="acc-head">${i+1}. ${q.split('？')[0]}？ <span>⌄</span></button><div class="acc-body">${q}</div></div>`).join('');if((getState().routes||[]).length){document.getElementById('routeOutput').innerHTML=getState().routes.map(renderRoute).join('')}else{generateRoute(false)}generateCheckReport()}
+    init();
+  </script>
+</body>
+</html>

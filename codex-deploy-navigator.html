@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 部署流程导航器｜Vercel、Netlify、Cloudflare Pages 小白部署指引</title>
+  <meta name="description" content="给小白开发者使用的 Codex 部署流程导航器：判断项目类型、选择 Vercel/Netlify/Cloudflare Pages、检查构建命令与输出目录、排查部署错误。" />
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: rgba(255,255,255,.075);
+      --panel-strong: rgba(255,255,255,.11);
+      --card: rgba(255,255,255,.09);
+      --text: #edf5ff;
+      --muted: #a9b9ce;
+      --weak: #6f8198;
+      --line: rgba(255,255,255,.14);
+      --brand: #7c5cff;
+      --brand2: #21d4fd;
+      --green: #39d98a;
+      --yellow: #ffd166;
+      --red: #ff6b6b;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 5%, rgba(124,92,255,.35), transparent 31%),
+        radial-gradient(circle at 86% 12%, rgba(33,212,253,.22), transparent 34%),
+        linear-gradient(180deg, #08111f 0%, #0b1425 47%, #09101d 100%);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    .container { width: min(1180px, calc(100% - 36px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(8,17,31,.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .logo-mark {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      display: grid; place-items: center;
+      box-shadow: 0 12px 35px rgba(33,212,253,.22);
+    }
+    .nav-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-links a {
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,.08); color: var(--text); }
+
+    .hero { padding: 82px 0 48px; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 28px; align-items: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      color: #d6e7ff;
+      background: rgba(255,255,255,.07);
+      font-size: 14px;
+    }
+    h1 {
+      font-size: clamp(40px, 7vw, 76px);
+      line-height: 1.02;
+      margin: 22px 0 18px;
+      letter-spacing: -.055em;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff 0%, #b8d8ff 42%, #8ee7ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p { color: var(--muted); font-size: 18px; max-width: 780px; margin: 0 0 24px; }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .btn {
+      border: 0;
+      color: var(--text);
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      padding: 12px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,.14); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--brand), #3eb8ff);
+      border-color: transparent;
+      box-shadow: 0 16px 40px rgba(80,120,255,.28);
+    }
+    .btn.ghost { background: transparent; }
+    .btn.small { padding: 8px 10px; font-size: 13px; border-radius: 10px; }
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.055));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-panel:before {
+      content: "";
+      position: absolute; inset: -1px;
+      background: radial-gradient(circle at 80% 0%, rgba(33,212,253,.18), transparent 38%);
+      pointer-events: none;
+    }
+    .mini-terminal {
+      position: relative;
+      background: rgba(3,8,16,.72);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .terminal-head { display: flex; align-items: center; gap: 7px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+    .dot:nth-child(2){ background: #febc2e; }
+    .dot:nth-child(3){ background: #28c840; }
+    .terminal-body { padding: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #d7e9ff; font-size: 14px; }
+    .terminal-line { margin: 0 0 10px; color: #a7e8ff; }
+    .terminal-line span { color: #9cffc2; }
+
+    section { padding: 34px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 18px; align-items: flex-end; margin-bottom: 18px; }
+    .section-title { margin: 0; font-size: clamp(26px, 4vw, 42px); line-height: 1.15; letter-spacing: -.035em; }
+    .section-desc { color: var(--muted); max-width: 720px; margin: 8px 0 0; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.07);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.16);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 20px; letter-spacing: -.02em; }
+    .card p { color: var(--muted); margin: 0 0 12px; }
+    .metric { font-size: 34px; font-weight: 800; letter-spacing: -.04em; margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .weak { color: var(--weak); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.075); border: 1px solid rgba(255,255,255,.1); color: #dcecff; font-size: 13px; }
+
+    .checklist { display: grid; gap: 10px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(255,255,255,.055);
+    }
+    .check-item input { margin-top: 5px; accent-color: var(--brand2); }
+    .progress-wrap { margin: 12px 0 0; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+    .progress { height: 12px; border-radius: 999px; background: rgba(255,255,255,.09); overflow: hidden; border: 1px solid rgba(255,255,255,.12); }
+    .progress-bar { height: 100%; width: 0%; border-radius: inherit; background: linear-gradient(90deg, var(--brand), var(--brand2)); transition: width .25s ease; }
+    .notice { margin-top: 14px; padding: 13px 14px; border-radius: 14px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); color: #d6e8ff; }
+
+    .selector-grid { display: grid; grid-template-columns: 300px 1fr; gap: 16px; }
+    .option-list { display: grid; gap: 9px; }
+    .option-btn {
+      width: 100%; text-align: left;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      padding: 12px 13px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+    .option-btn.active { border-color: rgba(33,212,253,.55); background: rgba(33,212,253,.12); box-shadow: inset 0 0 0 1px rgba(33,212,253,.12); }
+    .result-panel { min-height: 280px; }
+    .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+    .result-box { padding: 14px; border-radius: 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+    .result-box strong { display: block; margin-bottom: 5px; }
+    code, .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      padding: 2px 6px;
+      border-radius: 7px;
+      background: rgba(0,0,0,.28);
+      color: #a7e8ff;
+    }
+
+    table { width: 100%; border-collapse: collapse; overflow: hidden; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.055); }
+    th, td { padding: 14px 13px; border-bottom: 1px solid rgba(255,255,255,.09); text-align: left; vertical-align: top; }
+    th { color: #e9f5ff; background: rgba(255,255,255,.075); font-size: 14px; white-space: nowrap; }
+    td { color: var(--muted); min-width: 140px; }
+    tr:last-child td { border-bottom: 0; }
+
+    .decision-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .field { display: grid; gap: 7px; }
+    label { color: #dfeeff; font-weight: 650; }
+    select, input[type="text"], input[type="url"], textarea {
+      width: 100%;
+      color: var(--text);
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 13px;
+      padding: 12px;
+      outline: none;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    select:focus, input:focus, textarea:focus { border-color: rgba(33,212,253,.58); box-shadow: 0 0 0 4px rgba(33,212,253,.1); }
+    .switch-row { display: grid; gap: 9px; margin-top: 8px; }
+    .switch { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+    .switch input { accent-color: var(--brand2); }
+    .recommendation { margin-top: 16px; border: 1px solid rgba(33,212,253,.28); background: linear-gradient(180deg, rgba(33,212,253,.12), rgba(124,92,255,.08)); }
+    .big-rec { font-size: 26px; font-weight: 850; letter-spacing: -.03em; margin: 6px 0 8px; }
+
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tab-btn { border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.055); color: var(--muted); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
+    .tab-btn.active { background: linear-gradient(135deg, rgba(124,92,255,.85), rgba(33,212,253,.65)); color: #fff; border-color: transparent; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .step-list { display: grid; gap: 10px; counter-reset: step; }
+    .step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .step:before {
+      counter-increment: step;
+      content: counter(step);
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 11px;
+      background: rgba(33,212,253,.14);
+      color: #bff3ff;
+      border: 1px solid rgba(33,212,253,.24);
+      font-weight: 800;
+    }
+    .step h4 { margin: 0 0 4px; font-size: 16px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .roadmap { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .road-item { padding: 16px; border: 1px solid rgba(255,255,255,.11); border-radius: 18px; background: rgba(255,255,255,.06); position: relative; }
+    .road-num { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 10px; background: rgba(124,92,255,.24); color: #e5ddff; font-weight: 800; margin-bottom: 9px; }
+    .road-item h4 { margin: 0 0 6px; }
+    .road-item p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .accordion { display: grid; gap: 10px; }
+    .acc-item { border: 1px solid rgba(255,255,255,.12); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.055); }
+    .acc-head { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; background: transparent; border: 0; color: var(--text); cursor: pointer; text-align: left; font-weight: 750; }
+    .acc-head span:last-child { color: var(--brand2); font-size: 20px; }
+    .acc-body { display: none; padding: 0 16px 16px; color: var(--muted); }
+    .acc-item.open .acc-body { display: block; }
+
+    .template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .template-card { border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: rgba(255,255,255,.055); padding: 16px; }
+    .template-card h3 { margin: 0 0 9px; }
+    .template-text { white-space: pre-wrap; color: #d9e9ff; background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 13px; font-size: 14px; min-height: 150px; }
+
+    .record-list { display: grid; gap: 12px; margin-top: 14px; }
+    .record-card { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); border-radius: 18px; padding: 16px; }
+    .record-title { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+    .record-title h3 { margin: 0; }
+    .record-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .record-meta div { padding: 10px; border-radius: 12px; background: rgba(0,0,0,.18); color: var(--muted); font-size: 14px; }
+
+    .glossary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .term { padding: 15px; border-radius: 16px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.1); }
+    .term strong { display: block; color: #fff; margin-bottom: 6px; }
+    .term span { color: var(--muted); font-size: 14px; }
+
+    .footer { padding: 34px 0 52px; color: var(--weak); border-top: 1px solid var(--line); margin-top: 28px; }
+    .footer a { color: #cfe8ff; text-decoration: underline; text-decoration-color: rgba(255,255,255,.25); }
+    .source-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+    .source-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 12px; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(30px);
+      background: rgba(9, 18, 32, .96);
+      border: 1px solid rgba(255,255,255,.16);
+      color: #fff;
+      border-radius: 999px;
+      padding: 11px 15px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: all .2s ease;
+      z-index: 99;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 980px) {
+      .hero-grid, .selector-grid, .grid-2, .grid-3, .decision-form, .template-grid { grid-template-columns: 1fr; }
+      .roadmap { grid-template-columns: repeat(2, 1fr); }
+      .glossary { grid-template-columns: repeat(2, 1fr); }
+      .source-grid { grid-template-columns: 1fr; }
+      .nav { height: auto; padding: 14px 0; align-items: flex-start; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(100% - 24px, 1180px); }
+      .hero { padding: 42px 0 24px; }
+      .card { padding: 16px; }
+      .roadmap, .glossary, .record-meta { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      h1 { font-size: 42px; }
+      .cta-row .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#top" class="logo" aria-label="返回顶部">
+        <span class="logo-mark">🚀</span>
+        <span>Codex 部署流程导航器</span>
+      </a>
+      <nav class="nav-links" aria-label="页面导航">
+        <a href="#check">自检</a>
+        <a href="#type">项目判断</a>
+        <a href="#recommender">平台推荐</a>
+        <a href="#platforms">三平台流程</a>
+        <a href="#errors">错误诊断</a>
+        <a href="#records">部署记录</a>
+        <a href="#templates">复制模板</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">给 Codex 小白开发者的上线陪跑工具</span>
+          <h1><span class="gradient-text">不会部署，</span><br />也能把作品发到网上。</h1>
+          <p>从项目类型判断、平台选择、构建命令、输出目录，到 Vercel、Netlify、Cloudflare Pages 的具体点击路径和错误排查，这个导航器会把“部署”拆成你能照着做的小步骤。</p>
+          <div class="cta-row">
+            <a class="btn primary" href="#check">开始 30 秒部署自检</a>
+            <a class="btn" href="#recommender">让我推荐平台</a>
+            <a class="btn ghost" href="#templates">复制 Codex 排查模板</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="部署流程预览">
+          <div class="mini-terminal">
+            <div class="terminal-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="weak" style="margin-left:8px">deploy-navigator</span></div>
+            <div class="terminal-body">
+              <p class="terminal-line">$ 项目类型：<span>Vite / HTML / Next.js</span></p>
+              <p class="terminal-line">$ 推荐平台：<span id="hero-platform">Netlify 拖拽 / Vercel Git / Cloudflare Pages</span></p>
+              <p class="terminal-line">$ 构建命令：<span>npm run build / 无</span></p>
+              <p class="terminal-line">$ 输出目录：<span>dist / build / 根目录</span></p>
+              <p class="terminal-line">$ 结果：<span>生成部署路线 + 错误排查 + 记录卡片</span></p>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top:14px">
+            <div class="card"><div class="metric">3</div><p>平台流程</p></div>
+            <div class="card"><div class="metric">12+</div><p>错误诊断</p></div>
+            <div class="card"><div class="metric">0</div><p>后端依赖</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="check">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">部署前 30 秒检查器</h2>
+            <p class="section-desc">先别急着点 Deploy。小白部署失败，80% 不是平台问题，而是文件位置、构建目录、路径和环境变量没确认。</p>
+          </div>
+          <span class="badge">可勾选 · 自动进度</span>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="checklist" id="precheck-list"></div>
+          </div>
+          <div class="card">
+            <h3>你的部署准备度</h3>
+            <div class="progress-wrap">
+              <div class="progress-meta"><span id="progress-label">已完成 0/10 项</span><span id="progress-score">0%</span></div>
+              <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+            </div>
+            <div class="notice" id="progress-message">先从左边勾选你已经确认的事项。低于 5 项时，不建议直接部署。</div>
+            <div class="pill-row" style="margin-top:16px">
+              <span class="pill">重点看 index.html</span>
+              <span class="pill">确认 dist/build</span>
+              <span class="pill">先本地预览</span>
+              <span class="pill">保存线上链接</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="type">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">项目类型判断器</h2>
+            <p class="section-desc">选择你用 Codex 做出来的项目类型，导航器会告诉你：选什么平台、要不要构建、命令填什么、输出目录填什么。</p>
+          </div>
+          <span class="badge">适合完全小白</span>
+        </div>
+        <div class="selector-grid">
+          <div class="card option-list" id="type-options"></div>
+          <div class="card result-panel" id="type-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recommender">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">平台推荐决策器</h2>
+            <p class="section-desc">不知道该用 Vercel、Netlify 还是 Cloudflare Pages？按你的项目和习惯做选择，不再凭感觉乱试。</p>
+          </div>
+          <span class="badge">生成明确推荐</span>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="decision-form">
+              <div class="field">
+                <label for="project-kind">项目类型</label>
+                <select id="project-kind">
+                  <option value="html">纯 HTML/CSS/JS</option>
+                  <option value="vite">Vite / Vue / React</option>
+                  <option value="next">Next.js</option>
+                  <option value="astro">Astro / 静态博客</option>
+                  <option value="unknown">我不确定</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="priority">第一优先级</label>
+                <select id="priority">
+                  <option value="fast">最快上线</option>
+                  <option value="stable">以后自动更新</option>
+                  <option value="domain">绑定域名和全球访问</option>
+                  <option value="framework">框架适配省心</option>
+                </select>
+              </div>
+            </div>
+            <div class="switch-row">
+              <label class="switch"><input type="checkbox" id="has-github" /> 我已经有 GitHub 仓库</label>
+              <label class="switch"><input type="checkbox" id="afraid-cli" checked /> 我害怕命令行，想尽量点页面完成</label>
+              <label class="switch"><input type="checkbox" id="need-domain" /> 我准备绑定自己的域名</label>
+              <label class="switch"><input type="checkbox" id="selling-html" /> 我只是想给 HTML 虚拟产品一个演示链接</label>
+            </div>
+            <button class="btn primary" style="margin-top:16px" id="recommend-btn">生成我的部署方案</button>
+          </div>
+          <div class="card recommendation" id="recommendation-output">
+            <span class="badge">推荐结果</span>
+            <div class="big-rec">先选择条件，再生成方案</div>
+            <p class="muted">这里会显示推荐平台、部署方式、推荐理由、注意事项和下一步操作。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">三平台对比选择表</h2>
+            <p class="section-desc">不要问“哪个最好”，要问“我的项目现在最适合哪个”。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>平台</th><th>最适合项目</th><th>小白友好度</th><th>拖拽/直接上传</th><th>框架项目</th><th>域名</th><th>常见方式</th><th>注意事项</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Vercel</strong></td><td>Next.js、React、Vite、AI 生成网页产品</td><td>高</td><td>不以拖拽为主</td><td>强，尤其 Next.js</td><td>支持</td><td>GitHub 导入、CLI</td><td>要看 Framework Preset、Build Command、Output Directory</td></tr>
+              <tr><td><strong>Netlify</strong></td><td>HTML 产品、Landing Page、作品集、静态小工具</td><td>很高</td><td>支持拖拽文件夹发布</td><td>强</td><td>支持</td><td>拖拽、GitHub 自动部署、CLI</td><td>拖拽时要上传最终输出目录，不要传错源码</td></tr>
+              <tr><td><strong>Cloudflare Pages</strong></td><td>静态站点、Vite/Vue/React/Astro、需要全球边缘网络</td><td>中高</td><td>支持 Direct Upload</td><td>强</td><td>支持，适合 Cloudflare 生态</td><td>Git 集成、Direct Upload、Wrangler</td><td>Git 集成和 Direct Upload 项目路径不要混用，创建时先想清楚</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-3" style="margin-top:16px">
+          <div class="card"><h3>只有 HTML 文件</h3><p>优先 Netlify 拖拽，或者 Cloudflare Pages Direct Upload。目标是先拿到可访问链接。</p></div>
+          <div class="card"><h3>用 Next.js</h3><p>优先 Vercel。它对 Next.js 的默认识别和部署体验更顺。</p></div>
+          <div class="card"><h3>要自动更新</h3><p>用 GitHub 连接任一平台。之后每次更新仓库，平台会自动重新发布。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platforms">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Vercel / Netlify / Cloudflare Pages 部署导航</h2>
+            <p class="section-desc">每个平台都按“小白能照着点”的方式拆开。先选平台，再跟步骤走。</p>
+          </div>
+          <span class="badge">三平台完整流程</span>
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="vercel">Vercel</button>
+          <button class="tab-btn" data-tab="netlify">Netlify</button>
+          <button class="tab-btn" data-tab="cloudflare">Cloudflare Pages</button>
+        </div>
+        <div class="tab-panel active" id="tab-vercel">
+          <div class="grid-2">
+            <div class="card">
+              <h3>路径 A：GitHub 仓库部署</h3>
+              <div class="step-list">
+                <div class="step"><div><h4>整理项目文件夹</h4><p>确认真正的项目根目录在哪里。看到 <code>package.json</code> 或 <code>index.html</code> 的那一层通常就是根目录。</p></div></div>
+                <div class="step"><div><h4>本地先跑一遍</h4><p>纯 HTML 直接打开；框架项目先运行 <code>npm install</code> 和 <code>npm run build</code>。</p></div></div>
+                <div class="step"><div><h4>上传 GitHub</h4><p>仓库名尽量简单：不要中文、不要空格，例如 <code>codex-landing-page</code>。</p></div></div>
+                <div class="step"><div><h4>在 Vercel 导入项目</h4><p>使用 GitHub 登录，点击 Import Project，选择对应仓库。</p></div></div>
+                <div class="step"><div><h4>检查配置</h4><p>重点看 Framework Preset、Build Command、Output Directory。Vite 通常是 <code>npm run build</code> + <code>dist</code>。</p></div></div>
+                <div class="step"><div><h4>点击 Deploy</h4><p>等构建完成，打开 Production 链接，在电脑和手机都测试一遍。</p></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>路径 B：Vercel CLI 部署</h3>
+              <p>CLI 就是用命令行把项目发到 Vercel。小白可以先不用，但进阶时很有用。</p>
+              <div class="template-text">npm i -g vercel
+vercel
+vercel --prod</div>
+              <p><code>npm i -g vercel</code>：安装 Vercel 命令工具。<br><code>vercel</code>：创建一次预览部署。<br><code>vercel --prod</code>：发布正式线上版本。</p>
+              <div class="notice">小白建议：先用 GitHub + 页面导入跑通一次，再学命令行。不要一开始被终端报错吓退。</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-netlify">
+          <div class="grid-2">
+            <div class="card">
+              <h3>路径 A：拖拽部署，HTML 小白优先</h3>
+              <div class="step-list">
+                <div class="step"><div><h4>找到要上传的文件夹</h4><p>纯 HTML 上传包含 <code>index.html</code> 的文件夹；Vite/React/Vue 先构建，上传 <code>dist</code> 或 <code>build</code>。</p></div></div>
+                <div class="step"><div><h4>打开 Netlify Drop</h4><p>登录后进入拖拽上传区域，把文件夹拖进去。</p></div></div>
+                <div class="step"><div><h4>等待发布</h4><p>发布完成后会获得一个 <code>netlify.app</code> 链接。</p></div></div>
+                <div class="step"><div><h4>测试页面</h4><p>检查首页、按钮、图片、样式、手机端。如果坏了，修好后重新拖拽上传。</p></div></div>
+                <div class="step"><div><h4>保存版本记录</h4><p>把项目名、平台、链接、问题写到下面的部署记录区，下一次不会忘。</p></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>路径 B：GitHub 自动部署</h3>
+              <div class="step-list">
+                <div class="step"><div><h4>Add new site</h4><p>选择 Import an existing project，连接 GitHub。</p></div></div>
+                <div class="step"><div><h4>选择仓库</h4><p>选择你刚上传的项目仓库。</p></div></div>
+                <div class="step"><div><h4>填写构建设置</h4><p>Build command 常见为 <code>npm run build</code>，Publish directory 常见为 <code>dist</code> 或 <code>build</code>。</p></div></div>
+                <div class="step"><div><h4>点击 Deploy</h4><p>之后每次 push 代码，Netlify 会自动重新发布。</p></div></div>
+              </div>
+              <div class="notice">纯 HTML 如果没有构建命令，Build command 可以留空，Publish directory 指向包含 index.html 的目录。</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-cloudflare">
+          <div class="grid-2">
+            <div class="card">
+              <h3>路径 A：Git 集成部署</h3>
+              <div class="step-list">
+                <div class="step"><div><h4>进入 Workers & Pages</h4><p>创建 Pages 项目，选择连接 GitHub 或 GitLab 仓库。</p></div></div>
+                <div class="step"><div><h4>选择项目仓库</h4><p>确认分支，一般是 <code>main</code> 或 <code>master</code>。</p></div></div>
+                <div class="step"><div><h4>配置构建</h4><p>填写 Build command 和 Build output directory。Vite 通常是 <code>npm run build</code> 与 <code>dist</code>。</p></div></div>
+                <div class="step"><div><h4>部署并测试</h4><p>等待构建完成，打开 Pages 提供的链接，检查图片、样式、刷新路由。</p></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>路径 B：Direct Upload 直接上传</h3>
+              <div class="step-list">
+                <div class="step"><div><h4>准备静态输出文件夹</h4><p>必须是已经能直接上线的文件：HTML、CSS、JS、图片等。框架项目先构建。</p></div></div>
+                <div class="step"><div><h4>创建 Direct Upload 项目</h4><p>进入 Pages 的直接上传路径，上传文件夹。</p></div></div>
+                <div class="step"><div><h4>拿到链接</h4><p>打开链接测试。如果你后续要自动部署，建议下一个项目直接用 Git 集成。</p></div></div>
+              </div>
+              <div class="notice">注意：Cloudflare Pages 的 Git 集成和 Direct Upload 是不同创建路径。新建项目时先想清楚要哪种方式。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="build-helper">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">构建命令和输出目录助手</h2>
+            <p class="section-desc">部署表单里最容易填错的两个位置：Build Command 和 Output / Publish Directory。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>项目类型</th><th>构建命令</th><th>输出目录</th><th>小白提醒</th></tr></thead>
+            <tbody>
+              <tr><td>纯 HTML/CSS/JS</td><td>无</td><td>项目根目录</td><td><code>index.html</code> 要在上传目录里，不要藏太深。</td></tr>
+              <tr><td>Vite</td><td><code>npm run build</code></td><td><code>dist</code></td><td>上传/发布的是 <code>dist</code>，不是整个源码目录。</td></tr>
+              <tr><td>React</td><td><code>npm run build</code></td><td><code>build</code> 或 <code>dist</code></td><td>看你用 CRA 还是 Vite，别靠猜。</td></tr>
+              <tr><td>Next.js</td><td><code>next build</code> 或平台自动识别</td><td>平台处理</td><td>优先 Vercel，小白不要手动改太多。</td></tr>
+              <tr><td>Vue</td><td><code>npm run build</code></td><td><code>dist</code></td><td>图片路径和 base 配置出错很常见。</td></tr>
+              <tr><td>Astro</td><td><code>npm run build</code></td><td><code>dist</code></td><td>适合静态内容站点和教程页。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">部署流程路线图</h2>
+            <p class="section-desc">把部署拆成 10 个固定动作。以后任何项目都按这个顺序走。</p>
+          </div>
+        </div>
+        <div class="roadmap" id="roadmap"></div>
+      </div>
+    </section>
+
+    <section id="errors">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">错误诊断中心</h2>
+            <p class="section-desc">看到报错不要慌。先找到最像的问题，再按“原因 → 解决步骤”排查。</p>
+          </div>
+          <span class="badge">点击展开</span>
+        </div>
+        <div class="accordion" id="error-accordion"></div>
+      </div>
+    </section>
+
+    <section id="glossary-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">小白术语词典</h2>
+            <p class="section-desc">部署文档里的词，一句话讲清楚。</p>
+          </div>
+        </div>
+        <div class="glossary" id="glossary"></div>
+      </div>
+    </section>
+
+    <section id="records">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">部署记录表</h2>
+            <p class="section-desc">每次部署都记下来：链接、命令、目录、问题、解决方法。记录会保存在当前浏览器 localStorage 中。</p>
+          </div>
+          <span class="badge">本地保存</span>
+        </div>
+        <div class="card">
+          <div class="decision-form">
+            <div class="field"><label>项目名称</label><input type="text" id="rec-name" placeholder="例如：小红书资料包展示页" /></div>
+            <div class="field"><label>项目类型</label><input type="text" id="rec-type" placeholder="HTML / Vite / Next.js" /></div>
+            <div class="field"><label>部署平台</label><select id="rec-platform"><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option></select></div>
+            <div class="field"><label>部署方式</label><input type="text" id="rec-method" placeholder="GitHub 导入 / 拖拽上传 / Direct Upload / CLI" /></div>
+            <div class="field"><label>构建命令</label><input type="text" id="rec-build" placeholder="无 / npm run build" /></div>
+            <div class="field"><label>输出目录</label><input type="text" id="rec-output" placeholder="根目录 / dist / build" /></div>
+            <div class="field"><label>线上链接</label><input type="url" id="rec-url" placeholder="https://..." /></div>
+            <div class="field"><label>GitHub 仓库链接</label><input type="url" id="rec-github" placeholder="https://github.com/..." /></div>
+          </div>
+          <div class="field" style="margin-top:12px"><label>遇到的问题</label><textarea id="rec-problem" placeholder="例如：部署成功但页面空白"></textarea></div>
+          <div class="field" style="margin-top:12px"><label>解决方法 / 下一次优化事项</label><textarea id="rec-solution" placeholder="例如：发现上传了源码目录，改为上传 dist 后解决"></textarea></div>
+          <div class="cta-row">
+            <button class="btn primary" id="save-record">生成并保存记录</button>
+            <button class="btn" id="clear-form">清空表单</button>
+            <button class="btn ghost" id="clear-records">清空所有记录</button>
+          </div>
+        </div>
+        <div class="record-list" id="record-list"></div>
+      </div>
+    </section>
+
+    <section id="templates">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">复制给 Codex 的部署提示词</h2>
+            <p class="section-desc">不会问，也会导致 Codex 帮错方向。这里给你可直接复制的排查和部署提示词。</p>
+          </div>
+          <span class="badge">一键复制</span>
+        </div>
+        <div class="template-grid" id="template-grid"></div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">FAQ：小白最常问的问题</h2>
+            <p class="section-desc">先看这里，很多部署问题其实不是代码坏了，而是目录、路径和构建设置没对。</p>
+          </div>
+        </div>
+        <div class="accordion" id="faq-accordion"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <strong>Codex 部署流程导航器</strong>
+      <p>这是一个前端单页产品，可直接保存为 <code>index.html</code> 打开，也可以部署到 Vercel、Netlify 或 Cloudflare Pages。页面记录功能仅保存在当前浏览器。</p>
+      <div class="source-grid">
+        <div class="source-card">Vercel：支持从 Git 仓库和 CLI 部署，构建输出目录会影响最终静态资源服务。</div>
+        <div class="source-card">Netlify：支持从项目文件夹拖拽发布，也支持从 Git 仓库持续部署。</div>
+        <div class="source-card">Cloudflare Pages：支持 Git 集成与 Direct Upload，Direct Upload 用于上传预构建静态资源。</div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    // ===== 数据区：小白可让 Codex 继续修改这些文案 =====
+    const prechecks = [
+      '我知道项目文件夹在哪里',
+      '我确认首页文件叫 index.html，或者框架项目能正常运行',
+      '我知道项目是否需要构建',
+      '我知道项目里是否有 package.json',
+      '我知道是否需要环境变量',
+      '我已经本地预览过页面',
+      '我的图片、CSS、JS 路径没有写错',
+      '我知道最终输出目录，例如 dist、build、out 或根目录',
+      '我已经准备好 GitHub 仓库，或者准备使用拖拽上传',
+      '我知道部署成功后要保存访问链接'
+    ];
+
+    const projectTypes = {
+      html: {
+        name: '纯 HTML/CSS/JS 单页产品', platform: 'Netlify 或 Cloudflare Pages Direct Upload，Vercel 也可以', build: '通常不需要构建', command: '无', output: '项目根目录',
+        tips: ['确认 index.html 在上传目录第一层', 'CSS/JS/图片尽量用相对路径', '最适合先用 Netlify 拖拽拿到演示链接'],
+        risks: ['上传了外层空文件夹', '图片文件名大小写不一致', '本地路径如 C:\\Users\\... 被写进代码']
+      },
+      vite: {
+        name: 'Vite 项目', platform: 'Vercel / Netlify / Cloudflare Pages 都适合', build: '需要构建', command: 'npm run build', output: 'dist',
+        tips: ['先本地运行 npm install，再 npm run build', '部署时输出目录通常填 dist', '如果页面空白，优先检查 base 路径'],
+        risks: ['上传了源码而不是 dist', 'package.json 没有 build 脚本', 'Node 版本或依赖安装失败']
+      },
+      react: {
+        name: 'React 项目', platform: 'Vercel 或 Netlify 更直观', build: '通常需要构建', command: 'npm run build', output: 'build 或 dist',
+        tips: ['先看是 CRA 还是 Vite', 'CRA 常见输出 build，Vite 常见输出 dist', 'SPA 刷新 404 需要重定向规则'],
+        risks: ['输出目录猜错', '路由刷新 404', '环境变量前缀或平台变量没配置']
+      },
+      next: {
+        name: 'Next.js 项目', platform: '优先 Vercel', build: '需要构建，但 Vercel 通常自动识别', command: 'next build / 平台自动处理', output: 'Vercel 通常自动处理',
+        tips: ['新手优先 Vercel + GitHub', '不要随便改 Output Directory', '如果用了 API Key，要检查环境变量'],
+        risks: ['把前端变量和服务端变量混淆', '依赖版本不匹配', '误把静态导出和 SSR 混为一谈']
+      },
+      vue: {
+        name: 'Vue 项目', platform: 'Netlify / Vercel / Cloudflare Pages 都可以', build: '需要构建', command: 'npm run build', output: 'dist',
+        tips: ['构建后看 dist 里有没有 index.html', '部署目录填 dist', '路由 history 模式可能需要重定向'],
+        risks: ['路由刷新 404', 'base 路径配置不对', '图片引用路径不对']
+      },
+      astro: {
+        name: 'Astro 项目', platform: 'Cloudflare Pages / Netlify / Vercel 都适合', build: '需要构建', command: 'npm run build', output: 'dist',
+        tips: ['适合文档、博客、资料站、静态产品页', '先本地 build 成功再部署', 'Cloudflare Pages 对静态站点体验很好'],
+        risks: ['适配器配置不清楚', '输出目录填错', '动态功能误以为静态部署也能跑']
+      },
+      unknown: {
+        name: '不确定项目类型', platform: '先检查文件结构，再决定平台', build: '看是否有 package.json', command: '如果有 build 脚本，多半是 npm run build；如果只有 index.html，可能不需要', output: 'dist / build / 根目录，需要看构建结果',
+        tips: ['先找 package.json', '看 scripts 里有没有 build', '让 Codex 读取文件树后判断'],
+        risks: ['盲目上传整个项目', '构建命令靠猜', '把源码目录当成发布目录']
+      }
+    };
+
+    const roadmap = [
+      ['确认项目类型', '先判断是纯 HTML 还是框架项目。类型不同，命令和目录不同。'],
+      ['本地预览', '本地都打不开，线上通常也打不开。先在电脑里跑通。'],
+      ['选择平台', 'HTML 先快上线，Next.js 先 Vercel，全球生态可看 Cloudflare。'],
+      ['准备 GitHub 或静态文件夹', '有仓库走自动部署；没仓库就先拖拽或 Direct Upload。'],
+      ['填写构建命令和输出目录', 'Vite/Vue/Astro 多数是 npm run build + dist。'],
+      ['点击部署', '不要反复乱改设置。先用默认识别，失败后看错误第一行。'],
+      ['测试链接', '用电脑、手机、无痕窗口各打开一次。'],
+      ['修复问题', '空白查路径，404 查 index 和重定向，构建失败查依赖。'],
+      ['绑定域名', '不是必须。先拿平台链接验证产品，再考虑域名。'],
+      ['保存部署记录', '记录平台、命令、目录、链接和解决方法。下次会快很多。']
+    ];
+
+    const errors = [
+      ['页面部署成功但打开空白', '常见原因：资源路径错误、JS 报错、上传了源码而不是构建产物、构建输出缺文件。解决：打开浏览器开发者工具看 Console；确认上传的是 dist/build；检查 JS/CSS 路径是否从 / 或相对路径开始。'],
+      ['404 Not Found', '常见原因：首页不在根目录、文件夹传错、单页应用刷新路由没配置。解决：确认 index.html 在发布目录；React/Vue SPA 需要配置 fallback 到 index.html。'],
+      ['图片不显示', '常见原因：文件名大小写不一致、中文路径、图片没放进输出目录、本地绝对路径。解决：文件名用英文小写；路径用相对路径；构建后检查 dist/build 是否包含图片。'],
+      ['CSS 没生效', '常见原因：link 路径错误、CSS 没上传、缓存、构建时路径变化。解决：查看 Network 是否 404；强制刷新；确认发布目录里有 CSS 文件。'],
+      ['构建失败', '常见原因：依赖没安装、Node 版本不匹配、build 脚本不存在、环境变量缺失。解决：本地执行 npm install 和 npm run build；看报错最上面几行。'],
+      ['Vercel Build Command 错误', '打开 package.json，看 scripts 里有没有 build。如果没有，不要填 npm run build；纯 HTML 项目通常不需要构建命令。'],
+      ['Netlify 发布后缺文件', '多半是 Publish directory 填错。Vite 填 dist，CRA React 填 build，纯 HTML 填包含 index.html 的目录。'],
+      ['Cloudflare Pages 构建失败', '检查 Framework preset、Build command、Build output directory 和 Node 版本。Direct Upload 要上传预构建资产，不是源码。'],
+      ['环境变量缺失', '环境变量是部署平台里填写的隐藏配置。不要把私密 API Key 直接写进公开前端代码。'],
+      ['部署后手机端很丑', '这不是部署失败，是响应式没做好。让 Codex 检查 CSS media query、容器宽度、按钮换行和表格横向滚动。'],
+      ['点击按钮没反应', '多半是 JS 报错或按钮绑定没执行。打开 Console 看红色错误；确认 script 在 body 底部或 DOMContentLoaded 后执行。'],
+      ['自定义域名打不开', '常见原因：DNS 记录没配好、解析还没生效、域名填错平台。先用平台原始链接确认页面没问题，再改域名。']
+    ];
+
+    const glossary = [
+      ['部署', '把你电脑里的网页放到互联网上，让别人能通过链接访问。'],
+      ['静态网站', '主要由 HTML、CSS、JS、图片组成，不需要服务器实时计算。'],
+      ['构建', '把源码整理、压缩、转换成适合上线的文件。'],
+      ['输出目录', '构建后真正要发布的文件夹，常见是 dist 或 build。'],
+      ['GitHub 仓库', '存放代码的云端文件夹，平台可以从这里自动取代码部署。'],
+      ['Production', '正式线上版本，也就是你准备发给别人看的链接。'],
+      ['Preview', '预览版本，常用于测试，不一定是最终正式链接。'],
+      ['环境变量', '部署时填写的隐藏配置，常用于 API Key 或项目开关。'],
+      ['域名', '更好记的网址，例如 example.com。'],
+      ['DNS', '把域名指向部署平台的设置系统。'],
+      ['404', '服务器找不到你要访问的页面。'],
+      ['CLI', '命令行工具，用文字命令完成部署等操作。']
+    ];
+
+    const templates = [
+      ['部署前检查提示词', '请帮我检查这个项目是否适合部署到 Vercel / Netlify / Cloudflare Pages。请判断项目类型、是否需要构建、构建命令、输出目录、可能的部署风险，并给我小白能照着做的部署步骤。请先查看项目文件结构，再给结论，不要靠猜。'],
+      ['报错排查提示词', '我在部署时遇到了以下报错，请你像部署工程师一样帮我分析。请先用小白能听懂的话解释错误含义，再列出最可能的 3 个原因，最后给我一步一步的修复方法。我的平台是：____。项目类型是：____。构建命令是：____。输出目录是：____。报错内容是：____。'],
+      ['Vercel 部署提示词', '请指导我把这个项目部署到 Vercel。我是小白，请你先判断项目类型，再告诉我是否推荐 GitHub 导入或 Vercel CLI。请明确写出 Framework Preset、Build Command、Output Directory 应该怎么填，以及部署成功后如何检查页面。'],
+      ['Netlify 部署提示词', '请指导我把这个项目部署到 Netlify。我想尽量简单。如果适合拖拽部署，请告诉我应该拖拽哪个文件夹；如果适合 GitHub 自动部署，请告诉我 Build command 和 Publish directory 应该怎么填。请特别检查 index.html、dist/build 和图片路径。'],
+      ['Cloudflare Pages 部署提示词', '请指导我把这个项目部署到 Cloudflare Pages。请先判断适合 Git 集成还是 Direct Upload。请明确 Build command、Build output directory、是否需要环境变量，并提醒我哪些情况会导致 404、页面空白或图片不显示。'],
+      ['让 Codex 修复路径提示词', '我的项目本地可以打开，但部署后页面空白 / 图片不显示 / CSS 失效。请帮我检查所有 HTML、CSS、JS、图片路径。要求：不要改变页面设计，只修复路径、资源引用、构建后可访问性问题，并说明每个修改原因。']
+    ];
+
+    const faqs = [
+      ['我只有一个 HTML 文件，可以部署吗？', '可以。你只需要确保文件名是 index.html，图片和 CSS/JS 路径正确。最快方式是 Netlify 拖拽，或者 Cloudflare Pages Direct Upload。'],
+      ['我没有 GitHub，可以部署吗？', '可以。Netlify 支持拖拽文件夹，Cloudflare Pages 支持 Direct Upload。Vercel 更推荐 Git 或 CLI。'],
+      ['为什么本地能打开，部署后打不开？', '本地文件路径比较宽松，线上路径更严格。最常见是图片/CSS/JS 路径写错，或者上传了错误文件夹。'],
+      ['为什么图片路径经常出问题？', '因为大小写、中文文件名、空格、本地绝对路径都会在线上出问题。建议图片用英文小写命名，并放到明确的 assets/images 文件夹。'],
+      ['Vercel、Netlify、Cloudflare Pages 哪个最好？', '没有绝对最好。Next.js 优先 Vercel；HTML 演示页优先 Netlify 拖拽；想接 Cloudflare 域名和边缘网络，可选 Cloudflare Pages。'],
+      ['免费版够不够用？', '学习、演示、小型静态站点通常够用。商业增长后再看带宽、团队协作、构建分钟数和域名需求。'],
+      ['我卖虚拟产品，需要部署吗？', '如果你卖的是 HTML 产品，建议部署一个演示链接。客户看到真实效果，比截图更有说服力。'],
+      ['我可以把链接发给客户吗？', '可以，但先用手机、电脑、无痕窗口都测试一遍，确认没有空白、错位、404 和隐私信息泄露。'],
+      ['我修改后怎么重新部署？', '拖拽部署就重新上传新文件夹；GitHub 自动部署就提交并 push 代码；CLI 就重新运行部署命令。'],
+      ['绑定域名是不是必须？', '不是。刚开始先用平台提供的免费链接验证产品。需要品牌感或正式销售时，再绑定域名。'],
+      ['环境变量是什么？', '可以理解成部署平台里的隐藏配置。它常用来放 API 地址、密钥或开关。私密密钥不要直接写在前端公开代码里。'],
+      ['我应该让 Codex 帮我检查什么？', '让它检查项目类型、package.json、build 脚本、输出目录、资源路径、是否需要重定向、是否有环境变量。']
+    ];
+
+    // ===== 初始化：部署前自检 =====
+    const precheckList = document.getElementById('precheck-list');
+    prechecks.forEach((text, index) => {
+      const item = document.createElement('label');
+      item.className = 'check-item';
+      item.innerHTML = `<input type="checkbox" class="precheck" data-index="${index}"><span>${text}</span>`;
+      precheckList.appendChild(item);
+    });
+
+    function updateProgress() {
+      const checks = [...document.querySelectorAll('.precheck')];
+      const done = checks.filter(c => c.checked).length;
+      const percent = Math.round(done / checks.length * 100);
+      document.getElementById('progress-label').textContent = `已完成 ${done}/${checks.length} 项`;
+      document.getElementById('progress-score').textContent = `${percent}%`;
+      document.getElementById('progress-bar').style.width = percent + '%';
+      const msg = document.getElementById('progress-message');
+      if (done < 5) msg.textContent = '建议先别部署。你现在最该确认的是：项目根目录、index.html、是否需要构建、输出目录。';
+      else if (done < 8) msg.textContent = '可以尝试部署，但先准备好排查：如果页面空白，优先看路径和输出目录。';
+      else msg.textContent = '准备度很好。现在可以选择平台，按流程部署，并保存部署记录。';
+    }
+    document.addEventListener('change', e => { if (e.target.classList.contains('precheck')) updateProgress(); });
+    updateProgress();
+
+    // ===== 项目类型判断器 =====
+    const typeOptions = document.getElementById('type-options');
+    const typeResult = document.getElementById('type-result');
+    Object.entries(projectTypes).forEach(([key, info], idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn' + (idx === 0 ? ' active' : '');
+      btn.dataset.type = key;
+      btn.innerHTML = `<strong>${info.name}</strong><br><span class="muted">${info.command === '无' ? '不用构建或极简部署' : info.command + ' → ' + info.output}</span>`;
+      typeOptions.appendChild(btn);
+    });
+    function renderType(type) {
+      const info = projectTypes[type];
+      typeResult.innerHTML = `
+        <span class="badge">${info.name}</span>
+        <h3 style="margin-top:12px">推荐：${info.platform}</h3>
+        <div class="result-grid">
+          <div class="result-box"><strong>是否需要构建</strong>${info.build}</div>
+          <div class="result-box"><strong>构建命令</strong><code>${info.command}</code></div>
+          <div class="result-box"><strong>输出目录</strong><code>${info.output}</code></div>
+          <div class="result-box"><strong>最适合动作</strong>${type === 'html' ? '先拖拽上线拿演示链接' : '先本地 build 成功再连接平台'}</div>
+        </div>
+        <div class="grid-2" style="margin-top:12px">
+          <div class="result-box"><strong>小白提醒</strong><ul>${info.tips.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          <div class="result-box"><strong>最容易踩坑</strong><ul>${info.risks.map(x => `<li>${x}</li>`).join('')}</ul></div>
+        </div>`;
+    }
+    typeOptions.addEventListener('click', e => {
+      const btn = e.target.closest('.option-btn');
+      if (!btn) return;
+      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderType(btn.dataset.type);
+    });
+    renderType('html');
+
+    // ===== 平台推荐器 =====
+    function recommend() {
+      const kind = document.getElementById('project-kind').value;
+      const priority = document.getElementById('priority').value;
+      const hasGithub = document.getElementById('has-github').checked;
+      const afraidCli = document.getElementById('afraid-cli').checked;
+      const needDomain = document.getElementById('need-domain').checked;
+      const sellingHtml = document.getElementById('selling-html').checked;
+      let platform = 'Netlify';
+      let method = '拖拽上传';
+      let reasons = [];
+      let notes = [];
+      let steps = [];
+
+      if (kind === 'next' || priority === 'framework') {
+        platform = 'Vercel'; method = hasGithub ? 'GitHub 导入部署' : '先上传 GitHub，再导入 Vercel';
+        reasons = ['Next.js 项目在 Vercel 上默认识别更省心', '小白不用手动处理太多输出目录细节', 'GitHub 导入后后续更新会自动部署'];
+        notes = ['不要随便覆盖 Output Directory', '如果有 API Key，先配置环境变量', '先确认本地 npm run build 能通过'];
+        steps = ['把项目上传到 GitHub', '在 Vercel Import Project', '检查框架预设后点击 Deploy'];
+      } else if (sellingHtml || (kind === 'html' && priority === 'fast') || (afraidCli && !hasGithub)) {
+        platform = 'Netlify'; method = '拖拽上传';
+        reasons = ['HTML 产品最快拿到演示链接', '不需要命令行', '适合卖虚拟产品前给客户试看'];
+        notes = ['确认 index.html 在上传文件夹第一层', '图片和 CSS/JS 路径要是相对路径', '如果是 Vite，不要拖源码，要拖 dist'];
+        steps = ['准备包含 index.html 的文件夹', '打开 Netlify Drop 拖拽上传', '打开 netlify.app 链接测试'];
+      } else if (priority === 'domain' || needDomain) {
+        platform = 'Cloudflare Pages'; method = hasGithub ? 'Git 集成部署' : 'Direct Upload';
+        reasons = ['适合后续接 Cloudflare 域名和 DNS', '静态站点全球访问体验好', hasGithub ? 'Git 集成后更新自动部署' : 'Direct Upload 可直接上传预构建文件'];
+        notes = ['创建项目时先决定 Git 集成还是 Direct Upload', '构建输出目录要填对', '绑定域名前先确认 pages.dev 链接正常'];
+        steps = [hasGithub ? '连接 GitHub 仓库' : '准备预构建静态文件夹', '填写构建命令和输出目录', '部署后再处理域名'];
+      } else if (hasGithub) {
+        platform = kind === 'vite' ? 'Vercel 或 Netlify' : 'Netlify'; method = 'GitHub 自动部署';
+        reasons = ['有 GitHub 后自动部署更省事', '后续改代码不用反复手动上传', 'Vite/React/Vue 三个平台都能跑'];
+        notes = ['Vite 通常是 npm run build + dist', 'React 可能是 build 或 dist，要看工具', '首次部署后先测试手机端'];
+        steps = ['确认 package.json 的 build 脚本', '连接 GitHub 仓库', '填对输出目录并部署'];
+      }
+
+      document.getElementById('recommendation-output').innerHTML = `
+        <span class="badge">推荐结果</span>
+        <div class="big-rec">${platform}</div>
+        <p><strong>推荐部署方式：</strong>${method}</p>
+        <div class="grid-2">
+          <div class="result-box"><strong>推荐理由</strong><ol>${reasons.map(x => `<li>${x}</li>`).join('')}</ol></div>
+          <div class="result-box"><strong>部署前注意</strong><ol>${notes.map(x => `<li>${x}</li>`).join('')}</ol></div>
+        </div>
+        <div class="notice"><strong>下一步：</strong><ol>${steps.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
+    }
+    document.getElementById('recommend-btn').addEventListener('click', recommend);
+
+    // ===== Tab =====
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ===== 路线图 / 错误 / 术语 / FAQ =====
+    document.getElementById('roadmap').innerHTML = roadmap.map((x, i) => `<div class="road-item"><div class="road-num">${i+1}</div><h4>${x[0]}</h4><p>${x[1]}</p></div>`).join('');
+    function accordionHTML(items) {
+      return items.map(([q, a]) => `<div class="acc-item"><button class="acc-head"><span>${q}</span><span>+</span></button><div class="acc-body">${a}</div></div>`).join('');
+    }
+    document.getElementById('error-accordion').innerHTML = accordionHTML(errors);
+    document.getElementById('faq-accordion').innerHTML = accordionHTML(faqs);
+    document.addEventListener('click', e => {
+      const head = e.target.closest('.acc-head');
+      if (!head) return;
+      const item = head.parentElement;
+      item.classList.toggle('open');
+      head.querySelector('span:last-child').textContent = item.classList.contains('open') ? '−' : '+';
+    });
+    document.getElementById('glossary').innerHTML = glossary.map(([t, d]) => `<div class="term"><strong>${t}</strong><span>${d}</span></div>`).join('');
+
+    // ===== 复制模板 =====
+    const templateGrid = document.getElementById('template-grid');
+    templates.forEach(([title, text], i) => {
+      const card = document.createElement('div');
+      card.className = 'template-card';
+      card.innerHTML = `<h3>${title}</h3><div class="template-text" id="tpl-${i}">${text}</div><button class="btn small copy-btn" data-copy="tpl-${i}" style="margin-top:10px">复制模板</button>`;
+      templateGrid.appendChild(card);
+    });
+
+    function showToast(msg = '已复制') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1600);
+    }
+    document.addEventListener('click', async e => {
+      const btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      const text = document.getElementById(btn.dataset.copy).textContent;
+      try { await navigator.clipboard.writeText(text); showToast('已复制到剪贴板'); }
+      catch { showToast('复制失败，请手动选中文字'); }
+    });
+
+    // ===== 部署记录 localStorage =====
+    const recordKey = 'codex_deploy_navigator_records_v1';
+    function getRecords() {
+      try { return JSON.parse(localStorage.getItem(recordKey)) || []; }
+      catch { return []; }
+    }
+    function setRecords(records) { localStorage.setItem(recordKey, JSON.stringify(records)); }
+    function renderRecords() {
+      const list = document.getElementById('record-list');
+      const records = getRecords();
+      if (!records.length) { list.innerHTML = '<div class="notice">还没有部署记录。保存一次后，这里会出现你的部署卡片。</div>'; return; }
+      list.innerHTML = records.map((r, i) => `
+        <div class="record-card">
+          <div class="record-title"><h3>${escapeHTML(r.name)}</h3><button class="btn small delete-record" data-index="${i}">删除</button></div>
+          <div class="record-meta">
+            <div><strong>平台</strong><br>${escapeHTML(r.platform)}</div>
+            <div><strong>方式</strong><br>${escapeHTML(r.method || '未填写')}</div>
+            <div><strong>时间</strong><br>${escapeHTML(r.time)}</div>
+            <div><strong>类型</strong><br>${escapeHTML(r.type || '未填写')}</div>
+            <div><strong>构建命令</strong><br><code>${escapeHTML(r.build || '无')}</code></div>
+            <div><strong>输出目录</strong><br><code>${escapeHTML(r.output || '未填写')}</code></div>
+          </div>
+          <p><strong>线上链接：</strong>${r.url ? `<a href="${escapeAttr(r.url)}" target="_blank" rel="noopener">${escapeHTML(r.url)}</a>` : '未填写'}</p>
+          <p><strong>GitHub：</strong>${r.github ? `<a href="${escapeAttr(r.github)}" target="_blank" rel="noopener">${escapeHTML(r.github)}</a>` : '未填写'}</p>
+          <p><strong>问题：</strong>${escapeHTML(r.problem || '无')}</p>
+          <p><strong>解决 / 优化：</strong>${escapeHTML(r.solution || '无')}</p>
+        </div>`).join('');
+    }
+    function escapeHTML(str) { return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+    function escapeAttr(str) { return escapeHTML(str).replace(/`/g, '&#96;'); }
+    function readRecordForm() {
+      return {
+        name: document.getElementById('rec-name').value.trim(),
+        type: document.getElementById('rec-type').value.trim(),
+        platform: document.getElementById('rec-platform').value,
+        method: document.getElementById('rec-method').value.trim(),
+        build: document.getElementById('rec-build').value.trim(),
+        output: document.getElementById('rec-output').value.trim(),
+        url: document.getElementById('rec-url').value.trim(),
+        github: document.getElementById('rec-github').value.trim(),
+        problem: document.getElementById('rec-problem').value.trim(),
+        solution: document.getElementById('rec-solution').value.trim(),
+        time: new Date().toLocaleString('zh-CN')
+      };
+    }
+    document.getElementById('save-record').addEventListener('click', () => {
+      const record = readRecordForm();
+      if (!record.name) { showToast('请先填写项目名称'); return; }
+      const records = getRecords();
+      records.unshift(record);
+      setRecords(records);
+      renderRecords();
+      showToast('部署记录已保存');
+    });
+    document.getElementById('clear-form').addEventListener('click', () => {
+      ['rec-name','rec-type','rec-method','rec-build','rec-output','rec-url','rec-github','rec-problem','rec-solution'].forEach(id => document.getElementById(id).value = '');
+      showToast('表单已清空');
+    });
+    document.getElementById('clear-records').addEventListener('click', () => {
+      if (confirm('确定清空所有部署记录吗？')) { setRecords([]); renderRecords(); showToast('记录已清空'); }
+    });
+    document.getElementById('record-list').addEventListener('click', e => {
+      const btn = e.target.closest('.delete-record');
+      if (!btn) return;
+      const records = getRecords();
+      records.splice(Number(btn.dataset.index), 1);
+      setRecords(records); renderRecords(); showToast('记录已删除');
+    });
+    renderRecords();
+
+    // Hero 动态字样
+    const heroPlatforms = ['Netlify 拖拽发布', 'Vercel GitHub 导入', 'Cloudflare Pages Direct Upload'];
+    let hp = 0;
+    setInterval(() => {
+      hp = (hp + 1) % heroPlatforms.length;
+      document.getElementById('hero-platform').textContent = heroPlatforms[hp];
+    }, 2200);
+  </script>
+</body>
+</html>

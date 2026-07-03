@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 小白入门导航系统</title>
+  <style>
+    :root{
+      --bg:#f6f8ff;
+      --bg2:#eef7ff;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#667085;
+      --line:#e6eaf3;
+      --primary:#5b5ff4;
+      --primary2:#16b7a8;
+      --primary3:#7c3aed;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --ok:#12b981;
+      --shadow:0 18px 50px rgba(27,42,90,.10);
+      --shadow2:0 10px 26px rgba(27,42,90,.08);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(91,95,244,.20), transparent 34%),
+        radial-gradient(circle at 90% 8%, rgba(22,183,168,.18), transparent 32%),
+        linear-gradient(180deg,#fbfcff 0%,var(--bg) 52%,#f9fbff 100%);
+      line-height:1.72;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1180px,calc(100% - 36px));margin:0 auto}
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:rgba(255,255,255,.76);
+      border-bottom:1px solid rgba(230,234,243,.85);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:18px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.4px}
+    .brand-logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:white;box-shadow:0 12px 28px rgba(91,95,244,.25)}
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a{font-size:14px;color:#445066;padding:8px 10px;border-radius:999px}
+    .nav-links a:hover{background:#eef2ff;color:var(--primary)}
+    .hero{padding:78px 0 42px}
+    .hero-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:28px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(91,95,244,.18);border-radius:999px;background:rgba(255,255,255,.72);color:var(--primary);font-weight:800;font-size:14px}
+    h1{font-size:clamp(38px,6vw,72px);line-height:1.04;margin:20px 0 18px;letter-spacing:-2.6px}
+    .gradient-text{background:linear-gradient(110deg,var(--primary),var(--primary3),var(--primary2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p.lead{font-size:20px;color:#475467;max-width:760px;margin:0 0 26px}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 24px}
+    .btn{border:0;border-radius:16px;padding:13px 18px;font-weight:800;cursor:pointer;transition:.22s ease;display:inline-flex;align-items:center;gap:8px;font-size:15px}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary3));color:white;box-shadow:0 16px 34px rgba(91,95,244,.25)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 44px rgba(91,95,244,.32)}
+    .btn-ghost{background:white;color:#293449;border:1px solid var(--line);box-shadow:var(--shadow2)}
+    .btn-ghost:hover{transform:translateY(-2px);border-color:#c8d0ff;color:var(--primary)}
+    .btn-mini{padding:8px 10px;border-radius:12px;font-size:13px;background:#f3f6ff;color:#344054;border:1px solid #e4e9ff}
+    .btn-mini:hover{background:#e9edff;color:var(--primary)}
+    .btn-done{background:#e9fbf5!important;color:#047857!important;border-color:#c6f6df!important}
+    .hero-points{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .point{background:rgba(255,255,255,.74);border:1px solid rgba(230,234,243,.9);border-radius:18px;padding:14px;box-shadow:0 10px 26px rgba(27,42,90,.05)}
+    .point strong{display:block;font-size:15px}.point span{display:block;color:var(--muted);font-size:13px;line-height:1.45;margin-top:3px}
+    .hero-card{background:rgba(255,255,255,.82);border:1px solid rgba(230,234,243,.92);border-radius:32px;box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden}
+    .hero-card:before{content:"";position:absolute;inset:-80px -80px auto auto;width:220px;height:220px;border-radius:999px;background:linear-gradient(135deg,rgba(91,95,244,.17),rgba(22,183,168,.15));}
+    .map-title{font-weight:900;font-size:18px;margin-bottom:14px;position:relative}.mini-path{display:grid;gap:12px;position:relative}
+    .path-row{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;box-shadow:0 8px 18px rgba(27,42,90,.04)}
+    .path-num{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#eef2ff,#ecfeff);font-weight:900;color:var(--primary)}
+    .path-row strong{display:block;line-height:1.35}.path-row span{font-size:13px;color:var(--muted);line-height:1.5}
+    section{padding:54px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:22px}
+    .kicker{font-size:14px;font-weight:900;color:var(--primary);text-transform:uppercase;letter-spacing:.8px;margin:0 0 4px}
+    h2{font-size:clamp(27px,4vw,42px);line-height:1.15;margin:0;letter-spacing:-1.2px}.section-desc{color:var(--muted);max-width:720px;margin:10px 0 0}
+    .grid{display:grid;gap:18px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}
+    .card{background:rgba(255,255,255,.88);border:1px solid rgba(230,234,243,.95);border-radius:var(--radius);box-shadow:var(--shadow2);padding:22px;transition:.22s ease;position:relative;overflow:hidden}
+    .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .card h3{font-size:20px;margin:0 0 10px;line-height:1.3}.card p{color:var(--muted);margin:0}.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:#f3f6ff;color:#3b47b5;font-size:12px;font-weight:800;border:1px solid #e4e9ff}
+    .tag.ok{background:#ecfdf3;color:#047857;border-color:#c6f6df}.tag.warn{background:#fff8e6;color:#a15c00;border-color:#ffe1a3}.tag.purple{background:#f4edff;color:#6d28d9;border-color:#e9d5ff}.tag.gray{background:#f6f7fb;color:#586172;border-color:#e6eaf3}
+    .test-options{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.test-btn{text-align:left;border:1px solid var(--line);background:white;border-radius:18px;padding:16px;cursor:pointer;transition:.2s ease;min-height:138px;box-shadow:0 8px 18px rgba(27,42,90,.04)}
+    .test-btn:hover,.test-btn.active{border-color:#b8c0ff;background:#f8f9ff;transform:translateY(-2px)}.test-btn .emoji{font-size:26px;display:block;margin-bottom:8px}.test-btn strong{display:block;line-height:1.35}.test-btn span{display:block;font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}
+    .result-box{margin-top:18px;display:none}.result-box.show{display:block}.result-inner{border-radius:24px;background:linear-gradient(135deg,#ffffff,#f7fbff);border:1px solid #dfe6ff;padding:22px;box-shadow:var(--shadow2)}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.info-chip{background:white;border:1px solid var(--line);border-radius:16px;padding:14px}.info-chip b{display:block;margin-bottom:4px}.info-chip span{color:var(--muted);font-size:14px}
+    .timeline{display:grid;gap:16px}.day-card{display:grid;grid-template-columns:92px 1fr auto;gap:18px;align-items:center;background:white;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow2)}
+    .day-badge{width:72px;height:72px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(135deg,#eef2ff,#ecfeff);font-weight:950;color:var(--primary);font-size:20px}.day-content h3{margin:0 0 8px}.day-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.day-meta div{background:#f8faff;border:1px solid #edf1ff;border-radius:14px;padding:10px;font-size:13px;line-height:1.45}.day-meta b{display:block;color:#344054;margin-bottom:2px}
+    .progress-wrap{background:#edf2ff;border-radius:999px;height:14px;overflow:hidden;border:1px solid #dbe4ff}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));transition:.3s ease;border-radius:999px}
+    .project-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}.tab-btn{border:1px solid var(--line);background:white;color:#475467;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}.tab-btn.active{background:#eef2ff;color:var(--primary);border-color:#cfd7ff}
+    .project-card{display:flex;flex-direction:column;gap:12px}.project-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.meta-row{display:flex;gap:8px;flex-wrap:wrap}.project-prompt{display:none;background:#101828;color:#eef2ff;border-radius:18px;padding:16px;font-size:13px;line-height:1.65;white-space:pre-wrap;max-height:260px;overflow:auto}.project-card.open .project-prompt{display:block}
+    .template-card{padding:0;overflow:hidden}.template-top{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.template-body{background:#0b1020;color:#e8ecff;padding:18px;font-size:13px;line-height:1.72;white-space:pre-wrap;max-height:310px;overflow:auto}.copy-row{display:flex;gap:8px;align-items:center}.copy-hint{font-size:12px;color:var(--ok);font-weight:800;opacity:0;transition:.2s}.copy-hint.show{opacity:1}
+    .faq-item{background:white;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 8px 18px rgba(27,42,90,.04)}.faq-q{width:100%;border:0;background:white;padding:18px;text-align:left;font-weight:900;cursor:pointer;display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--text);font-size:16px}.faq-a{display:none;padding:0 18px 18px;color:var(--muted)}.faq-item.open .faq-a{display:block}.faq-a pre{white-space:pre-wrap;background:#0b1020;color:#e8ecff;border-radius:16px;padding:14px;font-size:13px;line-height:1.65;overflow:auto}.faq-item.open .faq-q span:last-child{transform:rotate(45deg)}
+    .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.flow-card{position:relative;padding-left:62px}.flow-no{position:absolute;left:18px;top:20px;width:34px;height:34px;border-radius:12px;background:#eef2ff;color:var(--primary);display:grid;place-items:center;font-weight:950}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}.bad,.good{border-radius:22px;padding:20px;border:1px solid var(--line);background:white}.bad h3{color:var(--danger)}.good h3{color:var(--ok)}.quote{padding:14px;border-radius:16px;background:#f8faff;color:#475467;border:1px solid #edf1ff}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.check-item{display:grid;grid-template-columns:34px 1fr;gap:12px;background:white;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 18px rgba(27,42,90,.04)}.check-icon{width:28px;height:28px;border-radius:10px;background:#ecfdf3;color:#047857;display:grid;place-items:center;font-weight:950}.check-item b{display:block}.check-item span{color:var(--muted);font-size:14px}
+    .dash-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.stat{background:white;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 18px rgba(27,42,90,.04)}.stat-num{font-size:32px;font-weight:950;line-height:1;color:var(--primary)}.stat-label{color:var(--muted);font-size:13px;margin-top:6px}.next-box{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #dfe6ff;border-radius:20px;padding:18px;height:100%}
+    .guide-steps{counter-reset:step;display:grid;gap:12px}.guide-step{counter-increment:step;background:white;border:1px solid var(--line);border-radius:18px;padding:15px 16px 15px 56px;position:relative}.guide-step:before{content:counter(step);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;display:grid;place-items:center;font-weight:950}
+    .footer{padding:36px 0 54px;color:var(--muted);font-size:14px}.footer-card{background:#101828;color:#d0d5dd;border-radius:28px;padding:24px}.footer-card strong{color:white}
+    .floating-tip{position:fixed;right:18px;bottom:18px;background:#101828;color:white;border-radius:16px;padding:12px 14px;box-shadow:0 16px 40px rgba(16,24,40,.25);font-size:14px;z-index:80;display:none}.floating-tip.show{display:block;animation:pop .25s ease}@keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @media (max-width:980px){.hero-grid,.grid-3,.grid-4,.test-options,.flow,.dash-grid{grid-template-columns:1fr}.hero-points,.grid-2,.result-grid,.compare,.checklist,.stat-grid{grid-template-columns:1fr}.day-card{grid-template-columns:1fr}.day-badge{width:58px;height:58px;border-radius:18px}.day-meta{grid-template-columns:1fr 1fr}.section-head{align-items:start;flex-direction:column}.nav{align-items:flex-start;flex-direction:column;padding:14px 0}.nav-links{justify-content:flex-start}.hero{padding-top:42px}h1{letter-spacing:-1.2px}.flow-card{padding-left:58px}}
+    @media (max-width:560px){.container{width:min(100% - 24px,1180px)}.hero-actions{flex-direction:column}.btn{justify-content:center;width:100%}.day-meta{grid-template-columns:1fr}.template-top{flex-direction:column}.test-btn{min-height:auto}.nav-links a{font-size:13px;padding:7px 8px}.card{padding:18px}.hero-card{padding:18px;border-radius:24px}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="返回顶部"><span class="brand-logo">C</span><span>Codex 小白入门导航系统</span></a>
+      <div class="nav-links">
+        <a href="#test">自测</a><a href="#route">七天路线</a><a href="#projects">项目库</a><a href="#templates">提示词</a><a href="#faq">急救站</a><a href="#dashboard">仪表盘</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">🧭 给零基础用户的 Codex 上手地图</span>
+          <h1>从完全不会代码，到用 <span class="gradient-text">Codex 做出第一个小产品</span></h1>
+          <p class="lead">这不是技术文档，而是一套能带着小白一步一步完成自测、学习、选项目、复制提示词、处理报错、完成交付的 HTML 导航系统。</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#route">开始入门 →</a>
+            <a class="btn btn-ghost" href="#projects">查看我适合做什么项目</a>
+          </div>
+          <div class="hero-points">
+            <div class="point"><strong>0 基础也能看懂</strong><span>用普通人语言解释，不要求先懂代码。</span></div>
+            <div class="point"><strong>跟着任务一步步做</strong><span>每天一个目标，一个任务，一个产出。</span></div>
+            <div class="point"><strong>内置可复制模板</strong><span>提示词、报错修复、项目需求都能直接用。</span></div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="map-title">你会经历的 4 个阶段</div>
+          <div class="mini-path">
+            <div class="path-row"><div class="path-num">1</div><div><strong>看懂 Codex 能帮你做什么</strong><span>先理解能力边界，不被复杂名词吓住。</span></div></div>
+            <div class="path-row"><div class="path-num">2</div><div><strong>写出清晰的产品需求</strong><span>学会像产品经理一样描述页面、功能和用户。</span></div></div>
+            <div class="path-row"><div class="path-num">3</div><div><strong>生成、运行、反馈、迭代</strong><span>不是一次生成完美，而是一轮轮修正。</span></div></div>
+            <div class="path-row"><div class="path-num">4</div><div><strong>包装成作品或虚拟产品</strong><span>补齐说明、案例、交付文件和售卖文案。</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="test">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="kicker">Step 01</p><h2>新手自测：我现在处在哪个阶段？</h2><p class="section-desc">先选一个最接近你的状态，系统会给你推荐学习路径、适合项目、避坑提醒和提示词方向。</p></div>
+          <span class="tag purple">结果会保存到本地</span>
+        </div>
+        <div class="test-options" id="testOptions"></div>
+        <div class="result-box" id="testResult"></div>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Mindset</p><h2>Codex 小白认知地图</h2><p class="section-desc">小白用 Codex 的重点不是“马上成为程序员”，而是学会把需求说清楚、把结果跑起来、把问题反馈回去。</p></div></div>
+        <div class="grid grid-3">
+          <div class="card"><h3>🛠️ 它能帮你做什么</h3><p>Codex 可以帮你生成网页、小工具、自动化脚本、页面交互、修复报错、解释代码、重构结构。你负责提出真实需求，它负责把需求翻译成可运行的代码。</p></div>
+          <div class="card"><h3>🧱 它不是万能许愿机</h3><p>一句“帮我做个网站”通常会得到平庸结果。你需要告诉它：给谁用、解决什么问题、有哪些模块、需要什么交互、视觉风格是什么。</p></div>
+          <div class="card"><h3>📄 从 HTML 单页开始</h3><p>HTML 单页产品最适合小白：打开浏览器就能运行，不需要后端，不需要数据库，容易修改，也适合做提示词工具、计划表、导航站和资料包。</p></div>
+          <div class="card"><h3>🚫 不要一上来做复杂 App</h3><p>不要刚开始就做登录、支付、数据库、多人协作和大型系统。先做一个小而完整的工具，跑通一次“需求 → 代码 → 运行 → 优化”。</p></div>
+          <div class="card"><h3>📝 好提示词 = 小型需求文档</h3><p>优秀提示词要包含角色、目标用户、核心功能、页面结构、交互规则、视觉风格、输出格式、验收标准和禁止事项。</p></div>
+          <div class="card"><h3>🔁 核心能力是迭代</h3><p>小白不需要立刻看懂所有代码，但要学会描述问题：哪个按钮不工作、哪个区域不好看、手机端哪里乱、想新增什么功能。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="route">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="kicker">Step 02</p><h2>七天入门路线</h2><p class="section-desc">每天只做一个关键动作。完成后点击打卡，系统会自动保存进度。</p></div>
+          <div style="min-width:220px"><div class="progress-wrap"><div class="progress-bar" id="routeProgress"></div></div><div style="color:var(--muted);font-size:13px;margin-top:6px" id="routeProgressText">0/7 已完成</div></div>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Step 03</p><h2>小白项目导航库</h2><p class="section-desc">选项目不要贪大。优先选择“功能清楚、能本地打开、可以展示成果”的 HTML 小工具。</p></div></div>
+        <div class="project-tabs" id="projectTabs"></div>
+        <div class="grid grid-3" id="projectList"></div>
+      </div>
+    </section>
+
+    <section id="templates">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Step 04</p><h2>提示词模板库</h2><p class="section-desc">这里的模板都按“角色 + 目标 + 结构 + 功能 + 视觉 + 输出 + 验收”组织，小白复制后替换少量变量即可使用。</p></div><span class="tag ok">已复制次数：<b id="copyCountTop">0</b></span></div>
+        <div class="grid grid-2" id="templateList"></div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Emergency</p><h2>常见报错急救站</h2><p class="section-desc">遇到问题不要重做整个项目，先定位问题，再把错误现象和目标一起发给 Codex。</p></div></div>
+        <div class="grid" id="faqList"></div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Workflow</p><h2>Codex 对话工作流</h2><p class="section-desc">把 Codex 当成“会写代码的执行伙伴”，而不是许愿池。你说得越清楚，结果越接近产品。</p></div></div>
+        <div class="flow">
+          <div class="card flow-card"><div class="flow-no">1</div><h3>先说目标</h3><p>我要做什么产品？解决谁的问题？用户打开后第一件事要做什么？</p></div>
+          <div class="card flow-card"><div class="flow-no">2</div><h3>再说结构</h3><p>页面包含哪些模块？每个模块展示什么内容？哪些区域需要按钮、输入框、结果区？</p></div>
+          <div class="card flow-card"><div class="flow-no">3</div><h3>补充交互</h3><p>按钮点击后发生什么？内容是否要保存？是否需要一键复制、折叠、筛选、打卡？</p></div>
+          <div class="card flow-card"><div class="flow-no">4</div><h3>描述风格</h3><p>不要只说“高级”，要说清楚：浅色、卡片、圆角、渐变、留白、移动端自适应。</p></div>
+          <div class="card flow-card"><div class="flow-no">5</div><h3>要求完整输出</h3><p>明确要求输出完整 HTML 文件，包含 CSS 和 JavaScript，不要只给片段。</p></div>
+          <div class="card flow-card"><div class="flow-no">6</div><h3>运行后再迭代</h3><p>截图或描述问题，让 Codex 局部修改，不要每次推倒重来。</p></div>
+        </div>
+        <div class="compare" style="margin-top:18px">
+          <div class="bad"><h3>错误示范</h3><div class="quote">帮我做一个很好看的网页，要高级，要能赚钱。</div><p style="margin-top:12px;color:var(--muted)">问题：没有用户、没有功能、没有页面结构、没有输出格式，AI 只能猜。</p></div>
+          <div class="good"><h3>正确示范</h3><div class="quote">请为零基础宝妈做一个“家庭每周计划表生成器”HTML 单页。包含成员选择、任务输入、自动生成周计划、一键复制、打印样式、手机端适配。视觉风格要温暖清爽，输出完整 HTML。</div><p style="margin-top:12px;color:var(--muted)">优点：用户明确、场景明确、功能明确、交互明确、输出明确。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pitfalls">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Checklist</p><h2>小白避坑清单</h2><p class="section-desc">先避开这些坑，你的成功率会高很多。</p></div></div>
+        <div class="checklist" id="pitfallList"></div>
+      </div>
+    </section>
+
+    <section id="dashboard">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">Dashboard</p><h2>个人学习仪表盘</h2><p class="section-desc">根据你的打卡、自测和复制行为，给出当前进度和下一步行动。</p></div></div>
+        <div class="dash-grid">
+          <div class="card">
+            <div class="stat-grid">
+              <div class="stat"><div class="stat-num" id="statDays">0</div><div class="stat-label">七天路线完成数</div></div>
+              <div class="stat"><div class="stat-num" id="statCopies">0</div><div class="stat-label">已复制提示词次数</div></div>
+              <div class="stat"><div class="stat-num" id="statStage">未测</div><div class="stat-label">当前推荐阶段</div></div>
+            </div>
+            <div style="margin-top:18px"><div class="progress-wrap"><div class="progress-bar" id="dashProgress"></div></div><p id="dashProgressText" style="color:var(--muted);margin:8px 0 0">完成自测后，会出现更准确的学习建议。</p></div>
+          </div>
+          <div class="next-box">
+            <span class="tag ok">今日建议任务</span>
+            <h3 id="todayTask" style="margin:12px 0 8px">先完成新手自测</h3>
+            <p id="nextAction" style="color:#475467;margin:0">选择你当前阶段，系统会推荐你第一步该做什么。</p>
+            <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-primary" href="#test">去自测</a><a class="btn btn-ghost" href="#templates">复制模板</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guide">
+      <div class="container">
+        <div class="section-head"><div><p class="kicker">How to use</p><h2>产品使用说明</h2><p class="section-desc">按照这个顺序使用，不用纠结从哪里开始。</p></div></div>
+        <div class="guide-steps">
+          <div class="guide-step"><b>先做新手自测。</b>明确自己是完全小白、提示词小白、页面优化小白，还是准备部署变现。</div>
+          <div class="guide-step"><b>按七天路线打卡。</b>每天只完成一个核心动作，不要同时学习太多工具。</div>
+          <div class="guide-step"><b>从项目库选一个最简单的项目。</b>建议先做计划表、提示词生成器、标题生成器、个人主页这类小工具。</div>
+          <div class="guide-step"><b>复制提示词给 Codex。</b>不要只复制一句话，把用户、模块、功能、风格和输出要求都说清楚。</div>
+          <div class="guide-step"><b>把生成结果保存为 HTML。</b>新建文本文件，保存为 .html 后缀，用浏览器打开。</div>
+          <div class="guide-step"><b>运行、截图、反馈、迭代。</b>把问题现象讲清楚，让 Codex 局部修复。</div>
+          <div class="guide-step"><b>整理成作品或虚拟产品。</b>补齐产品说明、使用案例、交付文件、封面图和售卖文案。</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    <div class="container">
+      <div class="footer-card"><strong>Codex 小白入门导航系统</strong><br/>适合用作自学工具、课程资料、虚拟产品交付页、AI 编程入门导航页。所有进度数据保存在本机浏览器 localStorage 中，不上传任何个人信息。</div>
+    </div>
+  </div>
+  <div class="floating-tip" id="toast">已复制</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const storage = {
+      get(k, fallback){ try{return JSON.parse(localStorage.getItem(k)) ?? fallback}catch(e){return fallback} },
+      set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+    };
+    const state = {
+      stage: storage.get('codexNav_stage', ''),
+      days: storage.get('codexNav_days', {}),
+      copies: storage.get('codexNav_copies', 0)
+    };
+
+    const stages = [
+      {id:'zero', emoji:'🌱', title:'完全不懂代码', desc:'只是听说过 Codex', stage:'启蒙期', path:'先看认知地图，再做第 1-2 天任务。', project:'个人主页、每日计划表、AI 工具导航页。', pitfall:'不要碰登录、数据库、支付和复杂小程序。', prompt:'优先使用“生成 HTML 单页产品提示词”和“让 AI 解释代码提示词”。'},
+      {id:'prompt', emoji:'🧩', title:'会复制提示词', desc:'但不知道怎么让 AI 做产品', stage:'需求表达期', path:'重点练习把想法拆成模块和交互。', project:'学习计划生成器、小红书标题生成器、提示词管理器。', pitfall:'不要只说高级、美观、丰富，要列出页面结构。', prompt:'优先使用“产品结构提示词”和“升级成高级产品提示词”。'},
+      {id:'html', emoji:'🎨', title:'能生成 HTML', desc:'但不会修改和优化', stage:'迭代优化期', path:'做第 3-5 天任务，练习局部修改。', project:'账号定位生成器、读书笔记整理器、周报生成器。', pitfall:'不要每次重生整个文件，先指出具体区域。', prompt:'优先使用“优化美观度”“增加交互”“修复报错”模板。'},
+      {id:'deploy', emoji:'🚀', title:'做过小工具', desc:'但不会部署和变现', stage:'交付包装期', path:'做第 6-7 天任务，补齐说明和发布材料。', project:'服务报价页、咨询预约页、虚拟产品工具包。', pitfall:'不要把半成品直接卖，要加入示例、教程和边界说明。', prompt:'优先使用“用户使用说明”“小红书售卖文案”“检查可部署”模板。'},
+      {id:'product', emoji:'💎', title:'想做虚拟产品', desc:'但不知道选题和包装', stage:'商业验证期', path:'先从刚需场景做一个最小可卖版本。', project:'私域成交话术生成器、家庭计划表生成器、Codex 小白项目生成器。', pitfall:'不要承诺自动赚钱，不要用侵权素材，不要假装官方工具。', prompt:'优先使用“项目命名”“产品结构”“售卖文案”模板。'}
+    ];
+
+    const days = [
+      {d:1,title:'认识 Codex 和 HTML 产品',goal:'知道 Codex 能帮你做什么',task:'打开一个 HTML 文件，观察标题、卡片、按钮、输入框和结果区。',output:'能用一句话描述网页需求',prompt:'请用小白能听懂的话解释 HTML 单页产品由哪些部分组成，并举 3 个适合零基础做的案例。'},
+      {d:2,title:'学会写第一个产品提示词',goal:'能把想法说清楚',task:'写一个“学习计划生成器”的完整需求，包括用户、模块和功能。',output:'生成第一个 HTML 页面',prompt:'请根据我的想法，帮我整理成一份可交给 Codex 的 HTML 产品需求提示词，要求结构完整、功能清晰。'},
+      {d:3,title:'学会让页面变好看',goal:'掌握基础 UI 描述方法',task:'要求 AI 优化配色、卡片、按钮、间距、层级和手机端布局。',output:'一个更像产品的页面',prompt:'请在不改变核心功能的前提下，把这个 HTML 页面升级为现代化中文互联网产品风格，优化排版、配色、卡片和移动端体验。'},
+      {d:4,title:'学会加交互',goal:'理解按钮、输入框、选择器、结果区',task:'做一个“提示词生成器”，让用户输入信息后生成结果。',output:'可交互的小工具',prompt:'请为这个 HTML 页面增加前端交互：输入框、选择器、一键生成、一键复制、清空内容和本地保存。'},
+      {d:5,title:'学会修改和迭代',goal:'会对 AI 说哪里不好，怎么改',task:'把页面从普通版改成专业版，并只修改你指定的问题。',output:'第二版产品',prompt:'以下是我运行后的问题，请你只修复这些问题，不要重写无关代码：1）[问题一]；2）[问题二]；3）[我想新增的功能]。'},
+      {d:6,title:'学会整理成可售卖产品',goal:'理解封面、说明、示例、卖点',task:'给产品加使用说明、示例数据、适合人群和交付清单。',output:'虚拟产品资料包雏形',prompt:'请帮我把这个 HTML 小工具包装成可交付的虚拟产品，补充产品卖点、使用说明、案例、交付文件清单和注意事项。'},
+      {d:7,title:'学会部署和发布',goal:'知道如何把 HTML 放到网上',task:'检查文件是否可独立运行，准备发布标题、介绍文案和展示截图清单。',output:'可以分享给别人的网页产品',prompt:'请检查这个 HTML 文件是否适合部署和交付，并给我一份部署前检查清单、发布文案和用户使用教程。'}
+    ];
+
+    const projectCategories = {
+      '学习提升类': [
+        ['暑假计划表生成器','家长、学生','低','2-4 小时','年级选择、目标输入、时间表生成、打印导出','需求明确，成果可视化强'],
+        ['英语单词复习器','学生、备考人群','低','2 小时','单词录入、随机抽查、错词记录、复习提醒','功能小，适合练习交互'],
+        ['读书笔记整理器','学生、职场人','中','3-5 小时','书名、观点、金句、行动清单、导出复制','适合做成知识管理产品'],
+        ['考试复盘工具','中高考/考研人群','中','3 小时','错题类型、原因分析、下次策略、复盘报告','痛点强，适合售卖资料包'],
+        ['每日学习打卡器','自律学习用户','低','2 小时','任务添加、完成打卡、进度条、本地保存','能快速理解 localStorage']
+      ],
+      '内容创作类': [
+        ['小红书标题生成器','博主、运营','低','2 小时','赛道选择、关键词输入、生成 20 个标题','变现需求强，结构清晰'],
+        ['爆款笔记结构生成器','内容创作者','中','3 小时','痛点、场景、标题、正文结构、结尾引导','能体现 AI 资料产品价值'],
+        ['短视频脚本生成器','短视频创作者','中','3-5 小时','人设、主题、钩子、分镜、口播稿','适合扩展为高客单工具'],
+        ['选题库管理器','博主、团队','中','4 小时','选题记录、状态筛选、优先级、复制脚本','贴近内容运营真实工作流'],
+        ['账号定位生成器','新手博主','中','3 小时','人群、优势、变现路径、栏目设计','适合小红书虚拟产品']
+      ],
+      '办公效率类': [
+        ['会议纪要整理器','职场人','低','2 小时','会议信息、待办、负责人、截止时间','办公刚需，易理解'],
+        ['周报生成器','职场人、实习生','低','2 小时','本周事项、成果、问题、下周计划','使用频率高，容易包装'],
+        ['任务优先级排序器','管理者、自由职业者','中','3 小时','任务输入、重要紧急矩阵、建议顺序','交互逻辑清晰'],
+        ['客户跟进表','销售、私域运营','中','3-4 小时','客户阶段、跟进记录、下一步话术','商业场景明显'],
+        ['简历优化助手','求职者','中','4 小时','岗位、经历、亮点、优化建议、复制简历段落','需求稳定，适合模板产品']
+      ],
+      '虚拟产品类': [
+        ['提示词管理器','AI 工具用户','中','4 小时','分类、搜索、收藏、一键复制、本地保存','Codex 用户刚需'],
+        ['私域成交话术生成器','私域运营、顾问','中','4-6 小时','客户类型、异议、场景、话术生成','高价值业务场景'],
+        ['AI 工具导航页','小白用户','低','2 小时','工具分类、适用人群、使用入口、收藏','页面展示强'],
+        ['家庭计划表生成器','宝妈、家庭用户','中','4 小时','成员、任务、周期、家庭分工表','适合中国家庭刚需'],
+        ['Codex 小白项目生成器','AI 编程新手','中','5 小时','用户画像、项目难度、模块、提示词输出','与热点结合强']
+      ],
+      '个人品牌类': [
+        ['个人主页','自由职业者','低','2 小时','个人介绍、服务、案例、联系方式','最快做出作品'],
+        ['服务报价页','顾问、设计师','低','2 小时','服务包、价格、适合人群、FAQ','有商业转化价值'],
+        ['作品集页面','设计/运营/开发新手','中','3 小时','项目卡片、成果说明、能力标签','适合求职和接单'],
+        ['咨询预约页','咨询师、教练','中','3 小时','问题收集、服务说明、预约引导','能理解转化页面结构'],
+        ['知识库导航页','课程博主、资料整理者','低','2 小时','资料分类、学习路径、常用链接','非常适合 HTML 交付']
+      ]
+    };
+
+    const templates = [
+      ['生成 HTML 单页产品提示词',`你是一位高级前端产品工程师和中文互联网产品设计师。请为我生成一个完整的 HTML 单页产品，产品名称是：[产品名称]。目标用户是：[目标用户]。产品要解决的问题是：[核心痛点]。
+页面必须包含：顶部 Hero 区、使用说明、核心功能区、输入区、结果区、案例展示、常见问题、底部说明。功能包括：[核心功能 1]、[核心功能 2]、[核心功能 3]。视觉风格要求：现代、干净、卡片化、圆角、浅色背景、主色突出、手机端自适应。
+请直接输出完整 HTML 文件，包含 CSS 和 JavaScript，所有代码写在一个文件里。不要依赖后端，不要使用复杂框架。不要只给片段，不要输出解释。代码从 <!DOCTYPE html> 开始，到 </html> 结束。`],
+      ['优化页面美观度提示词',`请你作为资深 UI 设计师和前端工程师，在不改变现有核心功能的前提下，优化我下面这份 HTML 页面。优化目标：让它看起来像一个可以售卖的中文互联网 HTML 产品，而不是普通练习页面。
+请重点优化：整体留白、标题层级、卡片阴影、按钮样式、颜色搭配、移动端排版、模块之间的节奏、重要信息突出、结果区可读性。请保持代码完整可运行，不要删除原有功能。输出完整 HTML 文件，不要只输出修改片段。`],
+      ['增加交互功能提示词',`请为我下面的 HTML 页面增加前端交互功能。要求全部用原生 JavaScript 实现，不需要后端。需要增加的交互包括：[交互 1]、[交互 2]、[交互 3]。
+请确保：按钮点击有反馈；输入为空时有提示；结果可以一键复制；重要状态可以保存到 localStorage；刷新页面后数据尽量保留；手机端也能正常使用。请输出完整 HTML 文件，并保证原有样式和内容不被破坏。`],
+      ['修复报错提示词',`我运行 HTML 页面时遇到了问题。请你像耐心的前端老师一样帮我排查，并直接给出修复后的完整代码。
+问题现象是：[例如页面空白/按钮没反应/样式丢失/手机端错位]。
+我希望保留的功能是：[列出必须保留的功能]。
+请你检查可能原因，包括 HTML 结构、CSS 选择器、JavaScript 报错、函数绑定、元素 ID 不匹配、localStorage、复制功能兼容性。请不要重写无关模块，只修复问题并输出完整可运行 HTML。`],
+      ['让 AI 解释代码提示词',`请你用完全零基础能听懂的方式解释下面这段 HTML/CSS/JavaScript 代码。不要使用过多专业术语。如果必须使用术语，请先用一句话解释。
+请按以下结构讲解：1）这个页面整体在做什么；2）HTML 负责哪些内容；3）CSS 负责哪些样式；4）JavaScript 负责哪些交互；5）我最应该看懂的 5 个位置；6）如果我要修改标题、颜色、按钮文案、结果内容，分别应该改哪里。`],
+      ['让 AI 帮我改需求提示词',`我有一个产品想法，但说得比较乱。请你帮我整理成一份适合交给 Codex 的产品需求提示词。我的想法是：[粘贴你的想法]。
+请你输出：产品名称、目标用户、核心痛点、核心功能、页面模块、交互规则、视觉风格、输出要求、验收标准、不要做什么。要求具体、清晰、小白可复制，不要写空泛概念。`],
+      ['做产品结构提示词',`请你作为产品经理，帮我把 [产品名称] 拆成一个适合 HTML 单页实现的产品结构。目标用户是 [目标用户]，核心目标是 [目标]。
+请输出：1）顶部区域应该写什么；2）用户输入区需要哪些字段；3）结果区展示哪些内容；4）需要哪些按钮；5）哪些内容适合做卡片；6）哪些地方需要一键复制；7）移动端怎么排版；8）第一个版本不要做哪些复杂功能。`],
+      ['小红书售卖文案提示词',`请你作为小红书虚拟产品运营专家，帮我为一个 HTML 虚拟产品写售卖文案。产品名称：[产品名称]。目标用户：[目标用户]。解决的问题：[痛点]。核心功能：[功能列表]。
+请输出：小红书标题 10 个、封面文案 10 个、正文种草文案 3 篇、适合人群、痛点描述、产品卖点、交付清单、使用步骤、FAQ、合规提醒。不要夸大收益，不要承诺自动赚钱，语言要真实、具体、有购买理由。`],
+      ['用户使用说明提示词',`请为我的 HTML 小工具写一份用户使用说明。产品名称：[产品名称]。用户是：[目标用户]。请用小白能看懂的语言写。
+说明必须包含：这个工具适合谁、能解决什么问题、第一次打开怎么用、每个输入项怎么填、生成结果怎么看、如何复制或保存、常见错误、使用建议、适用边界、售后说明。语气清楚、亲切、专业，不要像技术说明书。`],
+      ['项目命名提示词',`请你作为中文互联网产品命名顾问，为我的 HTML 虚拟产品生成 50 个名字。产品方向是：[方向]，目标用户是：[目标用户]，核心卖点是：[卖点]。
+要求：名字要清晰、有记忆点、适合小红书展示、不要太像软件公司、不要过度夸张。请按风格分类：专业工具型、温暖陪伴型、高级顾问型、效率提升型、资料包型。每个名字后面附一句适合的副标题。`],
+      ['普通页面升级成高级产品提示词',`请你把我这个普通 HTML 页面升级成更完整的产品。不要只改颜色，而是从产品体验上升级。
+请增加或优化：顶部卖点区、用户使用路径、示例数据、结果解释、FAQ、使用说明、适合人群、交付感、空状态提示、按钮反馈、复制功能、移动端体验。视觉要求：高级、清爽、卡片化、有层次。请输出完整 HTML，不要省略任何代码。`],
+      ['检查代码是否可部署提示词',`请你检查下面这个 HTML 文件是否适合直接部署或作为虚拟产品交付。请从以下角度检查：是否完整、是否依赖外部资源、手机端是否可用、按钮是否有绑定、复制功能是否兼容、localStorage 是否安全、是否有空白占位内容、是否有明显错别字、是否有侵权或夸大宣传风险。
+请输出：问题清单、严重程度、修复建议、部署前检查表、交付文件清单。如果需要修改，请给出修复后的完整 HTML。`]
+    ];
+
+    const faqs = [
+      ['页面打开是空白','可能是代码没有保存完整、文件后缀不是 .html、JavaScript 报错中断了渲染。','确认文件名以 .html 结尾；用浏览器打开；按 F12 看 Console 是否有红色报错；把报错发给 Codex。','我的 HTML 页面打开是空白。请检查代码是否缺少闭合标签、script 是否报错、元素 ID 是否不存在，并输出修复后的完整 HTML。'],
+      ['按钮点了没反应','常见原因是按钮没有绑定事件、函数名写错、元素 ID 不一致、脚本加载顺序错误。','找到按钮文字；搜索对应 ID 或 class；检查 JS 里是否 addEventListener；把现象发给 Codex。','页面里这个按钮点击没有反应：[按钮名称]。请检查事件绑定、函数名、元素选择器和脚本顺序，保留其他功能并输出完整修复版。'],
+      ['中文乱码','常见原因是缺少 UTF-8 声明，或保存文件编码不正确。','检查 head 中是否有 <meta charset="UTF-8">；保存时选择 UTF-8 编码。','我的 HTML 页面中文乱码。请帮我加入正确的 UTF-8 编码声明，并检查是否有特殊字符导致显示异常，输出完整 HTML。'],
+      ['样式很丑','通常不是代码错，而是提示词没有描述风格、留白、卡片、字体层级。','告诉 Codex 你想要的风格：清爽、卡片化、浅色、圆角、移动端适配。','请把这个页面升级为现代中文互联网产品风格，优化留白、字体层级、卡片、阴影、按钮、配色和移动端排版，不改核心功能。'],
+      ['手机端排版乱','可能没有 media query，宽度写死，表格或卡片不换行。','用浏览器缩小窗口测试；告诉 Codex 哪个模块横向溢出。','我的页面在手机端排版混乱，主要问题是：[描述模块]。请增加响应式布局，让卡片、按钮、输入框在手机端单列显示。'],
+      ['不知道保存成什么文件','HTML 单页产品通常保存为 .html 文件。','新建文本文件；粘贴完整代码；保存为 product.html；用浏览器打开。','请告诉我如何把你生成的完整 HTML 代码保存成本地可打开文件，并检查代码是否适合单文件运行。'],
+      ['AI 只给了解释，没有完整代码','提示词没有明确要求“完整 HTML 文件”。','重新要求从 <!DOCTYPE html> 到 </html> 完整输出，不要解释。','请不要解释，请直接输出完整 HTML 文件，包含 HTML、CSS、JavaScript，代码从 <!DOCTYPE html> 开始，到 </html> 结束。'],
+      ['越改越乱','通常是每次都让 AI 重写全部，导致旧功能丢失。','列出必须保留功能；只要求修复 1-3 个明确问题。','请基于当前代码做局部修改：必须保留 [功能列表]，只修复 [问题列表]，不要重构无关代码，输出完整 HTML。'],
+      ['不知道怎么部署','HTML 文件可以先本地运行，再上传到静态托管平台。','先确认本地打开没问题；准备文件名、封面、说明；再部署。','请检查这个 HTML 是否可以作为静态网页部署，并给我部署前检查清单、文件命名建议和发布说明。'],
+      ['不知道产品能不能卖','能不能卖取决于是否解决具体人群的具体问题，而不是页面多复杂。','检查目标用户、痛点、使用步骤、交付清单、案例、边界说明。','请从虚拟产品角度评估这个 HTML 工具是否有售卖价值，指出目标用户、痛点强度、卖点、缺口和改进方案。']
+    ];
+
+    const pitfalls = [
+      ['不要一开始就做复杂系统','正确做法：先做一个能本地打开的 HTML 单页工具。'],['不要同时要求太多功能','正确做法：第一版只保留 3-5 个核心功能。'],['不要只说“高级一点”','正确做法：描述具体风格，例如浅色、卡片、圆角、留白、渐变。'],['不要看不懂代码就放弃','正确做法：先学会改文案、颜色、按钮和模块顺序。'],['不要每次都重新生成','正确做法：截图或描述问题，让 Codex 局部修改。'],['不要忽视手机端','正确做法：每次都要求移动端自适应和按钮易点击。'],['不要没有使用说明','正确做法：加上适合人群、使用步骤、案例和 FAQ。'],['不要直接卖半成品','正确做法：至少准备 HTML 文件、说明书、案例、封面和售后边界。'],['不要过度承诺 AI 自动赚钱','正确做法：讲清楚工具价值，不承诺收益。'],['不要使用侵权素材或虚假宣传','正确做法：用原创文案、可商用素材和真实效果展示。']
+    ];
+
+    function renderTest(){
+      $('testOptions').innerHTML = stages.map(s => `<button class="test-btn ${state.stage===s.id?'active':''}" data-stage="${s.id}"><span class="emoji">${s.emoji}</span><strong>${s.title}</strong><span>${s.desc}</span></button>`).join('');
+      document.querySelectorAll('.test-btn').forEach(btn=>btn.addEventListener('click',()=>{
+        state.stage = btn.dataset.stage; storage.set('codexNav_stage', state.stage); renderTest(); renderStageResult(); updateDashboard(); toast('已生成你的入门建议');
+      }));
+      renderStageResult();
+    }
+    function renderStageResult(){
+      const s = stages.find(x=>x.id===state.stage);
+      const box = $('testResult');
+      if(!s){box.className='result-box'; box.innerHTML=''; return;}
+      box.className='result-box show';
+      box.innerHTML = `<div class="result-inner"><span class="tag ok">${s.emoji} 当前阶段：${s.stage}</span><h3 style="margin:12px 0 0">你现在最适合：${s.path}</h3><div class="result-grid"><div class="info-chip"><b>建议先做的项目</b><span>${s.project}</span></div><div class="info-chip"><b>不要踩的坑</b><span>${s.pitfall}</span></div><div class="info-chip"><b>提示词方向</b><span>${s.prompt}</span></div><div class="info-chip"><b>下一步行动</b><span>完成七天路线的前两天，再从项目库选一个低难度项目。</span></div></div></div>`;
+    }
+
+    function renderTimeline(){
+      $('timeline').innerHTML = days.map(day=>{
+        const done = !!state.days[day.d];
+        return `<div class="day-card"><div class="day-badge">D${day.d}</div><div class="day-content"><h3>${day.title}</h3><div class="day-meta"><div><b>目标</b>${day.goal}</div><div><b>任务</b>${day.task}</div><div><b>产出</b>${day.output}</div><div><b>可复制提示</b>${day.prompt}</div></div></div><button class="btn btn-mini check-btn ${done?'btn-done':''}" data-day="${day.d}">${done?'已完成 ✓':'完成打卡'}</button></div>`;
+      }).join('');
+      document.querySelectorAll('.check-btn').forEach(btn=>btn.addEventListener('click',()=>{
+        const d = btn.dataset.day; state.days[d] = !state.days[d]; storage.set('codexNav_days', state.days); renderTimeline(); updateDashboard(); toast(state.days[d]?'打卡成功':'已取消打卡');
+      }));
+      updateProgress();
+    }
+
+    let activeCategory = Object.keys(projectCategories)[0];
+    function renderProjects(){
+      $('projectTabs').innerHTML = Object.keys(projectCategories).map(c=>`<button class="tab-btn ${c===activeCategory?'active':''}" data-cat="${c}">${c}</button>`).join('');
+      $('projectList').innerHTML = projectCategories[activeCategory].map((p,i)=>{
+        const prompt = `请为我生成一个《${p[0]}》HTML 单页产品。目标用户：${p[1]}。产品难度控制在${p[2]}，适合零基础用户。核心功能包括：${p[4]}。视觉风格要求：清爽、卡片化、现代中文互联网风格、手机端自适应。请输出完整 HTML 文件，包含 CSS 和 JavaScript，不要依赖后端。页面要有使用说明、示例、结果区、一键复制、FAQ 和底部说明。`;
+        return `<div class="card project-card"><div class="project-head"><div><span class="tag purple">${activeCategory}</span><h3>${p[0]}</h3></div><span class="tag ${p[2]==='低'?'ok':'warn'}">${p[2]}难度</span></div><p><b>适合人群：</b>${p[1]}<br><b>预计完成：</b>${p[3]}<br><b>核心功能：</b>${p[4]}<br><b>小白友好点：</b>${p[5]}</p><div class="meta-row"><button class="btn btn-mini toggle-project">查看提示词</button><button class="btn btn-mini copy-project" data-prompt="${encodeURIComponent(prompt)}">复制提示词</button></div><div class="project-prompt">${prompt}</div></div>`;
+      }).join('');
+      document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{activeCategory=btn.dataset.cat;renderProjects();}));
+      document.querySelectorAll('.toggle-project').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.project-card').classList.toggle('open')));
+      document.querySelectorAll('.copy-project').forEach(btn=>btn.addEventListener('click',()=>copyText(decodeURIComponent(btn.dataset.prompt))));
+    }
+
+    function renderTemplates(){
+      $('templateList').innerHTML = templates.map((t,i)=>`<div class="card template-card"><div class="template-top"><div><span class="tag gray">模板 ${String(i+1).padStart(2,'0')}</span><h3>${t[0]}</h3></div><div class="copy-row"><button class="btn btn-mini" data-template="${i}">一键复制</button><span class="copy-hint" id="hint-${i}">已复制</span></div></div><div class="template-body" id="tpl-${i}">${escapeHtml(t[1])}</div></div>`).join('');
+      document.querySelectorAll('[data-template]').forEach(btn=>btn.addEventListener('click',()=>{
+        const i = btn.dataset.template; copyText(templates[i][1]); const h=$('hint-'+i); h.classList.add('show'); setTimeout(()=>h.classList.remove('show'),1200);
+      }));
+    }
+
+    function renderFaq(){
+      $('faqList').innerHTML = faqs.map((f,i)=>`<div class="faq-item"><button class="faq-q"><span>${i+1}. ${f[0]}</span><span>＋</span></button><div class="faq-a"><p><b>可能原因：</b>${f[1]}</p><p><b>小白处理步骤：</b>${f[2]}</p><p><b>复制给 Codex 的修复提示词：</b></p><pre>${escapeHtml(f[3])}</pre><button class="btn btn-mini faq-copy" data-faq="${i}">复制修复提示词</button></div></div>`).join('');
+      document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.faq-item').classList.toggle('open')));
+      document.querySelectorAll('.faq-copy').forEach(btn=>btn.addEventListener('click',()=>copyText(faqs[btn.dataset.faq][3])));
+    }
+
+    function renderPitfalls(){
+      $('pitfallList').innerHTML = pitfalls.map(p=>`<div class="check-item"><div class="check-icon">✓</div><div><b>${p[0]}</b><span>${p[1]}</span></div></div>`).join('');
+    }
+
+    function updateProgress(){
+      const count = Object.values(state.days).filter(Boolean).length;
+      const pct = Math.round(count/7*100);
+      $('routeProgress').style.width = pct+'%';
+      $('routeProgressText').textContent = `${count}/7 已完成`;
+      $('dashProgress').style.width = pct+'%';
+      $('dashProgressText').textContent = count===0 ? '你还没有开始打卡。建议先完成第 1 天。' : `你已经完成 ${count} 天，继续保持节奏，不要一次做太多。`;
+      $('statDays').textContent = count;
+    }
+    function updateDashboard(){
+      updateProgress();
+      $('statCopies').textContent = state.copies;
+      $('copyCountTop').textContent = state.copies;
+      const s = stages.find(x=>x.id===state.stage);
+      $('statStage').textContent = s ? s.stage.replace('期','') : '未测';
+      const count = Object.values(state.days).filter(Boolean).length;
+      if(!s){ $('todayTask').textContent='先完成新手自测'; $('nextAction').textContent='选择你当前阶段，系统会推荐你第一步该做什么。'; return; }
+      if(count < 2){ $('todayTask').textContent='完成七天路线第 1-2 天'; $('nextAction').textContent='先建立认知，再写第一个完整产品提示词。'; }
+      else if(count < 5){ $('todayTask').textContent='选择一个低难度项目实操'; $('nextAction').textContent='从项目库选一个低难度项目，复制提示词并运行 HTML。'; }
+      else { $('todayTask').textContent='补齐交付说明和发布材料'; $('nextAction').textContent='把工具包装成作品或虚拟产品，加入使用说明、案例和 FAQ。'; }
+    }
+
+    async function copyText(text){
+      try{ await navigator.clipboard.writeText(text); }
+      catch(e){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+      state.copies += 1; storage.set('codexNav_copies', state.copies); updateDashboard(); toast('已复制到剪贴板');
+    }
+    function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1500); }
+    function escapeHtml(str){return str.replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+    renderTest(); renderTimeline(); renderProjects(); renderTemplates(); renderFaq(); renderPitfalls(); updateDashboard();
+  </script>
+</body>
+</html>

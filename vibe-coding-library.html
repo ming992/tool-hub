@@ -1,0 +1,4429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe Coding 产品灵感库</title>
+  <style>
+    :root {
+      --bg:#f6f8fb; --panel:#ffffff; --ink:#182033; --muted:#667085; --line:#e8edf5;
+      --brand:#3b5bdb; --brand2:#7c3aed; --soft:#eef2ff; --gold:#b7791f; --green:#087f5b;
+      --shadow:0 18px 50px rgba(21, 32, 70, .09); --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f4f6fb 42%,#eef2f7 100%);color:var(--ink);line-height:1.72}
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1180px, calc(100% - 32px));margin:0 auto}
+    .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(255,255,255,.78);border-bottom:1px solid var(--line)}
+    .nav-inner{height:66px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .logo{font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+    .logo-badge{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 10px 22px rgba(59,91,219,.28)}
+    .nav-links{display:flex;gap:18px;font-size:14px;color:#475467}
+    .nav-links a:hover{color:var(--brand)}
+    .hero{padding:74px 0 42px;position:relative;overflow:hidden}
+    .hero:before{content:"";position:absolute;inset:-160px -220px auto auto;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.20),rgba(124,58,237,0) 64%)}
+    .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:34px;align-items:center}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 13px;color:#344054;font-weight:700;font-size:13px;box-shadow:0 6px 24px rgba(30,41,59,.06)}
+    h1{font-size:clamp(40px,7vw,76px);line-height:1.02;margin:18px 0 18px;letter-spacing:-2.8px}
+    .gradient-text{background:linear-gradient(115deg,#182033 0%,#335cff 45%,#8b5cf6 88%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{font-size:18px;color:var(--muted);max-width:760px;margin:0 0 26px}
+    .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0}
+    .btn{border:none;border-radius:14px;padding:12px 18px;font-weight:800;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px;font-size:14px}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;box-shadow:0 12px 26px rgba(59,91,219,.24)}
+    .btn-secondary{background:white;color:#24304a;border:1px solid var(--line)}
+    .btn:hover{transform:translateY(-1px)}
+    .hero-card{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:var(--shadow);position:relative}
+    .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .metric{background:linear-gradient(180deg,#fff,#f8faff);border:1px solid var(--line);border-radius:20px;padding:18px}
+    .metric strong{display:block;font-size:28px;line-height:1.1}
+    .metric span{font-size:13px;color:var(--muted)}
+    .mini-list{margin-top:16px;display:grid;gap:10px}
+    .mini-list div{background:#f8faff;border:1px solid var(--line);border-radius:16px;padding:11px 13px;color:#475467;font-size:14px}
+    section{padding:36px 0}
+    .section-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px}
+    .section-head h2{font-size:30px;line-height:1.15;margin:0;letter-spacing:-.8px}
+    .section-head p{margin:8px 0 0;color:var(--muted)}
+    .panel{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+    .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+    .step{padding:16px;background:#fff;border:1px solid var(--line);border-radius:18px}
+    .step b{display:flex;width:30px;height:30px;border-radius:11px;background:var(--soft);align-items:center;justify-content:center;color:var(--brand);margin-bottom:8px}
+    .step strong{display:block;font-size:15px;margin-bottom:6px}
+    .step span{font-size:13px;color:var(--muted)}
+    .toolbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
+    .search{width:100%;border:1px solid var(--line);border-radius:16px;background:white;padding:14px 16px;font-size:15px;outline:none}
+    .search:focus{border-color:#9db2ff;box-shadow:0 0 0 4px rgba(59,91,219,.10)}
+    .filter-wrap{display:grid;gap:16px}
+    .filter-row{display:grid;grid-template-columns:112px 1fr;gap:12px;align-items:start;border-top:1px dashed #e4e9f2;padding-top:14px}
+    .filter-row:first-child{border-top:none;padding-top:0}
+    .filter-title{font-weight:900;color:#344054;padding-top:7px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{border:1px solid var(--line);background:#fff;color:#475467;border-radius:999px;padding:7px 11px;font-size:13px;cursor:pointer;transition:.18s}
+    .chip.active,.chip:hover{background:var(--soft);border-color:#b8c3ff;color:#2446bf}
+    .result-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;color:#475467}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 12px 34px rgba(16,24,40,.06);display:flex;flex-direction:column;min-height:394px;transition:.2s}
+    .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(16,24,40,.10)}
+    .card-top{display:flex;align-items:start;justify-content:space-between;gap:12px}
+    .category{font-size:12px;color:var(--brand);font-weight:900;background:var(--soft);border-radius:999px;padding:5px 9px}
+    .fav{border:none;background:#fff1f3;color:#c2255c;border-radius:999px;width:35px;height:35px;cursor:pointer;font-size:16px}
+    .fav.off{background:#f5f7fb;color:#98a2b3}
+    .card h3{font-size:20px;line-height:1.25;margin:14px 0 8px;letter-spacing:-.4px}
+    .meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
+    .tag{font-size:12px;border-radius:999px;padding:4px 8px;background:#f6f7fb;color:#5c667a;border:1px solid #edf0f6}
+    .pain{font-size:14px;color:#475467;margin:0 0 12px}
+    .info-list{display:grid;gap:8px;margin-top:auto}
+    .info-list div{font-size:13px;color:#344054;background:#f8faff;border:1px solid #edf1f8;border-radius:12px;padding:9px}
+    .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+    .smallbtn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-weight:800;color:#344054;cursor:pointer}
+    .smallbtn.primary{background:#182033;color:#fff;border-color:#182033}
+    .empty{text-align:center;padding:42px;background:#fff;border:1px dashed #cfd8ea;border-radius:24px;color:var(--muted)}
+    .route-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .route{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px}
+    .route h3{margin:0 0 10px}
+    .route p{color:var(--muted);font-size:14px;margin:8px 0}
+    .rank-list{display:grid;gap:10px}
+    .rank{display:grid;grid-template-columns:56px 1fr 100px 110px 130px;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}
+    .rank-no{font-weight:1000;font-size:24px;color:var(--brand)}
+    .rank strong{display:block}
+    .rank p{margin:5px 0 0;color:var(--muted);font-size:13px}
+    .moat-grid,.money-grid,.title-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .note-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px}
+    .note-card h3{margin:0 0 8px;font-size:17px}
+    .note-card p{margin:0;color:var(--muted);font-size:14px}
+    .process{counter-reset:step;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .process div{counter-increment:step;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;position:relative}
+    .process div:before{content:counter(step);display:flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:10px;background:#eff4ff;color:var(--brand);font-weight:900;margin-bottom:9px}
+    .prompt-box{background:#121826;color:#e6ecff;border-radius:20px;padding:20px;position:relative;overflow:hidden}
+    .prompt-box pre{white-space:pre-wrap;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.7}
+    .prompt-box .btn{margin-top:14px;background:white;color:#121826}
+
+    .update-grid{display:grid;grid-template-columns:1fr .9fr;gap:16px;align-items:start}
+    .update-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+    .stat-card{background:linear-gradient(180deg,#fff,#f8faff);border:1px solid var(--line);border-radius:18px;padding:16px}
+    .stat-card strong{display:block;font-size:24px;line-height:1.1;color:#1d2939}
+    .stat-card span{font-size:13px;color:var(--muted)}
+    .admin-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .admin-form label{font-size:13px;font-weight:900;color:#344054;display:grid;gap:6px}
+    .admin-form input,.admin-form select,.admin-form textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:white;padding:11px 12px;font-size:14px;font-family:inherit;outline:none}
+    .admin-form textarea{min-height:96px;resize:vertical;grid-column:auto}
+    .admin-form input:focus,.admin-form select:focus,.admin-form textarea:focus{border-color:#9db2ff;box-shadow:0 0 0 4px rgba(59,91,219,.10)}
+    .admin-form .full{grid-column:1/-1}
+    .update-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .update-note{background:#f8faff;border:1px solid var(--line);border-radius:18px;padding:16px;color:#475467;font-size:14px}
+    .log-list{display:grid;gap:8px;max-height:270px;overflow:auto;margin-top:12px}
+    .log-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:13px;color:#475467}
+    .danger{background:#fff5f5!important;color:#c92a2a!important;border-color:#ffd8d8!important}
+    .admin-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .admin-mini{font-size:12px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 9px;cursor:pointer;color:#475467}
+    .admin-mini:hover{background:#f8faff;color:var(--brand)}
+    .file-input{display:none}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(11,18,32,.52);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+    .modal-backdrop.show{display:flex}
+    .modal{width:min(880px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.25)}
+    .modal-head{position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:20px 24px;display:flex;justify-content:space-between;gap:16px;align-items:start}
+    .modal-head h2{margin:4px 0 0;font-size:28px;letter-spacing:-.7px}
+    .close{border:none;background:#f2f4f7;border-radius:12px;width:40px;height:40px;font-size:20px;cursor:pointer}
+    .modal-body{padding:22px 24px 28px}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .detail{background:#f8faff;border:1px solid var(--line);border-radius:18px;padding:16px}
+    .detail h4{margin:0 0 8px;color:#344054}
+    .detail p,.detail li{color:#5d6679;font-size:14px;margin:0}
+    .detail ul{padding-left:18px;margin:0}
+    .toast{position:fixed;right:18px;bottom:18px;background:#101828;color:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 14px 40px rgba(0,0,0,.18);opacity:0;transform:translateY(14px);pointer-events:none;transition:.24s;z-index:70}
+    .toast.show{opacity:1;transform:translateY(0)}
+    footer{padding:38px 0;color:#667085;text-align:center}
+    @media(max-width:980px){.hero-grid,.grid,.steps,.route-grid,.moat-grid,.money-grid,.title-grid,.process,.update-grid{grid-template-columns:1fr 1fr}.rank{grid-template-columns:48px 1fr;align-items:start}.rank span{font-size:13px}}
+    @media(max-width:680px){.nav-links{display:none}.hero{padding-top:42px}.hero-grid,.grid,.steps,.route-grid,.moat-grid,.money-grid,.title-grid,.process,.detail-grid,.update-grid,.update-stats,.admin-form{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.filter-row{grid-template-columns:1fr}.section-head{display:block}h1{letter-spacing:-1.6px}.card{min-height:auto}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="logo" href="#top"><span class="logo-badge"></span><span>Vibe Coding 灵感库</span></a>
+      <div class="nav-links">
+        <a href="#library">灵感库</a><a href="#update-center">更新中心</a><a href="#ranking">排行榜</a><a href="#moat">护城河</a><a href="#prompt">通用提示词</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">AI 产品选题 · HTML 工具 · 小白可落地</div>
+          <h1><span class="gradient-text">Vibe Coding</span><br/>产品灵感库</h1>
+          <p>从不会写代码，到找到第一个可做、可卖、可迭代的 AI 产品方向。这里不是普通清单，而是一个带筛选、收藏、详情拆解和开发提示词的交互式灵感库。</p>
+          <div class="cta-row"><a class="btn btn-primary" href="#library">开始筛选灵感</a><a class="btn btn-secondary" href="#ranking">查看高价值方向</a></div>
+        </div>
+        <div class="hero-card">
+          <div class="metric-grid">
+            <div class="metric"><strong>60</strong><span>个可落地产品方向</span></div>
+            <div class="metric"><strong>8</strong><span>大刚需赛道</span></div>
+            <div class="metric"><strong>6</strong><span>个筛选维度</span></div>
+            <div class="metric"><strong>1</strong><span>键复制开发提示词</span></div>
+          </div>
+          <div class="mini-list"><div>适合：小白、博主、教师、家长、自由职业者、一人公司</div><div>形式：生成器、资料库、案例库、计划表、测评工具、话术工具</div><div>目标：先做 HTML 原型，快速验证需求，再迭代商业化</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head"><div><h2>怎么使用这个产品</h2><p>按身份、场景和变现目标快速定位可做方向。</p></div></div>
+        <div class="panel steps">
+          <div class="step"><b>1</b><strong>选择身份</strong><span>先确认你是谁，有什么经验。</span></div>
+          <div class="step"><b>2</b><strong>选择人群</strong><span>明确你要帮谁解决问题。</span></div>
+          <div class="step"><b>3</b><strong>选择形式</strong><span>生成器、清单、资料库都可以。</span></div>
+          <div class="step"><b>4</b><strong>查看卡片</strong><span>看痛点、MVP 和客单价。</span></div>
+          <div class="step"><b>5</b><strong>复制提示词</strong><span>交给 AI 或 Codex 做原型。</span></div>
+          <div class="step"><b>6</b><strong>发布测试</strong><span>用小红书、私域和社群验证。</span></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="update-center">
+      <div class="container">
+        <div class="section-head"><div><h2>动态更新中心</h2><p>把灵感库从“一次性资料”升级成“可持续更新的产品资产”：新增、编辑、删除、导入、导出，全部保存在浏览器本地。</p></div></div>
+        <div class="panel update-grid">
+          <div>
+            <div class="update-stats">
+              <div class="stat-card"><strong id="statTotal">60</strong><span>当前灵感总数</span></div>
+              <div class="stat-card"><strong id="statCustom">0</strong><span>本地新增/改动</span></div>
+              <div class="stat-card"><strong id="statUpdated">未更新</strong><span>最近更新时间</span></div>
+            </div>
+            <form class="admin-form" id="productForm">
+              <input type="hidden" id="editId" />
+              <label>产品名称<input id="fName" placeholder="例如：AI 简历诊断生成器" required /></label>
+              <label>所属赛道<input id="fCategory" placeholder="例如：职场办公类" /></label>
+              <label>适合身份<input id="fIdentities" placeholder="用逗号分隔，如：小白,自由职业者,运营" /></label>
+              <label>产品类型<select id="fType"></select></label>
+              <label>变现方式<select id="fMonetization"></select></label>
+              <label>难度等级<select id="fLevel"></select></label>
+              <label>推荐客单价<select id="fPrice"></select></label>
+              <label>需求强度<select id="fDemand"></select></label>
+              <label class="full">适合卖给谁<input id="fAudience" placeholder="写清楚具体人群和使用场景" /></label>
+              <label class="full">解决痛点<textarea id="fPain" placeholder="用户为什么愿意为这个工具付费？"></textarea></label>
+              <label class="full">核心功能<textarea id="fFeatures" placeholder="用逗号分隔，如：输入诊断,结果评分,行动清单,复制报告"></textarea></label>
+              <label class="full">第一版 MVP<textarea id="fMvp" placeholder="第一版只做什么，如何快速上线测试？"></textarea></label>
+              <label class="full">护城河来源<textarea id="fMoat" placeholder="真实案例、数据积累、行业经验、用户反馈等"></textarea></label>
+              <label class="full">落地开发提示词<textarea id="fPrompt" placeholder="留空时系统会自动生成一段基础提示词"></textarea></label>
+            </form>
+            <div class="update-actions">
+              <button class="btn btn-primary" type="button" onclick="saveProductFromForm()">保存到灵感库</button>
+              <button class="btn btn-secondary" type="button" onclick="clearProductForm()">清空表单</button>
+              <button class="btn btn-secondary" type="button" onclick="exportProducts()">导出 JSON 更新包</button>
+              <button class="btn btn-secondary" type="button" onclick="document.getElementById('importFile').click()">导入 JSON</button>
+              <button class="btn btn-secondary danger" type="button" onclick="restoreDefaultProducts()">恢复默认库</button>
+              <input class="file-input" id="importFile" type="file" accept="application/json,.json" onchange="importProducts(event)" />
+            </div>
+          </div>
+          <div>
+            <div class="update-note">
+              <b>更新方式建议：</b><br/>
+              1. 每看到一个真实需求，就在这里新增一张产品卡。<br/>
+              2. 每成交一次或收到一次反馈，就编辑对应卡片，把案例、痛点、价格和提示词补深。<br/>
+              3. 每周导出 JSON 更新包，作为新版资料交付给用户。<br/>
+              4. 部署到线上后，可把导出的 JSON 作为“更新包”，让老用户导入获得新版灵感库。
+            </div>
+            <div class="update-note" style="margin-top:12px">
+              <b>可动态沉淀的护城河：</b>真实需求截图、用户失败案例、成交话术、行业术语、部署错误、价格样本、优质提示词版本。灵感库越更新，越不像普通资料包。
+            </div>
+            <h3 style="margin:18px 0 0">更新日志</h3>
+            <div id="updateLog" class="log-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="library">
+      <div class="container">
+        <div class="section-head"><div><h2>产品灵感卡片库</h2><p>筛选、搜索、收藏，并复制每个产品的落地提示词。</p></div></div>
+        <div class="panel">
+          <div class="toolbar">
+            <input id="searchInput" class="search" placeholder="搜索产品名称、人群、痛点、类型、变现方式……" />
+            <button class="btn btn-secondary" id="favToggle">查看我的收藏</button>
+            <button class="btn btn-secondary" id="resetBtn">重置筛选</button>
+          </div>
+          <div id="filters" class="filter-wrap"></div>
+          <div class="result-line"><span id="resultCount">正在加载灵感……</span><span id="activeHint"></span></div>
+          <div id="cards" class="grid"></div>
+          <div id="empty" class="empty" style="display:none"><h3>暂时没有完全匹配的灵感</h3><p>可以降低难度、更换产品类型，或者重置筛选试试。</p><button class="btn btn-primary" onclick="resetFilters()">重置筛选</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head"><div><h2>根据用户阶段推荐产品路线</h2><p>不要一上来做复杂系统，先用最小产品验证需求。</p></div></div>
+        <div class="route-grid">
+          <div class="route"><h3>阶段一：完全小白</h3><p><b>推荐：</b>计划表、清单、生成器、模板中心</p><p>制作简单、容易交付，适合练手和快速发布。</p></div>
+          <div class="route"><h3>阶段二：有内容经验</h3><p><b>推荐：</b>选题库、案例库、话术库、知识导航器</p><p>把自己的经验沉淀为可复用产品。</p></div>
+          <div class="route"><h3>阶段三：有行业经验</h3><p><b>推荐：</b>测评系统、诊断工具、报价工具、客户管理工具</p><p>更接近业务决策，更容易卖高价。</p></div>
+          <div class="route"><h3>阶段四：高护城河</h3><p><b>推荐：</b>故障库、流程库、行业数据库、持续更新型工具</p><p>越积累越值钱，别人难以复制。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ranking">
+      <div class="container">
+        <div class="section-head"><div><h2>高价值产品排行榜</h2><p>优先选择刚需、复购、高客单价、可沉淀案例的方向。</p></div></div>
+        <div class="panel rank-list" id="rankingList"></div>
+      </div>
+    </section>
+
+    <section id="moat">
+      <div class="container">
+        <div class="section-head"><div><h2>Vibe Coding 产品的护城河</h2><p>护城河不是代码，而是你对真实场景的理解深度。</p></div></div>
+        <div class="moat-grid">
+          <div class="note-card"><h3>行业经验</h3><p>你越懂用户的真实流程、黑话、顾虑和失败原因，产品越难被复制。</p></div>
+          <div class="note-card"><h3>真实案例</h3><p>截图、对话、错误日志、复盘记录，比空泛模板更值钱。</p></div>
+          <div class="note-card"><h3>数据积累</h3><p>把用户反馈、常见选择、结果质量持续沉淀，形成自己的数据库。</p></div>
+          <div class="note-card"><h3>场景理解</h3><p>普通 HTML 工具只要切中具体场景，就能比通用 AI 对话更好用。</p></div>
+          <div class="note-card"><h3>持续更新</h3><p>每周更新案例、模板和问题库，产品就从一次性交付变成长期资产。</p></div>
+          <div class="note-card"><h3>交付体系</h3><p>把工具、说明书、案例、社群答疑组合起来，客单价会明显提高。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head"><div><h2>从灵感到上线的 12 步流程</h2><p>用最小可行版本快速进入市场，不要闭门造车。</p></div></div>
+        <div class="panel process">
+          <div>选择一个明确人群</div><div>找到一个高频痛点</div><div>把痛点拆成页面模块</div><div>用 AI 生成第一版 HTML</div>
+          <div>手动补充真实案例</div><div>找 5 个目标用户试用</div><div>收集反馈</div><div>优化页面体验</div>
+          <div>包装成虚拟产品</div><div>在小红书发布内容引流</div><div>私域成交</div><div>每周更新形成护城河</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head"><div><h2>如何把灵感变成收入</h2><p>不同价格带，对应不同交付深度和信任门槛。</p></div></div>
+        <div class="money-grid">
+          <div class="note-card"><h3>低价资料包：9-29 元</h3><p>适合清单、标题库、计划表。卖点是便宜、即买即用、降低整理成本。</p></div>
+          <div class="note-card"><h3>标准 HTML 工具：39-99 元</h3><p>适合生成器和模板中心。卖点是互动、可复制、比 PDF 更有体验。</p></div>
+          <div class="note-card"><h3>行业工具包：199-499 元</h3><p>适合诊断、报价、错题、私域成交。卖点是解决具体业务痛点。</p></div>
+          <div class="note-card"><h3>定制服务：999 元以上</h3><p>适合企业内训、自动化、服务产品化。HTML 工具可以作为成交钩子。</p></div>
+          <div class="note-card"><h3>课程/训练营前置产品</h3><p>先卖轻工具验证需求，再承接系统课、训练营或陪跑。</p></div>
+          <div class="note-card"><h3>私域成交钩子</h3><p>用免费体验版换咨询，再根据用户结果推荐高客单服务。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head"><div><h2>小红书发布角度</h2><p>推广时不要只说“我做了一个工具”，要讲具体痛点和结果。</p></div></div>
+        <div class="title-grid" id="xhsTitles"></div>
+      </div>
+    </section>
+
+    <section id="prompt">
+      <div class="container">
+        <div class="section-head"><div><h2>通用 Vibe Coding 产品生成提示词</h2><p>复制后替换产品名称和目标用户，即可交给 AI / Codex 生成第一版。</p></div></div>
+        <div class="prompt-box">
+<pre id="generalPrompt">你是一位 AI 产品经理、前端设计师和 Vibe Coding 教练。请帮我生成一个完整 HTML 单页产品，产品名称是《请填写产品名称》。目标用户是：请填写目标用户。使用场景是：请填写用户在什么时候打开这个工具、想解决什么问题。
+
+页面必须包含：顶部介绍区、使用说明、输入表单、结果生成区、案例展示、提示词复制区、收藏/记录功能、商业化说明、常见问题。视觉风格要求：浅色背景、卡片布局、圆角、柔和阴影、层级清晰、手机和电脑都好看。
+
+交互功能必须包含：表单输入、结果生成、复制按钮、重置按钮、Toast 提示、本地 localStorage 保存。数据结构要清晰，代码写在一个 index.html 内，包含 HTML、CSS、JavaScript，不依赖外部框架。
+
+内容要具体，不要空泛。请说明：谁会买、为什么买、买了怎么用、第一版 MVP 做什么、后续如何升级、如何在小红书和私域变现。最终只输出完整 HTML 代码。</pre>
+          <button class="btn" onclick="copyText(document.getElementById('generalPrompt').innerText)">复制通用提示词</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" onclick="backdropClose(event)">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head"><div><span class="category" id="modalCategory"></span><h2 id="modalTitle"></h2></div><button class="close" onclick="closeModal()">×</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast">已复制</div>
+
+  <footer><div class="container">Vibe Coding 产品灵感库 · 先做最小版本，再用真实反馈迭代。</div></footer>
+
+<script>
+const defaultProducts = [
+  {
+    "id": 1,
+    "name": "小红书账号定位生成器",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "一人公司创业者",
+      "小白"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "不知道账号做什么、面向谁、凭什么被关注的新手博主",
+    "pain": "帮助用户从赛道、人群、内容支柱、变现路径四个维度定出账号方向。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书账号定位生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书账号定位生成器》HTML 单页工具，目标用户是不知道账号做什么、面向谁、凭什么被关注的新手博主。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：帮助用户从赛道、人群、内容支柱、变现路径四个维度定出账号方向。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书账号定位生成器》是一个面向不知道账号做什么、面向谁、凭什么被关注的新手博主的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为帮助用户从赛道、人群、内容支柱、变现路径四个维度定出账号方向。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "不知道账号做什么、面向谁、凭什么被关注的新手博主",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“帮助用户从赛道、人群、内容支柱、变现路径四个维度”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 2,
+    "name": "小红书爆款标题生成器",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "AI 工具玩家"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "9-29 元",
+    "demand": "痛点型",
+    "audience": "每天要发 3-5 篇笔记但标题点击率不稳定的内容运营",
+    "pain": "按人群痛点、利益点、反差感、关键词生成可测试标题。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书爆款标题生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书爆款标题生成器》HTML 单页工具，目标用户是每天要发 3-5 篇笔记但标题点击率不稳定的内容运营。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按人群痛点、利益点、反差感、关键词生成可测试标题。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书爆款标题生成器》是一个面向每天要发 3-5 篇笔记但标题点击率不稳定的内容运营的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按人群痛点、利益点、反差感、关键词生成可测试标题。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "每天要发 3-5 篇笔记但标题点击率不稳定的内容运营",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按人群痛点、利益点、反差感、关键词生成可测试标题”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 3,
+    "name": "小红书选题库导航站",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "一人公司创业者",
+      "运营"
+    ],
+    "productType": "资料库",
+    "monetization": "付费会员",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "想长期稳定发内容但总是断更的博主和商家",
+    "pain": "把选题按行业、用户阶段、成交意图、内容形式分层管理。",
+    "form": "HTML 单页资料库，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "关键词检索",
+      "标签筛选",
+      "案例详情",
+      "收藏夹",
+      "持续更新记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书选题库导航站》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书选题库导航站》HTML 单页工具，目标用户是想长期稳定发内容但总是断更的博主和商家。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把选题按行业、用户阶段、成交意图、内容形式分层管理。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书选题库导航站》是一个面向想长期稳定发内容但总是断更的博主和商家的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把选题按行业、用户阶段、成交意图、内容形式分层管理。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想长期稳定发内容但总是断更的博主和商家",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把选题按行业、用户阶段、成交意图、内容形式分层管”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 4,
+    "name": "小红书私域成交话术生成器",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "话术工具",
+    "monetization": "私域成交",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "有咨询但不会从私信推进到成交的虚拟产品卖家",
+    "pain": "根据用户异议、预算、紧迫度生成分层成交话术。",
+    "form": "HTML 单页话术工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书私域成交话术生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书私域成交话术生成器》HTML 单页工具，目标用户是有咨询但不会从私信推进到成交的虚拟产品卖家。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：根据用户异议、预算、紧迫度生成分层成交话术。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书私域成交话术生成器》是一个面向有咨询但不会从私信推进到成交的虚拟产品卖家的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为根据用户异议、预算、紧迫度生成分层成交话术。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "有咨询但不会从私信推进到成交的虚拟产品卖家",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“根据用户异议、预算、紧迫度生成分层成交话术。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 5,
+    "name": "小红书店铺诊断工具",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "产品经理"
+    ],
+    "productType": "测评工具",
+    "monetization": "咨询转化",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "刚需型",
+    "audience": "小红书店主、买手、资料卖家和轻电商创业者",
+    "pain": "从封面、标题、商品页、评价、转化路径输出诊断报告。",
+    "form": "HTML 单页测评工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "评分维度",
+      "风险提示",
+      "诊断报告",
+      "改进建议",
+      "行动清单"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书店铺诊断工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书店铺诊断工具》HTML 单页工具，目标用户是小红书店主、买手、资料卖家和轻电商创业者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：从封面、标题、商品页、评价、转化路径输出诊断报告。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书店铺诊断工具》是一个面向小红书店主、买手、资料卖家和轻电商创业者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为从封面、标题、商品页、评价、转化路径输出诊断报告。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "小红书店主、买手、资料卖家和轻电商创业者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“从封面、标题、商品页、评价、转化路径输出诊断报告”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 6,
+    "name": "小红书笔记复盘工具",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "AI 工具玩家"
+    ],
+    "productType": "检查清单",
+    "monetization": "课程引流",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "痛点型",
+    "audience": "发了很多笔记但不知道为什么数据差的创作者",
+    "pain": "用数据字段沉淀爆款规律，形成下次发布的优化建议。",
+    "form": "HTML 单页检查清单，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书笔记复盘工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书笔记复盘工具》HTML 单页工具，目标用户是发了很多笔记但不知道为什么数据差的创作者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：用数据字段沉淀爆款规律，形成下次发布的优化建议。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书笔记复盘工具》是一个面向发了很多笔记但不知道为什么数据差的创作者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为用数据字段沉淀爆款规律，形成下次发布的优化建议。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "发了很多笔记但不知道为什么数据差的创作者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“用数据字段沉淀爆款规律，形成下次发布的优化建议。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 7,
+    "name": "小红书人设定位工具",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "自由职业者",
+      "小白"
+    ],
+    "productType": "决策助手",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "想打造个人 IP 但表达混乱的人",
+    "pain": "把身份、经历、优势、表达风格转成人设说明书。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书人设定位工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书人设定位工具》HTML 单页工具，目标用户是想打造个人 IP 但表达混乱的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把身份、经历、优势、表达风格转成人设说明书。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书人设定位工具》是一个面向想打造个人 IP 但表达混乱的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把身份、经历、优势、表达风格转成人设说明书。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想打造个人 IP 但表达混乱的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把身份、经历、优势、表达风格转成人设说明书。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 8,
+    "name": "小红书产品卖点提炼器",
+    "category": "小红书电商类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "一人公司创业者"
+    ],
+    "productType": "生成器",
+    "monetization": "私域成交",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "有产品但说不清卖点、差异化和购买理由的卖家",
+    "pain": "将功能、结果、痛点、场景转成可发笔记的卖点矩阵。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小红书产品卖点提炼器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小红书产品卖点提炼器》HTML 单页工具，目标用户是有产品但说不清卖点、差异化和购买理由的卖家。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：将功能、结果、痛点、场景转成可发笔记的卖点矩阵。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小红书产品卖点提炼器》是一个面向有产品但说不清卖点、差异化和购买理由的卖家的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为将功能、结果、痛点、场景转成可发笔记的卖点矩阵。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "有产品但说不清卖点、差异化和购买理由的卖家",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“将功能、结果、痛点、场景转成可发笔记的卖点矩阵。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 9,
+    "name": "暑假计划表生成器",
+    "category": "教育学习类",
+    "identities": [
+      "家长",
+      "教师",
+      "学生",
+      "小白"
+    ],
+    "productType": "计划表",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "想给孩子安排暑假但不知道学习、运动、休息如何平衡的家长",
+    "pain": "按年级、基础、目标、城市节奏生成可打印计划表。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《暑假计划表生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《暑假计划表生成器》HTML 单页工具，目标用户是想给孩子安排暑假但不知道学习、运动、休息如何平衡的家长。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按年级、基础、目标、城市节奏生成可打印计划表。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《暑假计划表生成器》是一个面向想给孩子安排暑假但不知道学习、运动、休息如何平衡的家长的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按年级、基础、目标、城市节奏生成可打印计划表。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想给孩子安排暑假但不知道学习、运动、休息如何平衡的家长",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按年级、基础、目标、城市节奏生成可打印计划表。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 10,
+    "name": "小学生每日学习安排器",
+    "category": "教育学习类",
+    "identities": [
+      "家长",
+      "教师"
+    ],
+    "productType": "计划表",
+    "monetization": "社群赠品",
+    "level": "入门",
+    "price": "9-29 元",
+    "demand": "刚需型",
+    "audience": "低年级家长每天不知道怎么安排预习、复习和阅读",
+    "pain": "把语数英、阅读、运动和习惯养成拆成每日任务。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《小学生每日学习安排器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《小学生每日学习安排器》HTML 单页工具，目标用户是低年级家长每天不知道怎么安排预习、复习和阅读。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把语数英、阅读、运动和习惯养成拆成每日任务。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《小学生每日学习安排器》是一个面向低年级家长每天不知道怎么安排预习、复习和阅读的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把语数英、阅读、运动和习惯养成拆成每日任务。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "低年级家长每天不知道怎么安排预习、复习和阅读",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把语数英、阅读、运动和习惯养成拆成每日任务。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 11,
+    "name": "初中错题复盘系统",
+    "category": "教育学习类",
+    "identities": [
+      "学生",
+      "家长",
+      "教师"
+    ],
+    "productType": "模板中心",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "初中生反复错同一类题但不会归因",
+    "pain": "按题型、知识点、错因、订正状态建立复盘闭环。",
+    "form": "HTML 单页模板中心，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《初中错题复盘系统》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《初中错题复盘系统》HTML 单页工具，目标用户是初中生反复错同一类题但不会归因。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按题型、知识点、错因、订正状态建立复盘闭环。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《初中错题复盘系统》是一个面向初中生反复错同一类题但不会归因的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按题型、知识点、错因、订正状态建立复盘闭环。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "初中生反复错同一类题但不会归因",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按题型、知识点、错因、订正状态建立复盘闭环。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 12,
+    "name": "高中学习计划生成器",
+    "category": "教育学习类",
+    "identities": [
+      "学生",
+      "家长",
+      "教师"
+    ],
+    "productType": "生成器",
+    "monetization": "课程引流",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "高中生时间紧、科目多、目标分数不清晰",
+    "pain": "按目标院校、薄弱科目、考试节点生成周计划和日计划。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《高中学习计划生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《高中学习计划生成器》HTML 单页工具，目标用户是高中生时间紧、科目多、目标分数不清晰。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按目标院校、薄弱科目、考试节点生成周计划和日计划。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《高中学习计划生成器》是一个面向高中生时间紧、科目多、目标分数不清晰的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按目标院校、薄弱科目、考试节点生成周计划和日计划。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "高中生时间紧、科目多、目标分数不清晰",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按目标院校、薄弱科目、考试节点生成周计划和日计划”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 13,
+    "name": "亲子阅读计划工具",
+    "category": "教育学习类",
+    "identities": [
+      "家长",
+      "教师"
+    ],
+    "productType": "计划表",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "想培养孩子阅读但坚持困难的家庭",
+    "pain": "按年龄、兴趣、书单和互动问题生成阅读路线。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《亲子阅读计划工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《亲子阅读计划工具》HTML 单页工具，目标用户是想培养孩子阅读但坚持困难的家庭。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按年龄、兴趣、书单和互动问题生成阅读路线。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《亲子阅读计划工具》是一个面向想培养孩子阅读但坚持困难的家庭的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按年龄、兴趣、书单和互动问题生成阅读路线。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想培养孩子阅读但坚持困难的家庭",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按年龄、兴趣、书单和互动问题生成阅读路线。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 14,
+    "name": "教师评语生成器",
+    "category": "教育学习类",
+    "identities": [
+      "教师"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "痛点型",
+    "audience": "期末需要批量写评语但又不想千篇一律的教师",
+    "pain": "按学生表现、学科特点、性格亮点生成温和真实评语。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《教师评语生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《教师评语生成器》HTML 单页工具，目标用户是期末需要批量写评语但又不想千篇一律的教师。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按学生表现、学科特点、性格亮点生成温和真实评语。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《教师评语生成器》是一个面向期末需要批量写评语但又不想千篇一律的教师的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按学生表现、学科特点、性格亮点生成温和真实评语。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "期末需要批量写评语但又不想千篇一律的教师",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按学生表现、学科特点、性格亮点生成温和真实评语。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 15,
+    "name": "班主任班级管理工具",
+    "category": "教育学习类",
+    "identities": [
+      "教师"
+    ],
+    "productType": "导航系统",
+    "monetization": "企业内训",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "刚需型",
+    "audience": "新班主任需要管理纪律、沟通家长和组织活动",
+    "pain": "汇总班会、家校沟通、学生观察、班级事务 SOP。",
+    "form": "HTML 单页导航系统，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《班主任班级管理工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《班主任班级管理工具》HTML 单页工具，目标用户是新班主任需要管理纪律、沟通家长和组织活动。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：汇总班会、家校沟通、学生观察、班级事务 SOP。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《班主任班级管理工具》是一个面向新班主任需要管理纪律、沟通家长和组织活动的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为汇总班会、家校沟通、学生观察、班级事务 SOP。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "新班主任需要管理纪律、沟通家长和组织活动",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“汇总班会、家校沟通、学生观察、班级事务 SOP。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 16,
+    "name": "作文素材库",
+    "category": "教育学习类",
+    "identities": [
+      "学生",
+      "家长",
+      "教师"
+    ],
+    "productType": "资料库",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "写作文没素材、不会举例、语言空泛的中小学生",
+    "pain": "按主题、人物、事件、金句、适用题目检索素材。",
+    "form": "HTML 单页资料库，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "关键词检索",
+      "标签筛选",
+      "案例详情",
+      "收藏夹",
+      "持续更新记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《作文素材库》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《作文素材库》HTML 单页工具，目标用户是写作文没素材、不会举例、语言空泛的中小学生。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按主题、人物、事件、金句、适用题目检索素材。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《作文素材库》是一个面向写作文没素材、不会举例、语言空泛的中小学生的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按主题、人物、事件、金句、适用题目检索素材。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "写作文没素材、不会举例、语言空泛的中小学生",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按主题、人物、事件、金句、适用题目检索素材。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 17,
+    "name": "Codex 小白入门导航系统",
+    "category": "AI 工具教学类",
+    "identities": [
+      "小白",
+      "AI 工具玩家",
+      "学生",
+      "自由职业者"
+    ],
+    "productType": "导航系统",
+    "monetization": "课程引流",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "想用 Codex 但害怕命令行、报错和部署的小白",
+    "pain": "把安装、项目生成、调试、部署拆成可点击路径。",
+    "form": "HTML 单页导航系统，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《Codex 小白入门导航系统》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《Codex 小白入门导航系统》HTML 单页工具，目标用户是想用 Codex 但害怕命令行、报错和部署的小白。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把安装、项目生成、调试、部署拆成可点击路径。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《Codex 小白入门导航系统》是一个面向想用 Codex 但害怕命令行、报错和部署的小白的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把安装、项目生成、调试、部署拆成可点击路径。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想用 Codex 但害怕命令行、报错和部署的小白",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把安装、项目生成、调试、部署拆成可点击路径。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 18,
+    "name": "Vibe Coding 项目生成器",
+    "category": "AI 工具教学类",
+    "identities": [
+      "小白",
+      "AI 工具玩家",
+      "一人公司创业者"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "有想法但不知道如何描述给 AI 生成产品的人",
+    "pain": "把人群、痛点、模块、交互转成完整开发提示词。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《Vibe Coding 项目生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《Vibe Coding 项目生成器》HTML 单页工具，目标用户是有想法但不知道如何描述给 AI 生成产品的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把人群、痛点、模块、交互转成完整开发提示词。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《Vibe Coding 项目生成器》是一个面向有想法但不知道如何描述给 AI 生成产品的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把人群、痛点、模块、交互转成完整开发提示词。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "有想法但不知道如何描述给 AI 生成产品的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把人群、痛点、模块、交互转成完整开发提示词。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 19,
+    "name": "AI 提示词管理器",
+    "category": "AI 工具教学类",
+    "identities": [
+      "AI 工具玩家",
+      "运营",
+      "产品经理",
+      "教师"
+    ],
+    "productType": "模板中心",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "提示词散落在聊天记录里，重复找、重复改的人",
+    "pain": "按场景、工具、输出类型、效果评分管理提示词。",
+    "form": "HTML 单页模板中心，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《AI 提示词管理器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《AI 提示词管理器》HTML 单页工具，目标用户是提示词散落在聊天记录里，重复找、重复改的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按场景、工具、输出类型、效果评分管理提示词。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《AI 提示词管理器》是一个面向提示词散落在聊天记录里，重复找、重复改的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按场景、工具、输出类型、效果评分管理提示词。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "提示词散落在聊天记录里，重复找、重复改的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按场景、工具、输出类型、效果评分管理提示词。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 20,
+    "name": "AI 工具学习路线图",
+    "category": "AI 工具教学类",
+    "identities": [
+      "小白",
+      "学生",
+      "自由职业者"
+    ],
+    "productType": "导航系统",
+    "monetization": "社群赠品",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "面对大量 AI 工具不知道先学哪个、怎么练的人",
+    "pain": "按办公、内容、编程、设计、自动化设计学习路径。",
+    "form": "HTML 单页导航系统，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《AI 工具学习路线图》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《AI 工具学习路线图》HTML 单页工具，目标用户是面对大量 AI 工具不知道先学哪个、怎么练的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按办公、内容、编程、设计、自动化设计学习路径。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《AI 工具学习路线图》是一个面向面对大量 AI 工具不知道先学哪个、怎么练的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按办公、内容、编程、设计、自动化设计学习路径。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "面对大量 AI 工具不知道先学哪个、怎么练的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按办公、内容、编程、设计、自动化设计学习路径。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 21,
+    "name": "AI 自动化场景库",
+    "category": "AI 工具教学类",
+    "identities": [
+      "运营",
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "案例库",
+    "monetization": "企业内训",
+    "level": "高护城河",
+    "price": "999 元以上",
+    "demand": "付费意愿强",
+    "audience": "想把重复工作自动化但不知道从哪个场景入手的团队",
+    "pain": "沉淀可复用的自动化场景、工具组合和落地步骤。",
+    "form": "HTML 单页案例库，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "关键词检索",
+      "标签筛选",
+      "案例详情",
+      "收藏夹",
+      "持续更新记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《AI 自动化场景库》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《AI 自动化场景库》HTML 单页工具，目标用户是想把重复工作自动化但不知道从哪个场景入手的团队。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：沉淀可复用的自动化场景、工具组合和落地步骤。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《AI 自动化场景库》是一个面向想把重复工作自动化但不知道从哪个场景入手的团队的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为沉淀可复用的自动化场景、工具组合和落地步骤。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想把重复工作自动化但不知道从哪个场景入手的团队",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“沉淀可复用的自动化场景、工具组合和落地步骤。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 22,
+    "name": "Codex 部署故障解决库",
+    "category": "AI 工具教学类",
+    "identities": [
+      "AI 工具玩家",
+      "小白",
+      "产品经理"
+    ],
+    "productType": "案例库",
+    "monetization": "付费会员",
+    "level": "高护城河",
+    "price": "199-499 元",
+    "demand": "痛点型",
+    "audience": "网页做好了但卡在 Vercel、Netlify、Pages 部署失败的人",
+    "pain": "按错误截图、日志关键词、平台和修复动作建立故障库。",
+    "form": "HTML 单页案例库，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "关键词检索",
+      "标签筛选",
+      "案例详情",
+      "收藏夹",
+      "持续更新记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《Codex 部署故障解决库》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《Codex 部署故障解决库》HTML 单页工具，目标用户是网页做好了但卡在 Vercel、Netlify、Pages 部署失败的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按错误截图、日志关键词、平台和修复动作建立故障库。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《Codex 部署故障解决库》是一个面向网页做好了但卡在 Vercel、Netlify、Pages 部署失败的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按错误截图、日志关键词、平台和修复动作建立故障库。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "网页做好了但卡在 Vercel、Netlify、Pages 部署失败的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按错误截图、日志关键词、平台和修复动作建立故障库”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 23,
+    "name": "网页产品灵感生成器",
+    "category": "AI 工具教学类",
+    "identities": [
+      "小白",
+      "小红书博主",
+      "一人公司创业者"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "想做 HTML 产品但不知道选题的人",
+    "pain": "根据身份、行业和变现目标生成产品清单。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《网页产品灵感生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《网页产品灵感生成器》HTML 单页工具，目标用户是想做 HTML 产品但不知道选题的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：根据身份、行业和变现目标生成产品清单。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《网页产品灵感生成器》是一个面向想做 HTML 产品但不知道选题的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为根据身份、行业和变现目标生成产品清单。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想做 HTML 产品但不知道选题的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“根据身份、行业和变现目标生成产品清单。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 24,
+    "name": "AI 工作流搭建助手",
+    "category": "AI 工具教学类",
+    "identities": [
+      "运营",
+      "产品经理",
+      "自由职业者"
+    ],
+    "productType": "决策助手",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "999 元以上",
+    "demand": "付费意愿强",
+    "audience": "想把 AI 真正嵌进日常业务流程的人",
+    "pain": "按输入、处理、审核、交付和复盘设计工作流。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《AI 工作流搭建助手》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《AI 工作流搭建助手》HTML 单页工具，目标用户是想把 AI 真正嵌进日常业务流程的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按输入、处理、审核、交付和复盘设计工作流。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《AI 工作流搭建助手》是一个面向想把 AI 真正嵌进日常业务流程的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按输入、处理、审核、交付和复盘设计工作流。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想把 AI 真正嵌进日常业务流程的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按输入、处理、审核、交付和复盘设计工作流。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 25,
+    "name": "一人公司 SOP 生成器",
+    "category": "一人公司类",
+    "identities": [
+      "一人公司创业者",
+      "自由职业者",
+      "运营"
+    ],
+    "productType": "生成器",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "刚需型",
+    "audience": "事情都靠自己记，交付不稳定的一人公司",
+    "pain": "将获客、咨询、成交、交付、复盘转成标准流程。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《一人公司 SOP 生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《一人公司 SOP 生成器》HTML 单页工具，目标用户是事情都靠自己记，交付不稳定的一人公司。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：将获客、咨询、成交、交付、复盘转成标准流程。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《一人公司 SOP 生成器》是一个面向事情都靠自己记，交付不稳定的一人公司的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为将获客、咨询、成交、交付、复盘转成标准流程。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "事情都靠自己记，交付不稳定的一人公司",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“将获客、咨询、成交、交付、复盘转成标准流程。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 26,
+    "name": "一人公司每日任务看板",
+    "category": "一人公司类",
+    "identities": [
+      "一人公司创业者",
+      "自由职业者"
+    ],
+    "productType": "计划表",
+    "monetization": "付费会员",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "每天忙但不知道哪些动作真正带来收入的人",
+    "pain": "按现金流、内容、交付、客户、资产沉淀安排任务。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《一人公司每日任务看板》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《一人公司每日任务看板》HTML 单页工具，目标用户是每天忙但不知道哪些动作真正带来收入的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按现金流、内容、交付、客户、资产沉淀安排任务。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《一人公司每日任务看板》是一个面向每天忙但不知道哪些动作真正带来收入的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按现金流、内容、交付、客户、资产沉淀安排任务。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "每天忙但不知道哪些动作真正带来收入的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按现金流、内容、交付、客户、资产沉淀安排任务。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 27,
+    "name": "客户需求访谈提纲生成器",
+    "category": "一人公司类",
+    "identities": [
+      "自由职业者",
+      "一人公司创业者",
+      "产品经理"
+    ],
+    "productType": "生成器",
+    "monetization": "私域成交",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "接咨询前不会问问题，导致报价和交付范围失控的人",
+    "pain": "按客户行业、预算、目标生成访谈问题和记录表。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《客户需求访谈提纲生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《客户需求访谈提纲生成器》HTML 单页工具，目标用户是接咨询前不会问问题，导致报价和交付范围失控的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按客户行业、预算、目标生成访谈问题和记录表。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《客户需求访谈提纲生成器》是一个面向接咨询前不会问问题，导致报价和交付范围失控的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按客户行业、预算、目标生成访谈问题和记录表。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "接咨询前不会问问题，导致报价和交付范围失控的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按客户行业、预算、目标生成访谈问题和记录表。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 28,
+    "name": "报价方案生成器",
+    "category": "一人公司类",
+    "identities": [
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "决策助手",
+    "monetization": "私域成交",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "不会定价，容易低价接单或范围蔓延的服务者",
+    "pain": "按项目复杂度、交付物、周期和风险生成报价层级。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《报价方案生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《报价方案生成器》HTML 单页工具，目标用户是不会定价，容易低价接单或范围蔓延的服务者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按项目复杂度、交付物、周期和风险生成报价层级。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《报价方案生成器》是一个面向不会定价，容易低价接单或范围蔓延的服务者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按项目复杂度、交付物、周期和风险生成报价层级。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "不会定价，容易低价接单或范围蔓延的服务者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按项目复杂度、交付物、周期和风险生成报价层级。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 29,
+    "name": "交付清单生成器",
+    "category": "一人公司类",
+    "identities": [
+      "自由职业者",
+      "一人公司创业者",
+      "运营"
+    ],
+    "productType": "检查清单",
+    "monetization": "小红书虚拟资料",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "项目交付靠临时发挥，容易漏项的人",
+    "pain": "按行业和服务类型生成交付前、中、后的检查清单。",
+    "form": "HTML 单页检查清单，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《交付清单生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《交付清单生成器》HTML 单页工具，目标用户是项目交付靠临时发挥，容易漏项的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按行业和服务类型生成交付前、中、后的检查清单。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《交付清单生成器》是一个面向项目交付靠临时发挥，容易漏项的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按行业和服务类型生成交付前、中、后的检查清单。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "项目交付靠临时发挥，容易漏项的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按行业和服务类型生成交付前、中、后的检查清单。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 30,
+    "name": "项目复盘工具",
+    "category": "一人公司类",
+    "identities": [
+      "一人公司创业者",
+      "产品经理",
+      "自由职业者"
+    ],
+    "productType": "模板中心",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "痛点型",
+    "audience": "项目结束后没有沉淀，下一次还会踩同样坑的人",
+    "pain": "记录目标、过程、问题、利润、客户反馈和可复用资产。",
+    "form": "HTML 单页模板中心，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《项目复盘工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《项目复盘工具》HTML 单页工具，目标用户是项目结束后没有沉淀，下一次还会踩同样坑的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：记录目标、过程、问题、利润、客户反馈和可复用资产。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《项目复盘工具》是一个面向项目结束后没有沉淀，下一次还会踩同样坑的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为记录目标、过程、问题、利润、客户反馈和可复用资产。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "项目结束后没有沉淀，下一次还会踩同样坑的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“记录目标、过程、问题、利润、客户反馈和可复用资产”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 31,
+    "name": "私域客户分层工具",
+    "category": "一人公司类",
+    "identities": [
+      "小红书博主",
+      "一人公司创业者",
+      "运营"
+    ],
+    "productType": "测评工具",
+    "monetization": "私域成交",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "好友很多但不知道谁该重点跟进、怎么跟进的人",
+    "pain": "按意向度、预算、问题紧急度、互动频率分层客户。",
+    "form": "HTML 单页测评工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "评分维度",
+      "风险提示",
+      "诊断报告",
+      "改进建议",
+      "行动清单"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《私域客户分层工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《私域客户分层工具》HTML 单页工具，目标用户是好友很多但不知道谁该重点跟进、怎么跟进的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按意向度、预算、问题紧急度、互动频率分层客户。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《私域客户分层工具》是一个面向好友很多但不知道谁该重点跟进、怎么跟进的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按意向度、预算、问题紧急度、互动频率分层客户。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "好友很多但不知道谁该重点跟进、怎么跟进的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按意向度、预算、问题紧急度、互动频率分层客户。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 32,
+    "name": "服务产品化设计器",
+    "category": "一人公司类",
+    "identities": [
+      "一人公司创业者",
+      "自由职业者",
+      "产品经理"
+    ],
+    "productType": "决策助手",
+    "monetization": "咨询转化",
+    "level": "高护城河",
+    "price": "999 元以上",
+    "demand": "付费意愿强",
+    "audience": "有技能但只能卖时间，无法做标准产品的人",
+    "pain": "把服务拆成套餐、边界、交付物、价格和升级路径。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《服务产品化设计器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《服务产品化设计器》HTML 单页工具，目标用户是有技能但只能卖时间，无法做标准产品的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把服务拆成套餐、边界、交付物、价格和升级路径。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《服务产品化设计器》是一个面向有技能但只能卖时间，无法做标准产品的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把服务拆成套餐、边界、交付物、价格和升级路径。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "有技能但只能卖时间，无法做标准产品的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把服务拆成套餐、边界、交付物、价格和升级路径。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 33,
+    "name": "周报生成器",
+    "category": "职场办公类",
+    "identities": [
+      "运营",
+      "产品经理",
+      "自由职业者",
+      "小白"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "9-29 元",
+    "demand": "痛点型",
+    "audience": "每周写周报但不知道如何体现价值的职场人",
+    "pain": "把任务、数据、问题、下周计划转成结构化周报。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《周报生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《周报生成器》HTML 单页工具，目标用户是每周写周报但不知道如何体现价值的职场人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把任务、数据、问题、下周计划转成结构化周报。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《周报生成器》是一个面向每周写周报但不知道如何体现价值的职场人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把任务、数据、问题、下周计划转成结构化周报。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "每周写周报但不知道如何体现价值的职场人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把任务、数据、问题、下周计划转成结构化周报。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 34,
+    "name": "会议纪要整理器",
+    "category": "职场办公类",
+    "identities": [
+      "运营",
+      "产品经理",
+      "AI 工具玩家"
+    ],
+    "productType": "生成器",
+    "monetization": "社群赠品",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "开会多但纪要混乱、行动项没人追踪的团队成员",
+    "pain": "把讨论内容整理成结论、负责人、截止时间和风险。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《会议纪要整理器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《会议纪要整理器》HTML 单页工具，目标用户是开会多但纪要混乱、行动项没人追踪的团队成员。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把讨论内容整理成结论、负责人、截止时间和风险。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《会议纪要整理器》是一个面向开会多但纪要混乱、行动项没人追踪的团队成员的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把讨论内容整理成结论、负责人、截止时间和风险。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "开会多但纪要混乱、行动项没人追踪的团队成员",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把讨论内容整理成结论、负责人、截止时间和风险。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 35,
+    "name": "OKR 拆解工具",
+    "category": "职场办公类",
+    "identities": [
+      "产品经理",
+      "运营",
+      "一人公司创业者"
+    ],
+    "productType": "决策助手",
+    "monetization": "企业内训",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "刚需型",
+    "audience": "目标很大但拆不到可执行任务的团队或个人",
+    "pain": "将目标拆为关键结果、项目、里程碑、指标和周动作。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《OKR 拆解工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《OKR 拆解工具》HTML 单页工具，目标用户是目标很大但拆不到可执行任务的团队或个人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：将目标拆为关键结果、项目、里程碑、指标和周动作。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《OKR 拆解工具》是一个面向目标很大但拆不到可执行任务的团队或个人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为将目标拆为关键结果、项目、里程碑、指标和周动作。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "目标很大但拆不到可执行任务的团队或个人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“将目标拆为关键结果、项目、里程碑、指标和周动作。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 36,
+    "name": "个人成长计划表",
+    "category": "职场办公类",
+    "identities": [
+      "学生",
+      "自由职业者",
+      "小白"
+    ],
+    "productType": "计划表",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "想提升能力但计划总是太泛、坚持不下来的人",
+    "pain": "按技能、时间、资源和反馈机制生成成长计划。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《个人成长计划表》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《个人成长计划表》HTML 单页工具，目标用户是想提升能力但计划总是太泛、坚持不下来的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按技能、时间、资源和反馈机制生成成长计划。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《个人成长计划表》是一个面向想提升能力但计划总是太泛、坚持不下来的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按技能、时间、资源和反馈机制生成成长计划。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想提升能力但计划总是太泛、坚持不下来的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按技能、时间、资源和反馈机制生成成长计划。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 37,
+    "name": "简历优化工具",
+    "category": "职场办公类",
+    "identities": [
+      "学生",
+      "自由职业者",
+      "小白"
+    ],
+    "productType": "测评工具",
+    "monetization": "咨询转化",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "投递无回复，不知道简历问题出在哪里的求职者",
+    "pain": "从岗位匹配度、项目表达、数据化成果和关键词检查简历。",
+    "form": "HTML 单页测评工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "评分维度",
+      "风险提示",
+      "诊断报告",
+      "改进建议",
+      "行动清单"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《简历优化工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《简历优化工具》HTML 单页工具，目标用户是投递无回复，不知道简历问题出在哪里的求职者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：从岗位匹配度、项目表达、数据化成果和关键词检查简历。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《简历优化工具》是一个面向投递无回复，不知道简历问题出在哪里的求职者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为从岗位匹配度、项目表达、数据化成果和关键词检查简历。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "投递无回复，不知道简历问题出在哪里的求职者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“从岗位匹配度、项目表达、数据化成果和关键词检查简”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 38,
+    "name": "面试问题训练器",
+    "category": "职场办公类",
+    "identities": [
+      "学生",
+      "自由职业者"
+    ],
+    "productType": "生成器",
+    "monetization": "课程引流",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "面试紧张，不会讲项目和回答追问的求职者",
+    "pain": "按岗位生成问题、参考回答、追问和自评标准。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《面试问题训练器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《面试问题训练器》HTML 单页工具，目标用户是面试紧张，不会讲项目和回答追问的求职者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按岗位生成问题、参考回答、追问和自评标准。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《面试问题训练器》是一个面向面试紧张，不会讲项目和回答追问的求职者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按岗位生成问题、参考回答、追问和自评标准。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "面试紧张，不会讲项目和回答追问的求职者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按岗位生成问题、参考回答、追问和自评标准。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 39,
+    "name": "领导汇报话术生成器",
+    "category": "职场办公类",
+    "identities": [
+      "运营",
+      "产品经理",
+      "小白"
+    ],
+    "productType": "话术工具",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "痛点型",
+    "audience": "做了很多工作但向上汇报没有重点的人",
+    "pain": "把进展、阻碍、资源需求和风险转成汇报话术。",
+    "form": "HTML 单页话术工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《领导汇报话术生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《领导汇报话术生成器》HTML 单页工具，目标用户是做了很多工作但向上汇报没有重点的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：把进展、阻碍、资源需求和风险转成汇报话术。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《领导汇报话术生成器》是一个面向做了很多工作但向上汇报没有重点的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为把进展、阻碍、资源需求和风险转成汇报话术。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "做了很多工作但向上汇报没有重点的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“把进展、阻碍、资源需求和风险转成汇报话术。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 40,
+    "name": "家庭预算规划器",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "自由职业者",
+      "小白"
+    ],
+    "productType": "计划表",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "收入不低但不知道钱花到哪里、家庭储蓄困难的人",
+    "pain": "按收入、固定支出、教育、保险、储蓄和娱乐预算规划。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《家庭预算规划器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《家庭预算规划器》HTML 单页工具，目标用户是收入不低但不知道钱花到哪里、家庭储蓄困难的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按收入、固定支出、教育、保险、储蓄和娱乐预算规划。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《家庭预算规划器》是一个面向收入不低但不知道钱花到哪里、家庭储蓄困难的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按收入、固定支出、教育、保险、储蓄和娱乐预算规划。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "收入不低但不知道钱花到哪里、家庭储蓄困难的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按收入、固定支出、教育、保险、储蓄和娱乐预算规划”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 41,
+    "name": "宝宝喂养记录工具",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "小白"
+    ],
+    "productType": "记录工具",
+    "monetization": "小红书虚拟资料",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "新手父母需要记录母乳、奶粉、辅食、睡眠和排便",
+    "pain": "支持单胎/双胞胎、家庭成员共享字段设计和趋势复盘。",
+    "form": "HTML 单页记录工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《宝宝喂养记录工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《宝宝喂养记录工具》HTML 单页工具，目标用户是新手父母需要记录母乳、奶粉、辅食、睡眠和排便。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：支持单胎/双胞胎、家庭成员共享字段设计和趋势复盘。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《宝宝喂养记录工具》是一个面向新手父母需要记录母乳、奶粉、辅食、睡眠和排便的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为支持单胎/双胞胎、家庭成员共享字段设计和趋势复盘。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "新手父母需要记录母乳、奶粉、辅食、睡眠和排便",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“支持单胎/双胞胎、家庭成员共享字段设计和趋势复盘”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 42,
+    "name": "家庭旅行计划生成器",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "自由职业者"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "带老人孩子旅行时路线、预算、节奏都难协调的家庭",
+    "pain": "按成员年龄、预算、城市和天数生成行程与物品清单。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《家庭旅行计划生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《家庭旅行计划生成器》HTML 单页工具，目标用户是带老人孩子旅行时路线、预算、节奏都难协调的家庭。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按成员年龄、预算、城市和天数生成行程与物品清单。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《家庭旅行计划生成器》是一个面向带老人孩子旅行时路线、预算、节奏都难协调的家庭的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按成员年龄、预算、城市和天数生成行程与物品清单。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "带老人孩子旅行时路线、预算、节奏都难协调的家庭",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按成员年龄、预算、城市和天数生成行程与物品清单。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 43,
+    "name": "家务分工表",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "小白"
+    ],
+    "productType": "检查清单",
+    "monetization": "社群赠品",
+    "level": "入门",
+    "price": "9-29 元",
+    "demand": "痛点型",
+    "audience": "家庭成员家务责任不清，容易吵架和遗漏",
+    "pain": "按任务频次、成员时间、难度和轮换规则分配家务。",
+    "form": "HTML 单页检查清单，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《家务分工表》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《家务分工表》HTML 单页工具，目标用户是家庭成员家务责任不清，容易吵架和遗漏。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按任务频次、成员时间、难度和轮换规则分配家务。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《家务分工表》是一个面向家庭成员家务责任不清，容易吵架和遗漏的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按任务频次、成员时间、难度和轮换规则分配家务。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "家庭成员家务责任不清，容易吵架和遗漏",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按任务频次、成员时间、难度和轮换规则分配家务。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 44,
+    "name": "家庭健康打卡表",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "自由职业者"
+    ],
+    "productType": "计划表",
+    "monetization": "付费会员",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "全家想改善睡眠、运动、饮食但缺少共同记录",
+    "pain": "记录运动、饮水、睡眠、体重、用药和复盘建议。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《家庭健康打卡表》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《家庭健康打卡表》HTML 单页工具，目标用户是全家想改善睡眠、运动、饮食但缺少共同记录。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：记录运动、饮水、睡眠、体重、用药和复盘建议。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《家庭健康打卡表》是一个面向全家想改善睡眠、运动、饮食但缺少共同记录的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为记录运动、饮水、睡眠、体重、用药和复盘建议。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "全家想改善睡眠、运动、饮食但缺少共同记录",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“记录运动、饮水、睡眠、体重、用药和复盘建议。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 45,
+    "name": "老人用药提醒表",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "小白"
+    ],
+    "productType": "检查清单",
+    "monetization": "小红书虚拟资料",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "家中老人药品多、剂量和时间容易混淆的家庭",
+    "pain": "按药品、剂量、时段、禁忌和复诊时间设计提醒表。",
+    "form": "HTML 单页检查清单，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《老人用药提醒表》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《老人用药提醒表》HTML 单页工具，目标用户是家中老人药品多、剂量和时间容易混淆的家庭。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按药品、剂量、时段、禁忌和复诊时间设计提醒表。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《老人用药提醒表》是一个面向家中老人药品多、剂量和时间容易混淆的家庭的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按药品、剂量、时段、禁忌和复诊时间设计提醒表。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "家中老人药品多、剂量和时间容易混淆的家庭",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按药品、剂量、时段、禁忌和复诊时间设计提醒表。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 46,
+    "name": "亲子活动计划器",
+    "category": "家庭生活类",
+    "identities": [
+      "家长",
+      "教师"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "兴趣型",
+    "audience": "周末想高质量陪伴孩子但不知道玩什么的家长",
+    "pain": "按年龄、天气、预算、室内外和能力目标生成活动。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《亲子活动计划器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《亲子活动计划器》HTML 单页工具，目标用户是周末想高质量陪伴孩子但不知道玩什么的家长。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按年龄、天气、预算、室内外和能力目标生成活动。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《亲子活动计划器》是一个面向周末想高质量陪伴孩子但不知道玩什么的家长的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按年龄、天气、预算、室内外和能力目标生成活动。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "周末想高质量陪伴孩子但不知道玩什么的家长",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按年龄、天气、预算、室内外和能力目标生成活动。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 47,
+    "name": "律师客户咨询记录模板",
+    "category": "垂直行业类",
+    "identities": [
+      "自由职业者",
+      "一人公司创业者",
+      "产品经理"
+    ],
+    "productType": "模板中心",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "法律服务者需要快速收集案情、证据和诉求",
+    "pain": "按案件类型、时间线、证据、风险点和下一步动作记录。",
+    "form": "HTML 单页模板中心，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《律师客户咨询记录模板》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《律师客户咨询记录模板》HTML 单页工具，目标用户是法律服务者需要快速收集案情、证据和诉求。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按案件类型、时间线、证据、风险点和下一步动作记录。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《律师客户咨询记录模板》是一个面向法律服务者需要快速收集案情、证据和诉求的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按案件类型、时间线、证据、风险点和下一步动作记录。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "法律服务者需要快速收集案情、证据和诉求",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按案件类型、时间线、证据、风险点和下一步动作记录”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 48,
+    "name": "心理咨询预约前问卷",
+    "category": "垂直行业类",
+    "identities": [
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "测评工具",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "咨询师想在预约前了解来访目标和基本情况",
+    "pain": "用温和问卷收集困扰主题、期望、边界和紧急程度。",
+    "form": "HTML 单页测评工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "评分维度",
+      "风险提示",
+      "诊断报告",
+      "改进建议",
+      "行动清单"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《心理咨询预约前问卷》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《心理咨询预约前问卷》HTML 单页工具，目标用户是咨询师想在预约前了解来访目标和基本情况。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：用温和问卷收集困扰主题、期望、边界和紧急程度。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《心理咨询预约前问卷》是一个面向咨询师想在预约前了解来访目标和基本情况的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为用温和问卷收集困扰主题、期望、边界和紧急程度。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "咨询师想在预约前了解来访目标和基本情况",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“用温和问卷收集困扰主题、期望、边界和紧急程度。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 49,
+    "name": "健身私教计划生成器",
+    "category": "垂直行业类",
+    "identities": [
+      "自由职业者",
+      "小红书博主"
+    ],
+    "productType": "生成器",
+    "monetization": "私域成交",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "私教需要根据客户目标快速生成训练计划",
+    "pain": "按体型目标、器械条件、频率和伤病限制输出计划。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《健身私教计划生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《健身私教计划生成器》HTML 单页工具，目标用户是私教需要根据客户目标快速生成训练计划。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按体型目标、器械条件、频率和伤病限制输出计划。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《健身私教计划生成器》是一个面向私教需要根据客户目标快速生成训练计划的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按体型目标、器械条件、频率和伤病限制输出计划。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "私教需要根据客户目标快速生成训练计划",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按体型目标、器械条件、频率和伤病限制输出计划。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 50,
+    "name": "营养餐计划工具",
+    "category": "垂直行业类",
+    "identities": [
+      "自由职业者",
+      "小红书博主",
+      "家长"
+    ],
+    "productType": "计划表",
+    "monetization": "小红书虚拟资料",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "想减脂、增肌或控糖但不会安排一周饮食的人",
+    "pain": "按目标热量、忌口、预算和备餐时间生成餐单。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《营养餐计划工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《营养餐计划工具》HTML 单页工具，目标用户是想减脂、增肌或控糖但不会安排一周饮食的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按目标热量、忌口、预算和备餐时间生成餐单。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《营养餐计划工具》是一个面向想减脂、增肌或控糖但不会安排一周饮食的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按目标热量、忌口、预算和备餐时间生成餐单。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想减脂、增肌或控糖但不会安排一周饮食的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按目标热量、忌口、预算和备餐时间生成餐单。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 51,
+    "name": "房产客户需求匹配表",
+    "category": "垂直行业类",
+    "identities": [
+      "运营",
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "决策助手",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "房产顾问需要快速匹配客户预算、区域和户型偏好",
+    "pain": "整理客户优先级、硬性条件、备选房源和跟进策略。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《房产客户需求匹配表》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《房产客户需求匹配表》HTML 单页工具，目标用户是房产顾问需要快速匹配客户预算、区域和户型偏好。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：整理客户优先级、硬性条件、备选房源和跟进策略。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《房产客户需求匹配表》是一个面向房产顾问需要快速匹配客户预算、区域和户型偏好的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为整理客户优先级、硬性条件、备选房源和跟进策略。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "房产顾问需要快速匹配客户预算、区域和户型偏好",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“整理客户优先级、硬性条件、备选房源和跟进策略。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 52,
+    "name": "装修预算测算器",
+    "category": "垂直行业类",
+    "identities": [
+      "家长",
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "测评工具",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "准备装修但不知道预算分配和避坑点的家庭",
+    "pain": "按面积、风格、材料档次和项目项估算预算。",
+    "form": "HTML 单页测评工具，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "评分维度",
+      "风险提示",
+      "诊断报告",
+      "改进建议",
+      "行动清单"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《装修预算测算器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《装修预算测算器》HTML 单页工具，目标用户是准备装修但不知道预算分配和避坑点的家庭。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按面积、风格、材料档次和项目项估算预算。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《装修预算测算器》是一个面向准备装修但不知道预算分配和避坑点的家庭的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按面积、风格、材料档次和项目项估算预算。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "准备装修但不知道预算分配和避坑点的家庭",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按面积、风格、材料档次和项目项估算预算。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 53,
+    "name": "美业客户档案工具",
+    "category": "垂直行业类",
+    "identities": [
+      "自由职业者",
+      "小红书博主",
+      "运营"
+    ],
+    "productType": "模板中心",
+    "monetization": "私域成交",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "美甲、美睫、皮肤管理从业者需要维护老客复购",
+    "pain": "记录客户偏好、消费记录、禁忌、生日和复购提醒。",
+    "form": "HTML 单页模板中心，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《美业客户档案工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《美业客户档案工具》HTML 单页工具，目标用户是美甲、美睫、皮肤管理从业者需要维护老客复购。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：记录客户偏好、消费记录、禁忌、生日和复购提醒。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《美业客户档案工具》是一个面向美甲、美睫、皮肤管理从业者需要维护老客复购的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为记录客户偏好、消费记录、禁忌、生日和复购提醒。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "美甲、美睫、皮肤管理从业者需要维护老客复购",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“记录客户偏好、消费记录、禁忌、生日和复购提醒。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 54,
+    "name": "短视频脚本生成器",
+    "category": "内容创作者类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "自由职业者"
+    ],
+    "productType": "生成器",
+    "monetization": "小红书虚拟资料",
+    "level": "入门",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "想拍短视频但不知道开头、节奏、结尾怎么写的人",
+    "pain": "按平台、主题、时长和转化目标生成脚本结构。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《短视频脚本生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《短视频脚本生成器》HTML 单页工具，目标用户是想拍短视频但不知道开头、节奏、结尾怎么写的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按平台、主题、时长和转化目标生成脚本结构。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《短视频脚本生成器》是一个面向想拍短视频但不知道开头、节奏、结尾怎么写的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按平台、主题、时长和转化目标生成脚本结构。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想拍短视频但不知道开头、节奏、结尾怎么写的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按平台、主题、时长和转化目标生成脚本结构。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 55,
+    "name": "直播选题规划器",
+    "category": "内容创作者类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "一人公司创业者"
+    ],
+    "productType": "计划表",
+    "monetization": "私域成交",
+    "level": "进阶",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "直播间不知道每天讲什么、如何承接成交的主播",
+    "pain": "设计主题、福利、互动、转化话术和复盘指标。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《直播选题规划器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《直播选题规划器》HTML 单页工具，目标用户是直播间不知道每天讲什么、如何承接成交的主播。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：设计主题、福利、互动、转化话术和复盘指标。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《直播选题规划器》是一个面向直播间不知道每天讲什么、如何承接成交的主播的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为设计主题、福利、互动、转化话术和复盘指标。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "直播间不知道每天讲什么、如何承接成交的主播",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“设计主题、福利、互动、转化话术和复盘指标。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 56,
+    "name": "内容日历工具",
+    "category": "内容创作者类",
+    "identities": [
+      "小红书博主",
+      "运营",
+      "自由职业者"
+    ],
+    "productType": "计划表",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "想稳定更新但没有内容节奏和栏目规划的创作者",
+    "pain": "按平台、栏目、节日、产品节点生成月度内容日历。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《内容日历工具》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《内容日历工具》HTML 单页工具，目标用户是想稳定更新但没有内容节奏和栏目规划的创作者。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按平台、栏目、节日、产品节点生成月度内容日历。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《内容日历工具》是一个面向想稳定更新但没有内容节奏和栏目规划的创作者的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按平台、栏目、节日、产品节点生成月度内容日历。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想稳定更新但没有内容节奏和栏目规划的创作者",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按平台、栏目、节日、产品节点生成月度内容日历。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 57,
+    "name": "个人 IP 定位系统",
+    "category": "内容创作者类",
+    "identities": [
+      "小红书博主",
+      "自由职业者",
+      "一人公司创业者"
+    ],
+    "productType": "决策助手",
+    "monetization": "咨询转化",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "想做个人品牌但领域、受众和商业闭环不清晰的人",
+    "pain": "梳理优势、目标用户、内容支柱、产品阶梯和表达风格。",
+    "form": "HTML 单页决策助手，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "用户输入表单",
+      "结果生成区",
+      "复制/导出提示词",
+      "案例示例",
+      "复盘备注"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《个人 IP 定位系统》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《个人 IP 定位系统》HTML 单页工具，目标用户是想做个人品牌但领域、受众和商业闭环不清晰的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：梳理优势、目标用户、内容支柱、产品阶梯和表达风格。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《个人 IP 定位系统》是一个面向想做个人品牌但领域、受众和商业闭环不清晰的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为梳理优势、目标用户、内容支柱、产品阶梯和表达风格。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "想做个人品牌但领域、受众和商业闭环不清晰的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“梳理优势、目标用户、内容支柱、产品阶梯和表达风格”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 58,
+    "name": "公众号选题库",
+    "category": "内容创作者类",
+    "identities": [
+      "运营",
+      "小红书博主",
+      "自由职业者"
+    ],
+    "productType": "资料库",
+    "monetization": "付费会员",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "公众号作者长期缺选题、文章结构和系列化栏目",
+    "pain": "按主题、读者阶段、热点迁移和转化目标整理选题。",
+    "form": "HTML 单页资料库，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "关键词检索",
+      "标签筛选",
+      "案例详情",
+      "收藏夹",
+      "持续更新记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《公众号选题库》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《公众号选题库》HTML 单页工具，目标用户是公众号作者长期缺选题、文章结构和系列化栏目。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按主题、读者阶段、热点迁移和转化目标整理选题。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《公众号选题库》是一个面向公众号作者长期缺选题、文章结构和系列化栏目的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按主题、读者阶段、热点迁移和转化目标整理选题。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "公众号作者长期缺选题、文章结构和系列化栏目",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按主题、读者阶段、热点迁移和转化目标整理选题。”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 59,
+    "name": "知识付费课程大纲生成器",
+    "category": "内容创作者类",
+    "identities": [
+      "小红书博主",
+      "教师",
+      "一人公司创业者"
+    ],
+    "productType": "生成器",
+    "monetization": "课程引流",
+    "level": "高价值",
+    "price": "199-499 元",
+    "demand": "付费意愿强",
+    "audience": "有经验想做课但不会设计课程结构和交付路径的人",
+    "pain": "按人群、目标、模块、作业、案例和转化路径生成大纲。",
+    "form": "HTML 单页生成器，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "多维度输入",
+      "一键生成方案",
+      "结果分层",
+      "提示词复制",
+      "历史记录"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《知识付费课程大纲生成器》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《知识付费课程大纲生成器》HTML 单页工具，目标用户是有经验想做课但不会设计课程结构和交付路径的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：按人群、目标、模块、作业、案例和转化路径生成大纲。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《知识付费课程大纲生成器》是一个面向有经验想做课但不会设计课程结构和交付路径的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为按人群、目标、模块、作业、案例和转化路径生成大纲。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "有经验想做课但不会设计课程结构和交付路径的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“按人群、目标、模块、作业、案例和转化路径生成大纲”做成了一个小网页，用户打开就能直接用。"
+  },
+  {
+    "id": 60,
+    "name": "社群运营日历",
+    "category": "内容创作者类",
+    "identities": [
+      "运营",
+      "小红书博主",
+      "一人公司创业者"
+    ],
+    "productType": "计划表",
+    "monetization": "社群赠品",
+    "level": "进阶",
+    "price": "39-99 元",
+    "demand": "刚需型",
+    "audience": "建了社群但不知道每天发什么、如何促进活跃和转化的人",
+    "pain": "安排欢迎、打卡、直播、答疑、案例和成交节点。",
+    "form": "HTML 单页计划表，可作为资料包、咨询引流品或付费工具交付。",
+    "features": [
+      "目标设定",
+      "周期排程",
+      "每日任务",
+      "完成打卡",
+      "复盘总结"
+    ],
+    "mvp": "第一版只做 1 个主流程：用户填写关键背景 → 页面给出结构化结果 → 提供 3 个示例 → 支持复制结果和落地提示词。优先把《社群运营日历》的核心场景做深，不追求复杂账号系统。",
+    "moat": "持续补充真实案例、用户反馈、行业术语、失败原因和高频问题；越接近真实业务场景，越难被简单复制。",
+    "platforms": [
+      "小红书",
+      "朋友圈",
+      "知识星球",
+      "微信群",
+      "公众号"
+    ],
+    "prompt": "请帮我生成一个《社群运营日历》HTML 单页工具，目标用户是建了社群但不知道每天发什么、如何促进活跃和转化的人。页面要包含输入区、结果区、案例区、复制按钮、收藏或记录功能；围绕痛点：安排欢迎、打卡、直播、答疑、案例和成交节点。；视觉要清爽高级，适合做虚拟产品交付。",
+    "intro": "《社群运营日历》是一个面向建了社群但不知道每天发什么、如何促进活跃和转化的人的轻量级网页产品，适合用 Vibe Coding 快速做出可测试版本。它把一个高频问题拆成输入、判断、建议和交付结果，让用户不再只看教程，而是直接得到可执行方案。",
+    "whyNeed": "用户需要它，是因为安排欢迎、打卡、直播、答疑、案例和成交节点。。这个问题通常会反复出现，而且靠临时灵感很不稳定，做成工具后可以降低决策和执行成本。",
+    "buyer": "建了社群但不知道每天发什么、如何促进活跃和转化的人",
+    "buyReason": "购买理由包括：节省摸索时间、得到结构化结果、可以直接复制执行、比一对一咨询便宜、比普通资料更有互动感。",
+    "structure": [
+      "顶部说明与使用场景",
+      "输入表单",
+      "结果生成区",
+      "案例参考",
+      "复制提示词",
+      "升级服务入口"
+    ],
+    "fields": [
+      "用户身份",
+      "目标对象",
+      "当前问题",
+      "预算/时间",
+      "期望结果",
+      "备注"
+    ],
+    "upgrades": [
+      "加入历史记录",
+      "导出为 Markdown",
+      "增加案例库",
+      "增加评分系统",
+      "接入更多细分模板"
+    ],
+    "xhsAngle": "用一篇笔记讲清楚：我把“安排欢迎、打卡、直播、答疑、案例和成交节点。”做成了一个小网页，用户打开就能直接用。"
+  }
+];
+
+const STORAGE_PRODUCTS_KEY = 'vibe_products_dynamic_v2';
+const STORAGE_META_KEY = 'vibe_products_meta_v2';
+const STORAGE_LOG_KEY = 'vibe_update_log_v2';
+let products = loadProducts();
+let updateLog = JSON.parse(localStorage.getItem(STORAGE_LOG_KEY) || '[]');
+
+function loadProducts(){
+  try{
+    const saved = localStorage.getItem(STORAGE_PRODUCTS_KEY);
+    if(!saved) return [...defaultProducts];
+    const parsed = JSON.parse(saved);
+    if(Array.isArray(parsed) && parsed.length) return parsed;
+  }catch(e){console.warn('产品库读取失败，已使用默认数据', e);}
+  return [...defaultProducts];
+}
+function persistProducts(action){
+  localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
+  const meta = {updatedAt:new Date().toISOString(), total:products.length, customCount:Math.max(0, products.length - defaultProducts.length)};
+  localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta));
+  if(action) addUpdateLog(action);
+  renderUpdateStats();
+}
+function addUpdateLog(action){
+  updateLog = [{time:new Date().toISOString(), action}, ...updateLog].slice(0,30);
+  localStorage.setItem(STORAGE_LOG_KEY, JSON.stringify(updateLog));
+  renderUpdateLog();
+}
+
+const filterOptions = {"identity": ["小白", "小红书博主", "教师", "家长", "学生", "自由职业者", "运营", "产品经理", "一人公司创业者", "AI 工具玩家"], "productType": ["生成器", "资料库", "测评工具", "计划表", "检查清单", "话术工具", "导航系统", "模板中心", "决策助手", "案例库", "记录工具"], "monetization": ["小红书虚拟资料", "私域成交", "课程引流", "社群赠品", "付费会员", "企业内训", "咨询转化", "公众号/知识星球引流"], "level": ["入门", "进阶", "高价值", "高护城河"], "price": ["9-29 元", "39-99 元", "199-499 元", "999 元以上"], "demand": ["兴趣型", "刚需型", "痛点型", "付费意愿强"]};
+const ranking = [[1, "Vibe Coding 项目生成器", "★★★★★", "直接解决小白不会把想法转成产品提示词的问题，是所有 HTML 产品的上游需求。", "高价值", "199-499 元", "提示词模板、成功案例、行业拆解越积累越强"], [2, "Codex 部署故障解决库", "★★★★★", "部署失败是强痛点，用户卡住时付费意愿高。", "高护城河", "199-499 元", "错误截图、日志关键词、修复路径形成案例库"], [3, "小红书私域成交话术生成器", "★★★★★", "有流量但不会成交的人很多，直接关联收入。", "高价值", "199-499 元", "真实对话、异议库、成交案例"], [4, "服务产品化设计器", "★★★★★", "帮助自由职业者从卖时间转向卖标准化产品，客单价高。", "高护城河", "999 元以上", "行业套餐案例和咨询方法论"], [5, "AI 自动化场景库", "★★★★☆", "企业和一人公司都需要，把 AI 用在具体流程里。", "高护城河", "999 元以上", "场景库、工具链、落地 SOP"], [6, "暑假计划表生成器", "★★★★☆", "家长需求集中，容易在小红书传播和成交。", "入门", "39-99 元", "年级案例、城市节奏、真实计划模板"], [7, "报价方案生成器", "★★★★☆", "自由职业者长期痛点，能明显提升成交和利润。", "高价值", "199-499 元", "价格样本、行业交付边界"], [8, "小红书选题库导航站", "★★★★☆", "内容创作者高频使用，适合做会员和持续更新。", "高价值", "199-499 元", "选题数据、爆款复盘、行业标签"], [9, "初中错题复盘系统", "★★★★☆", "教育类刚需，家长和学生都容易理解价值。", "进阶", "199-499 元", "学科知识点、错因库、复盘模板"], [10, "个人 IP 定位系统", "★★★★☆", "适合咨询转化，可作为高客单服务入口。", "高价值", "199-499 元", "定位案例、赛道判断、内容闭环"]];
+const xhsTitles = [["不会代码，我用 AI 做出了第一个可卖的网页产品", "讲普通人从一个痛点开始，用 HTML 工具完成最小版本。"], ["普通人做 Vibe Coding，别一上来就做 App", "强调先做轻量网页产品，验证需求后再升级。"], ["这 60 个 HTML 小产品，才是小白最容易变现的方向", "用清单式内容展示低门槛、高需求方向。"], ["为什么你的 AI 产品没人买？因为一开始选题就错了", "讲选题标准：人群、痛点、频次、付费意愿。"], ["我把小红书经验做成网页工具，真的有人愿意买", "用个人案例说明经验产品化。"], ["Vibe Coding 最赚钱的不是代码，是案例库", "解释护城河来自真实案例和持续更新。"], ["小白做 AI 产品，先从这 4 类工具开始", "推荐计划表、生成器、清单、模板中心。"], ["一个人也能做产品：从资料包升级到 HTML 工具", "讲虚拟资料产品升级路径。"], ["别再收藏教程了，把你的经验做成一个可卖工具", "针对内容创作者和自由职业者。"], ["用 AI 做网页产品前，先问自己这 6 个问题", "引导用户判断目标用户、场景、交付物和变现。"], ["我用一个周末做了 3 个小红书虚拟产品原型", "讲快速测试和迭代，而不是完美开发。"], ["高客单 HTML 产品怎么做？关键是服务场景足够深", "强调垂直行业、咨询入口和复购。"]];
+const filterLabels = {identity:'用户身份', productType:'产品类型', monetization:'变现方式', level:'难度等级', price:'客单价', demand:'需求强度'};
+let state = {identity:'', productType:'', monetization:'', level:'', price:'', demand:'', q:'', favOnly:false};
+let favorites = JSON.parse(localStorage.getItem('vibe_favorites') || '[]');
+
+function safeText(value){return String(value ?? '').replace(/[&<>"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));}
+function splitList(value){return String(value || '').split(/[，,]/).map(x=>x.trim()).filter(Boolean);}
+function asArray(value){return Array.isArray(value) ? value : splitList(value);}
+function getMeta(){try{return JSON.parse(localStorage.getItem(STORAGE_META_KEY) || '{}')}catch(e){return {}}}
+function formatDate(iso){
+  if(!iso) return '未更新';
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return '未更新';
+  return `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function initDynamicCenter(){
+  fillSelect('fType', filterOptions.productType);
+  fillSelect('fMonetization', filterOptions.monetization);
+  fillSelect('fLevel', filterOptions.level);
+  fillSelect('fPrice', filterOptions.price);
+  fillSelect('fDemand', filterOptions.demand);
+  renderUpdateStats();
+  renderUpdateLog();
+}
+function fillSelect(id, list){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = list.map(v => `<option value="${safeText(v)}">${safeText(v)}</option>`).join('');
+}
+function renderUpdateStats(){
+  const meta = getMeta();
+  const changed = products.length !== defaultProducts.length || Boolean(localStorage.getItem(STORAGE_PRODUCTS_KEY));
+  const custom = changed ? products.filter(p => !defaultProducts.some(d => d.id === p.id && JSON.stringify(d) === JSON.stringify(p))).length : 0;
+  const statTotal = document.getElementById('statTotal');
+  if(statTotal) statTotal.textContent = products.length;
+  const statCustom = document.getElementById('statCustom');
+  if(statCustom) statCustom.textContent = custom;
+  const statUpdated = document.getElementById('statUpdated');
+  if(statUpdated) statUpdated.textContent = formatDate(meta.updatedAt);
+}
+function renderUpdateLog(){
+  const root = document.getElementById('updateLog');
+  if(!root) return;
+  if(!updateLog.length){root.innerHTML = '<div class="log-item">暂无更新记录。新增、编辑、导入或删除灵感后，会在这里自动记录。</div>'; return;}
+  root.innerHTML = updateLog.map(item => `<div class="log-item"><b>${formatDate(item.time)}</b> · ${safeText(item.action)}</div>`).join('');
+}
+function buildPromptFromForm(name, audience, pain){
+  return `请帮我生成一个《${name}》HTML 单页工具，目标用户是：${audience || '请根据产品名称判断'}。核心痛点是：${pain || '帮助用户快速获得结构化方案'}。页面要包含顶部介绍、使用说明、输入表单、结果生成区、案例区、复制按钮、本地记录、升级服务入口。视觉要清爽高级，适合做虚拟产品交付。请直接输出完整 HTML 代码，不依赖外部框架。`;
+}
+function saveProductFromForm(){
+  const name = document.getElementById('fName').value.trim();
+  if(!name){toast('请先填写产品名称'); return;}
+  const editId = document.getElementById('editId').value;
+  const audience = document.getElementById('fAudience').value.trim();
+  const pain = document.getElementById('fPain').value.trim();
+  const features = splitList(document.getElementById('fFeatures').value);
+  const prompt = document.getElementById('fPrompt').value.trim() || buildPromptFromForm(name, audience, pain);
+  const item = {
+    id: editId ? Number(editId) : Date.now(),
+    name,
+    category: document.getElementById('fCategory').value.trim() || '自定义更新类',
+    identities: splitList(document.getElementById('fIdentities').value).length ? splitList(document.getElementById('fIdentities').value) : ['小白','一人公司创业者'],
+    productType: document.getElementById('fType').value,
+    monetization: document.getElementById('fMonetization').value,
+    level: document.getElementById('fLevel').value,
+    price: document.getElementById('fPrice').value,
+    demand: document.getElementById('fDemand').value,
+    audience: audience || '有明确需求但缺少可执行工具的用户',
+    pain: pain || '把复杂经验拆成可填写、可生成、可复制的网页工具。',
+    form: '可动态更新的 HTML 单页产品，可通过 JSON 导入导出持续扩展。',
+    features: features.length ? features : ['输入表单','结果生成','复制提示词','案例沉淀'],
+    mvp: document.getElementById('fMvp').value.trim() || '第一版只做核心输入、结构化结果、示例参考和复制按钮，先让 5 个目标用户试用，再根据反馈补充案例库。',
+    moat: document.getElementById('fMoat').value.trim() || '持续补充真实案例、用户反馈、行业术语和高频问题，形成难以复制的场景数据库。',
+    platforms: ['小红书','朋友圈','微信群','知识星球','公众号'],
+    prompt,
+    intro: `《${name}》是一个可用 Vibe Coding 快速落地的 HTML 产品，适合围绕具体人群和高频场景做需求验证。`,
+    whyNeed: pain || '用户需要一个比普通资料更直接、比一对一咨询更便宜的互动工具。',
+    buyer: audience || '有明确场景需求的用户',
+    buyReason: '购买理由包括：节省摸索时间、降低执行难度、得到结构化结果、可直接复制使用，并且价格低于一对一服务。',
+    structure: ['顶部说明与使用场景','输入表单','结果生成区','案例参考','复制提示词','升级服务入口'],
+    fields: ['用户身份','目标对象','当前问题','预算/时间','期望结果','备注'],
+    upgrades: ['加入历史记录','导出为 Markdown','增加案例库','增加评分系统','接入更多细分模板'],
+    xhsAngle: `用一篇笔记讲清楚：我把“${name}”做成了一个可直接使用的小网页，打开就能生成方案。`
+  };
+  const index = products.findIndex(p => p.id === item.id);
+  if(index >= 0){products[index] = item; persistProducts(`编辑产品：${item.name}`); toast('已更新产品卡片');}
+  else{products.unshift(item); persistProducts(`新增产品：${item.name}`); toast('已新增到灵感库');}
+  clearProductForm();
+  renderCards();
+  renderFilters();
+}
+function editProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  document.getElementById('editId').value = p.id;
+  document.getElementById('fName').value = p.name || '';
+  document.getElementById('fCategory').value = p.category || '';
+  document.getElementById('fIdentities').value = asArray(p.identities).join(',');
+  document.getElementById('fType').value = p.productType || filterOptions.productType[0];
+  document.getElementById('fMonetization').value = p.monetization || filterOptions.monetization[0];
+  document.getElementById('fLevel').value = p.level || filterOptions.level[0];
+  document.getElementById('fPrice').value = p.price || filterOptions.price[0];
+  document.getElementById('fDemand').value = p.demand || filterOptions.demand[0];
+  document.getElementById('fAudience').value = p.audience || '';
+  document.getElementById('fPain').value = p.pain || '';
+  document.getElementById('fFeatures').value = asArray(p.features).join(',');
+  document.getElementById('fMvp').value = p.mvp || '';
+  document.getElementById('fMoat').value = p.moat || '';
+  document.getElementById('fPrompt').value = p.prompt || '';
+  location.hash = 'update-center';
+  toast('已载入编辑表单');
+}
+function deleteProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  if(!confirm(`确定删除「${p.name}」吗？`)) return;
+  products = products.filter(x => x.id !== id);
+  favorites = favorites.filter(x => x !== id);
+  localStorage.setItem('vibe_favorites', JSON.stringify(favorites));
+  persistProducts(`删除产品：${p.name}`);
+  renderCards();
+  toast('已删除产品');
+}
+function clearProductForm(){
+  const form = document.getElementById('productForm');
+  if(form) form.reset();
+  const edit = document.getElementById('editId');
+  if(edit) edit.value = '';
+}
+function exportProducts(){
+  const payload = {name:'Vibe Coding 产品灵感库更新包', version:new Date().toISOString(), total:products.length, products};
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vibe-coding-products-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  addUpdateLog('导出 JSON 更新包');
+  toast('已导出更新包');
+}
+function importProducts(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      const imported = Array.isArray(data) ? data : data.products;
+      if(!Array.isArray(imported) || !imported.length) throw new Error('JSON 中没有 products 数组');
+      const normalized = imported.map((p, i) => ({...p, id: Number(p.id) || Date.now()+i}));
+      products = normalized;
+      persistProducts(`导入更新包：${file.name}，共 ${products.length} 条`);
+      renderFilters(); renderCards();
+      toast('导入成功');
+    }catch(err){toast('导入失败：JSON 格式不正确'); console.error(err);}
+    event.target.value = '';
+  };
+  reader.readAsText(file, 'utf-8');
+}
+function restoreDefaultProducts(){
+  if(!confirm('确定恢复默认灵感库吗？本地新增和编辑内容会被清空。建议先导出 JSON 备份。')) return;
+  products = [...defaultProducts];
+  localStorage.removeItem(STORAGE_PRODUCTS_KEY);
+  localStorage.removeItem(STORAGE_META_KEY);
+  addUpdateLog('恢复默认产品库');
+  renderUpdateStats();
+  renderFilters(); renderCards();
+  toast('已恢复默认库');
+}
+
+
+function init(){
+  initDynamicCenter(); renderFilters(); renderRanking(); renderXhsTitles(); bindEvents(); renderCards();
+}
+function renderFilters(){
+  const root = document.getElementById('filters');
+  root.innerHTML = Object.entries(filterOptions).map(([key, list]) => `
+    <div class="filter-row"><div class="filter-title">${filterLabels[key]}</div><div class="chips" data-key="${key}">
+      <button class="chip ${!state[key] ? 'active' : ''}" data-value="">全部</button>
+      ${list.map(v => `<button class="chip ${state[key] === v ? 'active' : ''}" data-value="${v}">${v}</button>`).join('')}
+    </div></div>`).join('');
+  root.querySelectorAll('.chip').forEach(btn => btn.addEventListener('click', () => {
+    const key = btn.parentElement.dataset.key;
+    state[key] = btn.dataset.value;
+    btn.parentElement.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards();
+  }));
+}
+function bindEvents(){
+  document.getElementById('searchInput').addEventListener('input', e => {state.q = e.target.value.trim(); renderCards();});
+  document.getElementById('resetBtn').addEventListener('click', resetFilters);
+  document.getElementById('favToggle').addEventListener('click', () => {state.favOnly = !state.favOnly; document.getElementById('favToggle').textContent = state.favOnly ? '查看全部灵感' : '查看我的收藏'; renderCards();});
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+}
+function matchProduct(p){
+  if(state.identity && !asArray(p.identities).includes(state.identity)) return false;
+  if(state.productType && p.productType !== state.productType) return false;
+  if(state.monetization && p.monetization !== state.monetization) return false;
+  if(state.level && p.level !== state.level) return false;
+  if(state.price && p.price !== state.price) return false;
+  if(state.demand && p.demand !== state.demand) return false;
+  if(state.favOnly && !favorites.includes(p.id)) return false;
+  if(state.q){
+    const hay = [p.name,p.category,p.audience,p.pain,p.productType,p.monetization,p.level,p.demand,...asArray(p.identities),...asArray(p.features)].join(' ').toLowerCase();
+    if(!hay.includes(state.q.toLowerCase())) return false;
+  }
+  return true;
+}
+function renderCards(){
+  const list = products.filter(matchProduct);
+  document.getElementById('resultCount').textContent = `当前显示 ${list.length} / ${products.length} 个产品灵感`;
+  const active = Object.keys(state).filter(k => state[k] && k !== 'q' && k !== 'favOnly').map(k => `${filterLabels[k]}：${state[k]}`);
+  document.getElementById('activeHint').textContent = [state.q ? `搜索：${state.q}` : '', state.favOnly ? '仅收藏' : '', ...active].filter(Boolean).join(' · ');
+  document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+  document.getElementById('cards').innerHTML = list.map(p => cardHTML(p)).join('');
+}
+function cardHTML(p){
+  const isFav = favorites.includes(p.id);
+  return `<article class="card">
+    <div class="card-top"><span class="category">${p.category}</span><button class="fav ${isFav?'':'off'}" onclick="toggleFav(${p.id})" title="收藏">${isFav?'♥':'♡'}</button></div>
+    <h3>${p.name}</h3>
+    <div class="meta"><span class="tag">${p.productType}</span><span class="tag">${p.level}</span><span class="tag">${p.price}</span><span class="tag">${p.demand}</span></div>
+    <p class="pain">${p.pain}</p>
+    <div class="info-list"><div><b>适合人群：</b>${p.audience}</div><div><b>核心功能：</b>${asArray(p.features).slice(0,3).join(' / ')}</div><div><b>护城河：</b>${String(p.moat || '').slice(0,46)}...</div></div>
+    <div class="card-actions"><button class="smallbtn primary" onclick="openModal(${p.id})">查看详情</button><button class="smallbtn" onclick="copyText(products.find(x=>x.id==${p.id}).prompt)">复制提示词</button></div>
+    <div class="admin-bar"><button class="admin-mini" onclick="editProduct(${p.id})">编辑</button><button class="admin-mini danger" onclick="deleteProduct(${p.id})">删除</button></div>
+  </article>`;
+}
+function toggleFav(id){
+  favorites = favorites.includes(id) ? favorites.filter(x => x !== id) : [...favorites, id];
+  localStorage.setItem('vibe_favorites', JSON.stringify(favorites));
+  toast(favorites.includes(id) ? '已加入收藏' : '已取消收藏');
+  renderCards();
+}
+function openModal(id){
+  const p = products.find(x => x.id === id);
+  document.getElementById('modalCategory').textContent = p.category;
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-grid">
+      <div class="detail"><h4>产品介绍</h4><p>${p.intro}</p></div>
+      <div class="detail"><h4>用户为什么需要它</h4><p>${p.whyNeed}</p></div>
+      <div class="detail"><h4>适合卖给谁</h4><p>${p.buyer}</p></div>
+      <div class="detail"><h4>用户购买理由</h4><p>${p.buyReason}</p></div>
+      <div class="detail"><h4>第一版 MVP</h4><p>${p.mvp}</p></div>
+      <div class="detail"><h4>页面模块建议</h4><ul>${asArray(p.structure).map(x=>`<li>${x}</li>`).join('')}</ul></div>
+      <div class="detail"><h4>数据字段建议</h4><ul>${asArray(p.fields).map(x=>`<li>${x}</li>`).join('')}</ul></div>
+      <div class="detail"><h4>可升级功能</h4><ul>${asArray(p.upgrades).map(x=>`<li>${x}</li>`).join('')}</ul></div>
+      <div class="detail"><h4>变现路径</h4><p>${p.monetization} · 推荐客单价：${p.price}。先用低价版验证需求，再通过咨询、社群、课程或定制服务升级。</p></div>
+      <div class="detail"><h4>小红书发布角度</h4><p>${p.xhsAngle}</p></div>
+    </div>
+    <div class="detail" style="margin-top:14px"><h4>交给 AI / Codex 的详细开发提示词</h4><p>${p.prompt}</p><button class="btn btn-primary" style="margin-top:12px" onclick="copyText(products.find(x=>x.id==${p.id}).prompt)">复制这个产品的开发提示词</button></div>`;
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+function closeModal(){document.getElementById('modalBackdrop').classList.remove('show');}
+function backdropClose(e){ if(e.target.id === 'modalBackdrop') closeModal(); }
+function resetFilters(){
+  state = {identity:'', productType:'', monetization:'', level:'', price:'', demand:'', q:'', favOnly:false};
+  document.getElementById('searchInput').value = '';
+  document.getElementById('favToggle').textContent = '查看我的收藏';
+  renderFilters(); renderCards(); toast('已重置筛选');
+}
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){navigator.clipboard.writeText(text).then(()=>toast('已复制到剪贴板'));}
+  else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制到剪贴板');}
+}
+function toast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.classList.remove('show'),1800);
+}
+function renderRanking(){
+  document.getElementById('rankingList').innerHTML = ranking.map(r => `<div class="rank"><div class="rank-no">${r[0]}</div><div><strong>${r[1]}</strong><p>${r[3]}</p></div><span>${r[2]}</span><span>${r[4]}</span><span>${r[5]}</span></div>`).join('');
+}
+function renderXhsTitles(){
+  document.getElementById('xhsTitles').innerHTML = xhsTitles.map(([title, angle]) => `<div class="note-card"><h3>${title}</h3><p>${angle}</p></div>`).join('');
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小红书账号定位生成器</title>
+  <style>
+    :root{
+      --bg:#fff7f8;
+      --bg2:#fffdfb;
+      --card:#ffffffcc;
+      --text:#201b1d;
+      --muted:#6f6167;
+      --primary:#ff3f6c;
+      --primary2:#ff7a9a;
+      --accent:#7c3aed;
+      --line:#f0dce2;
+      --soft:#fff0f4;
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --shadow:0 20px 60px rgba(255,63,108,.12);
+      --shadow2:0 14px 34px rgba(32,27,29,.08);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,63,108,.16), transparent 28%),
+        radial-gradient(circle at 88% 5%, rgba(124,58,237,.12), transparent 26%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 40%,#fff);
+      line-height:1.7;
+    }
+    a{color:inherit}
+    .wrap{width:min(1180px,92vw);margin:0 auto}
+    .nav{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter: blur(18px);
+      background:rgba(255,247,248,.72);
+      border-bottom:1px solid rgba(240,220,226,.75);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:900;letter-spacing:.2px}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      display:grid;place-items:center;color:white;box-shadow:0 10px 20px rgba(255,63,108,.22)
+    }
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);
+      color:var(--muted);font-size:13px;box-shadow:0 8px 18px rgba(32,27,29,.04)
+    }
+    .hero{padding:72px 0 42px;text-align:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);
+      border-radius:999px;background:rgba(255,255,255,.76);color:var(--primary);font-weight:800;font-size:14px;
+      box-shadow:var(--shadow2);
+    }
+    h1{font-size:clamp(38px,6vw,78px);line-height:1.04;margin:22px 0 18px;letter-spacing:-2.5px}
+    .hero h1 span{background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;color:transparent}
+    .subtitle{font-size:clamp(17px,2.1vw,24px);color:#4b4145;margin:0 auto;max-width:850px}
+    .hero-desc{max-width:780px;margin:18px auto 0;color:var(--muted)}
+    .hero-actions{display:flex;gap:14px;justify-content:center;align-items:center;margin-top:30px;flex-wrap:wrap}
+    button,.btn{
+      border:0;cursor:pointer;font-weight:900;border-radius:16px;padding:14px 20px;font-size:15px;
+      transition:.2s ease;display:inline-flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 16px 30px rgba(255,63,108,.25)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(255,63,108,.32)}
+    .btn-ghost{background:#fff;color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow2)}
+    .btn-ghost:hover{transform:translateY(-2px);border-color:#ffc2d0}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:44px auto 0;max-width:940px}
+    .stat{padding:20px;border-radius:22px;background:rgba(255,255,255,.72);border:1px solid var(--line);box-shadow:var(--shadow2)}
+    .stat b{display:block;font-size:26px;line-height:1.1}
+    .stat span{color:var(--muted);font-size:13px}
+    .section{padding:36px 0}
+    .section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:18px}
+    .section h2{font-size:30px;margin:0;letter-spacing:-.8px}
+    .section p.lead{margin:6px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1.04fr .96fr;gap:22px;align-items:start}
+    .card{
+      background:var(--card);border:1px solid rgba(240,220,226,.9);border-radius:var(--radius);
+      box-shadow:var(--shadow2);backdrop-filter: blur(16px);overflow:hidden;
+    }
+    .card-pad{padding:24px}
+    .card-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:19px}
+    .num{
+      width:28px;height:28px;border-radius:10px;background:var(--soft);color:var(--primary);
+      display:inline-grid;place-items:center;font-weight:900;font-size:14px
+    }
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .field{display:flex;flex-direction:column;gap:7px}
+    label{font-weight:850;font-size:14px}
+    .hint{font-size:12px;color:var(--muted)}
+    select,input,textarea{
+      width:100%;border:1px solid #ead2da;background:#fff;border-radius:14px;padding:13px 14px;font:inherit;color:var(--text);
+      outline:none;transition:.18s ease;
+    }
+    textarea{min-height:110px;resize:vertical}
+    select:focus,input:focus,textarea:focus{border-color:var(--primary2);box-shadow:0 0 0 4px rgba(255,63,108,.1)}
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip input{display:none}
+    .chip span{
+      display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:999px;
+      background:#fff;border:1px solid #ead2da;color:#51474b;font-weight:750;font-size:13px;cursor:pointer;transition:.18s ease;
+    }
+    .chip input:checked + span{
+      color:white;border-color:transparent;background:linear-gradient(135deg,var(--primary),var(--accent));
+      box-shadow:0 10px 20px rgba(255,63,108,.18);
+    }
+    .full{grid-column:1/-1}
+    .side{
+      position:sticky;top:82px;
+    }
+    .preview{
+      padding:24px;background:linear-gradient(180deg,#fff,#fff5f7);border-radius:var(--radius);
+    }
+    .preview h3{margin:0 0 10px;font-size:22px}
+    .preview ul{margin:14px 0 0;padding-left:20px;color:var(--muted)}
+    .preview li{margin:8px 0}
+    .score-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    .mini{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;
+    }
+    .mini b{display:block;font-size:18px}
+    .mini span{font-size:12px;color:var(--muted)}
+    .generate-bar{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:18px;flex-wrap:wrap;
+      padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line)
+    }
+    .error{
+      display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:#fff4e6;color:#92400e;border:1px solid #fed7aa;font-weight:750
+    }
+    .result-shell{display:none;margin-top:18px}
+    .result-actions{
+      display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:14px
+    }
+    .report{
+      background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;
+    }
+    .report-cover{
+      padding:34px;background:
+      radial-gradient(circle at right top, rgba(124,58,237,.14), transparent 35%),
+      linear-gradient(135deg,#fff2f6,#fff);
+      border-bottom:1px solid var(--line);
+    }
+    .report-cover h2{font-size:34px;margin:0;letter-spacing:-1px}
+    .report-cover p{color:var(--muted);margin:8px 0 0}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .tag{padding:7px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800;color:#61565a}
+    .report-body{padding:26px}
+    .block{padding:24px;border:1px solid var(--line);border-radius:22px;background:#fff;margin-bottom:18px}
+    .block h3{display:flex;align-items:center;gap:9px;margin:0 0 14px;font-size:22px;letter-spacing:-.2px}
+    .block h4{margin:18px 0 8px;font-size:17px}
+    .muted{color:var(--muted)}
+    .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .direction-card{
+      border:1px solid var(--line);border-radius:20px;padding:18px;background:linear-gradient(180deg,#fff,#fff8fa);
+      position:relative;overflow:hidden;
+    }
+    .direction-card:before{
+      content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--primary),var(--accent))
+    }
+    .direction-card h4{font-size:18px;margin:7px 0 8px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+    .meta span{font-size:12px;font-weight:800;color:#7a2f45;background:#fff0f4;border:1px solid #ffd5df;border-radius:999px;padding:5px 8px}
+    .stars{color:#ff9f1c;letter-spacing:1px}
+    .formula{
+      padding:18px;border-radius:18px;background:#201b1d;color:#fff;font-weight:900;font-size:18px;
+    }
+    .formula small{display:block;color:#f3c7d2;font-weight:700;margin-bottom:6px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .list-clean{padding-left:18px;margin:8px 0}
+    .list-clean li{margin:7px 0}
+    .title-list{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px
+    }
+    .title-item{
+      padding:12px;border-radius:15px;background:#fff7f9;border:1px solid #f4d7df;font-weight:750;font-size:14px
+    }
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+    th,td{padding:12px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}
+    th{background:#fff2f6;font-size:13px}
+    tr:last-child td{border-bottom:0}
+    .notice{
+      padding:14px 16px;border-radius:18px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569
+    }
+    .footer{
+      padding:34px 0 48px;text-align:center;color:var(--muted);font-size:13px
+    }
+    .toast{
+      position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+      opacity:0;pointer-events:none;background:#201b1d;color:#fff;padding:12px 16px;border-radius:999px;
+      box-shadow:0 18px 40px rgba(32,27,29,.25);transition:.25s ease;z-index:80;font-weight:800
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media (max-width: 980px){
+      .grid,.cards3,.two-col{grid-template-columns:1fr}
+      .side{position:static}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .form-grid{grid-template-columns:1fr}
+      .title-list{grid-template-columns:1fr}
+      h1{letter-spacing:-1.5px}
+    }
+    @media (max-width: 560px){
+      .hero{padding-top:42px}
+      .nav-actions .pill{display:none}
+      .stats{grid-template-columns:1fr}
+      .card-pad,.report-body{padding:18px}
+      .report-cover{padding:24px}
+      .report-cover h2{font-size:26px}
+      th,td{font-size:12px;padding:10px 8px}
+      .hero-actions .btn{width:100%}
+    }
+    @media print{
+      .nav,.hero,.section-head,.side,.result-actions,.generate-bar,.footer{display:none!important}
+      body{background:#fff}
+      .wrap{width:100%}
+      .result-shell{display:block!important}
+      .report{box-shadow:none;border:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand"><div class="logo">红</div><span>账号定位生成器</span></div>
+      <div class="nav-actions">
+        <span class="pill">单页 HTML · 可部署 · 可售卖</span>
+        <a class="btn btn-ghost" href="#generator">开始使用</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="hero wrap">
+    <div class="eyebrow">✨ 给普通人 / 一人公司 / 副业博主的定位工具</div>
+    <h1>小红书账号<br><span>定位生成器</span></h1>
+    <p class="subtitle">输入你的身份、经历、兴趣、资源和变现目标，自动生成一份可执行的小红书账号定位报告。</p>
+    <p class="hero-desc">很多账号做不起来，不是因为不努力，而是从第一天就没有讲清楚：我是谁、帮谁、解决什么问题、为什么用户要关注我。这个工具会把模糊想法变成清晰赛道、内容栏目、主页包装和 30 天起号计划。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#generator">开始生成我的定位</a>
+      <a class="btn btn-ghost" href="#result">查看报告结构</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>3 个</b><span>推荐账号方向</span></div>
+      <div class="stat"><b>25+</b><span>爆款选题标题</span></div>
+      <div class="stat"><b>30 天</b><span>起号执行计划</span></div>
+      <div class="stat"><b>1 键</b><span>复制完整方案</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="section" id="generator">
+      <div class="section-head">
+        <div>
+          <h2>填写你的基础信息</h2>
+          <p class="lead">不用写得完美，越真实越容易生成可落地的定位方案。</p>
+        </div>
+        <span class="pill">建议填写时间：3-5 分钟</span>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-pad">
+            <h3 class="card-title"><span class="num">1</span>基础身份</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="identity">你现在的身份</label>
+                <select id="identity">
+                  <option value="">请选择</option>
+                  <option>上班族</option><option>宝妈</option><option>大学生</option><option>自由职业者</option>
+                  <option>实体店老板</option><option>老师</option><option>咨询顾问</option><option>设计师</option>
+                  <option>运营</option><option>程序员</option><option>AI 工具用户</option><option>一人公司创业者</option><option>其他</option>
+                </select>
+                <div class="hint">身份会影响人设表达和用户信任点。</div>
+              </div>
+              <div class="field">
+                <label for="age">年龄段</label>
+                <select id="age">
+                  <option value="">请选择</option>
+                  <option>18-24</option><option>25-30</option><option>31-40</option><option>41+</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="city">城市层级</label>
+                <select id="city">
+                  <option value="">请选择</option>
+                  <option>一线城市</option><option>新一线</option><option>二线</option><option>三四线</option><option>县城</option><option>海外</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="time">每天可投入时间</label>
+                <select id="time">
+                  <option value="">请选择</option>
+                  <option>30 分钟</option><option>1 小时</option><option>2 小时</option><option>3 小时以上</option>
+                </select>
+              </div>
+            </div>
+
+            <h3 class="card-title" style="margin-top:28px"><span class="num">2</span>兴趣方向</h3>
+            <div class="chips" id="interests">
+              <label class="chip"><input type="checkbox" value="AI 工具"><span>AI 工具</span></label>
+              <label class="chip"><input type="checkbox" value="副业赚钱"><span>副业赚钱</span></label>
+              <label class="chip"><input type="checkbox" value="虚拟产品"><span>虚拟产品</span></label>
+              <label class="chip"><input type="checkbox" value="职场成长"><span>职场成长</span></label>
+              <label class="chip"><input type="checkbox" value="学习方法"><span>学习方法</span></label>
+              <label class="chip"><input type="checkbox" value="效率工具"><span>效率工具</span></label>
+              <label class="chip"><input type="checkbox" value="育儿"><span>育儿</span></label>
+              <label class="chip"><input type="checkbox" value="家庭教育"><span>家庭教育</span></label>
+              <label class="chip"><input type="checkbox" value="穿搭"><span>穿搭</span></label>
+              <label class="chip"><input type="checkbox" value="美妆"><span>美妆</span></label>
+              <label class="chip"><input type="checkbox" value="减脂"><span>减脂</span></label>
+              <label class="chip"><input type="checkbox" value="读书"><span>读书</span></label>
+              <label class="chip"><input type="checkbox" value="个人成长"><span>个人成长</span></label>
+              <label class="chip"><input type="checkbox" value="家居收纳"><span>家居收纳</span></label>
+              <label class="chip"><input type="checkbox" value="心理疗愈"><span>心理疗愈</span></label>
+              <label class="chip"><input type="checkbox" value="旅游"><span>旅游</span></label>
+              <label class="chip"><input type="checkbox" value="餐饮探店"><span>餐饮探店</span></label>
+              <label class="chip"><input type="checkbox" value="知识付费"><span>知识付费</span></label>
+              <label class="chip"><input type="checkbox" value="实体店经营"><span>实体店经营</span></label>
+              <label class="chip"><input type="checkbox" value="本地生活"><span>本地生活</span></label>
+            </div>
+
+            <h3 class="card-title" style="margin-top:28px"><span class="num">3</span>经历与能力</h3>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="skills">你擅长什么？</label>
+                <textarea id="skills" placeholder="例如：会整理资料、会做 PPT、懂 AI 工具、做过运营、带过孩子、擅长学习规划、会拍照、会做设计、会写文案……"></textarea>
+              </div>
+              <div class="field full">
+                <label for="experience">你过去有什么经历？</label>
+                <textarea id="experience" placeholder="例如：转行经历、副业经历、育儿经历、职场踩坑、开店经历、学习逆袭、做项目失败又复盘的经历……"></textarea>
+              </div>
+              <div class="field full">
+                <label for="proof">有没有可展示的成果？</label>
+                <textarea id="proof" placeholder="例如：证书、作品、案例、收入结果、客户反馈、学习成果、减重成果、社群经验、项目复盘……没有也可以写“暂无”。"></textarea>
+              </div>
+            </div>
+
+            <h3 class="card-title" style="margin-top:28px"><span class="num">4</span>账号目标与资源</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="goal">主要目标</label>
+                <select id="goal">
+                  <option value="">请选择</option>
+                  <option>涨粉</option><option>卖产品</option><option>卖服务</option><option>引流私域</option>
+                  <option>打造个人品牌</option><option>接广告</option><option>卖虚拟资料</option><option>卖课程</option><option>找客户</option><option>记录生活</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="audience">希望服务哪类人</label>
+                <select id="audience">
+                  <option value="">请选择</option>
+                  <option>学生</option><option>宝妈</option><option>职场新人</option><option>创业者</option>
+                  <option>女性用户</option><option>本地客户</option><option>家长</option><option>自由职业者</option>
+                  <option>AI 小白</option><option>想副业赚钱的人</option><option>暂不确定</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="face">是否愿意露脸</label>
+                <select id="face">
+                  <option value="">请选择</option>
+                  <option>愿意</option><option>不愿意</option><option>看情况</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="video">是否愿意拍视频</label>
+                <select id="video">
+                  <option value="">请选择</option>
+                  <option>愿意</option><option>不愿意</option><option>只做图文</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="product">是否有产品可卖</label>
+                <select id="product">
+                  <option value="">请选择</option>
+                  <option>没有</option><option>有虚拟产品</option><option>有实体产品</option><option>有课程</option><option>有咨询服务</option><option>有本地服务</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="privateDomain">私域承接</label>
+                <select id="privateDomain">
+                  <option value="">请选择</option>
+                  <option>微信</option><option>社群</option><option>公众号</option><option>店铺</option><option>暂无</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="extra">补充说明</label>
+                <textarea id="extra" placeholder="例如：我想做一人公司方向、我不想露脸、我想卖 19.9 的资料包、我希望先用图文起号、我主要面向小红书新手……"></textarea>
+              </div>
+            </div>
+
+            <div class="generate-bar">
+              <div>
+                <b>准备好了就生成报告</b>
+                <div class="hint">至少选择身份、兴趣方向和账号目标，效果会更好。</div>
+              </div>
+              <button class="btn-primary" id="generateBtn">生成定位方案</button>
+            </div>
+            <div class="error" id="errorBox"></div>
+          </div>
+        </div>
+
+        <aside class="side card">
+          <div class="preview">
+            <h3>生成后你会得到什么？</h3>
+            <p class="muted">这不是简单模板，而是一份围绕你个人条件生成的账号定位报告。</p>
+            <ul>
+              <li>3 个适合你的账号赛道，含推荐指数和变现方式。</li>
+              <li>一句话人设公式，避免账号主页说不清。</li>
+              <li>目标用户画像，知道内容写给谁看。</li>
+              <li>5 个固定内容栏目，每个栏目附爆款标题。</li>
+              <li>昵称、简介、背景图、置顶笔记、合集建议。</li>
+              <li>按产品资源生成变现路径。</li>
+              <li>30 天起号计划和每日复盘指标。</li>
+            </ul>
+            <div class="score-box">
+              <div class="mini"><b>适合小白</b><span>无需懂代码，填写即可生成</span></div>
+              <div class="mini"><b>可复制</b><span>生成内容可一键复制</span></div>
+              <div class="mini"><b>可售卖</b><span>适合作为虚拟工具产品</span></div>
+              <div class="mini"><b>可部署</b><span>一个 HTML 文件即可上线</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section result-shell" id="result">
+      <div class="result-actions">
+        <button class="btn btn-ghost" id="copyBtn">复制完整方案</button>
+        <button class="btn btn-ghost" id="downloadBtn">下载 TXT</button>
+        <button class="btn btn-ghost" id="printBtn">打印 / 保存 PDF</button>
+        <button class="btn btn-primary" id="resetBtn">重新生成</button>
+      </div>
+      <div class="report" id="report"></div>
+    </section>
+  </main>
+
+  <div class="footer">
+    小红书账号定位生成器 · 适合个人 IP、虚拟产品、一人公司和本地商家使用
+  </div>
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const getChecked = (boxId) => [...document.querySelectorAll(`#${boxId} input:checked`)].map(i => i.value);
+    const val = (id) => ($(id)?.value || "").trim();
+    const esc = (str) => String(str || "").replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[s]));
+
+    const categories = {
+      ai: {
+        label: "AI 工具 / 副业变现",
+        keys: ["AI 工具","副业赚钱","虚拟产品","知识付费","效率工具"],
+        identityKeys:["AI 工具用户","一人公司创业者","运营","程序员","自由职业者"],
+        directions:[
+          {name:"普通人 AI 副业实战号", target:"想用 AI 提高效率、做副业、卖虚拟产品的小白", content:"AI 工具教程、提示词模板、真实案例拆解、虚拟资料制作、普通人副业避坑", money:"资料包、提示词模板、训练营、社群、陪跑咨询", difficulty:"中等", index:5},
+          {name:"小红书虚拟产品变现号", target:"想在小红书卖电子资料、模板、课程雏形的人", content:"资料包选题、产品包装、定价策略、笔记引流、成交话术、复盘案例", money:"19.9-99 元资料包、199 元工具包、399 元陪跑社群", difficulty:"中等偏低", index:5},
+          {name:"一人公司效率工具号", target:"自由职业者、个体创业者、想低成本做项目的人", content:"AI 工作流、自动化工具、内容流水线、产品原型、轻资产商业模式", money:"SOP 模板、顾问服务、工具导航、工作流课程", difficulty:"中等偏高", index:4}
+        ],
+        columns:[
+          ["AI 工具实战类",["我用 AI 做出一套小红书资料包，全流程公开","不会写文案的人，先学会这 5 个提示词","普通人用 AI 做副业，最该避开的 7 个坑","这 3 个 AI 工作流，适合一人公司每天复用","我用 1 小时搭了一个可售卖的 HTML 小工具"]],
+          ["虚拟产品拆解类",["19.9 元资料包到底怎么设计，才有人愿意买","小红书虚拟产品新手，先别做大而全资料","我拆了 30 个资料包，发现高转化都长这样","从 0 做一个定位模板包：选题、结构、交付全拆","为什么你的资料没人买？可能是包装错了"]],
+          ["起号复盘类",["新号第 1 周不要急着涨粉，先做这 4 件事","小红书没流量，不一定是内容差，可能是定位散","我建议新手前 30 篇都围绕这 5 类内容发","普通人做账号，最怕把自己写成百科全书","账号定位错了，再努力发 100 篇也很难变现"]],
+          ["提示词模板类",["这套选题提示词，我每周都会用一次","用 ChatGPT 写小红书标题，别只说帮我写标题","给新手的 20 个账号定位提问清单","一条笔记从选题到封面的 AI 提示词流程","AI 生成内容像机器？加这 3 类个人素材"]],
+          ["成交转化类",["小红书引流私域，别一上来就发广告","资料包卖不动时，先改这 3 个页面","低价产品怎么承接咨询服务？我的路径是这样","新手第一款产品，定价别超过这个区间","让用户愿意私信你的笔记，通常都有这句话"]]
+        ],
+        names:["AI副业观察员","普通人AI工具箱","小红书资料包研究所","一人公司提效笔记","AI小白陪跑日记","虚拟产品实战派","提示词模板铺","副业工具清单","低成本起号实验室","小红书变现样本"],
+        bio:["帮普通人用 AI 做内容、工具和虚拟产品｜分享可照抄的起号 SOP","AI 工具 + 小红书副业实战｜不讲玄学，只讲能落地的方法","记录一人公司从 0 到 1｜工具、内容、产品、变现全拆解","每天 1 小时，用 AI 搭建自己的副业系统｜适合小白","专注虚拟产品和小红书起号｜资料包/提示词/工作流分享"]
+      },
+      mom: {
+        label: "宝妈 / 育儿 / 家庭教育",
+        keys:["育儿","家庭教育","学习方法"],
+        identityKeys:["宝妈","老师"],
+        directions:[
+          {name:"宝妈成长陪跑号", target:"想兼顾家庭、自我成长和副业探索的宝妈", content:"育儿复盘、时间管理、情绪管理、家庭协作、宝妈副业", money:"成长社群、资料包、亲子计划表、咨询陪跑", difficulty:"中等偏低", index:5},
+          {name:"家庭教育规划号", target:"3-15 岁孩子家长，尤其是焦虑学习规划的家庭", content:"学习计划、暑假安排、阅读习惯、亲子沟通、家长避坑", money:"计划表模板、家长训练营、学习规划咨询", difficulty:"中等", index:5},
+          {name:"亲子陪伴实践号", target:"希望高质量陪伴孩子但时间有限的家长", content:"亲子游戏、绘本阅读、习惯培养、家庭活动、低成本陪伴", money:"亲子清单、陪伴课程、好物分销、社群", difficulty:"较低", index:4}
+        ],
+        columns:[
+          ["家长避坑类",["孩子暑假计划做不下去，多半不是孩子懒","我不再吼孩子后，家里变化最大的 3 件事","家长最容易把学习规划做成任务压迫","别再只盯分数了，真正要盯的是这 5 个习惯","孩子拖拉时，先检查你的指令是不是太模糊"]],
+          ["计划模板类",["一张适合小学生的暑假计划表，家长能直接用","双职工家庭怎么安排孩子一天，不靠鸡飞狗跳","低年级孩子晨读计划，建议从这 15 分钟开始","我给孩子做周计划，只保留 4 个模块","亲子阅读打卡表，别做成家长的 KPI"]],
+          ["亲子沟通类",["孩子不愿意说心里话，可能是你问错了","这 5 句话，比讲道理更容易让孩子听进去","家长情绪稳定，不是忍住不发火","孩子犯错后，我会先做这 3 步","亲子关系变好，通常从一次复盘开始"]],
+          ["宝妈成长类",["带娃很累，但别把自己完全丢掉","宝妈每天 30 分钟，也能慢慢建立副业能力","我建议宝妈先做轻交付产品，而不是重服务","没有完整时间的人，怎么做小红书内容","宝妈做账号，最值钱的是这些真实经历"]],
+          ["家庭效率类",["一个家庭共享计划表，让家务和学习都清楚","周末家庭复盘 20 分钟，减少 80% 内耗","家里总是乱，先从这 3 个固定区开始","孩子学习用品收纳，不要买太多盒子","家庭日程怎么安排，才不会全靠妈妈记"]]
+        ],
+        names:["陪娃成长研究所","不焦虑妈妈笔记","家庭计划表小站","亲子陪伴日记本","宝妈自我成长局","孩子学习规划师","温柔家教实验室","妈妈不内耗指南","亲子习惯养成记","家长陪跑手册"],
+        bio:["分享家长能上手的学习规划和亲子陪伴方法｜少焦虑，多执行","宝妈成长 + 家庭教育实践｜把复杂育儿变成可执行清单","陪孩子成长，也不丢掉自己｜计划表/习惯/沟通方法分享","专注家庭学习规划｜让孩子能用，家长不崩溃","记录真实育儿复盘｜不制造焦虑，只解决问题"]
+      },
+      career:{
+        label:"职场 / 成长 / 效率",
+        keys:["职场成长","学习方法","效率工具","个人成长","读书"],
+        identityKeys:["上班族","运营","咨询顾问","设计师","程序员","大学生"],
+        directions:[
+          {name:"职场成长经验号", target:"职场新人、转行者、想提升表达和效率的人", content:"职场沟通、复盘方法、效率工具、转行经验、面试简历", money:"简历修改、职业咨询、效率模板、社群", difficulty:"中等", index:5},
+          {name:"普通人自我提升号", target:"想变自律、会学习、会表达、提高执行力的普通人", content:"学习方法、读书笔记、计划复盘、习惯养成、低成本成长路径", money:"计划表模板、读书营、习惯社群、陪跑", difficulty:"中等偏低", index:4},
+          {name:"办公效率工具号", target:"每天被琐事占满、想提升办公效率的职场人", content:"Excel/PPT/AI 工具、自动化办公、效率流程、会议记录、模板分享", money:"办公模板、企业内训、工具课、咨询服务", difficulty:"中等", index:5}
+        ],
+        columns:[
+          ["职场避坑类",["刚入职不要急着表现，先搞懂这 5 件事","职场沟通最怕的不是不会说，而是没结论","领导要的不是过程，而是这个汇报结构","同事关系再好，也别忽视边界感","我踩过的职场坑，90% 都和表达有关"]],
+          ["效率工具类",["这 5 个办公模板，让我少加班 2 小时","不会做周报的人，直接套这个结构","用 AI 写会议纪要，真正关键的是这一步","PPT 做不好，先别学设计，先改逻辑","职场人必备的 10 个复盘问题"]],
+          ["学习成长类",["普通人自学一项技能，最怕一开始就买课","我把读书笔记从收藏变成行动，只做 3 步","低成本成长，不是每天打鸡血","30 天学会一个新技能，我会这样安排","为什么你看了很多干货，还是没有变化"]],
+          ["求职转行类",["转行简历不要写经历，要写可迁移能力","面试回答没亮点？用这个故事结构","裸辞前先完成这份风险清单","普通人转行，别被高薪案例骗了","作品集不是越多越好，而是越匹配越好"]],
+          ["复盘清单类",["每周复盘 20 分钟，我只看这 4 个指标","做事没结果，可能是复盘方式错了","一个让拖延症动起来的任务拆解法","我不再列愿望清单，只列行动清单","年底复盘别写流水账，写这 6 个问题"]]
+        ],
+        names:["职场升级说明书","普通人成长样本","效率模板实验室","打工人复盘本","转行自救指南","办公效率研究所","职场新人避坑局","低成本成长笔记","会表达的打工人","普通人执行力计划"],
+        bio:["分享职场成长、效率工具和可复制模板｜帮普通人少走弯路","职场新人避坑 + 办公效率提升｜用清单解决真实问题","普通人成长实录｜学习、复盘、表达、执行力","专注职场转型和能力提升｜不贩卖焦虑，只给方法","每天一点效率升级｜模板/工具/复盘/沟通"]
+      },
+      local:{
+        label:"本地生活 / 实体店 / 老板 IP",
+        keys:["实体店经营","本地生活","餐饮探店","旅游"],
+        identityKeys:["实体店老板","自由职业者","咨询顾问"],
+        directions:[
+          {name:"同城门店引流号", target:"本地消费者、周边 3-5 公里潜在客户", content:"门店场景、产品体验、客户故事、同城福利、老板日常", money:"到店消费、团购套餐、会员卡、私域复购", difficulty:"中等偏低", index:5},
+          {name:"老板 IP 信任号", target:"想了解门店背后的人、服务理念和真实案例的客户", content:"老板创业故事、服务过程、避坑科普、客户反馈、幕后日常", money:"高信任成交、本地服务预约、转介绍", difficulty:"中等", index:5},
+          {name:"本地生活种草号", target:"同城吃喝玩乐用户、亲子家庭、年轻女性", content:"同城清单、探店攻略、周末路线、性价比推荐、本地优惠", money:"探店合作、团购佣金、商家代运营、本地社群", difficulty:"中等", index:4}
+        ],
+        columns:[
+          ["同城场景类",["这家店为什么很多老客一来就是 3 年","周末不知道去哪？这条同城路线可以收藏","第一次来我们店，建议这样选最不踩雷","藏在小区旁边的宝藏小店，真实体验后说说","同城新手探店，别只拍环境，要拍这 5 个细节"]],
+          ["老板故事类",["我为什么开这家店？真实原因有点扎心","开店第 1 年，我踩过最贵的 3 个坑","一个老客户让我坚持下来的瞬间","小店老板的一天，没有想象中轻松","做本地生意，最重要的不是流量而是复购"]],
+          ["客户反馈类",["客户第二次来，通常是因为这个细节","这条反馈让我把服务流程改了一遍","新客户最关心的 5 个问题，一次说清","为什么我们不建议你一上来买最贵的","真实案例：她的问题是这样解决的"]],
+          ["产品服务类",["第一次体验，建议先选这款入门套餐","这 3 类人不适合盲目购买，先看完","同样的服务，为什么价格差这么多","店里最容易被忽略的高性价比项目","一篇说清楚预约、到店、体验全流程"]],
+          ["同城福利类",["本周同城用户专属福利，适合第一次来","老客才知道的隐藏用法，今天公开","附近 3 公里用户可以收藏这份清单","工作日来店，反而更适合这类人","小红书来的用户，记得先问这 3 个问题"]]
+        ],
+        names:["同城小店观察","本地生活清单","小店老板日记","附近好店研究所","城市周末计划","同城探店不踩雷","老板IP实录","本地服务说明书","小店复购笔记","城市烟火地图"],
+        bio:["分享同城好店、真实体验和本地生活攻略｜不踩雷，少花冤枉钱","小店老板真实经营记录｜服务过程、客户故事、避坑科普","专注本地生活和门店引流｜让好店被附近的人看见","同城吃喝玩乐清单｜适合周末、亲子、朋友聚会","用真实内容帮本地客户做选择｜体验/价格/流程说清楚"]
+      },
+      lifestyle:{
+        label:"生活方式 / 美学 / 健康",
+        keys:["穿搭","美妆","减脂","家居收纳","心理疗愈","旅游"],
+        identityKeys:["自由职业者","设计师","宝妈","大学生"],
+        directions:[
+          {name:"普通人变美变好号", target:"想提升外在、状态和生活质量的女性用户", content:"穿搭公式、护肤心得、减脂记录、生活习惯、状态管理", money:"好物合作、资料清单、社群、咨询", difficulty:"中等", index:4},
+          {name:"低成本生活美学号", target:"预算有限但想把生活过舒服的人", content:"家居收纳、房间改造、日常仪式感、平价好物、生活清单", money:"好物带货、清单模板、家居咨询", difficulty:"中等偏低", index:4},
+          {name:"情绪疗愈陪伴号", target:"压力大、内耗多、需要陪伴感的年轻用户", content:"情绪复盘、关系边界、自我接纳、独处方法、治愈清单", money:"疗愈手册、读书营、陪伴社群、咨询", difficulty:"中等偏高", index:4}
+        ],
+        columns:[
+          ["普通人改善类",["普通女孩变精致，不是先买贵东西","我坚持 30 天状态变好的 5 个小习惯","不靠节食的减脂记录，真实到有点慢","穿搭不好看，可能是比例没处理对","低成本变美，先改这 3 个细节"]],
+          ["生活清单类",["让房间变舒服的 10 个低成本小物","周末一个人在家，我会做这 7 件事","租房党收纳，不建议一上来买柜子","我的年度好物清单，真正复购的是这些","把生活过顺，靠的不是仪式感而是系统"]],
+          ["情绪疗愈类",["停止内耗后，我发现生活轻了很多","关系里最重要的，是学会不自动讨好","情绪不好时，先别急着讲道理","一个人也可以过得很稳定的 5 个方法","我用这张复盘表，慢慢找回自己"]],
+          ["真实记录类",["我的减脂第 14 天：没有逆袭，只有调整","房间改造前后对比，最值的是这个角落","一周穿搭记录：普通身材也能参考","我不再追求完美生活，只保留有效习惯","从混乱到稳定，我花了 3 个月"]],
+          ["好物测评类",["这类好物别盲买，先看你的使用场景","平价不等于便宜感，关键看这 3 点","收纳产品买错了，家里会更乱","我复购 3 次的东西，不是因为网红","适合新手的入门清单，少踩坑版"]]
+        ],
+        names:["普通女孩自救计划","低成本生活美学","不内耗生活笔记","房间变舒服研究","状态变好日记","普通人变美清单","一人生活整理术","治愈感日常馆","慢慢变好实验室","生活秩序笔记"],
+        bio:["记录普通人低成本变好｜穿搭、状态、收纳、情绪复盘","不追求完美生活，只分享真实可执行的改善方法","低成本生活美学｜把房间、状态和日子慢慢整理好","普通女孩自我提升记录｜变美、变瘦、变稳定","分享治愈感日常和情绪整理方法｜适合容易内耗的人"]
+      }
+    };
+
+    function scoreCategory(cat, data){
+      let score = 0;
+      cat.keys.forEach(k => { if(data.interests.includes(k)) score += 3; });
+      cat.identityKeys.forEach(k => { if(data.identity === k) score += 3; });
+      const text = [data.skills, data.experience, data.extra, data.goal, data.product, data.audience].join(" ");
+      cat.keys.forEach(k => { if(text.includes(k.replace(" ","")) || text.includes(k)) score += 2; });
+      if(data.face === "不愿意" || data.video === "只做图文") score += cat.label.includes("AI") || cat.label.includes("职场") ? 1 : 0;
+      return score;
+    }
+
+    function collectData(){
+      return {
+        identity: val("identity"),
+        age: val("age"),
+        city: val("city"),
+        time: val("time"),
+        interests: getChecked("interests"),
+        skills: val("skills"),
+        experience: val("experience"),
+        proof: val("proof"),
+        goal: val("goal"),
+        audience: val("audience"),
+        face: val("face"),
+        video: val("video"),
+        product: val("product"),
+        privateDomain: val("privateDomain"),
+        extra: val("extra")
+      };
+    }
+
+    function validate(data){
+      const missing = [];
+      if(!data.identity) missing.push("身份");
+      if(!data.interests.length) missing.push("兴趣方向");
+      if(!data.goal) missing.push("账号目标");
+      if(missing.length){
+        return `请至少填写：${missing.join("、")}。这样才能生成更准确的定位方案。`;
+      }
+      return "";
+    }
+
+    function getTopCategories(data){
+      const scored = Object.entries(categories).map(([key, cat]) => ({key, cat, score: scoreCategory(cat, data)}));
+      scored.sort((a,b) => b.score - a.score);
+      if(scored[0].score === 0) return [scored.find(x=>x.key==="career"), scored.find(x=>x.key==="ai"), scored.find(x=>x.key==="lifestyle")];
+      return scored.slice(0,3);
+    }
+
+    function stars(n){ return "★★★★★".slice(0,n) + "☆☆☆☆☆".slice(0,5-n); }
+
+    function unique(arr){ return [...new Set(arr)].filter(Boolean); }
+
+    function buildAudience(data, main){
+      const audience = data.audience && data.audience !== "暂不确定" ? data.audience : main.directions[0].target;
+      const painMap = {
+        ai:["不知道自己适合卖什么虚拟产品","不会把 AI 工具变成真实交付","发了很多笔记但没有私信和成交","怕内容像营销号，缺少可信案例"],
+        mom:["孩子计划执行不下去，家长也很疲惫","想陪伴孩子但时间被家务和工作切碎","看了很多育儿方法，真正落地很难","既想照顾家庭，也想找回自己的成长感"],
+        career:["工作很忙但成长感低","想提升表达、效率和求职竞争力","收藏很多干货但没有形成行动系统","想转型或副业，却不知道从哪里开始"],
+        local:["门店有服务但附近的人不知道","内容只像广告，缺少真实信任感","到店客户少，复购和转介绍不稳定","不知道怎么把老板故事、客户案例拍出来"],
+        lifestyle:["想变好但预算有限、执行不稳定","容易内耗，对自己要求高但行动少","看了很多好物和方法，却不知道哪个适合自己","想让生活更舒服，但缺少具体步骤"]
+      };
+      const wantsMap = {
+        ai:["用低成本做出自己的第一个产品","学会可复用的 AI 工作流","让内容带来咨询、资料包订单或私域线索"],
+        mom:["让家庭计划更清楚，减少鸡飞狗跳","孩子能执行，家长不崩溃","在育儿之外建立自己的价值感"],
+        career:["提高效率、表达和复盘能力","拿到更好的机会或副业收入","形成可持续成长系统"],
+        local:["让附近用户愿意到店体验","建立老板和门店信任","提升复购、预约和转介绍"],
+        lifestyle:["状态更稳定，生活更有秩序","用低成本方式改善外在和居住环境","减少内耗，慢慢变好"]
+      };
+      return {
+        audience,
+        age: data.age || "25-40",
+        pain: painMap[main.key] || painMap.career,
+        wants: wantsMap[main.key] || wantsMap.career
+      };
+    }
+
+    function buildPersona(data, main){
+      const skill = data.skills ? data.skills.split(/[，,、\n]/).filter(Boolean)[0] : main.label;
+      const audience = data.audience && data.audience !== "暂不确定" ? data.audience : main.directions[0].target;
+      const productText = data.product && data.product !== "没有" ? `结合${data.product}` : "用清单、模板和真实案例";
+      return {
+        formula:`我是一个${data.identity || "普通人"}出身、擅长${skill}的实战型博主，专门帮助${audience}，解决“方向不清、方法太散、执行不下去”的问题，通过${productText}，让他们更快获得可执行的结果。`,
+        versions:[
+          `专业顾问型：我专注${main.label}方向，用结构化方法帮${audience}拆解问题、建立路径、减少试错成本。`,
+          `普通人陪跑型：我不是高高在上的专家，而是把自己踩过的坑、用过的方法和真实复盘整理出来，陪${audience}一步步跑通。`,
+          `结果导向型：我的内容只围绕一个目标：帮${audience}从“想做但不会做”，变成“知道怎么做，并且能持续执行”。`
+        ]
+      };
+    }
+
+    function monetization(data, main){
+      if(data.product === "没有" || !data.product){
+        return [
+          ["第 1 阶段：免费内容吸粉","连续发布定位、避坑、清单、案例类内容，先验证目标用户是否愿意收藏、评论、私信。"],
+          ["第 2 阶段：低价资料包","把高收藏内容整理成 19.9-49.9 元模板包，例如选题库、计划表、提示词包、避坑清单。"],
+          ["第 3 阶段：社群 / 小课","当资料包有稳定需求后，做 99-199 元主题社群或 7 天训练营，提升陪伴感和复购。"],
+          ["第 4 阶段：咨询服务","针对高频痛点提供 199-599 元单次咨询，例如账号诊断、计划制定、主页优化、产品包装。"],
+          ["第 5 阶段：高客单陪跑","积累案例后升级为 999-2999 元陪跑或系统课，用结果案例提高信任。"]
+        ];
+      }
+      if(data.product.includes("虚拟")){
+        return [
+          ["产品包装","把产品命名成“结果型产品”，不要叫资料合集。例如：30 天起号选题库、AI 副业提示词包、家长暑假计划表生成器。"],
+          ["定价建议","新手首款产品建议 19.9-99 元，用低门槛降低决策成本；升级包可设置 199-399 元。"],
+          ["笔记引流","用“问题场景 + 解决过程 + 结果展示 + 评论区关键词”的结构引导用户私信。"],
+          ["私域承接","自动回复先给免费样例，再说明适合谁、不适合谁，避免硬推。"],
+          ["转化路径","爆款笔记 → 私信关键词 → 免费样例 → 低价产品 → 社群/咨询升级。"]
+        ];
+      }
+      if(data.product.includes("实体") || data.product.includes("本地")){
+        return [
+          ["同城内容策略","每周固定发布门店场景、客户案例、体验流程、价格说明、周边攻略，让附近用户产生熟悉感。"],
+          ["信任建立","多拍真实服务过程、老客反馈、老板出镜/手部出镜、幕后细节，不要只发硬广海报。"],
+          ["成交路径","同城笔记 → 评论/私信问价 → 预约体验 → 到店转化 → 会员/复购/转介绍。"],
+          ["活动设计","设置新客体验、老客带新、工作日专享、节日套餐，用内容解释福利而不是只发促销。"],
+          ["私域复购","到店后引导进入微信或社群，后续用预约提醒、护理建议、会员权益提高复购。"]
+        ];
+      }
+      return [
+        ["产品定位","把你的服务拆成“入门款、标准款、陪跑款”，降低首次购买门槛。"],
+        ["内容转化","每 5 篇干货中安排 1 篇案例/服务说明，避免账号只有价值没有成交入口。"],
+        ["信任证明","持续展示作品、客户反馈、过程截图、前后对比和复盘。"],
+        ["私域路径",`${data.privateDomain || "微信"}承接后，先诊断问题，再推荐合适服务，不要直接报价。`],
+        ["升级产品","低价服务验证需求后，再开发课程、社群或长期顾问。"]
+      ];
+    }
+
+    function dayPlan(data, main){
+      const days = [];
+      const isAi = main.key === "ai";
+      const isLocal = main.key === "local";
+      const base = isAi ? "定位/工具/产品" : isLocal ? "门店/同城/客户" : "定位/案例/清单";
+      for(let d=1; d<=30; d++){
+        let task, content, operation, metric;
+        if(d<=7){
+          const arr=[
+            ["拆定位","写出 3 个候选赛道和目标用户","找 10 个同赛道账号，记录昵称、简介、置顶笔记","是否能一句话说清账号价值"],
+            ["定人设","完成“我是谁+帮谁+解决什么问题”公式","修改头像、昵称、简介草稿","主页是否让陌生人 5 秒看懂"],
+            ["挖痛点","列出目标用户 30 个真实问题","发 1 条痛点共鸣笔记","评论区是否有人说“太真实了”"],
+            ["做栏目","确定 5 个固定栏目","每个栏目写 5 个标题","标题是否具体到场景"],
+            ["搭主页","设置背景图、简介、合集分类","发布 1 条自我介绍或账号说明","主页访问后的关注率"],
+            ["做素材库","整理经历、案例、截图、清单","发 1 条个人经历/复盘笔记","收藏率和完读感反馈"],
+            ["定产品雏形","列出未来可卖的低价产品或服务","发 1 条免费清单测试需求","私信/评论关键词数量"]
+          ];
+          [task,content,operation,metric]=arr[d-1];
+        }else if(d<=15){
+          const arr=[
+            ["测试痛点选题",`围绕${base}发 1 条避坑笔记`,"评论区追问用户具体卡点","收藏率、评论率"],
+            ["测试清单选题","发 1 条可收藏清单","把高频问题加入选题库","收藏率"],
+            ["测试案例选题","发 1 条真实案例或过程拆解","私信咨询者打标签","私信数"],
+            ["测试教程选题","发 1 条步骤教程","观察哪一步用户最容易问","完读率、转发率"],
+            ["测试对比选题","发 1 条前后对比/错误对比","收集用户反驳和补充","评论质量"],
+            ["测试标题风格","同主题换 2 种标题方向","记录点击更高的标题结构","点击率"],
+            ["小复盘","复盘前 7 篇数据，选出 2 个强栏目","把强栏目标题扩展到 20 个","高于平均的数据指标"],
+            ["补发强栏目","继续发最强栏目相关笔记","主动回复评论，制造二次互动","新增关注数"]
+          ];
+          [task,content,operation,metric]=arr[d-8];
+        }else if(d<=23){
+          const arr=[
+            ["放大爆款结构","复刻数据最好的一篇，不换主题只换角度","整理爆款公式","是否超过平均收藏"],
+            ["系列化内容","发布第 1 篇系列内容","标题加“第 1 期/系列”提示","用户是否催更"],
+            ["增强信任","发布成果、案例、过程截图或复盘","把证明放进主页置顶","主页访问量"],
+            ["做引导","笔记结尾加入温和私信关键词","准备免费样例或清单","私信关键词数量"],
+            ["做合集","把已发内容归入合集","优化合集名称为结果导向","合集浏览量"],
+            ["做互动","发 1 条提问型笔记","评论区收集 20 个用户问题","评论数"],
+            ["产品预热","发 1 条产品雏形/清单预告","邀请用户留言领取样例","意向用户数"],
+            ["二次复盘","筛选最有商业价值的 3 类选题","决定下一阶段主攻方向","私信/收藏/关注综合表现"]
+          ];
+          [task,content,operation,metric]=arr[d-16];
+        }else{
+          const arr=[
+            ["低价产品上线","整理一个最小可交付产品","用笔记说明适合谁、不适合谁","付费意向"],
+            ["成交话术优化","根据私信问题优化回复话术","设置免费样例 + 付费说明","转化率"],
+            ["置顶优化","置顶 3 篇：自我介绍、爆款干货、产品说明","检查主页闭环","主页关注率"],
+            ["复购设计","给已成交用户设计升级路径","收集反馈做案例","好评/反馈数"],
+            ["内容矩阵","把强选题拆成 10 个子选题","安排未来 2 周发布计划","选题库存量"],
+            ["数据复盘","统计 30 天所有笔记数据","保留高收藏、高私信、高关注选题","三类爆款模板"],
+            ["调整定位","删除表现差且偏离定位的栏目","优化一句话定位","账号是否更聚焦"],
+            ["制定下月计划","确定下月主栏目、主产品、主转化路径","写下 30 天升级目标","下月目标是否明确"]
+          ];
+          [task,content,operation,metric]=arr[d-24];
+        }
+        days.push({d, task, content, operation, metric});
+      }
+      return days;
+    }
+
+    function homepage(data, main){
+      const names = unique([...main.names, `${data.identity || "普通人"}成长手册`, `${main.label.split("/")[0].trim()}实战笔记`]).slice(0,10);
+      const bio = main.bio.slice(0,5);
+      const cover = [
+        "不做泛泛而谈，只分享真实可执行的方法",
+        "从定位、内容到变现，一步步跑通",
+        "适合新手收藏的实战笔记",
+        "把复杂问题拆成简单清单",
+        "关注我，一起把想法做成结果"
+      ];
+      const pinned = [
+        `置顶 1：我是谁，我能帮你解决什么问题`,
+        `置顶 2：${main.label}新手最容易踩的 7 个坑`,
+        `置顶 3：我的资料/服务/案例合集，适合想进一步解决问题的人`
+      ];
+      const albums = main.columns.map(c => c[0]);
+      return {names,bio,cover,pinned,albums};
+    }
+
+    function renderReport(data){
+      const tops = getTopCategories(data);
+      const mainWrap = tops[0];
+      const main = mainWrap.cat;
+      main.key = mainWrap.key;
+      const allDirections = unique(tops.flatMap(t => t.cat.directions.map(d => JSON.stringify(d)))).map(s => JSON.parse(s)).slice(0,3);
+      const audience = buildAudience(data, main);
+      const persona = buildPersona(data, main);
+      const home = homepage(data, main);
+      const money = monetization(data, main);
+      const days = dayPlan(data, main);
+      const noFaceTips = (data.face === "不愿意" || data.video === "只做图文") ? `
+        <div class="notice"><b>不露脸建议：</b>你的账号可以优先采用图文干货、屏幕录制、手部出镜、案例截图、清单模板、过程拆解等形式。重点不是露脸，而是让用户看到“你真的解决过这个问题”。</div>
+      ` : "";
+
+      const colHtml = main.columns.map((c,idx)=>`
+        <div class="block">
+          <h4>栏目 ${idx+1}：${esc(c[0])}</h4>
+          <p class="muted">适合用来持续建立账号标签，建议每周至少发布 1-2 篇。</p>
+          <div class="title-list">${c[1].map(t=>`<div class="title-item">${esc(t)}</div>`).join("")}</div>
+        </div>
+      `).join("");
+
+      const html = `
+        <div class="report-cover">
+          <h2>${esc(data.identity)}的小红书账号定位报告</h2>
+          <p>主推荐方向：${esc(main.label)}｜目标：${esc(data.goal)}｜内容形式：${esc(data.video || "图文/视频结合")}</p>
+          <div class="tag-row">
+            ${data.interests.map(i=>`<span class="tag">${esc(i)}</span>`).join("")}
+            <span class="tag">${esc(data.city || "城市未填写")}</span>
+            <span class="tag">${esc(data.time || "时间未填写")}</span>
+            <span class="tag">${esc(data.product || "产品未填写")}</span>
+          </div>
+        </div>
+        <div class="report-body">
+          <div class="block">
+            <h3><span class="num">1</span>推荐账号定位</h3>
+            <div class="cards3">
+              ${allDirections.map((d,idx)=>`
+                <div class="direction-card">
+                  <h4>方向 ${idx+1}：${esc(d.name)}</h4>
+                  <div class="meta"><span>${esc(d.difficulty)}</span><span class="stars">${stars(d.index)}</span></div>
+                  <p><b>适合原因：</b>结合你的身份、兴趣和目标，这个方向更容易形成稳定内容资产，也更容易承接后续变现。</p>
+                  <p><b>目标用户：</b>${esc(d.target)}</p>
+                  <p><b>内容方向：</b>${esc(d.content)}</p>
+                  <p><b>变现方式：</b>${esc(d.money)}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">2</span>账号人设定位</h3>
+            <div class="formula"><small>人设公式：我是谁 + 我帮谁 + 解决什么问题 + 用什么方式 + 达成什么结果</small>${esc(persona.formula)}</div>
+            <div class="two-col" style="margin-top:14px">
+              ${persona.versions.map(v=>`<div class="notice">${esc(v)}</div>`).join("")}
+            </div>
+            ${noFaceTips}
+          </div>
+
+          <div class="block">
+            <h3><span class="num">3</span>目标用户画像</h3>
+            <div class="two-col">
+              <div>
+                <h4>核心人群</h4>
+                <ul class="list-clean">
+                  <li><b>年龄：</b>${esc(audience.age)}</li>
+                  <li><b>身份：</b>${esc(audience.audience)}</li>
+                  <li><b>当前状态：</b>有明确焦虑或需求，但不知道如何拆成具体行动。</li>
+                  <li><b>愿意付费原因：</b>他们不是为信息付费，而是为节省时间、降低试错、获得模板和陪伴付费。</li>
+                </ul>
+              </div>
+              <div>
+                <h4>最能打动他们的内容</h4>
+                <ul class="list-clean">
+                  <li>真实经历：你踩过什么坑，怎么解决。</li>
+                  <li>具体清单：用户看完能立刻照做。</li>
+                  <li>前后对比：展示方法带来的变化。</li>
+                  <li>低门槛结果：让用户觉得“我也可以开始”。</li>
+                </ul>
+              </div>
+            </div>
+            <h4>高频痛点</h4>
+            <ul class="list-clean">${audience.pain.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+            <h4>他们想要的结果</h4>
+            <ul class="list-clean">${audience.wants.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">4</span>内容栏目设计</h3>
+            <p class="muted">建议不要每天随机发。先固定 5 个栏目，让系统和用户都更快识别你。</p>
+            ${colHtml}
+          </div>
+
+          <div class="block">
+            <h3><span class="num">5</span>小红书主页包装</h3>
+            <div class="two-col">
+              <div>
+                <h4>昵称建议 10 个</h4>
+                <ul class="list-clean">${home.names.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>
+                <h4>头像建议</h4>
+                <p>优先选择清晰、干净、有识别度的头像。愿意露脸可以用半身照；不露脸可用高质感文字头像、工具箱图标、手账风图标或专业感插画头像。头像颜色建议和主页背景保持统一。</p>
+              </div>
+              <div>
+                <h4>简介文案 5 条</h4>
+                <ul class="list-clean">${home.bio.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+                <h4>背景图文案 5 条</h4>
+                <ul class="list-clean">${home.cover.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+              </div>
+            </div>
+            <h4>置顶笔记建议</h4>
+            <ul class="list-clean">${home.pinned.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+            <h4>合集分类建议</h4>
+            <div class="tag-row">${home.albums.map(a=>`<span class="tag">${esc(a)}</span>`).join("")}</div>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">6</span>变现路径设计</h3>
+            <table>
+              <thead><tr><th>阶段 / 动作</th><th>具体做法</th></tr></thead>
+              <tbody>${money.map(m=>`<tr><td><b>${esc(m[0])}</b></td><td>${esc(m[1])}</td></tr>`).join("")}</tbody>
+            </table>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">7</span>30 天起号计划</h3>
+            <table>
+              <thead><tr><th>天数</th><th>今日任务</th><th>发布内容</th><th>运营动作</th><th>复盘指标</th></tr></thead>
+              <tbody>
+                ${days.map(d=>`<tr><td>第 ${d.d} 天</td><td>${esc(d.task)}</td><td>${esc(d.content)}</td><td>${esc(d.operation)}</td><td>${esc(d.metric)}</td></tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">8</span>新手避坑提醒</h3>
+            <ul class="list-clean">
+              <li>不要一开始就做太泛的“个人成长”，必须具体到人群和问题。</li>
+              <li>不要只发自己想发的，要发目标用户正在焦虑、正在搜索、愿意收藏的内容。</li>
+              <li>不要频繁换赛道。测试可以，漂移不行。</li>
+              <li>不要只追热点，不建立自己的账号资产。</li>
+              <li>没有产品时不要急着硬变现，先用免费清单测试需求。</li>
+              <li>不要所有内容都像广告，至少 80% 内容要先解决问题。</li>
+              <li>不要忽视主页三件套：昵称、简介、置顶笔记。</li>
+              <li>不要盲目模仿大博主，新号更需要窄切口和强场景。</li>
+              <li>不要只看点赞，要重点看收藏、评论、私信和关注转化。</li>
+              <li>不要把“坚持发”当策略，真正有效的是：发布、复盘、放大、转化。</li>
+            </ul>
+          </div>
+
+          <div class="block">
+            <h3><span class="num">9</span>可复制执行清单</h3>
+            <ul class="list-clean">
+              <li>今天完成一句话定位：我是谁，帮谁，解决什么问题。</li>
+              <li>今天确定 5 个固定栏目，每个栏目写 5 个标题。</li>
+              <li>今天改主页：昵称、头像、简介、背景图、置顶笔记。</li>
+              <li>未来 7 天每天发 1 篇测试笔记，不追求完美，追求反馈。</li>
+              <li>每晚记录 4 个数据：曝光、收藏、评论、私信。</li>
+              <li>第 15 天复盘，保留强栏目，删除弱栏目。</li>
+              <li>第 21 天准备一个免费样例或低价产品雏形。</li>
+              <li>第 30 天确定下月主赛道、主栏目和主变现路径。</li>
+            </ul>
+          </div>
+        </div>
+      `;
+      $("report").innerHTML = html;
+    }
+
+    function showToast(text){
+      const t = $("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"),1600);
+    }
+
+    $("generateBtn").addEventListener("click", () => {
+      const data = collectData();
+      const err = validate(data);
+      if(err){
+        $("errorBox").textContent = err;
+        $("errorBox").style.display = "block";
+        return;
+      }
+      $("errorBox").style.display = "none";
+      renderReport(data);
+      document.querySelector(".result-shell").style.display = "block";
+      setTimeout(()=> $("result").scrollIntoView({behavior:"smooth", block:"start"}), 60);
+    });
+
+    $("copyBtn").addEventListener("click", async () => {
+      const text = $("report").innerText.trim();
+      if(!text){ showToast("请先生成方案"); return; }
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("完整方案已复制");
+      }catch(e){
+        const area = document.createElement("textarea");
+        area.value = text; document.body.appendChild(area); area.select();
+        document.execCommand("copy"); area.remove();
+        showToast("完整方案已复制");
+      }
+    });
+
+    $("downloadBtn").addEventListener("click", () => {
+      const text = $("report").innerText.trim();
+      if(!text){ showToast("请先生成方案"); return; }
+      const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "小红书账号定位方案.txt";
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      showToast("TXT 已下载");
+    });
+
+    $("printBtn").addEventListener("click", () => window.print());
+
+    $("resetBtn").addEventListener("click", () => {
+      document.querySelector(".result-shell").style.display = "none";
+      $("report").innerHTML = "";
+      $("generator").scrollIntoView({behavior:"smooth"});
+    });
+
+    document.querySelectorAll(".chip input").forEach(input => {
+      input.addEventListener("change", () => {
+        const count = getChecked("interests").length;
+        if(count > 6 && input.checked){
+          input.checked = false;
+          showToast("最多建议选择 6 个方向");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工具导航</title>
+<style>
+  :root {
+    --bg: #f8f4eb;
+    --card: rgba(255,255,255,.88);
+    --text: #29383f;
+    --muted: #6c7c84;
+    --primary: #4ca8d8;
+    --primary-deep: #2479a6;
+    --green: #78c895;
+    --orange: #f2b66c;
+    --yellow: #ffd36b;
+    --purple: #9b7ec4;
+    --border: #dfe8ec;
+    --shadow: 0 18px 48px rgba(55,80,95,.13);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--text);
+    background: radial-gradient(circle at 8% 0%, rgba(76,168,216,.18), transparent 28%),
+                radial-gradient(circle at 90% 3%, rgba(255,211,107,.25), transparent 24%),
+                linear-gradient(180deg, #fbf7ed 0%, #f8f4eb 46%, #f5f9fa 100%);
+    min-height: 100vh;
+    line-height: 1.72;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 60px 24px 80px; }
+  header { text-align: center; margin-bottom: 56px; }
+  header h1 {
+    font-size: clamp(32px, 6vw, 54px);
+    font-weight: 900;
+    letter-spacing: -.04em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  header p { color: var(--muted); font-size: 17px; max-width: 520px; margin: 0 auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: transform .2s, box-shadow .2s;
+    display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none; color: inherit;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 24px 56px rgba(55,80,95,.18); }
+  .card .icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: grid; place-items: center; font-size: 22px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: linear-gradient(135deg, #4ca8d8, #9edcf0); }
+  .icon-green { background: linear-gradient(135deg, #78c895, #b7e8c5); }
+  .icon-orange { background: linear-gradient(135deg, #f2b66c, #ffdba0); }
+  .icon-purple { background: linear-gradient(135deg, #9b7ec4, #cbb8e8); }
+  .icon-yellow { background: linear-gradient(135deg, #ffd36b, #ffe9a0); }
+  .card h3 { font-size: 18px; font-weight: 800; letter-spacing: -.02em; }
+  .card .desc { color: var(--muted); font-size: 14px; line-height: 1.6; flex: 1; }
+  .card .tag {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(76,168,216,.1); color: var(--primary-deep);
+  }
+  footer {
+    text-align: center; margin-top: 60px; color: var(--muted); font-size: 13px;
+  }
+  .add-hint {
+    text-align: center; margin-top: 40px; padding: 32px;
+    background: var(--card); border-radius: var(--radius-lg);
+    border: 2px dashed var(--border); color: var(--muted);
+  }
+  .add-hint strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🛠 实用工具集</h1>
+    <p>全部免费，打开即用。点击卡片直达对应工具。</p>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="https://338a5b89fb144d7a8c86c875f88464de.app.codebuddy.work" target="_blank">
+      <div class="icon icon-blue">📅</div>
+      <h3>暑假计划表生成器 3.0</h3>
+      <p class="desc">超细化家庭执行版。学习画像 + 降级算法，生成适合孩子的可执行暑假计划。</p>
+      <span class="tag">教育</span>
+    </a>
+
+    <a class="card" href="https://c4651c5750a9440e857d6bf143cce3ba.app.codebuddy.work/xiaohongshu.html" target="_blank">
+      <div class="icon icon-orange">📕</div>
+      <h3>小红书账号定位生成器</h3>
+      <p class="desc">输入你的身份、兴趣和资源，自动生成可执行的账号定位报告和 30 天起号计划。</p>
+      <span class="tag">自媒体</span>
+    </a>
+
+    <a class="card" href="https://517a9d8188c34d98bbbeaf4bdce03d3c.app.codebuddy.work/sales-script.html" target="_blank">
+      <div class="icon icon-green">💬</div>
+      <h3>私域销售话术生成器</h3>
+      <p class="desc">根据你的产品、客户画像和场景，自动生成高转化私域销售话术。</p>
+      <span class="tag">营销</span>
+    </a>
+
+    <a class="card" href="https://20fa479745de40a3bfef0473c72117cb.app.codebuddy.work/codex.html" target="_blank">
+      <div class="icon icon-purple">🤖</div>
+      <h3>Codex 小白项目生成器</h3>
+      <p class="desc">零基础也能上手，自动生成适合小白的 Codex 项目方案和实操指引。</p>
+      <span class="tag">AI 开发</span>
+    </a>
+
+    <a class="card" href="https://3ce2597ed525460983711f6446e6ab99.app.codebuddy.work/codex-pro.html" target="_blank">
+      <div class="icon icon-yellow">⚡</div>
+      <h3>Codex 小白项目生成器 Pro</h3>
+      <p class="desc">进阶版，更多模板和高级配置，适合有基础的开发者和高阶需求。</p>
+      <span class="tag">AI 开发</span>
+    </a>
+  </div>
+
+  <div class="add-hint">
+    <strong>📌 分享提示</strong><br>
+    把这个页面链接发给朋友，他们就能一次找到所有工具。<br>
+    持续更新中，有新的工具需求随时告诉我。
+  </div>
+
+  <footer>全部工具免费使用，无需登录 · Made with ❤️</footer>
+</div>
+</body>
+</html>

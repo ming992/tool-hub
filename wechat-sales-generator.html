@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>微信私域成交话术生成器 Max｜500+海量话术版</title>
+  <style>
+    :root{
+      --bg:#f6f3ec; --bg2:#edf6ee; --ink:#14221a; --muted:#65736b; --card:rgba(255,255,255,.82); --card2:#fffdf8; --line:rgba(27,72,45,.13);
+      --green:#16a66a; --green2:#0a6b48; --mint:#e9f8ef; --gold:#bd8b38; --gold2:#fff4d9; --red:#c85c54; --blue:#416d8f;
+      --shadow:0 26px 80px rgba(29,63,43,.14); --shadow2:0 14px 36px rgba(29,63,43,.11); --radius:28px; --r2:18px; --nav:74px;
+    }
+    [data-theme="dark"]{--bg:#101612;--bg2:#17241d;--ink:#eff8f2;--muted:#a5b4aa;--card:rgba(27,36,31,.84);--card2:#1a241f;--line:rgba(238,255,244,.13);--mint:rgba(36,217,143,.12);--gold2:rgba(189,139,56,.16);--shadow:0 28px 80px rgba(0,0,0,.34);--shadow2:0 14px 36px rgba(0,0,0,.26)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 0%,rgba(22,166,106,.24),transparent 34vw),radial-gradient(circle at 92% 4%,rgba(189,139,56,.2),transparent 30vw),linear-gradient(135deg,var(--bg),var(--bg2));line-height:1.72;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(24,95,57,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(24,95,57,.05) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 76%);z-index:-1}button,input,select,textarea{font-family:inherit;color:inherit}a{text-decoration:none;color:inherit}.wrap{width:min(1240px,calc(100% - 36px));margin:0 auto}.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);background:linear-gradient(180deg,rgba(255,255,255,.76),rgba(255,255,255,.45));border-bottom:1px solid var(--line)}[data-theme="dark"] .nav{background:rgba(15,22,18,.74)}.navin{height:var(--nav);display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,var(--green),#7ddd9d);box-shadow:0 12px 28px rgba(22,166,106,.24);display:grid;place-items:center;color:white;font-weight:900}.brand h1{margin:0;font-size:17px}.brand p{margin:0;color:var(--muted);font-size:12px}.navlinks{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pillbtn,.btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 14px;cursor:pointer;font-weight:700;font-size:13px;transition:.2s}.pillbtn:hover,.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow2)}.btn.primary{background:linear-gradient(135deg,var(--green),var(--green2));color:white;border-color:transparent}.btn.gold{background:linear-gradient(135deg,var(--gold2),rgba(255,255,255,.75));border-color:rgba(189,139,56,.25);color:var(--ink)}.hero{padding:70px 0 38px}.heroGrid{display:grid;grid-template-columns:1.03fr .97fr;gap:28px;align-items:stretch}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(22,166,106,.18);background:rgba(255,255,255,.65);padding:8px 12px;border-radius:999px;color:var(--green2);font-weight:800;font-size:13px}.hero h2{font-size:clamp(38px,6vw,76px);line-height:1.05;margin:18px 0 18px;letter-spacing:-3px}.hero h2 span{background:linear-gradient(135deg,var(--green2),var(--gold));-webkit-background-clip:text;color:transparent}.heroText{font-size:18px;color:var(--muted);max-width:760px}.heroActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}.stat{padding:16px;border-radius:22px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow2)}.stat b{display:block;font-size:24px}.stat span{font-size:12px;color:var(--muted)}.showcase{border:1px solid var(--line);background:linear-gradient(155deg,rgba(255,255,255,.78),rgba(233,248,239,.72));border-radius:34px;box-shadow:var(--shadow);padding:22px;position:relative;overflow:hidden}.showcase:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(22,166,106,.12);right:-80px;top:-80px}.phone{position:relative;z-index:1;background:var(--card2);border:1px solid var(--line);border-radius:28px;padding:18px;box-shadow:var(--shadow2)}.bubble{max-width:88%;padding:12px 14px;border-radius:18px;margin:12px 0;font-size:14px}.bubble.left{background:var(--mint);border-top-left-radius:6px}.bubble.right{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;margin-left:auto;border-top-right-radius:6px}.minirow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--mint);border:1px solid rgba(22,166,106,.16);font-size:12px;color:var(--green2);font-weight:800}.section{padding:36px 0}.sectionHead{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px}.sectionHead h3{margin:0;font-size:30px;letter-spacing:-1px}.sectionHead p{margin:6px 0 0;color:var(--muted)}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.value{padding:18px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow2)}.value i{font-style:normal;font-size:28px}.value h4{margin:8px 0 5px}.value p{margin:0;color:var(--muted);font-size:14px}.main{display:grid;grid-template-columns:420px 1fr;gap:22px;align-items:start}.panel,.result,.library,.caseCard,.drawer{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.panel{position:sticky;top:92px}.panelHead{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.panelHead h3,.resultHead h3{margin:0;font-size:20px}.small{font-size:12px;color:var(--muted)}.tabs{display:flex;gap:8px;overflow:auto;padding:12px 16px;border-bottom:1px solid var(--line)}.tab{white-space:nowrap;border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 12px;cursor:pointer;color:var(--muted);font-weight:800;font-size:13px}.tab.active{background:var(--mint);color:var(--green2);border-color:rgba(22,166,106,.2)}.formBody{padding:18px;max-height:calc(100vh - 176px);overflow:auto}.tabPane{display:none}.tabPane.active{display:block}.groupTitle{display:flex;align-items:center;gap:8px;margin:12px 0 10px;font-weight:900}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fg{margin-bottom:13px}.fg label{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:900;margin-bottom:7px}.hint{font-size:11px;color:var(--muted);font-weight:600}select,input,textarea{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.68);border-radius:16px;padding:12px 12px;outline:none;font-size:14px;transition:.18s}[data-theme="dark"] select,[data-theme="dark"] input,[data-theme="dark"] textarea{background:rgba(255,255,255,.06)}select:focus,input:focus,textarea:focus{border-color:rgba(22,166,106,.5);box-shadow:0 0 0 4px rgba(22,166,106,.08)}textarea{min-height:92px;resize:vertical}.tall{min-height:132px}.checks{display:flex;gap:8px;flex-wrap:wrap}.chip{position:relative}.chip input{display:none}.chip span{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:8px 10px;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.42)}.chip input:checked+span{background:var(--mint);border-color:rgba(22,166,106,.28);color:var(--green2)}.actions{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-top:14px}.actions .btn{border-radius:16px;padding:13px}.sceneGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.scene{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:15px;cursor:pointer;transition:.18s}.scene:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:rgba(22,166,106,.3)}.scene b{display:block;margin-bottom:4px}.scene p{margin:0;color:var(--muted);font-size:13px}.resultHead{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.scorebar{display:flex;gap:8px;flex-wrap:wrap}.score{padding:7px 10px;border-radius:999px;background:var(--mint);font-weight:900;font-size:12px;color:var(--green2)}.resultBody{padding:20px}.empty{padding:36px;border:1px dashed var(--line);border-radius:24px;text-align:center;color:var(--muted);background:rgba(255,255,255,.34)}.resultTools{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.textCard{border:1px solid var(--line);border-radius:24px;background:var(--card2);padding:16px;margin:14px 0}.textCard h4{display:flex;justify-content:space-between;gap:10px;margin:0 0 10px;font-size:16px}.editable{min-height:130px;white-space:pre-wrap;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.62);padding:14px;outline:none}.editable:focus{box-shadow:0 0 0 4px rgba(22,166,106,.08);border-color:rgba(22,166,106,.45)}.scriptLine{padding:10px 12px;border-radius:15px;background:rgba(22,166,106,.08);border:1px solid rgba(22,166,106,.14);margin:8px 0}.scriptLine b{color:var(--green2)}.twoCol{display:grid;grid-template-columns:1fr 1fr;gap:14px}.notice{background:var(--gold2);border:1px solid rgba(189,139,56,.24);border-radius:22px;padding:15px}.notice h4{margin:0 0 6px}.notice p,.notice li{color:var(--muted);font-size:14px}.library{padding:20px}.libTop{display:grid;grid-template-columns:1fr 220px 160px;gap:10px;margin-bottom:14px}.libGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.libItem{background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:14px}.libItem b{display:block}.libItem p{margin:8px 0;color:var(--muted);font-size:13px}.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.caseCard{padding:18px}.caseCard h4{margin:0 0 8px}.caseCard p{color:var(--muted);font-size:14px}.footer{padding:40px 0 70px;color:var(--muted)}.toast{position:fixed;right:20px;bottom:22px;background:rgba(20,34,26,.92);color:#fff;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);z-index:90;opacity:0;transform:translateY(20px);transition:.22s}.toast.show{opacity:1;transform:translateY(0)}.drawerWrap{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:80;display:none}.drawerWrap.show{display:block}.drawer{position:absolute;right:18px;top:18px;bottom:18px;width:min(560px,calc(100% - 36px));padding:18px;overflow:auto}.savedItem{border:1px solid var(--line);background:var(--card2);border-radius:18px;padding:14px;margin:12px 0}.savedItem .meta{font-size:12px;color:var(--muted);margin:6px 0}.kpiRow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0}.kpi{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px}.kpi b{font-size:22px}.kbd{font-family:ui-monospace,monospace;font-size:12px;border:1px solid var(--line);border-radius:7px;padding:2px 6px;background:rgba(255,255,255,.42)}.floating{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;z-index:40}.floatBtn{width:48px;height:48px;border-radius:18px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow2);cursor:pointer}.risk{border-left:4px solid var(--red);padding-left:12px}.ok{border-left:4px solid var(--green);padding-left:12px}.progress{height:9px;background:rgba(22,166,106,.12);border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold));width:72%}.miniSelectRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.countHint{font-size:12px;color:var(--muted)}
+    @media(max-width:1050px){.heroGrid,.main{grid-template-columns:1fr}.panel{position:relative;top:0}.formBody{max-height:none}.grid4,.cases,.libGrid,.sceneGrid{grid-template-columns:repeat(2,1fr)}.floating{display:none}}
+    @media(max-width:700px){.wrap{width:min(100% - 24px,1240px)}.navin{height:auto;padding:12px 0;align-items:flex-start}.navlinks{justify-content:flex-end}.navlinks a{display:none}.hero{padding-top:38px}.hero h2{letter-spacing:-1px}.stats,.grid4,.formgrid,.twoCol,.cases,.libGrid,.sceneGrid,.kpiRow,.libTop,.miniSelectRow{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.drawer{right:10px;left:10px;width:auto}.sectionHead{display:block}}
+  </style>
+</head>
+<body>
+  <div class="nav"><div class="wrap navin"><div class="brand"><div class="logo">私</div><div><h1>微信私域成交话术生成器 Max</h1><p>客户情况可编辑 · 海量场景库 · 私聊/社群/朋友圈全覆盖</p></div></div><div class="navlinks"><a class="pillbtn" href="#generator">开始生成</a><a class="pillbtn" href="#scenes">场景库</a><a class="pillbtn" href="#library">资料库</a><button class="pillbtn" id="openSaved">收藏库</button><button class="pillbtn" id="themeBtn">深色</button></div></div></div>
+  <header class="hero wrap"><div class="heroGrid"><div><div class="badge">✨ 500+海量话术引擎 · 适合中国微信成交全场景</div><h2>不是几条模板，是真能生成<span>500+场景话术</span>的私域成交系统</h2><p class="heroText">输入客户原话、客户背景、产品差异点、成交底线、禁用表达和权益信息，系统自动组合出 500+ 种不同意思的私聊、社群、朋友圈、复购、转介绍、售后、退款挽回话术。</p><div class="heroActions"><a href="#generator" class="btn primary">生成我的成交话术</a><a href="#scenes" class="btn gold">先选一个场景</a><button class="btn" id="fillDemo">填入小白示例</button></div><div class="stats"><div class="stat"><b>260+</b><span>行业/细分赛道</span></div><div class="stat"><b>120+</b><span>客户抗拒点</span></div><div class="stat"><b>500+</b><span>私域成交话术</span></div><div class="stat"><b>可编辑</b><span>生成后直接改字</span></div></div></div><div class="showcase"><div class="phone"><div class="minirow"><span class="tag">客户问价</span><span class="tag">嫌贵</span><span class="tag">小红书引流</span></div><div class="bubble left">这个陪跑多少钱？我之前买过课没坚持下来，有点怕浪费钱。</div><div class="bubble right">我先不直接建议你买。你现在真正担心的不是价格本身，而是怕买完没人盯、自己又执行不起来，对吧？</div><div class="bubble right">我这个不是录播课，核心是每天作业反馈 + 账号定位修改 + 7天一次复盘，所以更适合你这种“知道方向但卡在执行”的情况。</div><div class="bubble left">那我再考虑一下。</div><div class="bubble right">可以，你不用急着定。我建议你主要确认 3 个点：时间能不能投入、是否接受被督促、以及是不是愿意按节奏交作业。如果这 3 点没问题，我再把适合你的版本发你。</div><div class="minirow"><span class="tag">自然</span><span class="tag">不尴尬</span><span class="tag">有推进</span><span class="tag">可复制</span></div></div></div></div></header>
+  <section class="section wrap"><div class="grid4"><div class="value"><i>🧩</i><h4>客户信息可细填</h4><p>客户原话、背景、顾虑、预算、关系温度、聊天阶段全部可输入，生成结果更像真人回复。</p></div><div class="value"><i>📚</i><h4>海量私域资料库</h4><p>内置破冰、报价、嫌贵、已读不回、社群促单、朋友圈种草、复购转介绍等资料。</p></div><div class="value"><i>📝</i><h4>生成后可编辑</h4><p>结果不是死文本，而是可编辑工作区，客户可按自己的产品和客户语气继续修改。</p></div><div class="value"><i>💼</i><h4>适合付费交付</h4><p>高级视觉、完整功能、可导出、可收藏、可复用，适合小红书虚拟产品售卖。</p></div></div></section>
+  <section class="section wrap" id="scenes"><div class="sectionHead"><div><h3>高频成交场景库</h3><p>覆盖问价、嫌贵、已读不回、退款挽回、门店到店、B端审批等场景，小白点击即可自动填入参数。</p></div><span class="tag">点击任一场景自动填充</span></div><div class="sceneGrid" id="sceneGrid"></div></section>
+  <main class="section wrap" id="generator"><div class="sectionHead"><div><h3>成交话术生成工作台</h3><p>左边填真实情况，右边生成可编辑话术。越具体，越不像模板。</p></div><div class="scorebar"><span class="score" id="generatedCount">已生成 0 次</span><span class="score" id="savedCount">收藏 0 条</span></div></div><div class="main"><aside class="panel"><div class="panelHead"><div><h3>客户情况配置</h3><div class="small">建议按 1-5 步填写；不知道怎么填就先选快捷场景。</div></div><button class="btn" id="resetBtn">清空</button></div><div class="tabs" id="tabs"><button class="tab active" data-tab="base">1 业务</button><button class="tab" data-tab="customer">2 客户</button><button class="tab" data-tab="custom">3 真实情况</button><button class="tab" data-tab="strategy">4 策略</button><button class="tab" data-tab="output">5 输出</button></div><div class="formBody"><div class="tabPane active" id="tab-base"><div class="groupTitle">🏷 我的业务信息</div><div class="formgrid"><div class="fg"><label>所属行业 <span class="hint">非常多细分项</span></label><select id="industry"></select></div><div class="fg"><label>细分赛道</label><select id="subIndustry"></select></div><div class="fg"><label>产品类型</label><select id="productType"></select></div><div class="fg"><label>价格区间</label><select id="price"></select></div></div><div class="fg"><label>产品/服务名称 <span class="hint">会写进话术</span></label><input id="productName" placeholder="例如：小红书变现陪跑营 / 7天皮肤管理体验卡"></div><div class="fg"><label>我的身份/人设</label><input id="sellerIdentity" placeholder="例如：做过3年小红书私域转化的陪跑老师"></div><div class="fg"><label>核心卖点 <span class="hint">可多选</span></label><div class="checks" id="sellingPoints"></div></div><div class="fg"><label>我的独特差异点 <span class="hint">客户最需要编辑这里</span></label><textarea id="productDifference" class="tall" placeholder="例如：不是单纯卖课，而是每天交作业、老师逐条改、每周直播复盘、帮客户把账号定位和前10篇笔记做出来。"></textarea></div><div class="fg"><label>真实案例/证明材料</label><textarea id="proofPoints" placeholder="例如：服务过120位学员，3个宝妈账号30天内收到咨询；有真实聊天截图和笔记改稿记录。"></textarea></div></div><div class="tabPane" id="tab-customer"><div class="groupTitle">👤 客户画像与聊天状态</div><div class="formgrid"><div class="fg"><label>客户来源</label><select id="source"></select></div><div class="fg"><label>关系温度</label><select id="warmth"></select></div><div class="fg"><label>客户阶段</label><select id="stage"></select></div><div class="fg"><label>客户性格</label><select id="personality"></select></div><div class="fg"><label>客户预算状态</label><select id="budget"></select></div><div class="fg"><label>决策角色</label><select id="decisionRole"></select></div></div><div class="fg"><label>客户抗拒点/顾虑</label><select id="resistance"></select></div><div class="fg"><label>客户最在意什么</label><select id="carePoint"></select></div><div class="fg"><label>客户称呼/昵称 <span class="hint">让话术更像私聊</span></label><input id="customerName" placeholder="例如：姐妹 / 王姐 / 张老师 / 宝妈 / 老板"></div></div><div class="tabPane" id="tab-custom"><div class="groupTitle">✍️ 客户真实情况输入区</div><div class="fg"><label>客户原话 <span class="hint">直接复制客户微信消息</span></label><textarea id="customerQuote" class="tall" placeholder="例如：感觉有点贵，我怕自己坚持不下来，而且我现在时间也不多，要不我再考虑一下？"></textarea></div><div class="fg"><label>客户具体背景 <span class="hint">越具体越准</span></label><textarea id="customerSituation" class="tall" placeholder="例如：客户是二线城市宝妈，有副业想法，之前买过低价录播课但没执行，每天晚上只有1小时，想做小红书但怕露脸。"></textarea></div><div class="formgrid"><div class="fg"><label>客户当前最痛的问题</label><input id="pain" placeholder="例如：想变现但不知道卖什么，也不会写笔记"></div><div class="fg"><label>客户想要的结果</label><input id="desiredResult" placeholder="例如：30天内跑通第一个咨询转化"></div></div><div class="fg"><label>必须避开的表达/雷区</label><textarea id="avoidWords" placeholder="例如：不要说限时最后一天；不要太强硬；不要承诺一定赚钱；不要说别人都买了。"></textarea></div><div class="fg"><label>其他补充信息</label><textarea id="customInfo" placeholder="例如：希望话术更像朋友聊天，但要有专业判断；最好先不逼单，先让客户回复真实顾虑。"></textarea></div><div class="notice"><h4>小白填写建议</h4><p>不会写很多也没关系，至少填 3 个：客户原话、你的差异点、你希望客户下一步做什么。工具会自动把这些信息融进话术里。</p></div></div><div class="tabPane" id="tab-strategy"><div class="groupTitle">🎯 成交策略</div><div class="formgrid"><div class="fg"><label>本次沟通目标</label><select id="goal"></select></div><div class="fg"><label>希望客户下一步</label><select id="nextAction"></select></div><div class="fg"><label>话术风格</label><select id="tone"></select></div><div class="fg"><label>成交力度</label><select id="strength"></select></div><div class="fg"><label>优惠/权益提醒</label><select id="offer"></select></div><div class="fg"><label>风险边界</label><select id="riskBoundary"></select></div></div><div class="fg"><label>当前可给客户的权益/赠品/保障</label><textarea id="benefits" placeholder="例如：赠送1次账号诊断、7天内可换班、报名后给资料包、社群答疑30天。"></textarea></div></div><div class="tabPane" id="tab-output"><div class="groupTitle">📦 输出设置</div><div class="formgrid"><div class="fg"><label>输出格式</label><select id="format"></select></div><div class="fg"><label>使用渠道</label><select id="channel"></select></div><div class="fg"><label>文案长度</label><select id="length"></select></div><div class="fg"><label>生成版本数</label><select id="versionCount"><option>1 个精选版本</option><option>3 个不同语气版本</option><option>5 个完整版本</option><option>10 个批量版本</option><option>20 个海量测试版本</option></select></div></div><div class="fg"><label>需要额外生成</label><div class="checks" id="extraOutputs"></div></div><div class="actions"><button class="btn primary" id="generateBtn">生成可编辑成交话术</button><button class="btn" id="exportConfigBtn">导出配置</button></div></div></div></aside><section class="result"><div class="resultHead"><div><h3>生成结果</h3><div class="small">所有结果均可直接编辑，再复制到微信。</div></div><div class="scorebar"><span class="score" id="fitScore">适配度 --</span><span class="score" id="riskScore">合规 --</span></div></div><div class="resultBody" id="resultBody"><div class="empty"><h3>还没有生成话术</h3><p>选择左侧参数，或先点击上方任一快捷场景。生成后这里会出现客户分析、主话术、跟进脚本、朋友圈/社群辅助文案。</p><p><span class="kbd">小白建议</span> 先填客户原话 + 产品差异点，效果最好。</p></div></div></section></div></main>
+  <section class="section wrap"><div class="sectionHead"><div><h3>真实案例矩阵</h3><p>覆盖知识付费、美业、教育、门店、B端、保险房产、老客复购、退款挽回等行业案例。</p></div></div><div class="cases" id="caseGrid"></div></section>
+  <section class="section wrap" id="library"><div class="sectionHead"><div><h3>私域成交资料库</h3><p>内置 500+ 条场景化话术，可搜索、可复制、可套用。</p></div></div><div class="library"><div class="libTop"><input id="libSearch" placeholder="搜索：嫌贵、已读不回、报价、高客单、复购、朋友圈、社群..."><select id="libCategory"></select><button class="btn" id="copyAllLib">复制当前资料</button></div><div class="libGrid" id="libGrid"></div></div></section>
+  <section class="section wrap"><div class="twoCol"><div class="notice ok"><h4>私域成交提醒</h4><p>成交不是逼客户付款，而是帮助客户基于真实情况做清晰决策。高客单成交的重点不是催，而是信任、适配、证据和边界。</p><ul><li>客户说贵，常常是还没理解价值。</li><li>客户已读不回，可能只是优先级不够高。</li><li>客户说考虑，不要急着追，要问清楚考虑点。</li></ul></div><div class="notice risk"><h4>合规边界</h4><p>不要承诺百分百有效、保证赚钱、一定上岸、马上变美、治疗效果、稳赚不赔。话术应强调适配度、执行度、服务边界和真实案例。</p><div class="progress"><span></span></div><p class="small">工具会做基础敏感词提醒，但最终仍需使用者根据行业合规要求检查。</p></div></div></section>
+  <footer class="footer wrap">© 微信私域成交话术生成器 Max · 本地运行 · 不上传客户隐私 · 可作为付费虚拟产品交付</footer>
+  <div class="floating"><button class="floatBtn" title="生成" onclick="document.getElementById('generateBtn').click()">⚡</button><button class="floatBtn" title="收藏" id="floatSaved">⭐</button><button class="floatBtn" title="顶部" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button></div>
+  <div class="drawerWrap" id="drawer"><div class="drawer"><div class="sectionHead"><div><h3>本地收藏库</h3><p>收藏记录保存在当前浏览器，不上传。</p></div><button class="btn" id="closeSaved">关闭</button></div><div class="resultTools"><button class="btn" id="exportSaved">导出收藏</button><button class="btn" id="clearSaved">清空收藏</button></div><div id="savedList"></div></div></div><div class="toast" id="toast">已完成</div>
+<script>
+const $ = id => document.getElementById(id);
+const storeKey = 'wechat_private_sales_generator_pro_v3';
+const countKey = 'wechat_private_sales_generator_count_v3';
+const data = {
+  industry:['知识付费','AI工具教学','小红书运营','自媒体变现','教育培训','考研考公','升学规划','留学咨询','职场咨询','简历面试','美业','皮肤管理','医美咨询','形象管理','健身私教','体重管理','营养健康','运动康复','心理咨询','情感咨询','婚恋服务','母婴育儿','产后修复','月嫂育儿嫂','保险','房产','装修设计','家政服务','摄影写真','婚庆策划','本地生活','餐饮团购','社群团购','实体门店','企业服务','财税法律','SaaS软件','私域代运营','短视频代运营','品牌设计','文案策划','电商运营','跨境电商','虚拟资料','副业项目','手作课程','宠物服务','旅游定制','汽车服务','其他'],
+  subIndustry:['小白入门','高客单咨询','训练营转化','陪跑交付','资料包售卖','到店体验','线上咨询','线下服务','会员社群','年度服务','企业团购','转介绍成交','老客户复购','直播引流承接','小红书私信承接','社群快闪成交','朋友圈种草','企业微信客服','门店预约','长期维护'],
+  productType:['低价资料包','电子书/知识库','体验课','公开课','正式课程','训练营','陪跑服务','一对一咨询','会员社群','年度会员','实物产品','到店服务','长期服务','套餐方案','定制方案','高客单项目','升级服务','复购产品','企业内训','诊断报告','工具模板','SOP手册','社群门票','预约体验','定金锁档'],
+  price:['免费引流品','9.9-49 元','50-99 元','100-199 元','200-399 元','400-599 元','600-999 元','1000-1999 元','2000-4999 元','5000-9999 元','1万-3万元','3万元以上','需要定制报价','分阶段付款','先定金后尾款'],
+  source:['小红书','抖音','视频号','朋友圈','公众号','微信群','朋友介绍','老客户转介绍','线下活动','广告投放','直播间','企业微信','私域社群','社群裂变','线下门店','淘宝/小店','知识星球','训练营群','其他'],
+  warmth:['刚认识','刚加微信1小时内','加微信1天内','聊过几句','主动咨询过','多次互动','看过朋友圈','听过直播','看过案例','已经听过介绍','问过价格','老客户','转介绍客户','沉默客户','准备付款客户','退款边缘客户'],
+  stage:['刚加微信','主动咨询','问产品内容','问价格','要案例','要优惠','犹豫不决','觉得贵','想考虑一下','已读不回','对比同行','担心没效果','想和家人商量','预算不够','不知道适不适合','只想白嫖资料','准备付款','付款后维护','老客户复购','转介绍','请求退款','群内观望','朋友圈互动后未私聊'],
+  personality:['谨慎型','价格敏感型','效率型','结果导向型','情绪型','理性分析型','怕被骗型','爱对比型','拖延型','爽快型','高端客户','小白客户','完美主义型','执行力弱型','自尊心强型','不愿被催型','喜欢细节型','只看结果型','需要陪伴型'],
+  budget:['预算充足','预算有限但有意愿','预算不足','需要分期/定金','想先低价体验','需要和家人商量','需要报销/走公司流程','价格敏感但重视结果','不想花冤枉钱','暂时只想了解'],
+  decisionRole:['本人决策','夫妻/家人共同决策','老板决策','团队决策','朋友建议影响大','需要上级审批','给孩子/家人购买','替团队采购','先咨询后转交决策人'],
+  resistance:['太贵了','没时间','怕没效果','想考虑一下','想和家人商量','现在不着急','已经买过类似产品','对你不够信任','担心被骗','预算不足','想对比一下','不知道适不适合自己','害怕坚持不下来','觉得自己现在不需要','问完价格就不回复','只想白嫖资料','总是拖着不付款','担心售后没人管','怕自己学不会','担心被割韭菜','之前踩过坑','觉得内容网上都有','想等活动价','担心隐私','不知道怎么开始','害怕改变成本','担心周期太长','想先问问朋友','担心家人反对'],
+  carePoint:['价格是否划算','能不能看到效果','有没有真实案例','适不适合小白','是否有人督促','能不能节省时间','服务是否靠谱','是否有售后','有没有风险','能不能快速开始','是否个性化','是否有长期价值','是否能复购升级','是否可以先体验','是否能解决当前痛点'],
+  goal:['破冰','建立信任','了解需求','引导客户说出痛点','介绍产品','发送资料','报价','解释价值','处理异议','引导预约','邀请进群','促成付款','温和催单','唤醒沉默客户','复购推荐','升级高客单','转介绍','售后安抚','退款挽回','群内促单','朋友圈转私聊'],
+  nextAction:['回复我','领取资料','预约咨询','进群','看案例','确认需求','选择套餐','支付定金','完成付款','预约到店','填写表单','转发给朋友','复购升级','发送截图','确定时间','先做诊断','先体验一次','等待我发方案'],
+  tone:['温柔真诚型','专业顾问型','朋友聊天型','高端克制型','简洁直接型','老师耐心型','宝妈亲和型','老板商务型','轻松幽默型','强成交型','低压陪伴型','理性分析型','企业微信客服型','门店销售型','私教陪伴型','社群团长型','IP博主型'],
+  strength:['轻度引导：不压迫，只提醒','中度推进：自然引导行动','明确成交：清晰告诉下一步','限时提醒：加入截止时间/名额/权益','高客单顾问：诊断适配优先','售后维护：稳定情绪增强信任','复购升级：强调长期价值'],
+  offer:['不加入优惠','轻度提醒权益','明确提醒截止时间','提醒名额/排期','赠送资料包','赠送一次诊断','老客户专属权益','定金锁定名额','早鸟价提醒','组合套餐优惠','到店体验权益','不过度强调优惠'],
+  riskBoundary:['正常表达即可','强调不保证结果','强调因人而异','强调需要执行配合','教育类：不承诺提分/上岸','健康美业：不承诺治疗效果','投资副业：不承诺收益','咨询类：强调诊断后再建议','高客单：先判断适配再成交'],
+  format:['一句话回复','一段微信回复','三轮对话脚本','五轮成交脚本','七天跟进脚本','报价完整话术','异议处理话术','朋友圈文案','社群成交文案','语音转文字风格','企业微信客服风格','高客单顾问式成交脚本','售后安抚脚本','转介绍邀请话术','复购升级话术'],
+  channel:['微信私聊','企业微信','朋友圈','微信群','付费社群','直播后私聊','小红书私信承接','视频号粉丝承接','线下门店微信','电话后微信跟进','老客户群','快闪成交群'],
+  length:['短：100字内','中：200-350字','长：500字左右','完整：含分析+主话术+跟进','超完整：多版本+复盘逻辑'],
+  sellingPoints:['省时间','少走弯路','专业指导','结果更稳定','有人陪跑','系统方法','真实案例','节省试错成本','适合小白','提升效率','改善体验','长期价值','稀缺名额','限时权益','一对一反馈','社群答疑','可落地执行','有工具表格','有SOP流程','可复盘优化','售后支持','低门槛体验'],
+  extraOutputs:['客户状态分析','话术拆解逻辑','1天/3天/7天跟进','朋友圈辅助文案','社群辅助文案','语音版话术','报价版本','高端克制版本','强成交版本','风险提醒','成交复盘清单','下一步SOP']
+};
+// 海量下拉项扩展：让客户几乎任何行业、任何微信场景都能找到自己的选项。
+const extraData = {
+  industry:['口腔护理','中医养生','瑜伽普拉提','舞蹈形体','成人教育','少儿编程','书法美术','音乐陪练','家庭教育','亲子关系','职业转型','副业陪跑','创业咨询','招商加盟','连锁门店','社区团购','养老服务','医药器械','宠物训练','宠物医疗','宠物食品','法律顾问','知识产权','税务筹划','人力资源','招聘猎头','企业培训','老板增长课','销售培训','门店督导','招商会务','直播带货','主播培训','达人孵化','品牌孵化','私董会','高端游学','研学营地','营地教育','海外置业','移民咨询','签证服务','奢侈品护理','二手奢侈品','珠宝首饰','茶酒文化','非遗手作','收纳整理','家庭空间规划','家电清洗','家居软装','高端家政','月子中心','养老院获客','康养旅居','企业团建','婚姻咨询','生涯规划','青少年心理','睡眠管理','口播训练','表达力训练','普通话纠音','写作训练营','读书会','知识管理','Notion模板','飞书搭建','自动化办公','Excel培训','PPT设计','简历优化','面试陪跑','海外留学文书','论文辅导','科研咨询','专利辅导','品牌命名','商业计划书','投融资顾问','短剧投放','本地获客','同城探店','外卖运营','餐饮招商','酒店民宿','旅游攻略','摄影约拍','亲子摄影','婚纱摄影','家装设计','软装搭配','全屋定制','房产租售','商铺招商','车险服务','汽车美容','二手车咨询','新能源车顾问'],
+  subIndustry:['7天体验转正','14天训练营','21天打卡营','30天陪跑','90天系统陪跑','全年顾问','私教小班','1对1深度诊断','到店核销','先体验后付费','定金锁档','尾款转化','高净值客户成交','企业客户线索跟进','门店到访转化','直播间引流承接','私信转微信','微信转社群','社群转高客单','低价课转正价课','资料包转咨询','咨询转陪跑','体验卡转套餐','短期服务转长期服务','单次消费转会员卡','老客唤醒','沉睡客户召回','客户转介绍','节日复购','生日关怀','售后续费','退款挽回','流失客户召回','竞品对比','客诉安抚','差评挽回','企业微信标准回复','门店顾问SOP','高客单销售SOP','宝妈用户成交','老板客户成交','学生家长成交','中年女性成交','年轻白领成交','一二线城市高知客户成交'],
+  productType:['体验卡','次卡','月卡','季卡','年卡','家庭套装','企业套餐','团购套餐','联名套餐','标准版','进阶版','旗舰版','私享版','VIP服务','超级会员','小班课','直播课','录播课','打卡营','作业批改','诊断服务','定制报告','陪访服务','代运营服务','托管服务','咨询包','顾问包','方案包','落地包','交付包','训练营门票','线下沙龙','闭门会','私董会席位','转介绍权益','老客升级包','售后续费包','退款挽回方案','门店储值卡','会员充值','预约金','订金','尾款','试用名额','内测名额'],
+  stage:['刚看到内容','刚私信咨询','刚加企业微信','加微信但没说话','看完自动回复','领取资料后沉默','领取资料后提问','问有没有优惠','问和别人有什么不同','问有没有保障','问能不能退款','问能不能分期','问有没有售后','问什么时候开始','问适不适合自己','问能不能先体验','问能不能便宜点','问有没有案例截图','问有没有合同','问服务周期','看完方案未回复','看完案例未回复','看完朋友圈点赞','连续看朋友圈但不私聊','直播后加微','群内加微','线下到店后加微','电话沟通后加微','预约后未到店','到店体验后未办卡','体验课后未报名','试听课后未付款','交定金后犹豫','尾款未付','付款后焦虑','服务中不配合','服务中想退款','效果未达到预期','抱怨服务慢','想暂停服务','即将到期','到期未续费','老客沉睡30天','老客沉睡90天','节日前可复购','生日/纪念日关怀','转介绍但未成交','朋友介绍但不信任','企业客户内部审批','老板已看方案','采购压价','财务走流程','家长犹豫','夫妻意见不一致','团队成员反对'],
+  resistance:['怕被套路','怕交钱后没人理','怕服务缩水','怕货不对版','怕时间冲突','怕不适合自己','怕坚持不下来','怕家人不支持','怕老板不批预算','怕买贵了','怕后续加价','怕隐形消费','怕没有合同','怕售后麻烦','怕退款困难','怕隐私泄露','怕被朋友圈知道','怕同事知道','怕自己基础差','怕老师不专业','怕顾问太销售','怕被催得难受','怕社群太水','怕资料太多看不完','怕课程太难','怕工具不会用','怕落地不了','怕周期太久','怕见效太慢','怕别人做过没用','怕案例不真实','怕价格不透明','怕买完降价','怕没有时间学习','怕影响主业','怕孩子不配合','怕父母反对','怕配偶反对','怕公司流程复杂','怕老板觉得没必要','怕团队执行不了','怕没有人负责','怕效果不可控','怕行业变化快','怕平台规则变','怕投入产出比不划算','怕后期维护成本高','怕只是一堆模板','怕没有个性化','怕自己没资源','怕自己没粉丝','怕自己没经验','怕自己不是这块料','怕做一半放弃','怕花钱买焦虑','怕被割韭菜','怕被过度营销','怕没有真实陪伴','怕复购后重复内容','怕升级不值','怕老客户权益不明显'],
+  goal:['快速破冰','让客户开口说情况','把沉默客户拉回来','让客户回复真实顾虑','把问价客户转成需求沟通','把嫌贵客户转成价值理解','把考虑客户转成下一步动作','把群内观望转成私聊','把朋友圈点赞转成咨询','把资料领取转成付费体验','把体验课转正课','把低价课转高客单','把单次服务转会员卡','把客户转成转介绍','把老客转复购','把退款客户稳住','把客诉客户安抚','把企业客户推进审批','把门店客户推进到店','把到店客户推进办卡','把高净值客户推进诊断','把家长客户推进试听','把老板客户推进方案会','把采购客户推进合同','把财务流程客户推进付款','把已付定金客户推进尾款'],
+  nextAction:['发一句真实顾虑','把目前情况发我','选一个适合版本','确认是否适合','约15分钟沟通','预约一次到店体验','发孩子/账号/身体/业务情况','把预算范围告诉我','看一组真实案例','看完整服务流程','先领低门槛体验','先交定金锁档','确认开课时间','确认服务排期','完成尾款','拉进正式群','填写诊断表','发过往截图','安排第一次沟通','约方案会','转发给家人/老板','提交公司审批','确认合同信息','发票信息','完成复购升级','推荐一个朋友来聊'],
+  tone:['姐姐聊天型','闺蜜建议型','靠谱老师型','资深顾问型','门店店长型','企业销售型','高净值私享型','低压提醒型','温和唤醒型','强信任背书型','案例复盘型','数据理性型','情绪共情型','反焦虑克制型','边界清晰型','轻成交不打扰型','老板对老板型','家长沟通型','宝妈陪伴型','年轻人松弛型','一二线高知型','下沉市场接地气型'],
+  format:['10种标题式回复','10条短句备选','20条朋友圈钩子','20条社群互动句','客户原话改写回复','客户异议拆解表','成交SOP清单','私聊完整剧本','群发不冒犯版本','朋友圈三段式文案','语音口播稿','门店顾问话术','企业微信标准话术','高客单诊断脚本','退款挽回脚本','客诉安抚脚本','老客召回脚本','转介绍激励话术','节日复购文案','客户分层跟进表'],
+  channel:['微信语音转文字','微信长消息','微信短消息','微信标签群发','企业微信欢迎语','企业微信快捷回复','微信群公告','微信群答疑','朋友圈九宫格配文','朋友圈长文','小红书私信','抖音私信','视频号直播后私聊','电话后微信确认','门店前台微信','顾问跟进微信','老客户私聊','转介绍三方群','企业采购群','家长群'],
+  sellingPoints:['真实陪伴','逐条修改','每天反馈','每周复盘','阶段诊断','专属方案','可视化进度','不懂也能用','步骤拆清楚','直接给作业','案例可参考','流程可复制','售前先判断','售后有边界','长期可复用','低风险试用','分层交付','不合适会劝退','不会强推','适配中国用户','适合一二线城市','适合小白','适合忙碌上班族','适合宝妈','适合门店老板','适合顾问销售','适合团队使用','支持复盘优化','支持资料沉淀','支持本地保存'],
+  extraOutputs:['10条短句备选','20条跟进短句','朋友圈钩子库','社群互动句库','客户画像判断','成交风险提示','话术优化建议','客户分层建议','下一次跟进时间','可复制标题','语音版口播','表情符号轻量版','不带表情正式版','企业微信版本','门店版本','高客单版本','低压版本','强推进版本','老客复购版本','转介绍版本']
+};
+Object.keys(extraData).forEach(k=>{ data[k] = [...new Set([...(data[k]||[]), ...extraData[k]])]; });
+const scenes = [
+  ['小红书客户问价格','客户刚加微信直接问多少钱，适合先承接再报价。',{source:'小红书',stage:'问价格',goal:'报价',resistance:'预算不足',format:'报价完整话术',tone:'专业顾问型'}],
+  ['客户嫌贵','客户认可但觉得价格高，适合拆价值和试错成本。',{stage:'觉得贵',goal:'处理异议',resistance:'太贵了',format:'异议处理话术',tone:'低压陪伴型'}],
+  ['客户说考虑一下','温和追问真实顾虑，不硬催。',{stage:'想考虑一下',goal:'处理异议',resistance:'想考虑一下',format:'三轮对话脚本',tone:'温柔真诚型'}],
+  ['客户已读不回','给1天、3天、7天低压跟进。',{stage:'已读不回',goal:'唤醒沉默客户',resistance:'问完价格就不回复',format:'七天跟进脚本',tone:'朋友聊天型'}],
+  ['高客单咨询成交','先诊断适配，再讲方案和下一步。',{price:'5000-9999 元',stage:'主动咨询',goal:'促成付款',resistance:'对你不够信任',format:'高客单顾问式成交脚本',tone:'高端克制型'}],
+  ['社群临近截止','群里有人观望，适合公开答疑+温和提醒。',{stage:'群内观望',goal:'群内促单',resistance:'总是拖着不付款',format:'社群成交文案',channel:'微信群'}],
+  ['朋友圈种草转私聊','发完朋友圈引导客户私聊咨询。',{stage:'朋友圈互动后未私聊',goal:'朋友圈转私聊',format:'朋友圈文案',channel:'朋友圈',tone:'IP博主型'}],
+  ['老客户复购升级','老客户买过低价产品，适合自然升级。',{warmth:'老客户',stage:'老客户复购',goal:'升级高客单',resistance:'现在不着急',format:'复购升级话术'}],
+  ['客户担心没效果','不能承诺结果，重点讲适配、执行、支持。',{stage:'担心没效果',goal:'处理异议',resistance:'怕没效果',riskBoundary:'强调不保证结果',format:'异议处理话术'}],
+  ['只想白嫖资料','给边界，转向低门槛体验。',{stage:'只想白嫖资料',goal:'建立信任',resistance:'只想白嫖资料',format:'一段微信回复',tone:'简洁直接型'}],
+  ['准备付款未付款','客户已认可，临门一脚提醒流程。',{stage:'准备付款',goal:'促成付款',resistance:'总是拖着不付款',format:'付款引导话术',strength:'明确成交：清晰告诉下一步'}],
+  ['付款后安抚','增强信任，降低退款概率。',{stage:'付款后维护',goal:'售后安抚',format:'售后安抚脚本',tone:'老师耐心型'}]
+];
+function buildMegaLibrary(){
+  const cats = ['破冰','问价报价','嫌贵处理','考虑一下','已读不回','建立信任','担心效果','同行对比','付款引导','售后安抚','老客复购','转介绍','朋友圈种草','社群成交','高客单成交','低价体验','门店到店','企业客户','家长教育','美业健康','保险房产','B端服务','退款挽回','客诉安抚','白嫖边界','节日复购','直播承接','小红书承接','企业微信','私域群发'];
+  const openers = [
+    '我先不急着给你推荐，先帮你把情况判断清楚。','你这个问题挺典型的，我先说结论，再说适不适合。','我理解你的顾虑，很多客户到这一步都会卡一下。','你不用马上做决定，我先把关键点讲清楚。','我建议你先别只看价格，先看这个事情值不值得做。',
+    '我跟你说得直白一点，这里真正要判断的是匹配度。','这个问题不能只用一句话回答，我帮你拆成两层。','你问得很对，说明你不是冲动消费型客户。','我先站在你的角度看一下，避免你花冤枉钱。','这个阶段最怕的是没搞清楚就急着买，所以我先帮你判断。'
+  ];
+  const valueAngles = [
+    '核心价值不是资料本身，而是帮你把信息变成可执行动作。','真正省的是你的试错时间，不是让你多买一个产品。','你买到的是流程、反馈、提醒和少走弯路的机会。','它适合已经意识到问题、但需要有人带着落地的人。','如果你只是想随便看看，低门槛版本更合适；如果你想真正推进，就要看完整交付。',
+    '这件事的价值在于把模糊问题拆成明确步骤。','对小白来说，最贵的不是价格，而是一直卡着不动。','和自己摸索相比，它多出来的是诊断、反馈和及时纠偏。','你需要的可能不是更多资料，而是有人帮你判断优先级。','这个方案更像一个推进器，不是单纯卖内容。'
+  ];
+  const objectionAngles = [
+    '你担心贵，本质上是在担心值不值、有没有用、自己能不能执行。','你说考虑一下很正常，我更想知道你主要考虑价格、时间还是效果。','你怕没效果，我不会承诺结果，但我可以把流程、支持和边界说清楚。','你想对比也对，重点看交付是否具体、反馈是否及时、案例是否真实。','你不信任很正常，微信成交本来就需要证据和时间。',
+    '你怕坚持不下来，其实这正是为什么需要陪跑和反馈。','你预算有限可以理解，所以更要先判断是不是现在最值得解决的问题。','你怕被割韭菜很正常，所以我会先把不适合的情况也说清楚。','你想先问家人/同事也可以，我可以给你一段更清楚的说明。','你怕时间不够，那我们要先看最小行动能不能跑起来。'
+  ];
+  const ctas = [
+    '你先把现在最卡的点发我，我帮你判断。','你可以先选一个你最担心的问题，我针对那个点说。','如果你愿意，我把适合你的版本和流程发你。','你不用马上付款，先确认适不适合再说。','如果方向对，我再把下一步发你。',
+    '你先回复我：价格、时间、效果，哪个是你最担心的？','你可以先看一个真实案例，再决定要不要继续。','你把你的预算范围告诉我，我帮你选不浪费钱的版本。','你先确认是否愿意投入时间执行，这比付款更重要。','你要是想开始，我把流程和准备清单发你。'
+  ];
+  const sceneTitles = ['刚加微信','直接问价','嫌贵','考虑一下','已读不回','要案例','怕没效果','对比同行','预算不足','准备付款','老客复购','转介绍','群内观望','朋友圈互动','付款后焦虑','退款边缘','门店体验后','直播后咨询','企业审批','家长犹豫'];
+  const items=[];
+  cats.forEach((cat, ci)=>{
+    for(let i=0;i<18;i++){
+      const title = `${sceneTitles[(i+ci)%sceneTitles.length]}｜${cat}话术 ${i+1}`;
+      const text = `${openers[(i+ci)%openers.length]}${valueAngles[(i*2+ci)%valueAngles.length]}${objectionAngles[(i*3+ci)%objectionAngles.length]}${ctas[(i*5+ci)%ctas.length]}`;
+      items.push({cat,title,text});
+    }
+  });
+  return items.slice(0,540);
+}
+const library = buildMegaLibrary();
+function buildMegaCases(){
+  const base = [
+    ['599元课程问价','小红书客户刚加微信，直接问“多少钱”。','先确认需求，再解释课程包含什么，不要裸报价。',{price:'400-599 元',productType:'正式课程',stage:'问价格',goal:'报价',resistance:'预算不足'}],
+    ['2999陪跑嫌贵','客户认可方向，但觉得陪跑贵，之前买课没坚持。','说明陪跑和录播课差异，承接“怕坚持不下来”。',{price:'2000-4999 元',productType:'陪跑服务',stage:'觉得贵',resistance:'太贵了',goal:'处理异议'}],
+    ['已读不回3天','客户看完报价后沉默，不适合连续催。','低压提醒和价值补充，给客户台阶回复。',{stage:'已读不回',resistance:'问完价格就不回复',format:'七天跟进脚本'}],
+    ['老客户升级','客户买过低价资料包，有进一步需求。','从当前阶段升级，不重复卖同类资料。',{warmth:'老客户',stage:'老客户复购',goal:'升级高客单',productType:'升级服务'}],
+    ['社群截止报名','群里有人问问题但不付款，临近截止。','统一答疑 + 适配提醒 + 行动步骤。',{stage:'群内观望',goal:'群内促单',format:'社群成交文案',channel:'微信群'}],
+    ['客户担心没效果','客户怕交钱后还是没结果，尤其高客单。','合规表达：不保证结果，但说明支持体系。',{resistance:'怕没效果',riskBoundary:'强调不保证结果',goal:'处理异议'}]
+  ];
+  const more = [
+    ['9.9资料包转99体验课','客户领了资料但没继续购买。','不要直接推正价课，先用低门槛体验建立信任。',{productType:'低价资料包',price:'9.9-49 元',stage:'领取资料后沉默',goal:'资料领取转成付费体验',nextAction:'先领低门槛体验'}],
+    ['体验课后未报名','客户上完试听课觉得不错但没报名。','复盘体验收获，再引导选择正式版本。',{productType:'体验课',stage:'体验课后未报名',goal:'把体验课转正课',nextAction:'选择套餐'}],
+    ['高净值客户问方案','客户不问优惠，只问服务深度和隐私。','高端克制，不要促销感，强调边界、流程、私密性。',{price:'1万-3万元',stage:'主动咨询',tone:'高净值私享型',goal:'把高净值客户推进诊断'}],
+    ['宝妈客户怕没时间','客户想做副业但每天只有1小时。','把目标缩小成最小行动，避免制造焦虑。',{industry:'副业陪跑',personality:'需要陪伴型',resistance:'怕没有时间学习',goal:'让客户回复真实顾虑'}],
+    ['家长问能不能提分','教育客户问结果保证。','合规表达，不承诺提分，强调评估、配合和过程。',{industry:'教育培训',stage:'问有没有保障',riskBoundary:'教育类：不承诺提分/上岸',resistance:'怕没效果'}],
+    ['美业客户怕踩坑','客户担心办卡后服务缩水。','强调流程透明、到店体验、售后边界。',{industry:'美业',productType:'门店储值卡',stage:'到店体验后未办卡',resistance:'怕服务缩水'}],
+    ['健身私教客户怕坚持不下去','客户想减脂但过去多次失败。','把销售点放在陪伴和反馈，不夸大结果。',{industry:'健身私教',resistance:'怕坚持不下来',productType:'月卡'}],
+    ['保险客户不信任','客户担心被推销不合适产品。','先做需求梳理，不攻击同行，不强推。',{industry:'保险',resistance:'怕被套路',tone:'资深顾问型'}],
+    ['房产客户对比多家','客户拿几套房源来对比。','强调匹配度和决策标准，不贬低同行。',{industry:'房产',resistance:'想对比一下',goal:'建立信任'}],
+    ['B端老板看完方案未回复','老板客户看过方案后沉默。','用业务结果、落地难点和下一次方案会推进。',{industry:'企业服务',stage:'老板已看方案',goal:'把老板客户推进方案会',channel:'企业微信'}],
+    ['采购客户压价','企业采购要求优惠。','区分价格和服务范围，用方案模块谈判。',{stage:'采购压价',resistance:'怕买贵了',goal:'把采购客户推进合同'}],
+    ['客户只想白嫖资料','客户一直要免费资料，不进入付费。','给价值边界，转低门槛体验。',{stage:'只想白嫖资料',resistance:'只想白嫖资料',tone:'边界清晰型'}],
+    ['客户想退款','客户付款后焦虑想退款。','先安抚情绪，再复盘期待差距和下一步。',{stage:'服务中想退款',goal:'退款客户稳住',format:'退款挽回脚本'}],
+    ['客诉服务慢','客户觉得反馈慢。','承认体验，说明处理节奏和补救动作。',{stage:'抱怨服务慢',goal:'把客诉客户安抚',format:'客诉安抚脚本'}],
+    ['老客沉睡90天','老客户很久没互动，可节日唤醒。','轻问候 + 低压力权益，不像群发广告。',{stage:'老客沉睡90天',goal:'把老客转复购',format:'老客召回脚本'}],
+    ['朋友圈点赞未私聊','客户经常点赞但不问。','用轻松私聊承接，不让对方尴尬。',{stage:'看完朋友圈点赞',goal:'把朋友圈点赞转成咨询',channel:'朋友圈'}],
+    ['直播后加微','直播间用户加微信但信息混乱。','先承接直播内容，再问具体情况。',{source:'直播间',stage:'直播后加微',channel:'视频号直播后私聊'}],
+    ['转介绍客户不信任','朋友介绍但客户仍有防备。','借朋友信任开场，但仍以适配判断为主。',{source:'老客户转介绍',stage:'朋友介绍但不信任',resistance:'对你不够信任'}],
+    ['定金后尾款未付','客户交定金后迟迟不付尾款。','提醒排期和流程，不用威胁式表达。',{stage:'尾款未付',goal:'把已付定金客户推进尾款',nextAction:'完成尾款'}],
+    ['门店预约未到店','客户预约了到店但没来。','给改约台阶，降低尴尬。',{industry:'实体门店',stage:'预约后未到店',goal:'把门店客户推进到店'}],
+    ['家人反对购买','客户说要和家人商量。','给一段可转发给家人的理性说明。',{resistance:'怕家人不支持',decisionRole:'夫妻/家人共同决策',goal:'把考虑客户转成下一步动作'}],
+    ['团队内部反对','B端客户团队有人反对。','拆成试点方案，降低一次性决策压力。',{industry:'企业服务',decisionRole:'团队决策',resistance:'怕团队执行不了'}],
+    ['客户怕隐私泄露','心理/咨询/高端客户担心隐私。','强调边界和流程，不追问敏感细节。',{industry:'心理咨询',resistance:'怕隐私泄露',tone:'高端克制型'}],
+    ['年轻客户嫌太正式','客户喜欢轻松表达，讨厌说教。','用朋友聊天型，短句推进。',{personality:'年轻人松弛型',tone:'朋友聊天型',length:'短：100字内'}],
+    ['老板客户没耐心','老板只要重点和ROI。','用简洁直接型，先说结论。',{personality:'效率型',tone:'老板对老板型',goal:'把老板客户推进方案会'}],
+    ['客户觉得网上都有','知识付费客户质疑资料价值。','说明资料不是壁垒，反馈和路径才是。',{industry:'知识付费',resistance:'觉得内容网上都有',goal:'解释价值'}]
+  ];
+  return base.concat(more);
+}
+const cases = buildMegaCases();
+function init(){
+  for(const k of ['industry','subIndustry','productType','price','source','warmth','stage','personality','budget','decisionRole','resistance','carePoint','goal','nextAction','tone','strength','offer','riskBoundary','format','channel','length']) fillSelect(k,data[k]);
+  fillChecks('sellingPoints', data.sellingPoints.slice(0,22)); fillChecks('extraOutputs', data.extraOutputs);
+  $('industry').value='知识付费'; $('subIndustry').value='陪跑交付'; $('productType').value='陪跑服务'; $('price').value='2000-4999 元'; $('source').value='小红书'; $('warmth').value='主动咨询过'; $('stage').value='问价格'; $('personality').value='谨慎型'; $('budget').value='预算有限但有意愿'; $('decisionRole').value='本人决策'; $('resistance').value='太贵了'; $('carePoint').value='能不能看到效果'; $('goal').value='报价'; $('nextAction').value='选择套餐'; $('tone').value='专业顾问型'; $('strength').value='中度推进：自然引导行动'; $('offer').value='轻度提醒权益'; $('riskBoundary').value='强调需要执行配合'; $('format').value='三轮对话脚本'; $('channel').value='微信私聊'; $('length').value='完整：含分析+主话术+跟进';
+  $('productName').value='小红书私域成交陪跑'; $('sellerIdentity').value='做过多个小红书私域转化项目的陪跑顾问';
+  renderScenes(); renderCases(); renderLibrary(); updateCounts(); bind();
+}
+function fillSelect(id, arr){ $(id).innerHTML = arr.map(v=>`<option value="${v}">${v}</option>`).join(''); }
+function fillChecks(id, arr){ $(id).innerHTML = arr.map((v,i)=>`<label class="chip"><input type="checkbox" value="${v}" ${i<5?'checked':''}><span>${v}</span></label>`).join(''); }
+function bind(){
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tabPane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('tab-'+b.dataset.tab).classList.add('active')});
+  $('generateBtn').onclick=generate; $('resetBtn').onclick=reset; $('fillDemo').onclick=fillDemo; $('themeBtn').onclick=toggleTheme; $('openSaved').onclick=openSaved; $('floatSaved').onclick=openSaved; $('closeSaved').onclick=()=>$('drawer').classList.remove('show'); $('exportSaved').onclick=exportSaved; $('clearSaved').onclick=clearSaved; $('exportConfigBtn').onclick=exportConfig; $('libSearch').oninput=renderLibrary; $('libCategory').onchange=renderLibrary; $('copyAllLib').onclick=copyCurrentLib;
+}
+function renderScenes(){ $('sceneGrid').innerHTML = scenes.map((s,i)=>`<div class="scene" data-i="${i}"><b>${s[0]}</b><p>${s[1]}</p></div>`).join(''); document.querySelectorAll('.scene').forEach(el=>el.onclick=()=>applyPreset(scenes[+el.dataset.i][2], true)); }
+function renderCases(){ $('caseGrid').innerHTML = cases.map((c,i)=>`<div class="caseCard"><span class="tag">案例 ${i+1}</span><h4>${c[0]}</h4><p>${c[1]}</p><p>${c[2]}</p><button class="btn" onclick="applyPreset(cases[${i}][3], true)">填入这个案例</button></div>`).join(''); }
+function renderLibrary(){
+  const cats=['全部',...new Set(library.map(x=>x.cat))]; if(!$('libCategory').innerHTML) $('libCategory').innerHTML=cats.map(c=>`<option>${c}</option>`).join('');
+  const q=$('libSearch').value.trim(); const cat=$('libCategory').value||'全部';
+  const items=library.filter(x=>(cat==='全部'||x.cat===cat)&&(!q||(x.title+x.text+x.cat).includes(q)));
+  const header=`<div class="libItem"><span class="tag">资料库</span><b>当前匹配 ${items.length} 条｜总计 ${library.length} 条</b><p>可按“嫌贵、报价、退款、社群、高客单、企业微信、美业、家长”等关键词搜索。点击复制即可直接粘贴到微信，也可作为生成器素材二次编辑。</p><button class="btn" onclick="copyCurrentLib()">复制当前筛选全部</button></div>`;
+  $('libGrid').innerHTML= items.length ? header + items.map((x,i)=>`<div class="libItem"><span class="tag">${x.cat}</span><b>${x.title}</b><p>${x.text}</p><button class="btn" onclick="copyText(${JSON.stringify(x.text)})">复制</button></div>`).join('') : '<div class="empty">没有找到匹配资料</div>';
+}
+function applyPreset(obj, gen){ Object.entries(obj).forEach(([k,v])=>{ if($(k)) $(k).value=v; }); toast('已填入场景参数'); document.getElementById('generator').scrollIntoView({behavior:'smooth'}); if(gen) setTimeout(generate,260); }
+function checked(id){ return [...document.querySelectorAll('#'+id+' input:checked')].map(x=>x.value); }
+function val(id){ return ($(id)?.value||'').trim(); }
+function collect(){ return {industry:val('industry'),subIndustry:val('subIndustry'),productType:val('productType'),price:val('price'),productName:val('productName'),sellerIdentity:val('sellerIdentity'),sellingPoints:checked('sellingPoints'),productDifference:val('productDifference'),proofPoints:val('proofPoints'),source:val('source'),warmth:val('warmth'),stage:val('stage'),personality:val('personality'),budget:val('budget'),decisionRole:val('decisionRole'),resistance:val('resistance'),carePoint:val('carePoint'),customerName:val('customerName')||'你',customerQuote:val('customerQuote'),customerSituation:val('customerSituation'),pain:val('pain'),desiredResult:val('desiredResult'),avoidWords:val('avoidWords'),customInfo:val('customInfo'),goal:val('goal'),nextAction:val('nextAction'),tone:val('tone'),strength:val('strength'),offer:val('offer'),riskBoundary:val('riskBoundary'),benefits:val('benefits'),format:val('format'),channel:val('channel'),length:val('length'),versionCount:val('versionCount'),extraOutputs:checked('extraOutputs')}; }
+function sourceLead(p){ const map={小红书:'你应该是看到我小红书内容过来的，笔记里讲的是方向，微信里我可以帮你结合具体情况判断。',抖音:'你应该是刷到我短视频过来的，视频讲得比较短，我先帮你把情况拆清楚。',朋友圈:'你应该是看到我朋友圈内容有共鸣，咱们可以先不急着定，我先看你现在卡在哪里。',朋友介绍:'既然是朋友介绍来的，我更建议先判断适配，不合适我也会直接说。',微信群:'群里信息比较多，我在私聊里帮你说得更具体一点。'}; return map[p.source]||'我先结合你的情况看一下，不急着让你做决定。'; }
+function stageAnalysis(p){
+  if(p.stage.includes('问价格')) return '客户已经有兴趣，但还没有充分理解价值。此时不能只报数字，要先承接需求、说明交付内容，再给出低压力行动。';
+  if(p.stage.includes('贵')) return '客户的表层问题是价格，深层问题通常是价值感、信任感和效果确定性不足。要把价格拆成服务、反馈、节省试错和执行支持。';
+  if(p.stage.includes('考虑')) return '客户没有拒绝，但真实顾虑还没说出来。核心不是继续介绍，而是温和追问考虑点。';
+  if(p.stage.includes('已读')) return '客户当前优先级下降，强催会反感。适合低压补充价值，给对方一个容易回复的台阶。';
+  if(p.stage.includes('复购')) return '老客户已经有信任基础，重点不是重新说服，而是指出下一阶段问题和升级价值。';
+  if(p.stage.includes('群内')) return '群内观望者需要公开答疑和安全感，话术要同时照顾多人，不要让用户觉得被单独逼单。';
+  return '客户还处在信息判断阶段，核心是先建立信任、确认需求，再给出匹配建议。';
+}
+function styleSentence(p){ const map={'温柔真诚型':'你不用急着决定，我先帮你把情况说清楚。','专业顾问型':'我建议先从你的阶段、目标和执行条件三个维度判断。','朋友聊天型':'我跟你说得直白一点哈，先别被价格吓到。','高端克制型':'我不建议你在信息不完整的情况下仓促决策。','简洁直接型':'我直接说重点。','强成交型':'如果你已经确认要解决这个问题，那下一步可以直接开始。','低压陪伴型':'你可以慢慢看，我先帮你降低判断成本。'}; return map[p.tone]||'我先帮你梳理一下。'; }
+function valueBlock(p){
+  const pts = p.sellingPoints.length ? p.sellingPoints.join('、') : '系统方法、真实案例、售后支持';
+  const diff = p.productDifference ? `\n\n和普通产品不一样的是：${p.productDifference}` : '';
+  const proof = p.proofPoints ? `\n\n你也可以先看这些证明：${p.proofPoints}` : '';
+  return `它不是单纯让你买一个“${p.productType}”，核心价值在于：${pts}。${diff}${proof}`;
+}
+function objectionBlock(p){
+  const r=p.resistance;
+  if(r.includes('贵')) return '你觉得贵我能理解，单看价格确实会有压力。但我更建议你看它解决的是什么问题：是继续自己摸索、反复试错，还是用一套有人反馈的流程把关键动作推进下去。';
+  if(r.includes('时间')) return '如果你担心时间，我反而建议先看执行方式。真正重要的不是每天花很多时间，而是动作够不够准确、反馈够不够及时。';
+  if(r.includes('效果')) return '效果我不会跟你做绝对承诺，因为它和你的基础、执行度、投入时间都有关系。但我能明确的是，流程、反馈、支持和调整机制会给到你。';
+  if(r.includes('信任')||r.includes('被骗')) return '你谨慎是对的。微信上做决定本来就要先建立信任，所以我可以先发你流程、案例和交付边界，你看完再判断。';
+  if(r.includes('考虑')) return '可以考虑，我不希望你冲动决定。只是我想帮你确认一下，你主要是在考虑价格、时间，还是担心自己坚持不下来？';
+  if(r.includes('同行')||r.includes('对比')) return '你多对比是对的。我不会说别人不好，你重点看交付是否具体、反馈是否及时、方案是否适合你现在的阶段。';
+  if(r.includes('白嫖')) return '资料可以先给你一部分了解，但真正影响结果的不是资料多少，而是你的情况怎么拆、动作怎么排、执行中怎么调整。';
+  return '这个顾虑很正常，我建议我们先把你真正担心的点说清楚，再看这个方案是否值得继续了解。';
+}
+function actionBlock(p){
+  const action = p.nextAction; const benefits=p.benefits?`\n\n如果你现在确认开始，目前可以给你的支持是：${p.benefits}`:'';
+  if(action.includes('付款')||action.includes('定金')) return `如果你确认要开始，我把${action}方式和后续流程发你。完成后我会先发准备清单，再安排第一步，不会让你进来后不知道做什么。${benefits}`;
+  if(action.includes('预约')) return `如果你愿意，我们可以先约一个时间做初步判断。你不用提前准备太多，把现在最卡的点发我就行。${benefits}`;
+  if(action.includes('进群')) return `如果你想继续了解，我可以先拉你进群看看节奏和交付方式，你先观察，不用有压力。${benefits}`;
+  return `如果你觉得我说的方向是对的，你可以先${action}，我再根据你的反馈给你下一步建议。${benefits}`;
+}
+function contextBlock(p){
+  let arr=[]; if(p.customerQuote) arr.push(`你刚才说：“${p.customerQuote}”，我理解你的顾虑。`); if(p.customerSituation) arr.push(`结合你的情况：${p.customerSituation}`); if(p.pain) arr.push(`你现在最关键的问题不是“买不买”，而是先解决：${p.pain}。`); if(p.desiredResult) arr.push(`你想要的结果是：${p.desiredResult}，所以需要看这个产品是否能支撑到这个目标。`); return arr.join('\n');
+}
+function versionNumber(p){ const m=String(p.versionCount||'1').match(/\d+/); return m?Math.max(1,Math.min(20,+m[0])):1; }
+function variantMeta(i){
+  const metas=[
+    ['共情承接版','先接住客户情绪，再轻推进'],['专业诊断版','先判断适配，再给建议'],['价值拆解版','把贵拆成服务价值'],['低压跟进版','不催不逼，给回复台阶'],['强行动版','明确告诉客户下一步'],
+    ['案例证明版','用案例和流程降低不信任'],['反焦虑版','先劝客户不要冲动买'],['高端克制版','适合高客单和老板客户'],['朋友聊天版','更像熟人微信回复'],['边界清晰版','适合白嫖、退款、客诉场景'],
+    ['短句快回版','适合手机上快速回复'],['语音口播版','适合直接发语音'],['企业微信版','适合客服和销售SOP'],['门店到店版','适合预约、体验、办卡'],['老客复购版','适合沉睡客户和升级'],
+    ['社群公开版','适合群内统一回应'],['朋友圈转化版','适合发圈后承接私聊'],['家人转述版','适合客户转发给家人/老板'],['定金尾款版','适合临门一脚'],['长期关系版','适合不想伤害客户关系']
+  ];
+  return metas[i%metas.length];
+}
+function variantScript(p,i){
+  const [title,desc]=variantMeta(i); const product=p.productName||p.productType; const name=p.customerName||'你';
+  const openers=[`${name}，我先接住你这个顾虑。`,`${name}，我不想直接催你买，先帮你判断清楚。`,`${name}，你这个问题其实要分两层看。`,`${name}，如果我是你，我也会先把这几个点问清楚。`,`${name}，我直接说重点，但不会硬推。`];
+  const bridges=[`结合你现在的情况，重点不是“要不要买${product}”，而是它能不能解决你当前最卡的点。`,`你现在真正要判断的是：这个方案是否匹配你的阶段、时间和预算。`,`单看价格容易误判，关键要看交付内容、反馈方式和后续支持。`,`如果只是了解一下，可以先不着急；如果你确实想推进，就要看下一步动作是否清晰。`,`我更建议你按“问题—方案—成本—行动”来判断。`];
+  const custom=[]; if(p.customerQuote) custom.push(`你刚才原话里提到：“${p.customerQuote}”。`); if(p.customerSituation) custom.push(`我理解你的背景是：${p.customerSituation}`); if(p.pain) custom.push(`你当前最卡的是：${p.pain}。`); if(p.desiredResult) custom.push(`你希望的结果是：${p.desiredResult}。`);
+  const values=[`我这边的差异点是：${p.productDifference||'不是只给资料，而是把流程、反馈、复盘和落地动作一起给到你。'}`,`它的价值主要在：${(p.sellingPoints||[]).slice(0,6).join('、')||'节省试错、有人反馈、流程清楚、可持续复盘'}。`,`${p.proofPoints?`你可以先看证明：${p.proofPoints}`:'我可以先发你服务流程和真实案例，你看完再判断。'}`,`${p.benefits?`目前可以给你的支持是：${p.benefits}`:'如果你担心风险，可以先从低门槛动作开始，不需要一步到位。'}`];
+  const objections=[objectionBlock(p),`如果你主要担心的是「${p.resistance}」，我建议我们先把这个顾虑说透，而不是急着让你付款。`,`这类问题不适合靠一句承诺解决，更适合看流程、边界和你自己的执行条件。`,`我不会跟你说“肯定有效”，更负责任的说法是：先看你的基础、投入时间和配合度。`];
+  const ctas=[actionBlock(p),`你可以先回复我一个数字：1 价格顾虑，2 时间顾虑，3 效果顾虑，4 还没信任。我按你的真实顾虑继续说。`,`如果你愿意，我先把适合你的版本、周期和下一步流程发你，你看完再决定。`,`你不用马上定，先把你最担心的点发我，我帮你判断值不值得开始。`];
+  if(i%5===0) return `${openers[i%openers.length]}\n\n${custom.join('\n')||sourceLead(p)}\n\n${bridges[i%bridges.length]}\n\n${values[i%values.length]}\n\n${objections[i%objections.length]}\n\n${ctas[i%ctas.length]}`;
+  if(i%5===1) return `${openers[i%openers.length]}\n\n我先不从价格说起，先从适配说起。\n${custom.join('\n')}\n\n第一，看你现在是不是真的需要解决「${p.pain||p.carePoint}」。\n第二，看你有没有时间配合。\n第三，看${product}的交付是不是正好补上你的短板。\n\n${values[(i+1)%values.length]}\n\n${ctas[(i+1)%ctas.length]}`;
+  if(i%5===2) return `${openers[i%openers.length]}\n\n你可以先不用急着买，我反而建议你先问自己三个问题：\n1. 这个问题继续拖，会不会更浪费时间？\n2. 自己摸索，能不能稳定推进？\n3. 有没有人帮你反馈和纠偏？\n\n${values[(i+2)%values.length]}\n\n所以我的建议是：${ctas[(i+2)%ctas.length]}`;
+  if(i%5===3) return `${name}，我补充一句，不想让你有被催的感觉。\n\n${custom.join('\n')||'你现在还没完全确定，我能理解。'}\n\n如果你暂时只是了解，我不会一直追着你；但如果你确实想解决这个问题，我们可以把「${p.resistance}」先拆开。\n\n${objections[(i+1)%objections.length]}\n\n${ctas[(i+3)%ctas.length]}`;
+  return `${openers[i%openers.length]}\n\n${sourceLead(p)}\n\n针对你这个阶段，我给你一个很简单的判断标准：\n- 只是想看看：先领资料/看案例就够了。\n- 想真正开始：就要确认时间、预算和执行节奏。\n- 想少走弯路：更适合选择有反馈的版本。\n\n${values[(i+3)%values.length]}\n\n${ctas[(i+2)%ctas.length]}`;
+}
+function variantCards(p){
+  const n=versionNumber(p); let html='';
+  for(let i=0;i<n;i++){ const [title,desc]=variantMeta(i); html += card(`版本${i+1}｜${title}｜${desc}`, variantScript(p,i), true, `variantText${i}`); }
+  return html;
+}
+function mainScript(p, variant='专业版'){
+  const name=p.customerName; const product=p.productName||p.productType; const lines=[];
+  lines.push(`${name}，${sourceLead(p)}`);
+  const ctx=contextBlock(p); if(ctx) lines.push(ctx);
+  lines.push(styleSentence(p));
+  lines.push(`关于「${product}」，我先不建议你只看价格或只看介绍页，而是看它和你现在的阶段是否匹配。`);
+  lines.push(valueBlock(p));
+  lines.push(objectionBlock(p));
+  lines.push(actionBlock(p));
+  if(p.offer !== '不加入优惠' && p.offer !== '不过度强调优惠') lines.push(`另外补一句：${p.offer}只是辅助信息，不是逼你马上决定，核心还是看你是否真的适合。`);
+  if(p.riskBoundary && p.riskBoundary !== '正常表达即可') lines.push(`我也提前说清楚边界：${p.riskBoundary}，这样你做决定会更踏实。`);
+  if(p.avoidWords) lines.push(`【内部提醒，不发给客户】避开这些表达：${p.avoidWords}`);
+  if(p.customInfo) lines.push(`【补充策略】${p.customInfo}`);
+  return lines.join('\n\n');
+}
+function dialogue(p){ return `<div class="scriptLine"><b>你：</b>${sourceLead(p)}</div><div class="scriptLine"><b>你：</b>${contextBlock(p)||'你可以先说说你现在最卡的地方，我帮你判断。'}</div><div class="scriptLine"><b>你：</b>${objectionBlock(p)}</div><div class="scriptLine"><b>你：</b>${actionBlock(p)}</div>`; }
+function followups(p){ return `【1天后】\n${p.customerName}，我不确定你是不是这两天比较忙，所以先不打扰太多。你上次提到的点，如果还想继续了解，我可以直接把适合你的版本发你。\n\n【3天后】\n我回来补一句：如果你现在还没决定也没关系。你可以先告诉我卡住的是价格、时间，还是担心效果，我帮你判断现在适不适合开始。\n\n【7天后】\n这周我会把这批咨询做个整理。如果你还想继续了解，我可以给你保留一个简单诊断位；如果暂时不需要，也完全没关系。`; }
+function moments(p){ return `很多人以为成交是会说话，其实不是。真正影响转化的，是你能不能把客户的顾虑说清楚，把产品的价值说具体，把下一步动作说简单。\n\n比如客户说“太贵了”，很多人只会降价，但客户真正担心的可能是：买完没人管、自己坚持不下来、之前踩过坑。\n\n所以好的私域沟通，不是催客户买，而是帮客户判断：这件事现在值不值得做，适不适合自己做，怎么做更稳。`; }
+function groupPost(p){ return `我统一回应一下群里大家最关心的几个问题：\n\n1. 不建议因为快截止就冲动报名，先看自己是否符合：有明确问题、有时间执行、愿意反馈。\n2. ${p.productName||p.productType}的重点不是资料多少，而是流程、反馈和落地。\n3. 如果你还在纠结，可以先把自己的情况私发我，我帮你判断适不适合。\n\n适合再报名，不适合我也会直接说。`; }
+function riskCheck(text){ const bad=['保证赚钱','百分百有效','一定上岸','稳赚不赔','马上暴富','错过后悔一辈子','最后一次机会','绝对有效']; const hit=bad.filter(w=>text.includes(w)); return hit; }
+function fit(p){ let n=50; ['customerQuote','customerSituation','productDifference','proofPoints','pain','desiredResult','benefits'].forEach(k=>{if(p[k])n+=6}); if(p.sellingPoints.length>3)n+=6; return Math.min(98,n); }
+function generate(){
+  const p=collect(); let count=+(localStorage.getItem(countKey)||0)+1; localStorage.setItem(countKey,count);
+  const main=mainScript(p); const variantText = Array.from({length:versionNumber(p)},(_,i)=>variantScript(p,i)).join('\n\n---\n\n');
+  const follow=followups(p); const risk=riskCheck(main).concat(riskCheck(variantText)).concat(riskCheck(p.customInfo));
+  const extras=p.extraOutputs; let html=`<div class="kpiRow"><div class="kpi"><b>${p.industry}</b><div class="small">行业</div></div><div class="kpi"><b>${p.stage}</b><div class="small">客户阶段</div></div><div class="kpi"><b>${p.resistance}</b><div class="small">主要顾虑</div></div><div class="kpi"><b>${versionNumber(p)}版</b><div class="small">自动生成版本</div></div><div class="kpi"><b>${fit(p)}%</b><div class="small">信息完整度</div></div></div>`;
+  html += toolsHtml();
+  html += card('客户状态分析', stageAnalysis(p), false);
+  html += `<div class="notice ok"><h4>500+话术引擎说明</h4><p>本次根据「${p.industry} / ${p.stage} / ${p.resistance} / ${p.tone} / ${p.channel}」自动组合了 ${versionNumber(p)} 个可编辑版本。下方资料库总计 ${library.length} 条，可继续按关键词搜索复制。</p></div>`;
+  html += variantCards(p);
+  html += card('主话术｜完整整合版', main, true, 'mainText');
+  if(p.format.includes('对话')||p.format.includes('脚本')||extras.includes('语音版口播')) html += `<div class="textCard"><h4>多轮对话脚本 <button class="btn" onclick="copyText(document.getElementById('dialogueText').innerText)">复制</button></h4><div class="editable" id="dialogueText" contenteditable="true">${dialogue(p)}</div></div>`;
+  if(extras.includes('1天/3天/7天跟进') || extras.includes('20条跟进短句') || p.format.includes('七天')) html += card('后续跟进脚本', follow+'\n\n【更多短句】\n'+quickFollowSentencePack(p).join('\n'), true, 'followText');
+  if(extras.includes('朋友圈辅助文案') || extras.includes('朋友圈钩子库') || p.format.includes('朋友圈')) html += card('朋友圈辅助文案', moments(p)+'\n\n【朋友圈钩子】\n'+momentHooks(p).join('\n'), true, 'momentText');
+  if(extras.includes('社群辅助文案') || extras.includes('社群互动句库') || p.format.includes('社群')) html += card('社群辅助文案', groupPost(p)+'\n\n【社群互动句】\n'+groupHooks(p).join('\n'), true, 'groupText');
+  html += `<div class="twoCol"><div class="notice"><h4>话术拆解逻辑</h4><p>先承接客户来源 → 引用客户真实情况 → 降低决策压力 → 说明产品差异 → 处理主要顾虑 → 给出轻行动指令。多版本会分别偏向共情、专业、价值、低压、强推进。</p></div><div class="notice ${risk.length?'risk':'ok'}"><h4>合规提醒</h4><p>${risk.length?'检测到风险词：'+[...new Set(risk)].join('、')+'。建议改成“因人而异、需要执行配合、先判断适配”。':'未发现明显夸大承诺词。仍建议根据行业要求检查。'}</p></div></div>`;
+  $('resultBody').innerHTML=html; $('fitScore').textContent='适配度 '+fit(p)+'%'; $('riskScore').textContent=risk.length?'合规需检查':'合规正常'; updateCounts(); toast('已生成 '+versionNumber(p)+' 个版本，可继续编辑和复制'); $('resultBody').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function quickFollowSentencePack(p){
+  return [
+    `1. ${p.customerName}，我不确定你是不是最近比较忙，先不打扰太多，你方便时回我一个关键词就行。`,
+    `2. 我补充一句，你不用马上决定，我主要想确认你卡住的是价格、时间还是效果。`,
+    `3. 如果你暂时不考虑也没关系，我就不继续追着你发啦。`,
+    `4. 你上次提到的顾虑，我想了一下，可以先从一个低门槛动作开始。`,
+    `5. 如果你还想看案例，我可以发一个和你情况接近的，不用马上买。`,
+    `6. 我这边今天整理名额/排期，想确认你是否还需要我帮你保留。`,
+    `7. 你可以直接回我“需要/暂不需要”，我好安排后续，不会一直打扰你。`,
+    `8. 如果你主要是担心${p.resistance}，我可以单独把这个点讲清楚。`,
+    `9. 你现在不确定很正常，先把判断标准搞清楚就不会冲动消费。`,
+    `10. 我给你留个台阶：不想现在开始也没关系，后面有需要再找我。`
+  ];
+}
+function momentHooks(p){
+  return [
+    `1. 很多人不是不想改变，而是不知道第一步怎么做。`,
+    `2. 客户说“贵”的时候，往往不是只在说价格。`,
+    `3. 好的成交，不是催单，而是帮客户做清晰判断。`,
+    `4. ${p.industry}客户最怕的不是花钱，而是花完钱还是没人管。`,
+    `5. 如果你一直收藏资料但没开始，问题可能不在资料数量。`,
+    `6. 真正能转化的私域话术，一定来自真实客户情况。`,
+    `7. 今天又遇到一个典型咨询：${p.resistance}。`,
+    `8. 高客单成交的核心，是信任、适配和证据。`,
+    `9. 不适合的客户，我宁愿先劝退。`,
+    `10. 先判断适不适合，再谈要不要买。`
+  ];
+}
+function groupHooks(p){
+  return [
+    `1. 我统一说一下，大家不用被气氛推着报名，先看自己是否适合。`,
+    `2. 群里问得最多的是${p.resistance}，我用三点说明。`,
+    `3. 还在观望的朋友，可以先把自己的情况私发我，我帮你判断。`,
+    `4. 不建议只看价格，要看交付、反馈和你自己的执行时间。`,
+    `5. 如果你只是想了解，先看群公告就够；如果想开始，再来私聊我。`,
+    `6. 适合的人现在开始会更省试错，不适合的人我不会硬推。`,
+    `7. 今天的答疑我会整理出来，没跟上的可以回看。`,
+    `8. 最后提醒一次，不是催单，是方便我安排后续服务排期。`,
+    `9. 想要我帮你判断的，直接发“诊断”两个字。`,
+    `10. 群里每个人阶段不同，不要照抄别人的选择。`
+  ];
+}
+function toolsHtml(){ return `<div class="resultTools"><button class="btn primary" onclick="copyAllResult()">复制全部结果</button><button class="btn" onclick="saveCurrent()">收藏当前话术</button><button class="btn" onclick="exportCurrent()">导出TXT</button><button class="btn" onclick="generate()">重新生成</button></div>`; }
+function card(title,text,editable,id){ return `<div class="textCard"><h4>${title}<button class="btn" onclick="copyText(document.getElementById('${id||title}').innerText)">复制</button></h4><div class="${editable?'editable':''}" id="${id||title}" ${editable?'contenteditable="true"':''}>${escapeHtml(text).replace(/\n/g,'<br>')}</div></div>`; }
+function escapeHtml(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function copyText(t){ navigator.clipboard?.writeText(t).then(()=>toast('已复制，可直接粘贴到微信')).catch(()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制')}); }
+function allResultText(){ return $('resultBody').innerText.replace(/复制\n/g,'').trim(); }
+function copyAllResult(){ copyText(allResultText()); }
+function saveCurrent(){ const text=allResultText(); if(!text || text.includes('还没有生成')) return toast('请先生成话术'); const p=collect(); const list=getSaved(); list.unshift({time:new Date().toLocaleString('zh-CN'),title:`${p.industry} · ${p.stage} · ${p.resistance}`,text,config:p}); localStorage.setItem(storeKey,JSON.stringify(list.slice(0,80))); updateCounts(); toast('已收藏到本地话术库'); }
+function getSaved(){ try{return JSON.parse(localStorage.getItem(storeKey)||'[]')}catch(e){return[]} }
+function openSaved(){ renderSaved(); $('drawer').classList.add('show'); }
+function renderSaved(){ const list=getSaved(); $('savedList').innerHTML = list.length ? list.map((x,i)=>`<div class="savedItem"><b>${x.title}</b><div class="meta">${x.time}</div><p>${x.text.slice(0,160)}...</p><button class="btn" onclick="copyText(getSaved()[${i}].text)">复制</button> <button class="btn" onclick="restoreSaved(${i})">恢复配置</button> <button class="btn" onclick="deleteSaved(${i})">删除</button></div>`).join('') : '<div class="empty">暂无收藏</div>'; }
+function restoreSaved(i){ const x=getSaved()[i]; if(!x)return; Object.entries(x.config||{}).forEach(([k,v])=>{ if($(k) && typeof v==='string') $(k).value=v; }); toast('已恢复配置'); $('drawer').classList.remove('show'); generate(); }
+function deleteSaved(i){ const list=getSaved(); list.splice(i,1); localStorage.setItem(storeKey,JSON.stringify(list)); renderSaved(); updateCounts(); }
+function clearSaved(){ if(confirm('确认清空全部收藏？')){localStorage.removeItem(storeKey);renderSaved();updateCounts();toast('已清空收藏');} }
+function exportSaved(){ download('微信私域成交收藏库.txt', getSaved().map(x=>`【${x.title}】\n${x.time}\n${x.text}`).join('\n\n---\n\n')); }
+function exportCurrent(){ const text=allResultText(); if(!text || text.includes('还没有生成')) return toast('请先生成话术'); download('微信私域成交话术.txt', text); }
+function exportConfig(){ download('客户情况配置.json', JSON.stringify(collect(),null,2)); }
+function download(name,text){ const blob=new Blob([text],{type:'text/plain;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); URL.revokeObjectURL(a.href); toast('已导出文件'); }
+function copyCurrentLib(){ const q=$('libSearch').value.trim(); const cat=$('libCategory').value||'全部'; const items=library.filter(x=>(cat==='全部'||x.cat===cat)&&(!q||(x.title+x.text+x.cat).includes(q))); copyText(items.map(x=>`【${x.cat}】${x.title}\n${x.text}`).join('\n\n')); }
+function fillDemo(){ $('productName').value='小红书副业变现陪跑营'; $('sellerIdentity').value='专门帮小白用小红书做私域转化的陪跑老师'; $('customerName').value='姐妹'; $('customerQuote').value='感觉2999有点贵，我怕自己坚持不下来，而且之前买过课也没有做起来。'; $('customerSituation').value='客户是二线城市上班族，晚上有1小时空闲，想做小红书副业，但不懂定位、不敢发笔记，也不知道怎么把咨询转到微信。'; $('pain').value='收藏了很多资料，但不知道自己的账号到底卖什么、怎么写第一批笔记。'; $('desiredResult').value='先跑通一个可持续的副业方向，并拿到第一批精准咨询。'; $('productDifference').value='不是录播课，而是定位诊断、选题共创、笔记修改、私域承接话术和每周复盘一起做。'; $('proofPoints').value='已有宝妈、职场人、老师等案例，可看真实改稿记录和私域咨询截图。'; $('benefits').value='报名后赠送一次账号诊断、30条选题库、7天私聊答疑。'; toast('已填入完整示例'); generate(); }
+function reset(){ document.querySelectorAll('input[type=text],textarea').forEach(x=>x.value=''); toast('已清空文本，可重新填写'); }
+function toggleTheme(){ const cur=document.documentElement.dataset.theme; document.documentElement.dataset.theme=cur==='dark'?'':'dark'; $('themeBtn').textContent=cur==='dark'?'深色':'浅色'; }
+function updateCounts(){ $('generatedCount').textContent='已生成 '+(localStorage.getItem(countKey)||0)+' 次'; $('savedCount').textContent='收藏 '+getSaved().length+' 条'; }
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1900); }
+window.applyPreset=applyPreset; window.copyText=copyText; window.cases=cases; window.getSaved=getSaved; window.restoreSaved=restoreSaved; window.deleteSaved=deleteSaved; window.generate=generate; window.copyAllResult=copyAllResult; window.saveCurrent=saveCurrent; window.exportCurrent=exportCurrent;
+init();
+</script>
+</body>
+</html>

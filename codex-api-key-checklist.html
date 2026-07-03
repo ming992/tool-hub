@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex API Key 泄露检查清单</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: rgba(255,255,255,.92);
+      --panel-solid: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --primary2: #7c3aed;
+      --green: #16a34a;
+      --yellow: #d97706;
+      --orange: #ea580c;
+      --red: #dc2626;
+      --danger: #b91c1c;
+      --shadow: 0 24px 60px rgba(15,23,42,.08);
+      --radius: 22px;
+      --chip: #eef2ff;
+      --code: #0f172a;
+      --codeText: #e5e7eb;
+    }
+    [data-theme="dark"] {
+      --bg: #090d18;
+      --panel: rgba(15,23,42,.88);
+      --panel-solid: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: rgba(148,163,184,.22);
+      --primary: #60a5fa;
+      --primary2: #a78bfa;
+      --green: #4ade80;
+      --yellow: #fbbf24;
+      --orange: #fb923c;
+      --red: #f87171;
+      --danger: #fca5a5;
+      --shadow: 0 24px 70px rgba(0,0,0,.35);
+      --chip: rgba(99,102,241,.14);
+      --code: #020617;
+      --codeText: #dbeafe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 8% 5%, rgba(37,99,235,.12), transparent 30%),
+        radial-gradient(circle at 92% 0%, rgba(124,58,237,.14), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(22,163,74,.08), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select {
+      font: inherit;
+    }
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    button:active { transform: translateY(1px) scale(.99); }
+    .app {
+      display: grid;
+      grid-template-columns: 288px 1fr;
+      min-height: 100vh;
+    }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(18px);
+      overflow-y: auto;
+      z-index: 10;
+    }
+    [data-theme="dark"] aside { background: rgba(2,6,23,.62); }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 10px 18px;
+    }
+    .logo {
+      width: 44px; height: 44px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      display: grid; place-items: center;
+      color: white;
+      box-shadow: 0 15px 35px rgba(37,99,235,.3);
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.22;
+    }
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .nav {
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .nav button {
+      text-align: left;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav button span:first-child {
+      display: flex; gap: 10px; align-items: center;
+    }
+    .nav button:hover, .nav button.active {
+      background: var(--chip);
+      color: var(--text);
+    }
+    .side-card {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+    .side-card .small { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    main {
+      padding: 24px;
+      max-width: 1480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .topbar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 12px 14px;
+      background: rgba(246,248,251,.78);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    [data-theme="dark"] .topbar { background: rgba(9,13,24,.78); }
+    .hamb { border-radius: 12px; background: var(--panel-solid); padding: 10px 12px; color: var(--text); box-shadow: var(--shadow); }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      padding: 34px;
+      background:
+        linear-gradient(135deg, rgba(37,99,235,.12), rgba(124,58,237,.10) 48%, rgba(22,163,74,.08)),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 360px; height: 360px;
+      right: -120px; top: -120px;
+      background: radial-gradient(circle, rgba(37,99,235,.22), transparent 64%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.42);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    [data-theme="dark"] .eyebrow { background: rgba(15,23,42,.42); }
+    h2 {
+      margin: 18px 0 10px;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.04;
+      letter-spacing: -0.06em;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+      max-width: 840px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    .btn {
+      border-radius: 14px;
+      padding: 12px 16px;
+      background: var(--panel-solid);
+      color: var(--text);
+      border: 1px solid var(--line);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(15,23,42,.08); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      color: white;
+      border-color: transparent;
+      font-weight: 800;
+    }
+    .btn.danger { background: rgba(220,38,38,.12); color: var(--danger); border-color: rgba(220,38,38,.2); }
+    .btn.ghost { background: transparent; }
+    .btn.small { padding: 8px 10px; min-height: 34px; border-radius: 11px; font-size: 12px; }
+    .hero-note {
+      border: 1px solid rgba(217,119,6,.24);
+      background: rgba(217,119,6,.10);
+      border-radius: 22px;
+      padding: 18px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .section {
+      display: none;
+      margin-top: 22px;
+    }
+    .section.active { display: block; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .card.no-shadow { box-shadow: none; }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .metric .label { color: var(--muted); font-size: 13px; }
+    .metric .value { font-size: 28px; font-weight: 900; letter-spacing: -.04em; margin-top: 7px; }
+    .metric .icon {
+      width: 42px; height: 42px; border-radius: 15px; display: grid; place-items: center;
+      background: var(--chip);
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: var(--chip);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill.red { color: var(--danger); background: rgba(220,38,38,.12); }
+    .pill.green { color: var(--green); background: rgba(22,163,74,.12); }
+    .pill.yellow { color: var(--yellow); background: rgba(217,119,6,.12); }
+    .pill.orange { color: var(--orange); background: rgba(234,88,12,.12); }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 18px 0;
+    }
+    .field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 13px;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    input, textarea, select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel-solid);
+      color: var(--text);
+      padding: 12px 13px;
+      outline: none;
+      transition: .18s ease;
+    }
+    textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+    }
+    .checklist {
+      display: grid;
+      gap: 12px;
+    }
+    .check-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel-solid);
+      overflow: hidden;
+    }
+    .check-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+    }
+    .check-head input[type="checkbox"] { width: 20px; height: 20px; }
+    .check-title {
+      font-weight: 850;
+      line-height: 1.4;
+    }
+    .check-meta {
+      margin-top: 4px;
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .check-body {
+      display: none;
+      padding: 0 14px 14px 46px;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+    .check-item.open .check-body { display: block; }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini-box {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .mini-box b { color: var(--text); }
+    code, pre {
+      background: var(--code);
+      color: var(--codeText);
+      border-radius: 12px;
+      padding: 2px 6px;
+    }
+    pre { padding: 12px; overflow-x: auto; white-space: pre-wrap; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 16px; }
+    .tab {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .tab.active { background: var(--chip); color: var(--primary); font-weight: 850; }
+    .progress {
+      height: 12px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--orange), var(--red));
+      transition: .25s ease;
+    }
+    .result-list, .case-list, .template-list, .task-list {
+      display: grid;
+      gap: 12px;
+    }
+    .result-row, .case-card, .template-card, .task-card {
+      border: 1px solid var(--line);
+      background: var(--panel-solid);
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.7;
+    }
+    .result-row h4, .case-card h4, .template-card h4, .task-card h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .muted { color: var(--muted); }
+    .report-preview {
+      min-height: 420px;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      outline: none;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 1000;
+      display: grid;
+      gap: 10px;
+    }
+    .toast-item {
+      border-radius: 16px;
+      background: var(--panel-solid);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      min-width: 260px;
+      color: var(--text);
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 18px;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal {
+      max-width: 760px;
+      width: 100%;
+      max-height: 88vh;
+      overflow: auto;
+      background: var(--panel-solid);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+    }
+    .modal h3 { margin-top: 0; }
+    .kbd {
+      font-size: 12px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--muted);
+    }
+    .search {
+      min-width: 280px;
+      flex: 1;
+    }
+    .footer-space { height: 80px; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      aside {
+        position: fixed;
+        left: -320px;
+        transition: .25s ease;
+        width: 288px;
+        box-shadow: var(--shadow);
+      }
+      aside.show { left: 0; }
+      .topbar { display: flex; }
+      main { padding: 14px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .span-3,.span-4,.span-5,.span-6,.span-7,.span-8,.span-12 { grid-column: span 12; }
+      .two-col, .mini-grid { grid-template-columns: 1fr; }
+      .check-head { grid-template-columns: auto 1fr; }
+      .check-head > .pill, .check-head > .btn { grid-column: 2; justify-self: start; }
+      .check-body { padding-left: 14px; }
+      h2 { font-size: 34px; }
+      .hero { padding: 24px; border-radius: 26px; }
+    }
+
+    @media print {
+      aside, .topbar, .actions, .toolbar, .btn, .tabs, .modal-backdrop, .toast { display: none !important; }
+      .app { display: block; }
+      body { background: #fff; color: #111; }
+      main { max-width: none; padding: 0; }
+      .section { display: block !important; break-after: auto; }
+      .hero, .card, .check-item { box-shadow: none; border-color: #ddd; background: #fff; }
+      .report-preview { border: 0; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <div class="topbar">
+    <button class="hamb" onclick="toggleAside()">☰ 目录</button>
+    <b>Codex API Key 泄露检查清单</b>
+    <button class="btn small" onclick="toggleTheme()">明暗</button>
+  </div>
+  <div class="app">
+    <aside id="aside">
+      <div class="brand">
+        <div class="logo">KEY</div>
+        <div>
+          <h1>Codex API Key<br/>泄露检查清单</h1>
+          <p>本地扫描 · 风险报告 · 交付检查</p>
+        </div>
+      </div>
+      <div class="nav" id="nav"></div>
+      <div class="side-card">
+        <div class="pill yellow">安全原则</div>
+        <p class="small">不要粘贴完整真实密钥。所有检测默认在浏览器本地完成。导出和同步前请确认内容已脱敏。</p>
+      </div>
+      <div class="side-card">
+        <div class="small">快捷键：<span class="kbd">Ctrl/⌘ + S</span> 本地保存，<span class="kbd">Ctrl/⌘ + F</span> 搜索页面。</div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow">🛡️ Codex 用户专用 · API Key 安全自查工具</span>
+            <h2>交付前，先检查你的 Key 有没有泄露。</h2>
+            <p class="subtitle">面向 Codex、AI 工具创作者、一人公司、小红书博主、私域交付项目的本地化安全检查产品。支持客户信息自定义、本地代码扫描、风险评分、报告生成、多格式下载、飞书同步、Workbuddy 任务流和国产 AI 提示词。</p>
+            <div class="actions">
+              <button class="btn primary" onclick="go('checklist')">开始安全检查</button>
+              <button class="btn" onclick="go('scanner')">导入代码片段</button>
+              <button class="btn" onclick="go('report')">生成风险报告</button>
+              <button class="btn" onclick="downloadMarkdown()">下载检查清单</button>
+              <button class="btn" onclick="openFeishuModal()">同步飞书</button>
+              <button class="btn" onclick="copyWorkbuddyAll()">复制到 Workbuddy</button>
+            </div>
+          </div>
+          <div class="hero-note">
+            <b>重要提醒：</b>本工具默认在浏览器本地运行，不会主动上传你的 API Key、Token、密钥或代码。为了安全，请不要粘贴完整真实密钥。建议只粘贴脱敏片段、代码结构、错误日志或示例内容。如发现真实密钥已经泄露，请立即停用旧 Key，重新生成新 Key，并检查账单与调用记录。
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="section active"></section>
+      <section id="project" class="section"></section>
+      <section id="checklist" class="section"></section>
+      <section id="scanner" class="section"></section>
+      <section id="platforms" class="section"></section>
+      <section id="emergency" class="section"></section>
+      <section id="report" class="section"></section>
+      <section id="downloads" class="section"></section>
+      <section id="feishu" class="section"></section>
+      <section id="workbuddy" class="section"></section>
+      <section id="ai" class="section"></section>
+      <section id="cases" class="section"></section>
+      <section id="settings" class="section"></section>
+      <div class="footer-space"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h3 id="modalTitle">提示</h3>
+      <div id="modalBody"></div>
+      <div class="actions" style="justify-content:flex-end">
+        <button class="btn" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      ["dashboard","仪表盘","📊"],["project","项目信息","🧩"],["checklist","自查清单","✅"],["scanner","本地扫描","🔎"],
+      ["platforms","平台专项","🧭"],["emergency","应急修复","🚨"],["report","报告生成","📝"],["downloads","多格式下载","⬇️"],
+      ["feishu","飞书同步","🟦"],["workbuddy","Workbuddy","🤖"],["ai","国产 AI 模板","✨"],["cases","案例库","📚"],["settings","设置","⚙️"]
+    ];
+
+    const baseProject = {
+      name: "我的 Codex 项目",
+      type: "HTML 工具",
+      scene: "交付客户",
+      platforms: ["Codex","GitHub","Vercel"],
+      models: ["DeepSeek","OpenAI"],
+      online: "否",
+      delivery: "是",
+      paidApi: "是",
+      database: "否",
+      userData: "否",
+      workflow: "否",
+      owner: "",
+      date: new Date().toISOString().slice(0,10),
+      note: ""
+    };
+
+    const state = {
+      project: {...baseProject},
+      checked: {},
+      fixed: {},
+      notes: {},
+      repairNotes: {},
+      scanResults: [],
+      reportText: "",
+      feishuWebhook: "",
+      theme: "light",
+      filter: "",
+      riskFilter: "全部",
+      platformFilter: "全部",
+      showOnlyUnfixed: false
+    };
+
+    const checklist = [
+      ["env-github","GitHub 公开仓库是否上传 .env 文件","严重","GitHub","检查仓库根目录、提交历史和压缩包。",".env 是密钥仓库，公开上传后别人可能直接拿你的额度调用接口。","把 .env 上传到公开仓库。","把 .env 加入 .gitignore，只在部署平台配置环境变量。"],
+      ["html-key","前端 HTML 是否写死 API Key","严重","HTML","查看页面源代码和打包产物。","HTML 是公开文件，别人右键查看源代码就可能看到 Key。","const apiKey='sk-xxxx'","前端调用自己的后端接口，由后端读取环境变量。"],
+      ["js-key","前端 JavaScript 是否写死 Token","严重","前端","搜索 API_KEY、TOKEN、SECRET。","JS 会下载到用户浏览器，不能放需要保密的 Key。","window.API_KEY='xxx'","服务端代理调用，浏览器只拿业务结果。"],
+      ["react-key","Vue/React/Next 前端组件是否包含 Key","高","前端框架","搜索 src、pages、components。","组件最终会打包到浏览器，公开变量不等于安全。","const key = process.env.NEXT_PUBLIC_OPENAI_API_KEY","不要用 NEXT_PUBLIC 存保密 Key，使用 API Route。"],
+      ["readme-key","README.md 是否出现真实 Key","高","文档","搜索 README、docs、wiki。","很多人会忽略文档里的示例，真实 Key 一旦出现就等于公开。","OPENAI_API_KEY=sk-真实内容","用 OPENAI_API_KEY=你的密钥占位。"],
+      ["md-key","Markdown 教程是否泄露 Key","高","文档","检查教程、知识库、交付说明。","教程经常被复制转发，泄露范围会迅速扩大。","截图或代码块里含完整 key","全部使用脱敏示例。"],
+      ["pdf-key","PDF 交付文档是否含密钥截图","中","交付","检查导出的 PDF 和截图。","PDF 很容易长期传播，里面的截图也可能露出密钥。","部署截图露出环境变量值","截图前打码，导出前复查。"],
+      ["word-key","Word 文档是否出现密钥","中","交付","搜索 Word 内容和图片。","客户转发 Word 后你很难收回。","文档里粘贴完整 .env","只写配置位置，不写真实值。"],
+      ["zip-env","交付压缩包是否包含 .env","严重","交付","解压交付包，查看隐藏文件。","压缩包一旦包含 .env，客户和第三方都可能看到。","project.zip 内含 .env","打包前自动排除 .env、node_modules、日志。"],
+      ["xiaohongshu-shot","小红书截图是否露出 Key","高","小红书","检查封面、正文图、评论图、录屏。","小红书内容公开传播，截图里的 Key 可能被放大识别。","教程图露出 sk- 开头内容","发布前检查每一张图，统一打码。"],
+      ["screen-record","录屏教程是否露出环境变量","高","教程","逐帧检查敏感页面。","录屏里一闪而过的 Key 也可能被暂停截图。","录屏展示 Vercel env 值","录屏前切换演示账号或遮挡敏感区域。"],
+      ["feishu-doc","飞书文档是否保存完整 Key","高","飞书","检查共享范围和文档内容。","飞书文档容易共享给团队或客户，权限一扩大就泄露。","飞书表格中保存完整 Token","只保存脱敏编号和配置说明。"],
+      ["tencent-doc","腾讯文档是否保存完整 Key","高","腾讯文档","检查共享链接。","公开链接或协作文档会扩大风险。","腾讯文档里放数据库连接串","删除真实值，改为占位符。"],
+      ["yuque-doc","语雀知识库是否保存完整 Key","高","语雀","检查公开知识库、团队空间。","语雀文章可能被搜索引擎收录或团队共享。","语雀教程里有真实 Token","使用变量名，不写真实值。"],
+      ["notion-doc","Notion 页面是否残留密钥","高","Notion","检查模板、数据库、页面历史。","Notion 模板复制传播后风险更难控制。","模板中残留 API Key","发布模板前用占位符替换。"],
+      ["chat-key","微信群/QQ群/飞书群是否发送完整 Key","高","社群","搜索聊天记录。","群聊中的 Key 很难彻底撤回。","直接发 Key 给别人调试","发临时低权限 Key，用完立即删除。"],
+      ["outsourcing-key","是否把 Key 发给外包人员","高","协作","检查外包交接记录。","外包结束后仍可能持有 Key。","发主账号生产 Key","创建独立子 Key，设置期限和额度。"],
+      ["client-key","是否把 Key 发给客户","中","客户交付","检查交付记录。","客户可能误传或误用你的 Key。","把自己的 API Key 写给客户","让客户配置自己的 Key，或使用你方后端代理。"],
+      ["ai-tool-key","是否把完整 Key 粘贴给在线 AI 工具","高","AI 工具","回忆是否粘贴给第三方网页。","你无法确定第三方工具如何处理输入内容。","让 AI 直接看完整 .env","只给脱敏片段和目录结构。"],
+      ["console-token","浏览器控制台是否 console.log Token","高","前端","搜索 console.log、debug。","用户打开控制台就可能看到 Token。","console.log(process.env.API_KEY)","生产环境删除敏感日志。"],
+      ["error-log-key","报错日志是否输出 Key","高","日志","检查服务器日志、构建日志。","日志经常被复制给别人排错。","Error: invalid key sk-xxx","日志中只显示脱敏值。"],
+      ["deploy-log-env","部署日志是否输出环境变量","高","部署","检查 Vercel/Netlify/Cloudflare 构建输出。","构建日志可能被团队成员或截图看到。","echo $OPENAI_API_KEY","不要打印环境变量。"],
+      ["url-key","请求 URL 是否携带 token/key 参数","高","接口","检查 fetch、axios、请求日志。","URL 会进入浏览器历史、服务器日志和统计工具。","?api_key=xxx","把认证放在服务端，不放 URL。"],
+      ["webhook-public","Webhook 地址是否公开","中","自动化","检查飞书、企业微信、Zapier 等。","Webhook 被别人拿到后可能向你的群或流程发垃圾信息。","文档中公开 robot webhook","重新生成 Webhook，限制来源。"],
+      ["db-frontend","数据库连接串是否写在前端","严重","数据库","搜索 postgres/mysql/mongodb。","数据库连接串放前端可能导致数据库被直接访问。","DATABASE_URL=postgres://user:pass@host","数据库只允许服务端访问。"],
+      ["supabase-role","Supabase service_role key 是否放到前端","严重","Supabase","搜索 service_role。","service_role 权限很高，前端暴露风险极大。","SUPABASE_SERVICE_ROLE_KEY 放在 JS","前端只用 anon key，敏感操作走服务端。"],
+      ["firebase-admin","Firebase Admin Key 是否放前端","严重","Firebase","检查 firebase admin 配置。","Admin Key 拥有管理权限，不能进浏览器。","serviceAccount 放到前端","Admin SDK 只在服务器使用。"],
+      ["wx-secret","微信小程序 AppSecret 是否在前端","严重","微信小程序","检查小程序源码。","小程序前端包可被反编译，不能放 AppSecret。","appSecret 写进小程序 JS","服务端保存 AppSecret。"],
+      ["static-secret","服务端密钥是否放静态 HTML","严重","静态站点","查看 dist、public、assets。","静态站点没有真正服务端，代码都会公开。","fetch(api, {key:'xxx'})","增加后端代理服务。"],
+      ["shared-key","多个项目共用同一个 Key","中","管理","检查密钥命名和项目映射。","被盗刷后很难定位哪个项目泄露。","所有项目用一个 Key","每个项目独立 Key。"],
+      ["env-mix","测试环境和生产环境共用 Key","中","环境","检查 dev/prod 配置。","测试泄露可能影响正式账单。","DEV 和 PROD 用同一 Key","环境隔离。"],
+      ["team-shared","团队多人共用一个 Key","中","团队","检查成员权限。","成员离开或误用后难追责。","团队共用主 Key","按人/项目分配权限。"],
+      ["no-quota","没有设置额度限制","高","成本","检查 API 控制台。","泄露后可能被快速刷爆账单。","无限额度 Key","设置月度、日度、项目额度。"],
+      ["no-rate","没有设置调用频率限制","中","成本","检查网关/平台。","被脚本刷接口时会快速消耗。","无频率限制","增加 rate limit。"],
+      ["no-ip","没有设置 IP 白名单","中","权限","检查平台安全设置。","IP 限制能降低被盗用后的可用性。","任何 IP 都能用","绑定服务器出口 IP。"],
+      ["no-domain","没有设置域名限制","中","权限","检查平台安全设置。","域名限制适合部分前端可公开 Key 场景。","任意域名可调用","绑定授权域名。"],
+      ["no-min-permission","没有最小权限原则","中","权限","检查 Key 权限范围。","权限越大，泄露损失越大。","一个 Key 拥有全部权限","按任务创建最小权限 Key。"],
+      ["no-rotation","长期不轮换 Key","中","管理","检查创建时间。","长期使用的 Key 泄露概率更高。","一年不换 Key","建立定期轮换制度。"],
+      ["no-billing-alert","没有账单报警","高","成本","检查账单通知。","异常消费不提醒，发现时可能已经高额扣费。","没有任何余额提醒","设置余额、日消耗、异常报警。"],
+      ["no-monitor","没有异常调用监控","中","监控","检查调用记录。","无法及时发现陌生调用。","不看 usage dashboard","每周查看调用曲线。"],
+      ["no-naming","没有密钥命名规范","低","管理","检查命名。","命名混乱会影响排查和轮换。","key1/key2/test","项目-环境-用途-日期。"],
+      ["no-handover","没有密钥交接记录","低","团队","检查交接文档。","无人知道 Key 用在哪里，出事难修复。","只有口头交接","建立脱敏台账。"],
+      ["former-member","离职成员权限未删除","高","团队","检查成员列表。","离开的人仍可访问密钥或后台。","外包结束后仍有权限","立即删除成员和轮换 Key。"],
+      ["gitignore","没有配置 .gitignore","高","Git","查看 .gitignore。","没有 .gitignore 很容易误传 .env。","缺少 .env 规则","加入 .env、*.pem、*.key。"],
+      ["secret-scanning","没有开启 Secret Scanning","中","GitHub","检查 Security 设置。","自动扫描能提前发现泄露。","不开启扫描","开启 secret scanning 和 push protection。"],
+      ["git-history","没有清理 Git 提交历史","严重","Git","检查历史提交。","只删除当前文件不够，历史里仍然有 Key。","删掉 .env 后不轮换 Key","轮换 Key，必要时清理历史。"],
+      ["delivery-files","没有检查客户交付文件","高","交付","检查源码、文档、截图、压缩包。","交付包是泄露高发点。","直接打包整个项目","交付前跑清单。"],
+      ["download-pack","没有检查下载包内容","高","售卖产品","检查售卖资料包。","虚拟产品一旦售出很难追回。","资料包里有配置文件","打包前自动排除敏感文件。"],
+      ["no-emergency","没有应急处理预案","中","流程","检查是否有流程文档。","出事后不知道先做什么会扩大损失。","泄露后先慢慢问人","先停用 Key，再排查。"]
+    ];
+
+    const platforms = [
+      ["Codex","不要让 Codex 把真实 Key 写入示例代码。提交前搜索 API_KEY、TOKEN、SECRET、sk-。把敏感调用改成后端代理。"],
+      ["Cursor","检查 .env 是否被 AI 上下文读取并写入文档。让 Cursor 只基于脱敏片段分析。"],
+      ["Claude Code","不要把完整 .env 作为上下文提交。让它输出修复建议时使用占位符。"],
+      ["CodeBuddy","检查生成代码是否写死 Key。交付前导出清单和报告。"],
+      ["Workbuddy","把扫描、修复、生成 .gitignore、改造后端代理拆成可执行任务。"],
+      ["GitHub","检查仓库可见性、.env、README、Issue、Wiki、提交历史，开启 secret scanning。"],
+      ["Vercel","Key 放 Environment Variables，前端不能使用 NEXT_PUBLIC 保存保密 Key，使用 API Route。"],
+      ["Netlify","Key 放 Environment Variables，检查 Build log，不在构建脚本 echo 环境变量。"],
+      ["Cloudflare Pages","用 Pages Functions 或 Workers 代理敏感调用，检查变量是否泄露到前端。"],
+      ["GitHub Pages","它是静态站点，不能保密服务端 Key，必须外接后端代理。"],
+      ["Supabase","前端只用 anon key，service_role key 只能在服务端使用。"],
+      ["Firebase","Admin SDK 密钥只能在服务端。前端配置要理解权限规则。"],
+      ["微信小程序","AppSecret 不能放小程序前端，敏感调用走服务器。"],
+      ["飞书文档","不要保存完整 Key。共享文档只写脱敏值、负责人、配置位置。"],
+      ["Notion","公开模板发布前搜索 key、token、secret、password。"],
+      ["语雀","检查团队知识库和公开文档，截图全部打码。"],
+      ["腾讯文档","取消公开链接，删除真实配置，保留占位符。"],
+      ["小红书发布","发布前检查封面、正文图、录屏、评论、下载包，全部脱敏。"],
+      ["公众号发布","截图、代码块、附件、网盘资料都要检查。"],
+      ["客户交付","交付前检查源码、压缩包、PDF、Word、README、部署说明。"]
+    ];
+
+    const emergency = [
+      ["确认泄露范围","确认密钥出现在哪里，例如 GitHub、截图、飞书文档、HTML 文件、压缩包、客户交付文件。","先列出所有出现位置，不要先改来改去。"],
+      ["立即停用旧 Key","不要犹豫，不要先慢慢排查，先停用或删除旧 Key。","旧 Key 停用后，继续排查和修复。"],
+      ["重新生成新 Key","新 Key 不要复制到旧位置，必须重新配置到安全位置。","生成后立刻设置权限和额度。"],
+      ["检查账单和调用记录","查看是否有异常调用、高额消耗、陌生 IP、异常时间段。","截图保存调用记录，便于复盘。"],
+      ["设置额度和权限","设置每日额度、项目额度、IP 限制、域名限制、最小权限。","能限制就限制，不能限制就用服务端代理。"],
+      ["清理公开内容","删除公开文件、截图、文档、教程、网盘资料、飞书共享链接。","删除公开内容不等于 Key 安全，仍需轮换。"],
+      ["清理 Git 历史","如果密钥进入 Git 提交历史，只删除当前文件不够，需要清理历史并轮换密钥。","不会清理历史时，至少先停用旧 Key。"],
+      ["更新部署环境变量","在 Vercel、Netlify、Cloudflare、服务器、小程序后台重新配置。","重新部署后测试功能是否正常。"],
+      ["通知相关人员","如涉及客户、团队、外包，需要说明风险和处理动作。","只说处理事实，不传播完整 Key。"],
+      ["生成复盘报告","记录泄露原因、影响范围、修复动作、后续预防措施。","形成下次交付前检查流程。"]
+    ];
+
+    const aiTemplates = [
+      ["代码泄露风险检查提示词","请帮我检查以下脱敏代码片段是否存在 API Key、Token、Webhook、数据库连接串、私钥泄露风险。不要要求我提供完整真实密钥。请输出：风险位置、风险等级、为什么危险、修复步骤、安全写法。"],
+      [".gitignore 生成提示词","请根据我的项目类型生成一份适合交付前使用的 .gitignore，重点排除 .env、密钥文件、日志、构建缓存、node_modules、私钥、证书、数据库导出文件。"],
+      ["前端改后端代理提示词","请把当前前端直接调用大模型 API 的结构，改造成前端调用后端代理接口、后端读取环境变量的安全结构。请说明需要新增哪些文件、如何配置环境变量、如何部署。"],
+      ["Vercel 环境变量配置提示词","请帮我生成 Vercel 项目的环境变量配置说明。要求面向小白，说明在哪里添加变量、哪些变量不能以 NEXT_PUBLIC 开头、如何重新部署、如何验证没有泄露。"],
+      ["GitHub 仓库安全检查提示词","请根据以下脱敏目录结构和文件列表，帮我检查 GitHub 仓库交付前的泄露风险。重点检查 .env、README、提交历史、docs、截图、压缩包、日志文件。"],
+      ["飞书文档脱敏提示词","请帮我把这份飞书项目说明改成安全版本，删除或替换所有疑似 API Key、Token、Webhook、数据库连接串，只保留脱敏占位符和配置说明。"],
+      ["小红书发布前安全检查提示词","我准备发布一篇 AI 工具教程，请帮我做发布前安全检查。请检查标题、正文、截图描述、录屏步骤、评论引导、资料包是否可能泄露 API Key。"],
+      ["客户交付前安全检查提示词","请生成一份客户交付前安全检查清单，适用于 HTML 工具/微信小程序/Web 应用，重点检查源码、压缩包、Word、PDF、README、部署说明、截图是否包含敏感密钥。"],
+      ["泄露后应急修复提示词","我怀疑 API Key 已经泄露。请给我一份 30 分钟内优先执行的应急流程：停用旧 Key、生成新 Key、检查账单、清理公开内容、更新部署环境变量、通知相关人员、生成复盘报告。"],
+      ["安全复盘报告生成提示词","请根据我的脱敏信息生成一份 API Key 泄露风险复盘报告，包含事件背景、影响范围、发现方式、修复动作、剩余风险、后续预防措施、客户说明话术。"]
+    ];
+
+    const cases = [
+      ["小白把 OpenAI Key 写进 HTML 源码","为了让页面直接调用接口，把 Key 写进 script。","任何人查看源代码都能拿到 Key。","打开页面源代码搜索 sk-。","立即删除旧 Key，改为后端代理。","前端永远不放保密 Key。","AI 学习者","严重"],
+      ["Codex 生成示例代码时把真实 Key 写进去","用户把真实 Key 作为上下文发给 Codex。","生成代码、文档、截图都可能残留。","全局搜索 API_KEY、sk-。","轮换 Key，清理生成内容。","只用占位符。","Codex 用户","高"],
+      ["小红书博主录屏露出环境变量","录屏时打开部署平台设置页。","粉丝暂停视频后能看到。","逐帧看敏感页面。","删除视频，换 Key，重新录。","录屏用演示账号。","博主","高"],
+      ["GitHub 公开仓库上传 .env","打包或 commit 时没配置 .gitignore。","搜索引擎和机器人可能抓取。","仓库根目录和历史。","停用 Key，清理历史。","先写 .gitignore。","开发者","严重"],
+      ["README 中保留 API Key 示例","把测试时的 Key 当成示例。","文档被复制传播。","搜索 README。","替换为占位符。","文档只写变量名。","知识库作者","高"],
+      ["飞书文档共享给客户时包含数据库连接串","把配置表直接共享。","客户或外部人员可能访问数据库。","检查飞书共享范围。","删除连接串，轮换密码。","飞书只保留脱敏台账。","交付团队","严重"],
+      ["客户交付压缩包包含 .env","直接压缩整个项目。","客户拿到你的生产密钥。","解压后检查隐藏文件。","重新交付安全包。","打包脚本排除敏感文件。","一人公司","严重"],
+      ["微信小程序前端暴露 AppSecret","误以为小程序代码不可见。","小程序包可被反编译。","搜索 appSecret。","迁移到服务端。","小程序前端不放密钥。","小程序开发者","严重"],
+      ["Supabase service_role key 放浏览器端","不了解 anon 和 service_role 区别。","数据库可能被越权操作。","搜索 service_role。","轮换 service_role，改服务端。","前端只用 anon。","SaaS 创业者","严重"],
+      ["Firebase Admin Key 放到前端","把服务账号 JSON 放 public。","管理员权限泄露。","搜索 serviceAccount。","删除并重建服务账号。","Admin SDK 只在服务端。","开发者","严重"],
+      ["Vercel 构建日志输出环境变量","构建脚本里 echo 变量。","日志截图或团队可见。","查看 build log。","删除日志输出，轮换 Key。","不要打印敏感变量。","部署用户","高"],
+      ["Webhook 地址被公开转发","把飞书机器人地址写进文档。","陌生人可往群发消息。","搜索 webhook。","重新生成 Webhook。","Webhook 当作密钥管理。","自动化用户","中"],
+      ["外包人员离开后仍持有 Key","没有交接和权限回收。","离开后仍可调用接口。","检查成员和 Key 使用记录。","删除权限，轮换 Key。","外包用临时 Key。","企业/个人","高"],
+      ["多个项目共用一个 Key","图省事只申请一个 Key。","泄露后无法定位来源。","查看 Key 命名。","拆分项目 Key。","一项目一 Key。","一人公司","中"],
+      ["没有设置额度导致 Key 被刷爆","密钥无预算限制。","可能产生高额账单。","检查账单控制台。","设置额度和报警。","上线前必须限额。","API 用户","高"],
+      ["公开教程使用真实 Token","教程想演示真实效果。","读者复制或滥用。","检查教程代码块。","删除教程，换 Token。","演示用假值。","教程作者","高"],
+      ["网盘资料包包含配置文件","交付资料夹未清理。","购买者拿到敏感配置。","下载包复查。","重新上传安全包。","建立交付清单。","知识付费卖家","高"],
+      ["公众号截图露出控制台","截图时控制台打印 Token。","公开文章长期可见。","放大截图检查。","删除文章图，换 Key。","截图前清控制台。","公众号作者","高"],
+      ["Notion 模板残留真实密钥","复制自己的工作页做模板。","购买者复制后拿到 Key。","搜索模板数据库。","替换占位符。","模板发布前清洗。","模板卖家","高"],
+      ["Git 历史里删了文件但 Key 仍存在","只删除当前 .env。","历史提交仍可恢复。","git log / GitHub 历史。","停用旧 Key，必要时清理历史。","误传后必须轮换。","开发者","严重"],
+      ["浏览器 localStorage 存储 Token","为了方便登录长期保存。","XSS 或用户机器可读。","开发者工具检查。","减少存储敏感数据。","短期 token + 服务端会话。","Web 开发者","中"],
+      ["客户要求把 Key 写死到网页","为了部署简单。","交付后 Key 完全暴露。","检查源码。","解释风险，改后端代理。","合同写明密钥管理方式。","接单者","高"],
+      ["AI 工具读取整个项目包含 .env","上传项目让 AI 分析。","第三方系统可能记录内容。","检查上传文件列表。","撤回/删除，轮换 Key。","上传前排除 .env。","AI 使用者","高"],
+      ["部署说明里写了真实配置截图","给客户讲配置步骤。","截图里包含 Key 值。","检查 Word/PDF 图片。","替换截图，轮换 Key。","截图只显示变量名。","交付者","中"],
+      ["生产 Key 用于演示项目","偷懒用正式 Key。","演示页面公开后消耗生产额度。","查看 Key 使用记录。","拆分演示 Key。","演示环境独立限额。","讲师","高"],
+      ["后端报错返回完整密钥","错误处理不当。","用户页面看到敏感信息。","制造错误测试。","过滤错误输出。","错误信息脱敏。","开发者","高"],
+      ["接口 URL 携带 key 参数","把 Key 放查询参数。","日志和浏览器历史会记录。","看 Network 面板。","改为服务端认证。","不要用 URL 传密钥。","Web 开发者","高"],
+      ["飞书群机器人 Webhook 被外传","把机器人地址贴给多人。","任何人可发消息到群。","检查消息来源。","重建机器人。","Webhook 不公开。","运营团队","中"],
+      ["语雀知识库保存客户密钥","为方便维护写入文档。","团队成员越权看到客户信息。","搜索 key/secret。","删除并轮换客户 Key。","只保留密钥编号。","交付团队","高"],
+      ["数据库导出文件放进下载包","测试数据未清理。","用户数据泄露。","检查 .sql/.dump/.csv。","删除并重新打包。","打包前跑敏感文件检查。","工具卖家","严重"]
+    ];
+
+    const projectTypes = ["HTML 工具","微信小程序","Web 应用","AI 自动化工作流","知识库产品","电商工具","私域成交工具","客户交付项目","小红书售卖产品","其他"];
+    const scenes = ["自己学习","内部使用","交付客户","公开上线","付费售卖","团队协作","教程演示"];
+    const platformOptions = ["Codex","Cursor","Claude Code","CodeBuddy","Workbuddy","Vercel","Netlify","Cloudflare Pages","GitHub Pages","Supabase","Firebase","飞书","Notion","语雀","腾讯文档","微信小程序","小红书"];
+    const modelOptions = ["OpenAI","Claude","DeepSeek","Kimi","通义千问","豆包","智谱","文心一言","火山方舟","MiniMax","百川","零一万物","其他"];
+    const templates = [
+      ["HTML 虚拟产品交付模板",["html-key","js-key","zip-env","delivery-files","download-pack","static-secret","client-key"]],
+      ["小红书 AI 博主发布模板",["xiaohongshu-shot","screen-record","md-key","pdf-key","ai-tool-key","url-key"]],
+      ["一人公司 SaaS 项目模板",["db-frontend","no-quota","no-billing-alert","shared-key","no-monitor","no-min-permission"]],
+      ["微信小程序上线模板",["wx-secret","client-key","delivery-files","no-domain","no-quota"]],
+      ["Vercel 部署项目模板",["react-key","deploy-log-env","no-quota","gitignore","env-github","secret-scanning"]],
+      ["GitHub 开源项目前检查模板",["env-github","readme-key","git-history","secret-scanning","md-key"]],
+      ["私域知识付费资料包模板",["zip-env","pdf-key","word-key","download-pack","feishu-doc"]],
+      ["电商工具项目模板",["db-frontend","webhook-public","no-rate","no-monitor","delivery-files"]],
+      ["飞书自动化流程模板",["feishu-doc","webhook-public","chat-key","no-handover"]],
+      ["客户定制开发交付模板",["client-key","delivery-files","zip-env","pdf-key","word-key","no-handover"]]
+    ];
+
+    function init() {
+      load();
+      renderNav();
+      renderAll();
+      document.body.dataset.theme = state.theme || "light";
+      document.addEventListener("keydown", e => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+          e.preventDefault(); save(); toast("已保存到本地浏览器");
+        }
+      });
+      setInterval(() => save(false), 20000);
+    }
+
+    function renderNav() {
+      const nav = document.getElementById("nav");
+      nav.innerHTML = sections.map(([id,name,icon]) => `<button class="${id==='dashboard'?'active':''}" data-target="${id}" onclick="go('${id}')"><span>${icon}<b>${name}</b></span><span>›</span></button>`).join("");
+    }
+
+    function go(id) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.target === id));
+      if (innerWidth < 980) document.getElementById("aside").classList.remove("show");
+      scrollTo({top: 0, behavior: "smooth"});
+      if (id === "report") generateReport(false);
+    }
+
+    function riskValue(level) {
+      return level === "严重" ? 20 : level === "高" ? 10 : level === "中" ? 5 : 2;
+    }
+    function score() {
+      let total = 0, count = 0, high = 0, fixed = 0;
+      checklist.forEach(([id,,,]) => {
+        const item = checklist.find(x => x[0]===id);
+        if (state.checked[id]) {
+          count++;
+          let v = riskValue(item[2]);
+          if (state.fixed[id]) { v = Math.ceil(v * .25); fixed++; }
+          total += v;
+          if (item[2] === "严重" || item[2] === "高") high++;
+        }
+      });
+      if (state.project.delivery === "是") total += 8;
+      if (state.project.online === "是") total += 8;
+      if (state.project.paidApi === "是") total += 8;
+      if (state.project.database === "是") total += 8;
+      if (state.project.userData === "是") total += 8;
+      total = Math.min(100, total);
+      return { total, count, high, fixed, unfixed: Math.max(0, count-fixed), level: riskLevel(total) };
+    }
+    function riskLevel(n) {
+      if (n <= 20) return ["安全","green"];
+      if (n <= 40) return ["低风险","green"];
+      if (n <= 60) return ["中风险","yellow"];
+      if (n <= 80) return ["高风险","orange"];
+      return ["严重风险","red"];
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderProject();
+      renderChecklist();
+      renderScanner();
+      renderPlatforms();
+      renderEmergency();
+      renderReport();
+      renderDownloads();
+      renderFeishu();
+      renderWorkbuddy();
+      renderAI();
+      renderCases();
+      renderSettings();
+    }
+
+    function renderDashboard() {
+      const s = score();
+      document.getElementById("dashboard").innerHTML = `
+        <div class="grid">
+          ${metric("风险等级", s.level[0], "🛡️", s.level[1])}
+          ${metric("发现问题", s.count + " 项", "⚠️")}
+          ${metric("高危问题", s.high + " 项", "🔥", s.high ? "red" : "green")}
+          ${metric("已修复", s.fixed + " 项", "✅", "green")}
+          <div class="card span-8">
+            <div class="metric"><div><div class="label">当前风险分</div><div class="value">${s.total}/100</div></div><span class="pill ${s.level[1]}">${s.level[0]}</span></div>
+            <div class="progress" style="margin-top:14px"><div class="bar" style="width:${s.total}%"></div></div>
+            <p class="muted">评分会根据勾选风险、修复状态、是否上线、是否交付客户、是否涉及付费 API、数据库和用户数据自动变化。</p>
+          </div>
+          <div class="card span-4">
+            <h3 style="margin-top:0">今天优先处理</h3>
+            ${priorityItems().slice(0,5).map(x=>`<p>• ${x[1]}</p>`).join("") || "<p class='muted'>暂未发现高优先级风险。</p>"}
+          </div>
+          <div class="card span-12">
+            <h3 style="margin-top:0">推荐操作路径</h3>
+            <div class="actions">
+              <button class="btn primary" onclick="go('project')">1. 填项目信息</button>
+              <button class="btn" onclick="go('checklist')">2. 勾选自查项</button>
+              <button class="btn" onclick="go('scanner')">3. 本地扫描代码</button>
+              <button class="btn" onclick="go('emergency')">4. 按流程修复</button>
+              <button class="btn" onclick="go('report')">5. 生成报告</button>
+              <button class="btn" onclick="go('downloads')">6. 导出交付</button>
+            </div>
+          </div>
+        </div>`;
+    }
+    function metric(label, value, icon, color="") {
+      return `<div class="card span-3 metric"><div><div class="label">${label}</div><div class="value">${value}</div></div><div class="icon">${icon}</div></div>`;
+    }
+
+    function renderProject() {
+      document.getElementById("project").innerHTML = `
+        <div class="card">
+          <h3 style="margin-top:0">项目基础信息：让客户按自己的情况编辑</h3>
+          <p class="muted">这里填写的内容会自动进入风险报告、飞书摘要、Workbuddy 任务和导出文件。</p>
+          <div class="grid">
+            ${field("项目名称","name","text")}
+            ${selectField("项目类型","type",projectTypes)}
+            ${selectField("使用场景","scene",scenes)}
+            ${selectField("是否已经上线","online",["否","是"])}
+            ${selectField("是否涉及客户交付","delivery",["否","是"])}
+            ${selectField("是否涉及付费 API","paidApi",["否","是"])}
+            ${selectField("是否涉及数据库","database",["否","是"])}
+            ${selectField("是否涉及用户数据","userData",["否","是"])}
+            ${selectField("是否涉及自动化工作流","workflow",["否","是"])}
+            ${field("负责人","owner","text")}
+            ${field("检查日期","date","date")}
+            <div class="field span-12"><label>备注说明</label><textarea onchange="setProject('note',this.value)">${escapeHtml(state.project.note||"")}</textarea></div>
+            <div class="card no-shadow span-6">
+              <h4>使用平台</h4>
+              <div class="toolbar">${platformOptions.map(p=>checkChip("platforms",p)).join("")}</div>
+            </div>
+            <div class="card no-shadow span-6">
+              <h4>使用的大模型 API</h4>
+              <div class="toolbar">${modelOptions.map(p=>checkChip("models",p)).join("")}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" onclick="save()">保存项目信息</button>
+            <button class="btn" onclick="applyTemplateModal()">选择项目模板</button>
+            <button class="btn" onclick="go('checklist')">下一步：自查清单</button>
+          </div>
+        </div>`;
+    }
+    function field(label,key,type) {
+      return `<div class="field span-4"><label>${label}</label><input type="${type}" value="${escapeHtml(state.project[key]||"")}" onchange="setProject('${key}',this.value)" /></div>`;
+    }
+    function selectField(label,key,opts) {
+      return `<div class="field span-4"><label>${label}</label><select onchange="setProject('${key}',this.value)">${opts.map(o=>`<option ${state.project[key]===o?'selected':''}>${o}</option>`).join("")}</select></div>`;
+    }
+    function checkChip(group,value) {
+      const checked = (state.project[group]||[]).includes(value);
+      return `<label class="pill" style="cursor:pointer"><input type="checkbox" ${checked?'checked':''} onchange="toggleProjectArray('${group}','${value}',this.checked)" style="width:auto"> ${value}</label>`;
+    }
+    function setProject(key,val){ state.project[key]=val; save(false); renderAll(); }
+    function toggleProjectArray(group,val,on) {
+      state.project[group] = state.project[group] || [];
+      if (on && !state.project[group].includes(val)) state.project[group].push(val);
+      if (!on) state.project[group] = state.project[group].filter(x=>x!==val);
+      save(false); renderAll();
+    }
+
+    function renderChecklist() {
+      const platformSet = ["全部", ...new Set(checklist.map(x=>x[3]))];
+      const filtered = checklist.filter(item => {
+        const hay = item.join(" ") + " " + (state.notes[item[0]]||"") + " " + (state.repairNotes[item[0]]||"");
+        const f = !state.filter || hay.toLowerCase().includes(state.filter.toLowerCase());
+        const r = state.riskFilter === "全部" || item[2] === state.riskFilter;
+        const p = state.platformFilter === "全部" || item[3] === state.platformFilter;
+        const u = !state.showOnlyUnfixed || (state.checked[item[0]] && !state.fixed[item[0]]);
+        return f && r && p && u;
+      });
+      document.getElementById("checklist").innerHTML = `
+        <div class="card">
+          <h3 style="margin-top:0">API Key 泄露自查清单</h3>
+          <div class="toolbar">
+            <input class="search" placeholder="搜索检查项、平台、风险类型、修复建议..." value="${escapeHtml(state.filter)}" oninput="state.filter=this.value; renderChecklist()" />
+            <select onchange="state.riskFilter=this.value; renderChecklist()">${["全部","严重","高","中","低"].map(x=>`<option ${state.riskFilter===x?'selected':''}>${x}</option>`).join("")}</select>
+            <select onchange="state.platformFilter=this.value; renderChecklist()">${platformSet.map(x=>`<option ${state.platformFilter===x?'selected':''}>${x}</option>`).join("")}</select>
+            <label class="pill"><input type="checkbox" ${state.showOnlyUnfixed?'checked':''} onchange="state.showOnlyUnfixed=this.checked; renderChecklist()" style="width:auto"> 只看未修复</label>
+            <button class="btn small" onclick="markAllVisible()">批量勾选当前结果</button>
+            <button class="btn small" onclick="clearChecklist()">清空勾选</button>
+          </div>
+          <div class="checklist">${filtered.map(renderCheckItem).join("")}</div>
+        </div>`;
+    }
+    function renderCheckItem(item) {
+      const [id,title,risk,platform,method,explain,bad,good] = item;
+      const checked = !!state.checked[id], fixed = !!state.fixed[id];
+      const cls = risk === "严重" ? "red" : risk === "高" ? "orange" : risk === "中" ? "yellow" : "green";
+      return `<div class="check-item" id="item-${id}">
+        <div class="check-head">
+          <input type="checkbox" ${checked?'checked':''} onchange="state.checked['${id}']=this.checked; save(false); renderAll()" title="勾选表示存在这个风险" />
+          <div onclick="toggleItem('${id}')" style="cursor:pointer">
+            <div class="check-title">${title}</div>
+            <div class="check-meta"><span>${platform}</span><span>检查方法：${method}</span>${fixed?'<span class="pill green">已修复</span>':''}</div>
+          </div>
+          <span class="pill ${cls}">${risk}</span>
+          <button class="btn small" onclick="toggleItem('${id}')">展开</button>
+        </div>
+        <div class="check-body" id="body-${id}">
+          <div class="mini-grid">
+            <div class="mini-box"><b>小白解释</b><br>${explain}</div>
+            <div class="mini-box"><b>检查方法</b><br>${method}</div>
+            <div class="mini-box"><b>错误写法</b><pre>${escapeHtml(bad)}</pre></div>
+            <div class="mini-box"><b>安全写法</b><pre>${escapeHtml(good)}</pre></div>
+          </div>
+          <div class="two-col" style="margin-top:12px">
+            <div class="field"><label>我的实际情况</label><textarea onchange="state.notes['${id}']=this.value; save(false)">${escapeHtml(state.notes[id]||"")}</textarea></div>
+            <div class="field"><label>修复记录</label><textarea onchange="state.repairNotes['${id}']=this.value; save(false)">${escapeHtml(state.repairNotes[id]||"")}</textarea></div>
+          </div>
+          <div class="actions">
+            <button class="btn small" onclick="state.fixed['${id}']=!state.fixed['${id}']; save(false); renderAll()">${fixed?'取消已修复':'标记已修复'}</button>
+            <button class="btn small" onclick="copyText('${escapeAttr('【'+title+'】\\n风险等级：'+risk+'\\n检查方法：'+method+'\\n小白解释：'+explain+'\\n修复建议：'+good)}')">复制修复建议</button>
+            <button class="btn small" onclick="addToReport('${id}')">加入报告</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    function toggleItem(id){ document.getElementById("item-"+id)?.classList.toggle("open"); }
+    function markAllVisible() {
+      document.querySelectorAll(".check-item").forEach(el => {
+        const id = el.id.replace("item-","");
+        state.checked[id] = true;
+      });
+      save(false); renderAll(); toast("已勾选当前筛选结果");
+    }
+    function clearChecklist() {
+      if (!confirm("确定清空所有勾选和修复状态吗？")) return;
+      state.checked = {}; state.fixed = {}; save(false); renderAll(); toast("已清空清单状态");
+    }
+    function addToReport(id) {
+      state.checked[id] = true; save(false); toast("已加入报告问题清单"); renderAll();
+    }
+
+    function renderScanner() {
+      document.getElementById("scanner").innerHTML = `
+        <div class="grid">
+          <div class="card span-7">
+            <h3 style="margin-top:0">代码片段本地扫描器</h3>
+            <p class="muted">可粘贴 HTML、JS、.env、README、部署日志、错误日志、配置文件。检测只在浏览器本地进行。建议使用脱敏片段。</p>
+            <textarea id="scanInput" placeholder="请粘贴脱敏代码片段，例如：OPENAI_API_KEY=sk-****abcd、DATABASE_URL=postgres://****"></textarea>
+            <div class="actions">
+              <button class="btn primary" onclick="scanCode()">开始本地扫描</button>
+              <button class="btn" onclick="document.getElementById('scanInput').value=''">清空输入</button>
+              <button class="btn" onclick="loadDemoScan()">载入演示片段</button>
+            </div>
+          </div>
+          <div class="card span-5">
+            <h3 style="margin-top:0">扫描说明</h3>
+            <p class="muted">识别规则包括 sk-、API_KEY、SECRET_KEY、ACCESS_TOKEN、PRIVATE_KEY、WEBHOOK_URL、DATABASE_URL、SUPABASE_SERVICE_ROLE、Authorization: Bearer、console.log、token=、key= 等。</p>
+            <p><span class="pill yellow">注意</span> 扫描结果会自动脱敏，只显示前 4 位和后 4 位。</p>
+          </div>
+          <div class="card span-12">
+            <h3 style="margin-top:0">扫描结果</h3>
+            <div class="result-list" id="scanResults">${renderScanResults()}</div>
+          </div>
+        </div>`;
+    }
+    function loadDemoScan() {
+      document.getElementById("scanInput").value = `// 演示片段，请不要粘贴真实完整密钥
+const OPENAI_API_KEY = "sk-demo1234567890abcdef";
+console.log("token", process.env.ACCESS_TOKEN);
+DATABASE_URL=postgres://user:password@example.com:5432/app
+Authorization: Bearer abcdefghijklmnopqrstuvwxyz
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOi...demo`;
+    }
+    function scanCode() {
+      const text = document.getElementById("scanInput").value || "";
+      if (!text.trim()) return toast("请先粘贴脱敏代码片段");
+      const rules = [
+        ["疑似 OpenAI/兼容 Key","sk-[A-Za-z0-9_\\-]{8,}","严重","疑似 sk- 开头密钥，前端或文档出现都需要立即轮换。"],
+        ["API_KEY 字段","[A-Z0-9_]*API_KEY\\s*[:=]","高","出现 API_KEY 配置字段，请确认没有真实值。"],
+        ["SECRET_KEY 字段","[A-Z0-9_]*SECRET_KEY\\s*[:=]","高","Secret 类字段通常不能出现在前端或公开文档。"],
+        ["ACCESS_TOKEN 字段","ACCESS_TOKEN\\s*[:=]","高","访问令牌泄露可能导致接口被调用。"],
+        ["AUTH_TOKEN 字段","AUTH_TOKEN\\s*[:=]","高","认证 Token 不应出现在公开代码中。"],
+        ["PRIVATE_KEY 字段","PRIVATE_KEY|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----","严重","私钥泄露风险极高。"],
+        ["Webhook URL","WEBHOOK_URL\\s*[:=]|https?://[^\\s\"']*webhook[^\\s\"']*","中","Webhook 被公开后可能被滥用。"],
+        ["DATABASE_URL","DATABASE_URL\\s*[:=]|postgres://|mysql://|mongodb\\+srv://","严重","数据库连接串不能出现在前端或交付文件。"],
+        ["Supabase Service Role","SUPABASE_SERVICE_ROLE|service_role","严重","service_role 权限极高，只能放服务端。"],
+        ["Firebase Key","FIREBASE_[A-Z_]*KEY\\s*[:=]|serviceAccount","高","Firebase Admin 配置不能放前端。"],
+        ["国产模型 Key","DEEPSEEK_API_KEY|KIMI_API_KEY|QWEN_API_KEY|ARK_API_KEY|ZHIPU_API_KEY|DOUBAO_API_KEY","高","国产模型 API Key 也要按密钥管理。"],
+        ["URL 参数携带 key/token","[?&](token|key|api_key|access_token)=[^\\s&\"']+","高","不要在 URL 中携带密钥。"],
+        ["Authorization Bearer","Authorization\\s*:\\s*Bearer\\s+[A-Za-z0-9_\\-.]+","高","Bearer Token 不能暴露在公开文件。"],
+        ["console.log 敏感输出","console\\.log\\([^\\)]*(key|token|secret|password|env)[^\\)]*\\)","中","生产环境不要打印敏感字段。"],
+        [".env 内容","(^|\\n)[A-Z0-9_]+\\s*=\\s*[^\\n]+","中","疑似环境变量文件内容，请确认没有真实密钥。"],
+        ["密码字段","password\\s*[:=]","中","密码字段应脱敏并避免提交。"]
+      ];
+      const lines = text.split(/\n/);
+      const results = [];
+      rules.forEach(([name,pattern,level,advice]) => {
+        const re = new RegExp(pattern, "gi");
+        lines.forEach((line, idx) => {
+          const match = line.match(re);
+          if (match) results.push({
+            name, level, keyword: match[0], line: idx+1, snippet: mask(line.trim()).slice(0,220), advice
+          });
+        });
+      });
+      state.scanResults = results;
+      save(false); renderScanner(); renderAll();
+      toast(results.length ? `发现 ${results.length} 条疑似风险` : "未发现明显风险，但仍建议人工检查");
+    }
+    function renderScanResults() {
+      if (!state.scanResults.length) return `<p class="muted">暂无扫描结果。粘贴脱敏代码后点击“开始本地扫描”。</p>`;
+      return state.scanResults.map((r,i)=>`<div class="result-row">
+        <h4>${i+1}. ${r.name} <span class="pill ${r.level==='严重'?'red':r.level==='高'?'orange':'yellow'}">${r.level}</span></h4>
+        <p class="muted">第 ${r.line} 行 · 命中：${escapeHtml(mask(r.keyword))}</p>
+        <pre>${escapeHtml(r.snippet)}</pre>
+        <p><b>建议：</b>${r.advice}</p>
+        <button class="btn small" onclick="copyText('${escapeAttr(r.name+'\\n风险等级：'+r.level+'\\n片段：'+r.snippet+'\\n建议：'+r.advice)}')">复制结果</button>
+      </div>`).join("");
+    }
+
+    function renderPlatforms() {
+      document.getElementById("platforms").innerHTML = `
+        <div class="card">
+          <h3 style="margin-top:0">平台专项检查</h3>
+          <div class="tabs" id="platformTabs">${platforms.map((p,i)=>`<button class="tab ${i===0?'active':''}" onclick="showPlatform(${i})">${p[0]}</button>`).join("")}</div>
+          <div id="platformDetail"></div>
+        </div>`;
+      setTimeout(()=>showPlatform(0),0);
+    }
+    function showPlatform(i) {
+      document.querySelectorAll("#platformTabs .tab").forEach((t,idx)=>t.classList.toggle("active",idx===i));
+      const [name,desc] = platforms[i];
+      document.getElementById("platformDetail").innerHTML = `<div class="grid">
+        <div class="card no-shadow span-7">
+          <h3>${name} 安全检查</h3>
+          <p>${desc}</p>
+          <h4>检查路径</h4>
+          <p class="muted">搜索关键词：API_KEY、TOKEN、SECRET、PASSWORD、WEBHOOK、DATABASE_URL、sk-、Bearer、service_role。</p>
+          <h4>修复步骤</h4>
+          <ol>
+            <li>先确认是否有真实 Key 出现在公开位置。</li>
+            <li>如果出现，立即停用旧 Key，不要只删除文件。</li>
+            <li>重新生成新 Key，并放到安全的环境变量位置。</li>
+            <li>检查账单、调用记录、部署日志、交付文件。</li>
+            <li>生成复盘报告，加入下次交付前检查流程。</li>
+          </ol>
+        </div>
+        <div class="card no-shadow span-5">
+          <h4>可复制提示词</h4>
+          <pre>${escapeHtml(`请帮我检查 ${name} 项目是否存在 API Key、Token、Webhook、数据库连接串泄露风险。请不要要求我提供完整真实密钥，只基于脱敏代码、目录结构和配置方式判断风险，并输出修复步骤。`)}</pre>
+          <button class="btn small" onclick="copyText('${escapeAttr(`请帮我检查 ${name} 项目是否存在 API Key、Token、Webhook、数据库连接串泄露风险。请不要要求我提供完整真实密钥，只基于脱敏代码、目录结构和配置方式判断风险，并输出修复步骤。`)}')">复制提示词</button>
+        </div>
+      </div>`;
+    }
+
+    function renderEmergency() {
+      document.getElementById("emergency").innerHTML = `<div class="card">
+        <h3 style="margin-top:0">泄露后 30 分钟应急修复流程</h3>
+        <p class="muted">先停用旧 Key，再慢慢排查。不要把“删除公开文件”误认为“风险已消失”。</p>
+        <div class="checklist">${emergency.map((e,i)=>`<div class="check-item" id="em-${i}">
+          <div class="check-head"><span class="pill red">第 ${i+1} 步</span><div class="check-title" onclick="document.getElementById('em-${i}').classList.toggle('open')" style="cursor:pointer">${e[0]}</div><button class="btn small" onclick="document.getElementById('em-${i}').classList.toggle('open')">展开</button></div>
+          <div class="check-body"><p><b>我要做什么：</b>${e[1]}</p><p><b>怎么判断完成：</b>${e[2]}</p><p><b>复制话术：</b>我正在处理 API Key 泄露风险，已先停用旧密钥并开始排查公开内容、账单调用记录和部署环境变量。后续会提供修复记录和预防措施。</p><button class="btn small" onclick="copyText('${escapeAttr(e[0]+'\\n'+e[1]+'\\n完成判断：'+e[2])}')">复制本步骤</button></div>
+        </div>`).join("")}</div>
+      </div>`;
+    }
+
+    function renderReport() {
+      document.getElementById("report").innerHTML = `<div class="grid">
+        <div class="card span-4">
+          <h3 style="margin-top:0">报告版本</h3>
+          <div class="actions" style="display:grid">
+            <button class="btn" onclick="generateReport(true,'技术版')">技术版报告</button>
+            <button class="btn" onclick="generateReport(true,'小白版')">小白版报告</button>
+            <button class="btn" onclick="generateReport(true,'客户交付版')">客户交付版报告</button>
+            <button class="btn" onclick="generateReport(true,'老板汇报版')">老板汇报版报告</button>
+            <button class="btn" onclick="generateReport(true,'团队整改版')">团队整改版报告</button>
+          </div>
+          <p class="muted">报告区可直接编辑，编辑后的内容也可以下载。</p>
+        </div>
+        <div class="card span-8">
+          <h3 style="margin-top:0">API Key 泄露风险检查报告</h3>
+          <div id="reportPreview" class="report-preview" contenteditable="true" oninput="state.reportText=this.innerText; save(false)">${escapeHtml(state.reportText || buildReport("客户交付版"))}</div>
+          <div class="actions">
+            <button class="btn primary" onclick="generateReport(true)">重新生成</button>
+            <button class="btn" onclick="copyReport()">复制报告</button>
+            <button class="btn" onclick="downloadTxt()">下载 TXT</button>
+            <button class="btn" onclick="downloadWord()">下载 Word</button>
+            <button class="btn" onclick="window.print()">打印 / PDF</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    function generateReport(showToast=true, version="客户交付版") {
+      state.reportText = buildReport(version);
+      save(false);
+      const el = document.getElementById("reportPreview");
+      if (el) el.innerText = state.reportText;
+      if (showToast) toast("报告已生成，可直接编辑、复制、下载");
+    }
+    function buildReport(version="客户交付版") {
+      const s = score();
+      const issues = checklist.filter(x=>state.checked[x[0]]);
+      const fixed = issues.filter(x=>state.fixed[x[0]]);
+      const unfixed = issues.filter(x=>!state.fixed[x[0]]);
+      const high = issues.filter(x=>x[2]==="严重" || x[2]==="高");
+      return `《Codex API Key 泄露风险检查报告》｜${version}
+
+一、项目基本信息
+项目名称：${state.project.name || "未填写"}
+项目类型：${state.project.type}
+使用场景：${state.project.scene}
+使用平台：${(state.project.platforms||[]).join("、") || "未选择"}
+使用模型 API：${(state.project.models||[]).join("、") || "未选择"}
+是否上线：${state.project.online}
+是否涉及客户交付：${state.project.delivery}
+是否涉及付费 API：${state.project.paidApi}
+是否涉及数据库：${state.project.database}
+是否涉及用户数据：${state.project.userData}
+负责人：${state.project.owner || "未填写"}
+检查日期：${state.project.date || new Date().toISOString().slice(0,10)}
+
+二、风险评分
+当前风险分：${s.total}/100
+当前风险等级：${s.level[0]}
+发现问题数量：${issues.length}
+高危/严重问题数量：${high.length}
+已修复问题数量：${fixed.length}
+未修复问题数量：${unfixed.length}
+
+三、发现的问题
+${issues.length ? issues.map((x,i)=>`${i+1}. 【${x[2]}】${x[1]}
+   平台/场景：${x[3]}
+   小白解释：${x[5]}
+   修复建议：${x[7]}
+   我的情况：${state.notes[x[0]] || "未填写"}
+   修复记录：${state.repairNotes[x[0]] || (state.fixed[x[0]] ? "已标记修复" : "未填写")}`).join("\n\n") : "暂未勾选风险项。"}
+
+四、本地扫描结果
+${state.scanResults.length ? state.scanResults.map((r,i)=>`${i+1}. 【${r.level}】${r.name}，第 ${r.line} 行，片段：${r.snippet}，建议：${r.advice}`).join("\n") : "暂未进行本地扫描，或未发现明显风险。"}
+
+五、优先修复事项
+${priorityItems().slice(0,8).map((x,i)=>`${i+1}. ${x[1]}｜风险等级：${x[2]}｜建议：${x[7]}`).join("\n") || "暂无高优先级事项。"}
+
+六、应急处理建议
+1. 如果出现真实密钥，立即停用旧 Key。
+2. 重新生成新 Key，并配置到部署平台环境变量或服务端。
+3. 检查账单、调用记录、异常 IP、异常时间段。
+4. 检查 GitHub、飞书、Notion、PDF、Word、压缩包、小红书截图和录屏。
+5. 涉及客户或团队时，输出脱敏说明，不传播完整 Key。
+6. 形成交付前安全检查流程。
+
+七、给客户/老板/团队的说明话术
+本次检查重点排查 API Key、Token、Webhook、数据库连接串、私钥等敏感信息是否出现在前端代码、公开文档、部署日志、截图录屏和交付文件中。发现风险后，应优先停用旧密钥、重新生成新密钥、配置额度和权限限制，并对交付资料进行脱敏处理。后续建议把安全检查加入每次上线和交付前的固定流程。
+
+八、后续预防措施
+1. 前端代码不写真实保密 Key。
+2. .env 加入 .gitignore。
+3. 每个项目独立 Key，测试和生产分开。
+4. 设置额度、权限、IP/域名限制和账单报警。
+5. 公开教程、截图、录屏、文档、下载包全部脱敏。
+6. 交付前使用本清单复查。
+7. 每月进行一次 Key 轮换和权限复盘。
+
+备注：
+${state.project.note || "无"}`;
+    }
+
+    function priorityItems() {
+      return checklist.filter(x=>state.checked[x[0]] && !state.fixed[x[0]]).sort((a,b)=>riskValue(b[2])-riskValue(a[2]));
+    }
+
+    function renderDownloads() {
+      document.getElementById("downloads").innerHTML = `<div class="card">
+        <h3 style="margin-top:0">多格式下载中心</h3>
+        <p class="muted">下载前请确认导出的内容不包含完整真实 API Key、Token、私钥、数据库连接串或客户敏感信息。</p>
+        <div class="grid">
+          ${downloadCard("Markdown 版检查清单","适合导入飞书、Notion、语雀。","downloadMarkdown()")}
+          ${downloadCard("TXT 风险报告","适合快速发给客户或团队。","downloadTxt()")}
+          ${downloadCard("CSV 检查结果","适合导入飞书多维表格。","downloadCSV()")}
+          ${downloadCard("JSON 项目数据","适合备份和恢复本工具状态。","downloadJSON()")}
+          ${downloadCard("HTML 离线版","保存当前工具页面。","downloadOfflineHTML()")}
+          ${downloadCard("Word 版报告","用 .doc 格式交付。","downloadWord()")}
+          ${downloadCard("打印版 PDF","调用浏览器打印为 PDF。","window.print()")}
+          ${downloadCard("Workbuddy 任务清单","把整改任务交给 Workbuddy。","downloadWorkbuddy()")}
+          ${downloadCard("国产 AI 提示词包","复制给 DeepSeek、Kimi、通义等工具。","downloadAITemplates()")}
+        </div>
+      </div>`;
+    }
+    function downloadCard(title,desc,fn){ return `<div class="card no-shadow span-4"><h4>${title}</h4><p class="muted">${desc}</p><button class="btn small" onclick="${fn}">下载</button></div>`; }
+
+    function renderFeishu() {
+      document.getElementById("feishu").innerHTML = `<div class="grid">
+        <div class="card span-6">
+          <h3 style="margin-top:0">飞书 Webhook 同步</h3>
+          <p class="muted">只同步脱敏摘要，不发送完整密钥。若浏览器因跨域限制无法发送，可复制摘要手动发到飞书。</p>
+          <div class="field"><label>飞书机器人 Webhook</label><input value="${escapeHtml(state.feishuWebhook||"")}" onchange="state.feishuWebhook=this.value; save(false)" placeholder="https://open.feishu.cn/open-apis/bot/v2/hook/..." /></div>
+          <div class="actions">
+            <button class="btn primary" onclick="sendFeishu()">同步风险摘要</button>
+            <button class="btn" onclick="copyFeishuSummary()">复制飞书摘要</button>
+            <button class="btn" onclick="downloadCSV()">下载飞书 CSV</button>
+          </div>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">飞书多维表格字段模板</h3>
+          <pre>${escapeHtml(feishuFields())}</pre>
+          <button class="btn small" onclick="copyText('${escapeAttr(feishuFields())}')">复制字段模板</button>
+        </div>
+      </div>`;
+    }
+    function openFeishuModal() {
+      const summary = feishuSummary();
+      showModal("飞书同步设置", `<p class="muted">只同步脱敏摘要，不同步完整密钥。</p>
+        <div class="field"><label>飞书机器人 Webhook</label><input id="modalWebhook" value="${escapeHtml(state.feishuWebhook||"")}" placeholder="https://open.feishu.cn/open-apis/bot/v2/hook/..." /></div>
+        <pre>${escapeHtml(summary)}</pre>
+        <div class="actions"><button class="btn primary" onclick="state.feishuWebhook=document.getElementById('modalWebhook').value; save(false); sendFeishu()">同步摘要</button><button class="btn" onclick="copyText('${escapeAttr(summary)}')">复制摘要</button></div>`);
+    }
+    function feishuSummary() {
+      const s = score();
+      return `项目名称：${state.project.name}
+当前风险等级：${s.level[0]}
+风险分数：${s.total}/100
+发现问题数量：${s.count}
+高危问题数量：${s.high}
+最优先处理事项：${priorityItems().slice(0,3).map(x=>x[1]).join("；") || "暂无"}
+负责人：${state.project.owner || "未填写"}
+检查日期：${state.project.date}
+下一步建议：先处理严重和高风险问题，停用疑似泄露 Key，重新配置环境变量，生成交付报告。`;
+    }
+    function feishuFields() {
+      return "项目名称,风险等级,风险分数,问题名称,风险类型,平台,是否修复,负责人,检查日期,修复建议";
+    }
+    async function sendFeishu() {
+      if (!state.feishuWebhook) return toast("请先填写飞书 Webhook");
+      const body = { msg_type: "text", content: { text: feishuSummary() } };
+      try {
+        await fetch(state.feishuWebhook, { method:"POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body) });
+        toast("已尝试发送到飞书。如失败，可能是浏览器跨域或 Webhook 配置限制。");
+      } catch(e) {
+        toast("发送失败，可能是跨域限制。请复制摘要手动发送。");
+      }
+    }
+
+    function renderWorkbuddy() {
+      const tasks = workbuddyTasks();
+      document.getElementById("workbuddy").innerHTML = `<div class="card">
+        <h3 style="margin-top:0">Workbuddy 执行助手</h3>
+        <p class="muted">根据你的项目信息和风险结果，自动生成可复制的整改任务。</p>
+        <div class="actions">
+          <button class="btn primary" onclick="copyWorkbuddyAll()">复制总提示词</button>
+          <button class="btn" onclick="downloadWorkbuddy()">下载任务清单</button>
+        </div>
+        <div class="task-list">${tasks.map((t,i)=>`<div class="task-card">
+          <h4>${i+1}. ${t.title}</h4>
+          <p class="muted">${t.scene}</p>
+          <pre>${escapeHtml(t.prompt)}</pre>
+          <button class="btn small" onclick="copyText('${escapeAttr(t.prompt)}')">复制到 Workbuddy</button>
+        </div>`).join("")}</div>
+      </div>`;
+    }
+    function workbuddyTasks() {
+      return [
+        {title:"扫描项目目录是否存在 .env 泄露",scene:"适合 Codex 生成项目、客户交付前检查。",prompt:"请检查我的项目目录中是否存在 .env、.env.local、*.pem、*.key、serviceAccount.json、数据库导出文件等敏感文件。请不要要求我提供完整真实密钥，只根据文件名和脱敏片段判断风险，并输出应排除的文件清单。"},
+        {title:"检查 HTML/JS 是否包含 API Key",scene:"适合 HTML 工具、前端项目、小红书售卖产品。",prompt:"请检查以下脱敏 HTML/JS 代码是否把 API Key、Token、Webhook、数据库连接串写进前端。请输出风险位置、原因、修复方式，并给出前端调用后端代理的改造建议。"},
+        {title:"生成 .gitignore",scene:"适合 GitHub 提交前。",prompt:"请为我的项目生成安全的 .gitignore，重点排除 .env、.env.*、*.key、*.pem、日志、node_modules、dist 缓存、数据库导出文件、服务账号 JSON。"},
+        {title:"前端直连 API 改成后端代理",scene:"适合 OpenAI、DeepSeek、Kimi、通义、豆包等 API 调用。",prompt:"请把前端直接调用大模型 API 的代码结构，改成前端调用后端接口，后端从环境变量读取 API Key 的安全结构。请给出文件结构、代码修改点和部署环境变量配置说明。"},
+        {title:"生成 Vercel 环境变量配置说明",scene:"适合部署失败或交付客户。",prompt:"请生成一份面向小白的 Vercel 环境变量配置说明，解释哪些变量不能放前端、为什么保密 Key 不能使用 NEXT_PUBLIC、如何重新部署、如何验证没有泄露。"},
+        {title:"生成客户交付前安全检查报告",scene:"适合一人公司、接单交付。",prompt:"请根据我的脱敏项目信息和检查结果，生成一份客户交付前安全检查报告，包含检查范围、发现问题、修复动作、剩余风险和后续建议。"}
+      ];
+    }
+    function copyWorkbuddyAll() {
+      copyText(`你是我的项目安全整改助手。请根据我提供的项目目录、代码片段、部署方式和风险清单，帮我检查是否存在 API Key、Token、Webhook、数据库连接串、私钥等泄露风险。请不要要求我提供完整真实密钥，只基于脱敏片段、文件结构和配置方式判断风险。请输出：风险位置、风险等级、修复步骤、需要修改的文件、推荐的 .gitignore、环境变量配置方式、交付前检查清单。
+
+项目信息：
+项目名称：${state.project.name}
+项目类型：${state.project.type}
+使用平台：${(state.project.platforms||[]).join("、")}
+风险等级：${score().level[0]}
+优先问题：${priorityItems().slice(0,8).map(x=>x[1]).join("；")}`);
+    }
+
+    function renderAI() {
+      document.getElementById("ai").innerHTML = `<div class="card">
+        <h3 style="margin-top:0">国产 AI 安全排查提示词库</h3>
+        <p class="muted">适合复制给 DeepSeek、Kimi、通义千问、豆包、智谱清言、文心一言、腾讯元宝、MiniMax 等工具。不要粘贴完整真实 API Key。</p>
+        <div class="template-list">${aiTemplates.map((t,i)=>`<div class="template-card">
+          <h4>${i+1}. ${t[0]}</h4>
+          <pre>${escapeHtml(t[1])}</pre>
+          <button class="btn small" onclick="copyText('${escapeAttr(t[1])}')">复制提示词</button>
+        </div>`).join("")}</div>
+      </div>`;
+    }
+
+    function renderCases() {
+      document.getElementById("cases").innerHTML = `<div class="card">
+        <h3 style="margin-top:0">真实场景案例库</h3>
+        <div class="toolbar"><input class="search" placeholder="搜索案例..." oninput="filterCases(this.value)" /></div>
+        <div class="case-list" id="caseList">${caseCards(cases)}</div>
+      </div>`;
+    }
+    function caseCards(list) {
+      return list.map((c,i)=>`<div class="case-card">
+        <h4>${i+1}. ${c[0]} <span class="pill ${c[7]==='严重'?'red':c[7]==='高'?'orange':'yellow'}">${c[7]}</span></h4>
+        <p><b>发生原因：</b>${c[1]}</p>
+        <p><b>可能后果：</b>${c[2]}</p>
+        <p><b>如何发现：</b>${c[3]}</p>
+        <p><b>如何修复：</b>${c[4]}</p>
+        <p><b>如何避免：</b>${c[5]}</p>
+        <p class="muted">适用人群：${c[6]}</p>
+      </div>`).join("");
+    }
+    function filterCases(q) {
+      const list = cases.filter(c=>c.join(" ").toLowerCase().includes(q.toLowerCase()));
+      document.getElementById("caseList").innerHTML = caseCards(list);
+    }
+
+    function renderSettings() {
+      document.getElementById("settings").innerHTML = `<div class="grid">
+        <div class="card span-6">
+          <h3 style="margin-top:0">设置</h3>
+          <div class="actions">
+            <button class="btn" onclick="toggleTheme()">切换深色/浅色模式</button>
+            <button class="btn" onclick="save()">保存到本地</button>
+            <button class="btn danger" onclick="resetAll()">清空所有数据</button>
+          </div>
+          <p class="muted">数据保存在当前浏览器 localStorage 中，不会上传服务器。</p>
+        </div>
+        <div class="card span-6">
+          <h3 style="margin-top:0">导入 JSON 恢复项目</h3>
+          <input type="file" accept=".json" onchange="importJSON(event)" />
+          <p class="muted">可导入之前下载的 JSON 项目数据。</p>
+        </div>
+        <div class="card span-12">
+          <h3 style="margin-top:0">使用说明</h3>
+          <ol class="muted">
+            <li>先填写项目信息，让报告更贴近客户实际情况。</li>
+            <li>在自查清单中勾选已经发现或怀疑存在的风险。</li>
+            <li>粘贴脱敏代码片段进行本地扫描。</li>
+            <li>按照应急流程处理高危问题。</li>
+            <li>生成报告，导出 Markdown、TXT、CSV、Word、JSON 或打印 PDF。</li>
+            <li>把整改任务复制给 Workbuddy，或用国产 AI 模板辅助排查。</li>
+          </ol>
+        </div>
+      </div>`;
+    }
+
+    function applyTemplateModal() {
+      showModal("选择项目模板", `<div class="template-list">${templates.map((t,i)=>`<div class="template-card">
+        <h4>${t[0]}</h4><p class="muted">自动勾选：${t[1].map(id=>checklist.find(x=>x[0]===id)?.[1]).filter(Boolean).join("、")}</p>
+        <button class="btn small" onclick="applyTemplate(${i}); closeModal()">套用模板</button>
+      </div>`).join("")}</div>`);
+    }
+    function applyTemplate(i) {
+      templates[i][1].forEach(id=>state.checked[id]=true);
+      save(false); renderAll(); toast("已套用模板并自动勾选相关风险项");
+    }
+
+    function showModal(title, body) {
+      document.getElementById("modalTitle").innerHTML = title;
+      document.getElementById("modalBody").innerHTML = body;
+      document.getElementById("modalBackdrop").classList.add("show");
+    }
+    function closeModal(){ document.getElementById("modalBackdrop").classList.remove("show"); }
+    function toggleAside(){ document.getElementById("aside").classList.toggle("show"); }
+    function toggleTheme(){ state.theme = state.theme === "dark" ? "light" : "dark"; document.body.dataset.theme = state.theme; save(false); toast("已切换主题"); }
+
+    function mask(s) {
+      return String(s).replace(/([A-Za-z0-9_\-]{4})([A-Za-z0-9_\-=]{8,})([A-Za-z0-9_\-=]{4})/g, (m,a,b,c)=>a+"****"+c);
+    }
+    function escapeHtml(s) {
+      return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+    function escapeAttr(s) {
+      return escapeHtml(String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n"));
+    }
+    function copyText(text) {
+      const clean = String(text).replace(/\\n/g,"\n");
+      navigator.clipboard?.writeText(clean).then(()=>toast("已复制")).catch(()=>{
+        const ta=document.createElement("textarea"); ta.value=clean; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); toast("已复制");
+      });
+    }
+    function copyReport() {
+      const text = document.getElementById("reportPreview")?.innerText || buildReport();
+      copyText(text);
+    }
+    function copyFeishuSummary(){ copyText(feishuSummary()); }
+
+    function save(show=true) {
+      localStorage.setItem("codex_key_check_product", JSON.stringify(state));
+      if (show) toast("已保存到本地浏览器");
+    }
+    function load() {
+      try {
+        const raw = localStorage.getItem("codex_key_check_product");
+        if (raw) Object.assign(state, JSON.parse(raw));
+      } catch(e) {}
+    }
+    function resetAll() {
+      if (!confirm("确定清空所有本地数据吗？")) return;
+      localStorage.removeItem("codex_key_check_product");
+      location.reload();
+    }
+    function toast(msg) {
+      const box = document.getElementById("toast");
+      const el = document.createElement("div");
+      el.className = "toast-item";
+      el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(()=>{ el.style.opacity = "0"; el.style.transform = "translateY(8px)"; }, 2300);
+      setTimeout(()=>el.remove(), 2900);
+    }
+
+    function blobDownload(filename, content, type="text/plain;charset=utf-8") {
+      if (!confirm("下载前请确认内容不包含完整真实 API Key、Token、私钥、数据库连接串或客户敏感信息。继续下载吗？")) return;
+      const blob = new Blob([content], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+      toast("已生成下载文件");
+    }
+    function checklistMarkdown() {
+      return `# Codex API Key 泄露检查清单\n\n项目：${state.project.name}\n日期：${state.project.date}\n风险等级：${score().level[0]}\n\n` + checklist.map((x,i)=>`## ${i+1}. ${x[1]}\n- 风险等级：${x[2]}\n- 平台/场景：${x[3]}\n- 检查方法：${x[4]}\n- 小白解释：${x[5]}\n- 错误写法：\`${x[6]}\`\n- 安全写法：\`${x[7]}\`\n- 当前状态：${state.checked[x[0]] ? (state.fixed[x[0]] ? "存在风险，已修复" : "存在风险，未修复") : "未勾选"}\n`).join("\n");
+    }
+    function downloadMarkdown(){ blobDownload("Codex_API_Key_泄露检查清单.md", checklistMarkdown(), "text/markdown;charset=utf-8"); }
+    function downloadTxt(){ const text = document.getElementById("reportPreview")?.innerText || state.reportText || buildReport(); blobDownload("API_Key_泄露风险检查报告.txt", text); }
+    function downloadCSV(){
+      const rows = [["项目名称","风险等级","问题名称","风险类型","平台","是否勾选","是否修复","负责人","检查日期","修复建议"]];
+      checklist.forEach(x=>rows.push([state.project.name, score().level[0], x[1], x[2], x[3], state.checked[x[0]]?"是":"否", state.fixed[x[0]]?"是":"否", state.project.owner, state.project.date, x[7]]));
+      blobDownload("API_Key_检查结果_飞书导入.csv", rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n"), "text/csv;charset=utf-8");
+    }
+    function downloadJSON(){ blobDownload("codex_api_key_check_project.json", JSON.stringify(state,null,2), "application/json;charset=utf-8"); }
+    function downloadWord(){
+      const content = `<html><head><meta charset="utf-8"><title>API Key 泄露风险检查报告</title></head><body><pre style="font-family:Microsoft YaHei;white-space:pre-wrap;line-height:1.8">${escapeHtml(document.getElementById("reportPreview")?.innerText || state.reportText || buildReport())}</pre></body></html>`;
+      blobDownload("API_Key_泄露风险检查报告.doc", content, "application/msword;charset=utf-8");
+    }
+    function downloadOfflineHTML(){ blobDownload("Codex_API_Key_泄露检查清单_离线版.html", document.documentElement.outerHTML, "text/html;charset=utf-8"); }
+    function downloadWorkbuddy(){ blobDownload("Workbuddy_API_Key_安全整改任务清单.md", workbuddyTasks().map((t,i)=>`## ${i+1}. ${t.title}\n${t.scene}\n\n${t.prompt}`).join("\n\n"), "text/markdown;charset=utf-8"); }
+    function downloadAITemplates(){ blobDownload("国产AI_API_Key_安全排查提示词包.md", aiTemplates.map((t,i)=>`## ${i+1}. ${t[0]}\n${t[1]}`).join("\n\n"), "text/markdown;charset=utf-8"); }
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { Object.assign(state, JSON.parse(reader.result)); save(false); renderAll(); toast("导入成功"); }
+        catch(e) { toast("导入失败，请检查 JSON 文件"); }
+      };
+      reader.readAsText(file);
+    }
+
+    init();
+  </script>
+</body>
+</html>

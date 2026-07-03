@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 域名绑定实操包｜国内小白 WorkBuddy 版</title>
+  <meta name="description" content="面向中国国内小白的 Codex 域名绑定实操包：DNS 记录生成器、备案判断器、平台流程库、WorkBuddy 辅助提示词、绑定失败排查库、客户交付说明生成器。" />
+  <style>
+    :root{
+      --bg:#f7f4ee;
+      --bg2:#fffdf8;
+      --card:rgba(255,255,255,.76);
+      --solid:#fff;
+      --text:#16130f;
+      --muted:#6e675d;
+      --soft:#a0968b;
+      --line:rgba(22,19,15,.10);
+      --line2:rgba(22,19,15,.065);
+      --accent:#16130f;
+      --blue:#5567ff;
+      --cyan:#23b7d5;
+      --green:#19b77b;
+      --gold:#d8992d;
+      --red:#e65d4f;
+      --purple:#875cf6;
+      --shadow:0 26px 80px rgba(26,21,14,.12);
+      --shadow2:0 12px 34px rgba(26,21,14,.08);
+      --radius:28px;
+      --radius2:18px;
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+    }
+    html[data-theme="dark"]{
+      --bg:#0f1117;
+      --bg2:#151922;
+      --card:rgba(25,29,39,.78);
+      --solid:#191d27;
+      --text:#f5f0e8;
+      --muted:#b8afa5;
+      --soft:#82786f;
+      --line:rgba(255,255,255,.12);
+      --line2:rgba(255,255,255,.075);
+      --accent:#f5f0e8;
+      --shadow:0 26px 80px rgba(0,0,0,.36);
+      --shadow2:0 12px 34px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      line-height:1.66;
+      background:
+        radial-gradient(circle at 9% 6%,rgba(85,103,255,.16),transparent 27%),
+        radial-gradient(circle at 86% 7%,rgba(230,93,79,.15),transparent 28%),
+        radial-gradient(circle at 50% 42%,rgba(25,183,123,.10),transparent 31%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 52%,var(--bg));
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+    .shell{width:min(1210px,calc(100% - 36px));margin:0 auto}
+    .nav{position:sticky;top:0;z-index:70;background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(22px);border-bottom:1px solid var(--line2)}
+    .nav-inner{width:min(1210px,calc(100% - 36px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:-.035em}
+    .logo{width:38px;height:38px;border-radius:15px;background:linear-gradient(135deg,#16130f,#5567ff 48%,#19b77b);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow2)}
+    .nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a,.mini-btn{padding:9px 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:.2s}
+    .nav-links a:hover,.mini-btn:hover{background:var(--card);border-color:var(--line);color:var(--text)}
+    .cta{background:var(--accent)!important;color:var(--bg2)!important;border-color:var(--accent)!important}
+    .hero{padding:72px 0 42px}
+    .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:34px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 12px;color:var(--muted);margin-bottom:18px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 6px color-mix(in srgb,var(--green) 16%,transparent)}
+    h1{font-size:clamp(42px,7.2vw,82px);line-height:.98;letter-spacing:-.075em;margin:0 0 22px;font-weight:950}
+    .lead{font-size:clamp(17px,2vw,22px);color:var(--muted);max-width:760px;margin:0 0 26px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+    .btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:13px 18px;border-radius:999px;font-weight:850;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.22s}
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+    .btn-primary{background:var(--accent);color:var(--bg2);border-color:var(--accent)}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border-color:transparent}
+    .btn-soft{background:color-mix(in srgb,var(--blue) 10%,var(--card))}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{padding:16px;border:1px solid var(--line);background:var(--card);border-radius:20px}
+    .kpi strong{display:block;font-size:24px;letter-spacing:-.04em}
+    .kpi span{font-size:13px;color:var(--muted)}
+    .mock{border:1px solid var(--line);border-radius:34px;background:linear-gradient(180deg,color-mix(in srgb,var(--solid) 88%,transparent),var(--card));box-shadow:var(--shadow);padding:18px;overflow:hidden}
+    .mock-top{display:flex;gap:8px;margin-bottom:14px}
+    .mock-top i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+    .dashboard{display:grid;gap:11px}
+    .status-row{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 58%,transparent);border-radius:18px;padding:12px 14px}
+    .ok{color:var(--green);font-weight:900}.warn{color:var(--gold);font-weight:900}.bad{color:var(--red);font-weight:900}.info{color:var(--blue);font-weight:900}
+    .meter{height:12px;background:color-mix(in srgb,var(--text) 9%,transparent);border-radius:999px;overflow:hidden}
+    .meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green));transition:.25s}
+    .section{padding:48px 0}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}
+    h2{font-size:clamp(29px,4vw,48px);line-height:1.05;letter-spacing:-.055em;margin:0}
+    .desc{color:var(--muted);margin:10px 0 0;max-width:820px}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .card{border:1px solid var(--line);background:var(--card);backdrop-filter:blur(18px);border-radius:var(--radius);box-shadow:var(--shadow2);padding:22px}
+    .card h3{font-size:20px;letter-spacing:-.025em;margin:0 0 8px}
+    .card p{margin:0;color:var(--muted)}
+    .tag,.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 62%,transparent);border-radius:999px;padding:5px 10px;font-size:12px;color:var(--muted);margin:0 6px 6px 0}
+    .route-card{cursor:pointer;position:relative;overflow:hidden;transition:.22s}
+    .route-card:hover,.route-card.active{transform:translateY(-3px);border-color:color-mix(in srgb,var(--blue) 58%,var(--line));box-shadow:var(--shadow)}
+    .route-card.active:after{content:"已选择";position:absolute;right:16px;top:16px;background:var(--accent);color:var(--bg2);padding:5px 10px;border-radius:999px;font-size:12px;font-weight:900}
+    .icon{width:46px;height:46px;border-radius:17px;display:grid;place-items:center;font-weight:950;background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 48%,transparent),color-mix(in srgb,var(--green) 42%,transparent))}
+    .steps{display:grid;gap:12px}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:12px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--bg2) 58%,transparent);padding:16px}
+    .num{width:32px;height:32px;border-radius:12px;background:var(--accent);color:var(--bg2);display:grid;place-items:center;font-weight:950}
+    .step strong{display:block;margin-bottom:4px}.step small{color:var(--muted)}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+    .check-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 65%,transparent);border-radius:16px;padding:14px;cursor:pointer}
+    input[type="checkbox"]{width:18px;height:18px;accent-color:var(--blue)}
+    .meter-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .notice{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:color-mix(in srgb,var(--gold) 13%,var(--card));color:var(--muted)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .tab{padding:10px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer;color:var(--muted)}
+    .tab.active{background:var(--accent);border-color:var(--accent);color:var(--bg2)}
+    .flow{display:none}.flow.active{display:block}
+    details{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:4px 16px;margin-bottom:12px}
+    summary{cursor:pointer;padding:14px 0;font-weight:900;letter-spacing:-.02em}
+    .detail-body{padding:0 0 16px;color:var(--muted)}
+    .codebar{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--text) 7%,transparent);border-radius:16px;margin:10px 0 12px;overflow:hidden}
+    pre{margin:0;padding:14px;overflow:auto;font-family:var(--mono);font-size:13px;color:var(--text);flex:1;white-space:pre-wrap}
+    .copy-btn,.fav-btn{border:1px solid var(--line);background:var(--solid);color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer;margin-right:10px;font-size:12px;font-weight:900}
+    .copy-btn.done{background:var(--green);color:#06130d;border-color:transparent}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .input,.select,textarea{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:16px;padding:12px 14px;outline:none}
+    textarea{min-height:112px;resize:vertical}
+    .toolbar .input{max-width:430px}.toolbar .select{max-width:210px}
+    .input:focus,.select:focus,textarea:focus{border-color:color-mix(in srgb,var(--blue) 60%,var(--line));box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 13%,transparent)}
+    .error-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .error-card{border:1px solid var(--line);background:var(--card);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .error-card h3{font-size:17px;margin:0;line-height:1.25}.error-card p{margin:0;color:var(--muted);font-size:14px}
+    .error-actions{margin-top:auto;display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .prompt-card{border:1px solid var(--line);border-radius:22px;background:var(--card);padding:18px;display:flex;flex-direction:column;gap:10px}
+    .prompt-card h3{font-size:18px;margin:0}.prompt-text{font-size:14px;color:var(--muted);border-left:3px solid var(--blue);padding-left:12px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    label.field span{display:block;font-size:13px;color:var(--muted);margin:0 0 6px 2px}
+    .result-box{min-height:210px;border:1px solid var(--line);border-radius:24px;background:color-mix(in srgb,var(--green) 8%,var(--card));padding:20px}
+    .table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:var(--card)}
+    .table th,.table td{text-align:left;border-bottom:1px solid var(--line);padding:12px;font-size:14px;vertical-align:top}
+    .table th{color:var(--text);background:color-mix(in srgb,var(--text) 6%,transparent)}
+    .table tr:last-child td{border-bottom:0}
+    .risk{border-left:4px solid var(--red);background:color-mix(in srgb,var(--red) 8%,var(--card))}
+    .success{border-left:4px solid var(--green);background:color-mix(in srgb,var(--green) 8%,var(--card))}
+    .resource{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:22px;background:var(--card);padding:16px}
+    .glossary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .term{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px}
+    .term strong{display:block;margin-bottom:4px}.term span{font-size:13px;color:var(--muted)}
+    .footer{padding:40px 0 70px;color:var(--muted)}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--bg2);padding:12px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:var(--shadow2)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:980px){
+      .hero-grid,.grid-2,.grid-3,.grid-4,.form-grid{grid-template-columns:1fr}
+      .error-grid{grid-template-columns:1fr 1fr}
+      .checklist{grid-template-columns:1fr}
+      .glossary{grid-template-columns:1fr 1fr}
+      .nav-links a{display:none}
+      .kpis{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:620px){
+      .shell,.nav-inner{width:min(100% - 24px,1210px)}
+      .hero{padding-top:44px}.error-grid,.glossary{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.section-head{display:block}.toolbar .input,.toolbar .select{max-width:none}.resource{grid-template-columns:1fr}
+      h1{font-size:45px}
+      .table{display:block;overflow:auto}
+    }
+    @media print{
+      body{background:#fff;color:#000}.nav,.hero-actions,.btn,.copy-btn,.fav-btn,.toolbar,.tabs{display:none!important}
+      .card,.error-card,.prompt-card,.term,details{box-shadow:none;background:#fff;border-color:#ddd}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top"><span class="logo">域</span><span>Codex 域名绑定实操包</span></a>
+      <div class="nav-links">
+        <a href="#routes">路线</a>
+        <a href="#decision">决策树</a>
+        <a href="#dns">DNS生成器</a>
+        <a href="#filing">备案判断</a>
+        <a href="#errors">排查库</a>
+        <button class="mini-btn" id="themeBtn">深色</button>
+        <a class="cta" href="#dns">生成配置</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> 国内小白可用 · 不教科学上网 · 可结合 WorkBuddy 辅助</div>
+          <h1>把 AI 做出来的网页，绑定成自己的品牌域名。</h1>
+          <p class="lead">从丑链接到品牌域名，从 DNS 解析到 HTTPS 生效，从备案判断到绑定失败排查，不懂技术也能按步骤交付。</p>
+          <div class="hero-actions">
+            <a class="btn btn-blue" href="#decision">先判断路线 →</a>
+            <a class="btn btn-soft" href="#dns">生成 DNS 配置</a>
+            <a class="btn" href="#errors">查绑定失败</a>
+            <button class="btn" onclick="window.print()">打印检查表</button>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><strong>8 条</strong><span>用户绑定路线</span></div>
+            <div class="kpi"><strong>50+</strong><span>失败排查卡片</span></div>
+            <div class="kpi"><strong>40+</strong><span>域名术语扫盲</span></div>
+            <div class="kpi"><strong>299+</strong><span>适合高客单销售</span></div>
+          </div>
+        </div>
+        <div class="mock">
+          <div class="mock-top"><i></i><i></i><i></i></div>
+          <div class="dashboard">
+            <div class="status-row"><span>域名购买</span><span class="ok">已准备</span></div>
+            <div class="status-row"><span>实名认证</span><span class="warn">待确认</span></div>
+            <div class="status-row"><span>备案状态</span><span class="info">待判断</span></div>
+            <div class="status-row"><span>部署平台</span><span class="ok">可选择</span></div>
+            <div class="status-row"><span>DNS 记录</span><span class="bad">待配置</span></div>
+            <div class="status-row"><span>HTTPS 证书</span><span class="warn">待生效</span></div>
+            <div class="card" style="box-shadow:none;padding:16px;border-radius:20px">
+              <div class="meter-row"><strong>绑定完成度</strong><span>46%</span></div>
+              <div class="meter"><span style="width:46%"></span></div>
+              <p style="margin-top:10px">下一步：先判断是否备案，再根据平台生成 DNS 记录建议。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell">
+      <div class="grid grid-4">
+        <div class="card"><h3>国内小白可用</h3><p>不默认要求科学上网。能用海外平台就增强，不能用就走国内云、纯 HTML 或本地交付。</p></div>
+        <div class="card"><h3>WorkBuddy 可辅助</h3><p>让 WorkBuddy 辅助整理资料、截图、生成客服描述，但登录、付款、删除解析必须人工确认。</p></div>
+        <div class="card"><h3>DNS 不背概念</h3><p>用生成器把域名、平台、www、裸域名转换成可填写的解析记录建议。</p></div>
+        <div class="card"><h3>失败能排查</h3><p>覆盖验证失败、HTTPS、404、白屏、备案、NS、CNAME、A 记录、微信打不开等真实问题。</p></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="routes">
+      <div class="section-head">
+        <div>
+          <h2>先选你的绑定路线</h2>
+          <p class="desc">域名绑定失败，往往不是用户笨，而是路线选错。先判断你属于哪一种，再做下一步。</p>
+        </div>
+      </div>
+      <div class="grid grid-4" id="routeCards"></div>
+      <div class="card" id="routeDetail" style="margin-top:16px"></div>
+    </section>
+
+    <section class="section shell" id="decision">
+      <div class="section-head">
+        <div>
+          <h2>国内用户决策树</h2>
+          <p class="desc">回答几个问题，自动推荐你该走海外静态托管、国内云备案、纯 HTML 本地交付，还是先修部署。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="grid">
+            <label class="field"><span>主要访问人群</span><select class="select" id="decAudience"><option>中国大陆客户为主</option><option>海外客户为主</option><option>只是自己使用</option></select></label>
+            <label class="field"><span>是否已经购买域名</span><select class="select" id="decDomain"><option>已购买</option><option>还没买</option><option>不确定</option></select></label>
+            <label class="field"><span>是否完成域名实名认证</span><select class="select" id="decReal"><option>已实名</option><option>未实名</option><option>不确定</option></select></label>
+            <label class="field"><span>是否有备案主体</span><select class="select" id="decBeian"><option>没有</option><option>有个人备案条件</option><option>有企业备案条件</option><option>不确定</option></select></label>
+            <label class="field"><span>能否稳定访问海外部署平台</span><select class="select" id="decOverseas"><option>打不开或不稳定</option><option>可以稳定访问</option><option>不确定</option></select></label>
+            <label class="field"><span>网站类型</span><select class="select" id="decType"><option>单个 HTML 展示页</option><option>前端项目，有构建命令</option><option>有登录/支付/表单等后端功能</option></select></label>
+            <button class="btn btn-blue" id="runDecision">生成推荐路线</button>
+          </div>
+          <div class="result-box" id="decisionResult">
+            <h3>推荐路线会显示在这里</h3>
+            <p>国内用户先不要盲目改 DNS。先判断：网站在哪托管、要不要备案、客户在哪里、是否只有 HTML。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="basics">
+      <div class="section-head">
+        <div>
+          <h2>域名基础扫盲</h2>
+          <p class="desc">不是让你背概念，而是把每个词翻译成“实操时到底怎么填、哪里容易错”。</p>
+        </div>
+      </div>
+      <div class="glossary" id="glossaryGrid"></div>
+    </section>
+
+    <section class="section shell" id="buycheck">
+      <div class="section-head">
+        <div>
+          <h2>域名购买前检查表</h2>
+          <p class="desc">域名买错、续费贵、没实名、没截图，是后续绑定失败和售后扯皮的高发点。</p>
+        </div>
+        <button class="btn" id="exportChecklist">导出检查表</button>
+      </div>
+      <div class="card">
+        <div class="meter-row">
+          <strong>准备完成度：<span id="checkPercent">0%</span></strong>
+          <span class="pill" id="checkStatus">还没开始</span>
+        </div>
+        <div class="meter"><span id="checkBar" style="width:0%"></span></div>
+        <div class="checklist" id="buyChecklist"></div>
+        <div class="notice" id="checkAdvice">先勾选真实情况，系统会告诉你现在能不能开始绑定。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="platforms">
+      <div class="section-head">
+        <div>
+          <h2>平台绑定流程库</h2>
+          <p class="desc">平台按钮会变，但逻辑不变：先在平台添加域名，再按平台要求回域名后台填 DNS。</p>
+        </div>
+      </div>
+      <div class="tabs" id="platformTabs"></div>
+      <div id="platformFlows"></div>
+    </section>
+
+    <section class="section shell" id="dns">
+      <div class="section-head">
+        <div>
+          <h2>DNS 记录生成器</h2>
+          <p class="desc">输入你的域名、平台和目标地址，生成一张“该填什么”的辅助表。最终仍以平台后台给出的 DNS 要求为准。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="grid">
+            <label class="field"><span>你的域名</span><input class="input" id="dnsDomain" placeholder="例如：example.com" /></label>
+            <label class="field"><span>绑定平台</span><select class="select" id="dnsPlatform"><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option><option>腾讯云/阿里云/国内云</option><option>其他平台</option></select></label>
+            <label class="field"><span>是否绑定 www</span><select class="select" id="dnsWww"><option>是</option><option>否</option></select></label>
+            <label class="field"><span>是否绑定裸域名</span><select class="select" id="dnsApex"><option>是</option><option>否</option></select></label>
+            <label class="field"><span>平台给你的目标地址</span><input class="input" id="dnsTarget" placeholder="例如：xxx.vercel.app / xxx.netlify.app / pages.dev 目标" /></label>
+            <label class="field"><span>平台是否要求 TXT 验证</span><select class="select" id="dnsTxt"><option>否</option><option>是</option></select></label>
+            <label class="field"><span>是否更换 NS 到平台</span><select class="select" id="dnsNs"><option>否，保留注册商/DNSPod/阿里云解析</option><option>是，平台要求托管 DNS</option></select></label>
+            <label class="field"><span>TTL</span><select class="select" id="dnsTtl"><option>自动/默认</option><option>600</option><option>3600</option></select></label>
+            <button class="btn btn-blue" id="generateDns">生成 DNS 配置建议</button>
+          </div>
+          <div class="result-box" id="dnsResult">
+            <h3>DNS 建议表会显示在这里</h3>
+            <p>生成前请先复制平台后台给你的目标地址。不要在没有截图备份的情况下删除旧解析。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="workbuddy">
+      <div class="section-head">
+        <div>
+          <h2>WorkBuddy 辅助操作模板</h2>
+          <p class="desc">让 WorkBuddy 帮你整理、截图、生成客服描述。高风险动作必须人工确认。</p>
+        </div>
+      </div>
+      <div class="grid grid-3" id="promptGrid"></div>
+    </section>
+
+    <section class="section shell" id="filing">
+      <div class="section-head">
+        <div>
+          <h2>备案判断器</h2>
+          <p class="desc">面向中国大陆用户的关键判断：服务器/托管位置不同，备案要求不同。此处只做操作指引，不替代官方审核意见。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="grid">
+            <label class="field"><span>网站托管位置</span><select class="select" id="fileLocation"><option>中国大陆服务器/对象存储</option><option>中国香港/海外节点</option><option>海外静态托管平台</option><option>还没决定</option></select></label>
+            <label class="field"><span>是否使用国内云接入商</span><select class="select" id="fileCloud"><option>是</option><option>否</option><option>不确定</option></select></label>
+            <label class="field"><span>是否长期公开给中国大陆用户访问</span><select class="select" id="filePublic"><option>是</option><option>否，只是自己/小范围</option><option>不确定</option></select></label>
+            <label class="field"><span>网站用途</span><select class="select" id="filePurpose"><option>商业展示/成交</option><option>个人学习展示</option><option>公司官网/业务</option><option>不确定</option></select></label>
+            <label class="field"><span>域名是否已实名</span><select class="select" id="fileReal"><option>已实名</option><option>未实名</option><option>不确定</option></select></label>
+            <button class="btn btn-blue" id="runFiling">判断备案风险</button>
+          </div>
+          <div class="result-box" id="filingResult">
+            <h3>备案建议会显示在这里</h3>
+            <p>正式上线前请以工信部、接入商和云服务商最新要求为准。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="errors">
+      <div class="section-head">
+        <div>
+          <h2>绑定失败排查库</h2>
+          <p class="desc">搜索错误现象，得到表现、原因、检查方法、修复步骤和可复制给 AI/客服的描述。</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input class="input" id="errorSearch" placeholder="搜索：CNAME / HTTPS / 备案 / 404 / 白屏 / www / NS / 微信..." />
+        <select class="select" id="errorFilter">
+          <option value="all">全部分类</option>
+          <option value="DNS">DNS</option>
+          <option value="HTTPS">HTTPS</option>
+          <option value="备案">备案</option>
+          <option value="访问">访问</option>
+          <option value="平台">平台</option>
+          <option value="部署">部署</option>
+          <option value="国内">国内</option>
+        </select>
+        <select class="select" id="favFilter">
+          <option value="all">全部卡片</option>
+          <option value="fav">只看收藏</option>
+        </select>
+      </div>
+      <div class="error-grid" id="errorGrid"></div>
+    </section>
+
+    <section class="section shell" id="acceptance">
+      <div class="section-head">
+        <div>
+          <h2>HTTPS 和访问验收清单</h2>
+          <p class="desc">域名绑定不是后台显示成功就结束。客户能打开、手机能打开、微信能打开，才算交付完成。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="checklist" id="acceptList"></div>
+        <div class="notice" id="acceptAdvice">勾选全部后，说明可以用于小红书成交和客户交付。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="delivery">
+      <div class="section-head">
+        <div>
+          <h2>客户交付说明生成器</h2>
+          <p class="desc">绑定好了以后，直接生成一段可以发给客户的话，降低售后沟通成本。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="grid">
+            <label class="field"><span>产品名称</span><input class="input" id="delProduct" placeholder="例如：AI 提示词管理器" /></label>
+            <label class="field"><span>绑定好的域名</span><input class="input" id="delDomain" placeholder="例如：https://www.example.com" /></label>
+            <label class="field"><span>推荐浏览器</span><input class="input" id="delBrowser" value="Chrome / Edge / Safari" /></label>
+            <label class="field"><span>客户打不开时联系谁</span><input class="input" id="delContact" placeholder="例如：联系我发截图，我帮你排查" /></label>
+            <label class="field"><span>是否支持手机访问</span><select class="select" id="delMobile"><option>支持</option><option>不保证</option></select></label>
+            <label class="field"><span>是否支持微信内打开</span><select class="select" id="delWechat"><option>已测试支持</option><option>建议复制到浏览器打开</option></select></label>
+            <button class="btn btn-blue" id="genDelivery">生成交付说明</button>
+          </div>
+          <div class="result-box" id="deliveryResult">
+            <h3>交付说明会显示在这里</h3>
+            <p>生成后可直接复制给客户或放进你的交付包。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="commercial">
+      <div class="section-head">
+        <div>
+          <h2>小红书销售包装</h2>
+          <p class="desc">把“域名绑定”包装成结果型产品：客户买的是专业品牌链接和排错能力，不是 DNS 理论。</p>
+        </div>
+      </div>
+      <div class="grid" id="resourceList"></div>
+    </section>
+
+    <section class="section shell" id="boundary">
+      <div class="section-head">
+        <div>
+          <h2>售后边界</h2>
+          <p class="desc">高客单产品必须把能做和不能做写清楚，减少退款和扯皮。</p>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card success"><h3>可以帮用户解决</h3><p id="canHelp"></p></div>
+        <div class="card risk"><h3>不承诺、不代办</h3><p id="cannotHelp"></p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="card" style="box-shadow:none">
+      <p><strong>说明：</strong>平台界面、DNS 要求、备案规则可能变化。正式售卖前请定期校准官方文档，并持续补充真实截图案例。</p>
+      <p><strong>商业化建议：</strong>基础 HTML 工具版 299 元；真实截图案例版 499 元；视频演示版 699 元；一对一远程带绑版 999 元以上；企业 SOP 定制版 1999 元以上。</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">已复制</div>
+
+<script>
+const $=(q,r=document)=>r.querySelector(q);
+const $$=(q,r=document)=>[...r.querySelectorAll(q)];
+const toast=(msg='已复制')=>{const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)};
+const copyText=async(text)=>{try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板')}catch(e){toast('复制失败，请手动复制')}};
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const attr=s=>esc(s).replace(/\n/g,'&#10;');
+const codeBlock=code=>`<div class="codebar"><pre>${esc(code)}</pre><button class="copy-btn" data-copy="${attr(code)}">复制</button></div>`;
+
+const routes=[
+ {id:'html',icon:'H',title:'我只有一个 HTML 文件',desc:'刚用 AI 生成 index.html，还没有部署。',steps:['先双击 index.html 本地验收','确认页面不白屏、按钮能点、手机端不乱','选择静态托管或本地交付','部署成功后再添加自定义域名','按平台要求生成 DNS 记录','等待 HTTPS 生效并验收 www/裸域名']},
+ {id:'project',icon:'P',title:'我用 Codex/CodeBuddy 做好了项目',desc:'有多个文件，可能有 package.json、src、dist。',steps:['先确认项目能本地运行','找到构建命令和输出目录','部署到平台拿到临时链接','临时链接能打开后再绑定域名','配置 DNS 和 HTTPS','生成客户交付说明']},
+ {id:'deployed',icon:'D',title:'已部署到海外静态平台',desc:'已经有 vercel.app、netlify.app、pages.dev、github.io 等临时链接。',steps:['进入项目设置里的 Domain/Custom domain','添加 www 和裸域名','复制平台给出的 DNS 要求','回域名注册商后台添加解析','等待解析和证书生效','用手机流量、微信、浏览器验收']},
+ {id:'domestic',icon:'国',title:'我想用国内云服务',desc:'客户主要在中国大陆，访问速度和稳定性更重要。',steps:['先判断是否需要备案','选择腾讯云/阿里云/华为云/对象存储/云服务器','完成实名与备案流程','上传网站或配置源站','添加域名解析','备案通过后正式访问验收']},
+ {id:'onlydomain',icon:'名',title:'我只有域名，没有网站',desc:'域名先买了，但还没有任何页面。',steps:['先别急着解析','用 AI 生成一个单文件 HTML 落地页','本地打开确认没问题','再选择托管平台','添加域名并配置 DNS','写客户访问说明']},
+ {id:'failed',icon:'!',title:'已经绑定失败',desc:'平台提示验证失败、HTTPS 错误、404、白屏或 DNS 不生效。',steps:['先截图保存平台错误提示','截图保存当前 DNS 记录','确认域名在哪个平台管理 DNS','搜索失败排查库','每次只改一处 DNS 并等待生效','修复后做完整验收']},
+ {id:'noproxy',icon:'直',title:'不会科学上网',desc:'打不开海外后台或英文平台，不想折腾。',steps:['不把海外平台作为唯一方案','优先国内云/对象存储/本地 HTML 交付','用 WorkBuddy 辅助整理流程','国内客户优先考虑备案路线','先交付能打开的链接','后续再升级官方平台或海外静态托管']},
+ {id:'sell',icon:'卖',title:'我想卖给客户',desc:'小红书/私域成交，需要专业可信的品牌链接。',steps:['先确定品牌域名和产品名一致','绑定 www 和裸域名','测试手机、微信、不同网络','写清楚售后边界','生成客户交付说明','沉淀真实错误截图做护城河']}
+];
+
+const checklist=[
+ '域名简单好记，和产品名/品牌名一致',
+ '避免过长拼音、复杂数字和横杠',
+ '确认首年价格和续费价格',
+ '完成域名实名认证或知道如何实名',
+ '知道域名注册商后台在哪里',
+ '保存好账号、邮箱和手机号',
+ '判断客户主要在国内还是海外',
+ '判断是否需要备案',
+ '准备同时绑定 www 和裸域名',
+ '确认域名没有明显负面含义',
+ '避免侵犯他人商标或公司名',
+ '知道到期后必须续费',
+ '修改 DNS 前会截图保存原记录',
+ '准备好网站临时链接',
+ '确认网站本身已经能正常访问',
+ '知道不要随便删除 MX 邮箱记录',
+ '知道不要多个平台同时抢同一个域名',
+ '准备好给客服/AI 的问题描述',
+ '知道 HTTPS 证书可能需要等待',
+ '准备好最终客户交付说明'
+];
+
+const platformData=[
+ {id:'vercel',name:'Vercel',fit:'适合已经有 Vercel 临时链接、能访问平台后台的用户。',steps:['打开项目设置，找到 Domains / 域名设置','添加裸域名和 www 子域名','复制 Vercel 给出的 DNS 记录要求','回注册商/DNS 服务商添加 CNAME、A 或平台指定记录','等待域名验证和 HTTPS 证书签发','设置主域名跳转并验收访问'],fail:'常见失败：DNS 填错、裸域和 www 只配置了一个、等待太短、域名已被其他项目绑定。',prompt:'请帮我整理 Vercel 域名绑定资料：我的域名、项目临时链接、平台给出的 DNS 要求、当前解析记录和错误提示。不要替我登录或删除记录。'},
+ {id:'netlify',name:'Netlify',fit:'适合已经有 netlify.app 临时链接的静态网站用户。',steps:['进入站点的 Domain management / 域名管理','添加已有域名','根据 Netlify 提示配置 apex 与 www','如 DNS 支持 ALIAS/ANAME/Flattened CNAME，按平台建议填写','等待 DNS 传播与 HTTPS 生效','用 www 和裸域分别验收'],fail:'常见失败：apex 记录与 www 记录混淆、旧记录冲突、DNS 服务商不支持特定记录。',prompt:'请根据我的 Netlify 域名绑定截图，帮我整理需要添加的记录、已存在冲突记录、等待时间和客服问题描述。'},
+ {id:'cloudflare',name:'Cloudflare Pages',fit:'适合能使用 Cloudflare Pages，且希望用 Cloudflare 管理 DNS/证书的用户。',steps:['进入 Workers & Pages，选择 Pages 项目','找到 Custom domains','添加自定义域名','按 Cloudflare 提示创建或确认 CNAME 记录','确认 DNS 区域、代理状态、证书状态','验收 http/https 与移动端访问'],fail:'常见失败：DNS 区域没托管到 Cloudflare、CNAME 未创建、代理小云朵配置影响排查。',prompt:'请帮我检查 Cloudflare Pages 自定义域名配置，只整理当前状态，不要删除记录或修改 NS。'},
+ {id:'github',name:'GitHub Pages',fit:'适合静态页面、开源项目、能使用 GitHub 的用户。',steps:['进入仓库 Settings → Pages','在 Custom domain 填入域名','确认仓库中生成或保留 CNAME 文件','回 DNS 后台配置 CNAME/A 记录','等待 DNS 生效后开启 Enforce HTTPS','验收首页和子页面'],fail:'常见失败：CNAME 文件被删、仓库 Pages 源配置错、SPA 子页面 404。',prompt:'请帮我检查 GitHub Pages 自定义域名，确认 CNAME 文件、Pages 设置、DNS 记录和 HTTPS 状态。'},
+ {id:'tencent',name:'腾讯云/阿里云/华为云通用',fit:'适合中国大陆客户访问优先、愿意处理实名与备案的用户。',steps:['先完成域名实名认证','判断服务器/对象存储是否在中国大陆','按接入商要求进行 ICP 备案','备案通过后绑定域名到站点/桶/服务器','在 DNSPod/阿里云解析添加记录','验收访问、HTTPS 和备案号展示'],fail:'常见失败：未备案即解析大陆服务器、主体不一致、实名未完成、接入商不一致。',prompt:'请帮我整理国内云域名绑定准备清单：域名实名、备案状态、接入商、服务器位置、DNS 记录、HTTPS 状态。'},
+ {id:'local',name:'纯 HTML 本地交付',fit:'适合不会部署、公司电脑限制安装、先卖基础资料包的用户。',steps:['确认 index.html 双击能打开','把相关资源全部内联或放同一文件夹','压缩成交付包','给客户写打开说明','后续升级时再绑定域名','如客户要求线上访问，再做托管/备案方案'],fail:'常见失败：客户打开的是 txt、路径丢失、浏览器兼容、文件被微信压缩损坏。',prompt:'请帮我生成一份 HTML 本地交付说明，告诉客户如何打开、打不开怎么反馈、推荐浏览器和售后边界。'}
+];
+
+const prompts=[
+ ['整理域名绑定资料','绑定前先把信息集中到一张表。','请帮我整理当前域名绑定所需资料，包括域名、注册商、部署平台、临时链接、平台 DNS 要求、是否备案、当前报错。不要替我登录、付款、实名认证或删除任何记录。'],
+ ['打开注册商后台','让 WorkBuddy 引导，但不要自动提交。','请引导我打开域名注册商后台，但涉及账号密码、短信验证码、实名认证、付款、删除解析、提交修改时，必须停下来让我手动确认。'],
+ ['截图保存原 DNS','修改前必须备份。','请提醒我截图保存当前 DNS 解析记录。你只做记录整理，不要修改、删除或提交任何解析记录。'],
+ ['生成客服问题描述','绑定失败时发给平台客服。','我现在域名绑定失败。请根据我提供的截图和报错，生成一段给平台客服的描述，包括域名、平台、已添加记录、等待时间、错误提示和我希望客服确认的问题。'],
+ ['检查 www 和裸域名','两个入口都要验收。','请帮我检查 www.example.com 和 example.com 是否都能访问，并记录各自结果：能否打开、是否 HTTPS、是否跳转、是否页面正确。'],
+ ['HTTPS 验收','绑定成功后别忘了证书。','请引导我检查 http 是否跳转 https、浏览器是否显示安全锁、手机流量和微信里是否能打开。不要帮我修改后台，只生成检查清单。'],
+ ['整理失败日志','售后排查要有记录。','请把我遇到的域名绑定问题整理成表格：时间、操作、平台提示、我填的 DNS、当前状态、下一步建议。'],
+ ['客户交付说明','绑定完成后发给客户。','请帮我写一份给小白客户看的域名访问说明，告诉客户如何打开链接、打不开时怎么反馈、建议使用什么浏览器、手机和微信打开注意事项。'],
+ ['售后边界','减少退款扯皮。','请帮我写清楚：我不代替客户做实名认证、备案、付款、账号登录，不提供科学上网，不承诺所有海外平台国内稳定，也不保存账号密码。'],
+ ['远程带绑 SOP','升级服务使用。','请帮我生成一套远程带绑 SOP，包括准备资料、屏幕共享、截图备份、添加记录、等待生效、最终验收和失败回退。']
+];
+
+const glossary=[
+ ['域名','人话：网站的名字，比如 example.com。误区：买了域名不等于网站上线。提示：域名要和品牌名一致，续费价格也要看。'],
+ ['根域名/裸域名','人话：不带 www 的 example.com。误区：以为配置 www 就自动配置裸域。提示：裸域和 www 经常要分别配置。'],
+ ['二级域名','人话：www.example.com、app.example.com 都是二级域名。误区：www 不是必须，但用户习惯输。提示：小白建议 www 和裸域都绑定。'],
+ ['DNS','人话：互联网的地址簿。误区：DNS 不是部署平台。提示：你在域名后台填的记录，就是告诉浏览器去哪里找网站。'],
+ ['A 记录','人话：把域名指向一个 IP 地址。误区：乱填 IP 会指错地方。提示：只有平台明确给 IP 时才填。'],
+ ['CNAME','人话：把一个域名别名指向平台给的目标地址。误区：CNAME 不是你最终访问的网址。提示：www 常用 CNAME。'],
+ ['TXT 记录','人话：用于验证“这个域名是你的”。误区：它不负责打开网站。提示：平台要求验证时才添加。'],
+ ['NS','人话：谁来管理你的 DNS。误区：改 NS 后原来的解析可能失效。提示：改前截图旧记录。'],
+ ['TTL','人话：DNS 变化缓存多久。误区：改完立刻生效。提示：通常要等几分钟到几小时。'],
+ ['HTTPS/SSL','人话：浏览器安全锁。误区：域名解析成功不等于 HTTPS 立刻成功。提示：证书签发可能需要等待。'],
+ ['备案','人话：中国大陆服务器对外提供网站服务通常绕不开的登记流程。误区：买域名就自动备案。提示：以接入商和官方要求为准。'],
+ ['接入商','人话：提供服务器/托管的云服务商。误区：域名在哪买和在哪备案可能不是同一件事。提示：备案看接入商要求。'],
+ ['注册商','人话：你买域名的平台。误区：注册商不一定是 DNS 服务商。提示：先确认你的解析记录到底在哪管理。'],
+ ['静态网站','人话：主要是 HTML/CSS/JS，没有复杂后端。误区：静态不代表低级。提示：AI 做的 HTML 产品很适合静态托管。'],
+ ['对象存储','人话：云上的文件柜，也可以托管静态网站。误区：它不是完整服务器。提示：国内对象存储通常也涉及域名/备案/HTTPS配置。'],
+ ['404','人话：页面找不到。误区：一定是域名错。提示：也可能是部署路径、输出目录、路由配置错。'],
+ ['白屏','人话：页面空白。误区：域名绑定失败。提示：常见是代码报错或静态资源路径错。'],
+ ['重定向','人话：访问 A 自动跳到 B。误区：乱设会无限循环。提示：只保留一个主域名方向。'],
+ ['缓存','人话：浏览器或 DNS 暂时记住旧结果。误区：后台改了前台马上变。提示：换浏览器/手机流量测试。'],
+ ['微信拦截','人话：微信内打开链接可能被限制或提示风险。误区：域名绑定成功就一定能在微信打开。提示：真实验收要用微信测。'],
+ ['主机记录','人话：你要配置的是 @、www 还是其他子域名。误区：把 www 和 @ 混着填。提示：www 对应 www，裸域常用 @。'],
+ ['记录值','人话：平台让你指向的目标。误区：把自己的域名填回自己。提示：复制平台给出的值，不要手打。']
+];
+
+const errors=[
+ ['域名验证失败','平台一直显示未验证。','DNS 记录没填对、没生效、填错位置。','先确认 DNS 管理后台，再核对主机记录和记录值。','按平台要求重新填；每次只改一处，等待生效。','DNS','需要等待','低风险'],
+ ['CNAME 填错','www 无法打开或指向错误站点。','记录值填成了完整 URL、带了 https、或填回自己域名。','检查 CNAME 记录值是否为平台给出的目标域名。','去掉 https:// 和路径，只保留平台要求的域名。','DNS','可能需要等待','低风险'],
+ ['A 记录填错','裸域名打不开或打开旧网站。','IP 填错，或平台没有要求 A 记录。','查看平台后台是否明确给出 IP。','只有平台要求时才填 A 记录，否则删改前先截图。','DNS','需要等待','中风险'],
+ ['TXT 验证失败','平台无法证明域名归属。','TXT 主机记录或内容复制不完整。','逐字核对 TXT 值，注意引号和空格。','删除错误 TXT 前截图，重新添加平台给的值。','DNS','需要等待','低风险'],
+ ['DNS 未生效','后台改了但访问还是旧结果。','DNS 传播、缓存、TTL。','换手机流量、无痕浏览器、DNS 查询工具。','等待 10 分钟到数小时，不要频繁乱改。','DNS','需要等待','低风险'],
+ ['等待时间太短','刚改完就判断失败。','DNS 和 HTTPS 都有生效时间。','记录修改时间。','至少等待一段时间再复查，证书可能更久。','DNS','需要等待','低风险'],
+ ['填了 @ 但平台要求 www','裸域配置了但 www 没配。','主机记录理解错。','检查平台要求的主机记录。','为 www 单独添加 CNAME。','DNS','需要等待','低风险'],
+ ['www 能打开裸域打不开','只配置了 www，没有配置 apex。','裸域记录缺失。','分别访问 www 和裸域。','按平台支持方式配置 A/ALIAS/ANAME 或跳转。','DNS','需要等待','低风险'],
+ ['裸域能打开 www 打不开','只配置了 @，没有配置 www。','www 子域名记录缺失。','查询 www 的 CNAME。','添加 www CNAME 到平台目标。','DNS','需要等待','低风险'],
+ ['HTTPS 证书未签发','浏览器提示不安全或平台显示 pending。','DNS 未验证、证书签发等待、CAA限制。','先确认域名验证成功。','等待证书签发；超过 24 小时联系平台客服。','HTTPS','需要等待','低风险'],
+ ['证书错误','显示证书不匹配或无效。','域名指向了旧服务器或证书没更新。','查看证书颁发给哪个域名。','确认 DNS 指向正确平台，刷新证书配置。','HTTPS','可能需要等待','中风险'],
+ ['浏览器提示不安全','http 可打开但没有安全锁。','HTTPS 未开启或证书未生效。','用 https:// 访问并看错误。','在平台开启 HTTPS/Enforce HTTPS，等待证书。','HTTPS','需要等待','低风险'],
+ ['404','域名能访问但显示找不到页面。','部署输出目录错、路径错、平台项目错。','先打开平台临时链接是否正常。','修部署配置，不要先改 DNS。','部署','不一定','中风险'],
+ ['白屏','页面打开是空白。','代码报错、资源路径错、构建失败。','打开浏览器控制台看红色报错。','修复项目路径和构建输出，再重新部署。','部署','不一定','中风险'],
+ ['平台显示域名冲突','添加域名时提示已被占用。','域名曾绑定到其他项目/账号。','检查自己其他项目或旧账号。','先从旧项目解绑，或联系平台客服。','平台','不一定','中风险'],
+ ['域名被别人绑定过','无法验证归属。','平台存在旧绑定记录。','准备域名所有权截图和 DNS 验证记录。','提交客服说明。','平台','不一定','中风险'],
+ ['NS 没改成功','平台要求更换 NS，但 DNS 仍旧。','注册商后台未提交或生效中。','在注册商查看 NS 列表。','按平台要求更换，改前备份旧解析。','DNS','需要等待','高风险'],
+ ['改 NS 后原解析丢失','邮箱或旧网站异常。','换 NS 后旧 DNS 记录没迁移。','检查 MX、A、CNAME 是否存在。','把旧记录迁移到新 DNS；不要删除邮箱 MX。','DNS','需要等待','高风险'],
+ ['国内访问慢','国外平台国内加载慢。','访问链路、CDN、平台地区。','用手机流量和不同网络测试。','考虑国内云/备案/对象存储方案。','国内','不一定','低风险'],
+ ['微信打不开','浏览器能开，微信内不行。','微信环境限制、域名风险提示、证书问题。','复制到微信内实测。','建议复制到浏览器；必要时走国内云和合规备案。','国内','不一定','低风险'],
+ ['小红书链接无法跳转','私信/笔记链接受平台策略影响。','平台风控或链接形式。','测试不同表达方式。','不要承诺平台永久放行；使用合规引导。','国内','不一定','低风险'],
+ ['备案未完成','国内云提示需备案。','域名解析到大陆服务但未备案。','查看接入商备案状态。','按接入商流程完成备案后再开通。','备案','需要等待','高风险'],
+ ['备案主体不一致','接入商审核失败。','域名主体、备案主体、服务商信息不一致。','查看实名主体和备案主体。','咨询接入商，按要求变更或重新提交。','备案','需要等待','高风险'],
+ ['域名实名认证未完成','无法解析或备案。','注册后未实名。','域名后台查看实名状态。','先完成实名认证。','备案','需要等待','中风险'],
+ ['域名过期','访问突然失败。','域名到期未续费。','注册商后台查看到期时间。','尽快续费，等待恢复。','访问','需要等待','高风险'],
+ ['域名被锁定','无法修改 DNS。','安全锁、争议、实名异常。','看域名状态。','联系注册商解锁。','平台','不一定','高风险'],
+ ['CDN 配置错误','访问不稳定或证书异常。','CDN 回源、缓存、证书配置错。','临时绕过 CDN 测源站。','先关闭复杂 CDN，跑通基础域名。','访问','不一定','中风险'],
+ ['缓存没刷新','看到旧页面。','浏览器/CDN缓存。','无痕窗口和手机流量测试。','刷新缓存，等待 CDN 更新。','访问','需要等待','低风险'],
+ ['DNSPod 解析冲突','同一主机记录有多条冲突记录。','旧 A/CNAME 同时存在。','查看 www/@ 是否有重复记录。','保留平台要求的一条，删前截图。','DNS','需要等待','中风险'],
+ ['阿里云解析记录冲突','解析后台提示冲突。','同名同类型或 CNAME 与其他记录冲突。','查看解析记录列表。','按提示处理冲突，不要删除 MX。','DNS','需要等待','中风险'],
+ ['Cloudflare 小云朵异常','代理开启导致排查复杂。','代理/证书/源站配置影响。','切换 DNS only 测试。','先跑通 DNS，再决定是否代理。','DNS','需要等待','中风险'],
+ ['重定向循环','网页一直跳转。','www 与裸域互相跳。','检查平台主域名和跳转规则。','只保留一个方向：裸域到 www 或 www 到裸域。','访问','不一定','中风险'],
+ ['http 到 https 失败','http 不跳转或打不开。','强制 HTTPS 未开启。','分别测试 http 和 https。','开启平台的 HTTPS/重定向选项。','HTTPS','可能等待','低风险'],
+ ['根域跳转 www 失败','example.com 不跳到 www。','缺少重定向规则或 apex 配置。','访问两个域名。','在平台设置主域名或重定向。','访问','不一定','低风险'],
+ ['www 跳转根域失败','www 没跳到 apex。','主域设置相反或缺失。','查看平台 primary domain。','设置主域方向。','访问','不一定','低风险'],
+ ['路径大小写错误','部分页面 404。','文件名大小写不一致。','对比链接和实际文件名。','统一小写路径。','部署','不一定','低风险'],
+ ['静态资源 404','页面有内容但样式/图片没了。','CSS/JS/图片路径错误。','浏览器控制台 Network 查看 404。','改成相对路径或重新部署资源。','部署','不一定','中风险'],
+ ['部署后旧页面缓存','已经更新但看到旧版。','CDN 或浏览器缓存。','换设备测试。','刷新缓存或等待。','访问','需要等待','低风险'],
+ ['浏览器本地缓存','自己电脑看不到新页面。','浏览器缓存旧资源。','无痕窗口测试。','清缓存或换浏览器。','访问','不需要','低风险'],
+ ['项目输出目录错误','部署平台发布了空目录。','dist/build/out 填错。','看构建日志和输出目录。','按项目配置修正输出目录。','部署','不需要','中风险'],
+ ['绑定了错误项目','域名指向另一个项目。','平台里选错站点。','检查域名在平台归属。','解绑错误项目，绑定正确项目。','平台','可能等待','中风险'],
+ ['多个平台同时解析冲突','同一域名指向多个平台。','旧记录未清理。','查看同名 A/CNAME。','保留当前平台要求记录。','DNS','需要等待','中风险'],
+ ['注册商和 DNS 服务商不是同一个','在错误后台改记录。','NS 指向别的 DNS 服务。','查看当前 NS。','去真正 DNS 服务商后台修改。','DNS','不一定','中风险'],
+ ['更换 NS 后忘记重新添加记录','网站/邮箱都异常。','新 DNS 没有旧记录。','查看新 DNS 记录是否为空。','迁移旧 A/CNAME/MX/TXT。','DNS','需要等待','高风险'],
+ ['平台要求删除旧记录但用户没删','验证失败。','旧记录优先生效或冲突。','查看同名记录。','删前截图，保留必须记录。','DNS','需要等待','中风险'],
+ ['删除邮箱 MX 记录导致邮箱异常','企业邮箱收不到信。','误删 MX。','检查 MX 记录。','恢复邮箱服务商给的 MX。','DNS','需要等待','高风险'],
+ ['证书等待超过 24 小时','HTTPS 长期 pending。','DNS 未正确、CAA 限制或平台问题。','核对 DNS 和平台错误。','生成客服描述联系平台。','HTTPS','需要等待','低风险'],
+ ['域名含中文或特殊字符','平台不支持或显示异常。','IDN/特殊字符兼容。','查看平台支持说明。','优先使用英文字母域名。','DNS','不一定','低风险'],
+ ['客户所在网络屏蔽','自己能开客户不能开。','客户网络、公司防火墙、地区差异。','让客户换手机流量测试。','提供备用链接或国内云方案。','国内','不一定','低风险'],
+ ['手机能打开电脑打不开','设备缓存或网络差异。','浏览器、DNS缓存、本地网络。','换浏览器/清缓存。','记录差异并逐项排查。','访问','不需要','低风险'],
+ ['电脑能打开手机打不开','移动端适配或网络问题。','页面响应式/移动网络。','手机浏览器打开控制台不方便，先换手机浏览器。','修移动端 CSS 或换网络测试。','访问','不需要','低风险'],
+ ['只有首页能打开子页面 404','SPA 路由未回退。','静态平台缺少 rewrite。','直接刷新子页面测试。','配置 fallback 到 index.html。','部署','不需要','中风险'],
+ ['部署平台项目被暂停','链接突然打不开。','额度、风控、项目暂停。','查看平台项目状态。','恢复项目或迁移平台。','平台','不一定','中风险'],
+ ['域名解析到旧服务器','打开旧页面。','旧 A 记录仍生效。','查询当前解析 IP/目标。','清理旧记录，等待生效。','DNS','需要等待','中风险']
+];
+
+const acceptance=[
+ '输入裸域名 example.com 能打开',
+ '输入 www.example.com 能打开',
+ 'http 会自动跳转 https',
+ '浏览器显示安全锁',
+ '手机流量能打开',
+ '家里 Wi-Fi 能打开',
+ '微信里能打开或已有浏览器打开说明',
+ '小红书私信链接能正常跳转或已有合规替代说明',
+ '不同浏览器能打开',
+ '页面不是旧版本',
+ '页面没有白屏',
+ '页面没有 404',
+ '按钮能点击',
+ '图片和样式能加载',
+ '移动端排版正常',
+ '客户能访问',
+ '已截图保存成功状态',
+ '已保存 DNS 记录截图',
+ '已记录平台后台截图',
+ '已写好客户交付说明'
+];
+
+const resources=[
+ ['适合谁购买','已经用 AI 做出网页但不会绑定域名的人；卖 HTML 虚拟产品的人；想提升链接专业度的人。','人群'],
+ ['解决什么问题','链接太丑、域名不会解析、HTTPS 不生效、www/裸域混乱、备案不知道怎么判断。','痛点'],
+ ['基础版定价','HTML 工具包 + 检查表 + DNS 生成器 + 错误库，适合 299 元。','299'],
+ ['截图案例版','增加不同平台注册商后台截图、真实失败案例、修复路径，适合 499 元。','499'],
+ ['视频演示版','录制 Vercel/Netlify/国内云/DNSPod/阿里云解析演示，适合 699 元。','699'],
+ ['远程带绑版','一对一远程协助，但不代登录、不代付款、不代备案，适合 999 元以上。','999+'],
+ ['企业 SOP 版','为团队整理域名资产、DNS变更流程、截图规范和验收表，适合 1999 元以上。','1999+'],
+ ['长期护城河','持续收集真实错误截图、后台界面变化、客户失败路径和 WorkBuddy 辅助提示词。','护城河']
+];
+
+const canHelp=[
+ '判断域名绑定路线','整理 DNS 配置','检查绑定失败原因','生成客服描述','生成 WorkBuddy 辅助提示词','做访问验收清单','整理远程带绑 SOP','生成客户交付说明'
+];
+const cannotHelp=[
+ '不提供科学上网','不代注册海外账号','不代实名认证','不代备案','不代付款','不保存账号密码','不保证所有海外平台中国大陆网络稳定','不保证被微信/小红书永久放行','不替用户承担商标风险','不保证所有公司网络都能访问'
+];
+
+function renderRoutes(){
+ const wrap=$('#routeCards');
+ wrap.innerHTML=routes.map((r,i)=>`<div class="card route-card ${i===0?'active':''}" data-route="${r.id}"><div class="icon">${r.icon}</div><h3>${r.title}</h3><p>${r.desc}</p></div>`).join('');
+ $$('.route-card').forEach(c=>c.addEventListener('click',()=>{$$('.route-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');renderRouteDetail(c.dataset.route)}));
+ renderRouteDetail('html');
+}
+function renderRouteDetail(id){
+ const r=routes.find(x=>x.id===id);
+ $('#routeDetail').innerHTML=`<h3>${r.title}｜推荐执行顺序</h3><div class="steps">${r.steps.map((s,i)=>`<div class="step"><span class="num">${i+1}</span><div><strong>${s}</strong><small>完成后截图留证，再进入下一步。不要同时改多个 DNS 记录。</small></div></div>`).join('')}</div>`;
+}
+function renderChecklist(){
+ $('#buyChecklist').innerHTML=checklist.map((c,i)=>`<label class="check-item"><input type="checkbox" data-check="${i}"><span>${c}</span></label>`).join('');
+ $$('#buyChecklist input').forEach(i=>i.addEventListener('change',updateChecklist));
+ updateChecklist();
+}
+function updateChecklist(){
+ const checked=$$('#buyChecklist input:checked').length,total=checklist.length,pct=Math.round(checked/total*100);
+ $('#checkPercent').textContent=pct+'%';$('#checkBar').style.width=pct+'%';
+ let status='还没开始',advice='先勾选真实情况，系统会告诉你现在能不能开始绑定。';
+ if(pct>0&&pct<40){status='先别买/别绑';advice='准备度偏低。先确认品牌名、续费价格、实名、备案和临时链接。'}
+ if(pct>=40&&pct<70){status='可以买域名';advice='可以买域名，但不要急着改解析。先截图、实名、确认网站能访问。'}
+ if(pct>=70&&pct<90){status='可以准备绑定';advice='准备度不错。下一步进入平台绑定流程，先添加域名再配置 DNS。'}
+ if(pct>=90){status='可以开始绑定';advice='准备充分。按路线操作，每次只改一个记录，并做 HTTPS 和访问验收。'}
+ $('#checkStatus').textContent=status;$('#checkAdvice').textContent=advice;
+}
+function renderPlatforms(){
+ $('#platformTabs').innerHTML=platformData.map((p,i)=>`<button class="tab ${i===0?'active':''}" data-platform="${p.id}">${p.name}</button>`).join('');
+ $('#platformFlows').innerHTML=platformData.map((p,i)=>`<div class="flow ${i===0?'active':''}" id="platform-${p.id}"><div class="card"><h3>${p.name}</h3><p>${p.fit}</p><div class="steps" style="margin-top:16px">${p.steps.map((s,idx)=>`<div class="step"><span class="num">${idx+1}</span><div><strong>${s}</strong><small>以平台最新界面为准，重点看 Domain / DNS / Custom domain / HTTPS。</small></div></div>`).join('')}</div><div class="notice" style="margin-top:14px"><strong>常见失败：</strong>${p.fail}</div>${codeBlock(p.prompt)}</div></div>`).join('');
+ $$('#platformTabs .tab').forEach(tab=>tab.addEventListener('click',()=>{$$('#platformTabs .tab').forEach(t=>t.classList.remove('active'));$$('#platformFlows .flow').forEach(f=>f.classList.remove('active'));tab.classList.add('active');$('#platform-'+tab.dataset.platform).classList.add('active')}));
+}
+function renderGlossary(){ $('#glossaryGrid').innerHTML=glossary.map(g=>`<div class="term"><strong>${g[0]}</strong><span>${g[1]}</span></div>`).join(''); }
+function renderPrompts(){ $('#promptGrid').innerHTML=prompts.map(p=>`<div class="prompt-card"><span class="tag">${p[1]}</span><h3>${p[0]}</h3><div class="prompt-text">${p[2]}</div><button class="btn" data-copy="${attr(p[2])}">复制模板</button></div>`).join(''); }
+function renderErrors(){
+ const q=($('#errorSearch').value||'').toLowerCase().trim(),cat=$('#errorFilter').value,favOnly=$('#favFilter').value==='fav',favs=JSON.parse(localStorage.getItem('domain_favs')||'[]');
+ const filtered=errors.filter((e,idx)=>{const text=e.join(' ').toLowerCase();return(!q||text.includes(q))&&(cat==='all'||e[5]===cat)&&(!favOnly||favs.includes(idx))});
+ $('#errorGrid').innerHTML=filtered.map(e=>{const idx=errors.indexOf(e),isFav=favs.includes(idx);const desc=`域名绑定问题：${e[0]}。表现：${e[1]}。可能原因：${e[2]}。我已经检查：${e[3]}。请帮我按国内用户可执行步骤排查，不要让我盲目删除记录。`;return `<div class="error-card"><div><span class="pill">${e[5]}</span><span class="pill">${e[6]}</span><span class="pill">${e[7]}</span></div><h3>${e[0]}</h3><p><strong>表现：</strong>${e[1]}</p><p><strong>可能原因：</strong>${e[2]}</p><p><strong>检查：</strong>${e[3]}</p><p><strong>修复：</strong>${e[4]}</p><div class="error-actions"><button class="fav-btn" data-fav="${idx}">${isFav?'★ 已收藏':'☆ 收藏'}</button><button class="copy-btn" data-copy="${attr(desc)}">复制给客服/AI</button></div></div>`}).join('')||'<div class="card"><h3>没有找到匹配问题</h3><p>换关键词试试：CNAME、HTTPS、备案、白屏、www、NS、微信。</p></div>';
+}
+function renderAcceptance(){
+ $('#acceptList').innerHTML=acceptance.map((a,i)=>`<label class="check-item"><input type="checkbox" data-accept="${i}"><span>${a}</span></label>`).join('');
+ $$('#acceptList input').forEach(i=>i.addEventListener('change',()=>{const total=acceptance.length,checked=$$('#acceptList input:checked').length;$('#acceptAdvice').textContent=checked===total?'域名绑定完成，可以用于小红书成交、客户交付、个人品牌展示。':`已完成 ${checked}/${total}。剩余项就是客户最可能投诉的地方。`}));
+}
+function renderResources(){ $('#resourceList').innerHTML=resources.map((r,i)=>`<div class="resource"><div class="icon">${i+1}</div><div><h3 style="margin:0">${r[0]}</h3><p style="margin:0;color:var(--muted)">${r[1]}</p></div><span class="pill">${r[2]}</span></div>`).join(''); }
+function renderBoundaries(){
+ $('#canHelp').innerHTML=canHelp.map(x=>`<span class="tag">${x}</span>`).join('');
+ $('#cannotHelp').innerHTML=cannotHelp.map(x=>`<span class="tag">${x}</span>`).join('');
+}
+function runDecision(){
+ const audience=$('#decAudience').value,domain=$('#decDomain').value,real=$('#decReal').value,beian=$('#decBeian').value,over=$('#decOverseas').value,type=$('#decType').value;
+ let title='推荐：纯 HTML + 静态托管 + 域名绑定', reason='你的场景适合先跑通静态页面，再绑定域名。';
+ let steps=['确认 HTML/临时链接能打开','选择托管平台','添加自定义域名','按平台要求配置 DNS','等待 HTTPS 并验收'];
+ if(domain!=='已购买'){title='推荐：先别绑定，先买对域名';reason='你还没有稳定域名，先完成命名、购买、实名和续费价格确认。';steps=['确定品牌域名','确认续费价格','完成实名认证','生成一个可访问的网页','再进入绑定流程'];}
+ if(audience.includes('中国大陆') && over.includes('打不开')){title='推荐：国内云/纯 HTML 本地交付优先';reason='你的客户主要在国内，并且海外平台不稳定，不要把交付卡死在海外后台。';steps=['先用纯 HTML 本地交付或国内云','判断备案资格','如使用大陆服务器先完成备案','绑定域名并做手机/微信验收'];}
+ if(type.includes('后端')){title='推荐：先修架构，不要急着绑域名';reason='有登录/支付/表单后端功能时，域名只是最后一步，先确认服务器、接口和安全。';steps=['确认后端服务可用','确认数据库和接口','选择正式部署架构','再做域名和 HTTPS'];}
+ if(real!=='已实名'){steps.unshift('先完成域名实名认证');}
+ const prompt=`我的情况：访问人群=${audience}，域名=${domain}，实名=${real}，备案=${beian}，海外平台=${over}，网站类型=${type}。请给我一条国内用户可执行的域名绑定路线，包含准备材料、DNS 配置、备案提醒、风险边界和验收清单。`;
+ $('#decisionResult').innerHTML=`<h3>${title}</h3><p><strong>原因：</strong>${reason}</p><ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="notice">风险提醒：不要在没有截图备份的情况下删除旧 DNS；涉及实名、备案、付款、登录必须人工确认。</div>${codeBlock(prompt)}`;
+}
+function generateDns(){
+ const domain=$('#dnsDomain').value.trim()||'example.com', platform=$('#dnsPlatform').value, www=$('#dnsWww').value, apex=$('#dnsApex').value, target=$('#dnsTarget').value.trim()||'平台给你的目标地址', txt=$('#dnsTxt').value, ns=$('#dnsNs').value, ttl=$('#dnsTtl').value;
+ let rows=[];
+ if(www==='是') rows.push(['www 访问','CNAME','www',target,ttl,'域名注册商/DNS 服务商后台','访问 www.'+domain+' 能打开正确页面','不要把 https:// 写进 CNAME 值']);
+ if(apex==='是'){
+   const type = platform==='Netlify' ? 'ALIAS/ANAME/Flattened CNAME 或平台指定 A' : platform==='GitHub Pages' ? 'A 或平台指定记录' : platform==='腾讯云/阿里云/国内云' ? 'A/CNAME，以云服务商要求为准' : 'A/ALIAS/平台指定记录';
+   rows.push(['裸域访问',type,'@',target,ttl,'域名注册商/DNS 服务商后台','访问 '+domain+' 能打开正确页面','裸域不能随便填 CNAME，按平台要求']);
+ }
+ if(txt==='是') rows.push(['域名所有权验证','TXT','@ 或平台指定主机记录','平台给你的 TXT 值',ttl,'DNS 记录后台','平台验证通过','TXT 只负责验证，不负责打开网站']);
+ if(ns.includes('是')) rows.push(['DNS 托管','NS','整域名','平台给出的 NS 服务器','默认','域名注册商后台','NS 查询显示平台服务器','改 NS 前必须截图旧记录，尤其是邮箱 MX']);
+ const table=`<table class="table"><thead><tr><th>用途</th><th>记录类型</th><th>主机记录</th><th>记录值</th><th>TTL</th><th>填写位置</th><th>成功标志</th><th>风险提醒</th></tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+ const copy=`域名：${domain}\n平台：${platform}\n目标地址：${target}\n建议：${rows.map(r=>`${r[0]}：${r[1]} ${r[2]} -> ${r[3]}`).join('\n')}\n提醒：最终以平台后台给出的 DNS 要求为准，改动前截图保存旧记录。`;
+ $('#dnsResult').innerHTML=`<h3>${platform}｜DNS 配置建议</h3>${table}<div class="notice" style="margin-top:14px">最终以平台给出的 DNS 要求为准。本工具是辅助理解，不替代平台后台提示。每次只改一处，等待生效。</div>${codeBlock(copy)}`;
+}
+function runFiling(){
+ const loc=$('#fileLocation').value, cloud=$('#fileCloud').value, pub=$('#filePublic').value, purpose=$('#filePurpose').value, real=$('#fileReal').value;
+ let title='建议咨询接入商', level='warn', msg='你的情况还不够明确，备案判断应以接入商和官方审核为准。';
+ let steps=['确认服务器/对象存储实际所在地区','确认接入商备案要求','确认域名实名状态','正式上线前咨询云服务商'];
+ if(loc.includes('中国大陆') || cloud==='是'){title='可能需要备案';level='bad';msg='如果网站托管在中国大陆服务器或对象存储，并面向公众访问，通常需要按接入商要求完成 ICP 备案后再开通。';steps=['先完成域名实名认证','在接入商备案系统提交资料','等待初审/管局审核','备案通过后再正式解析访问'];}
+ if(loc.includes('香港') || loc.includes('海外') || loc.includes('海外静态')){title='通常不走大陆接入备案，但仍需合规';level='ok';msg='如果网站不托管在中国大陆服务器，通常不按大陆接入商备案流程处理；但国内访问稳定性、平台可用性和合规展示仍需自己评估。';steps=['确认平台可稳定访问','测试国内手机/微信访问','准备备用链接或国内方案','避免违规内容'];}
+ if(real!=='已实名') steps.unshift('先完成域名实名认证，否则很多后续流程会卡住');
+ $('#filingResult').innerHTML=`<h3 class="${level}">${title}</h3><p>${msg}</p><ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol><div class="notice">免责声明：备案要求会随接入商、服务器位置、服务类型和最新政策变化。本工具只做操作指引，不替代官方审核意见。</div>`;
+}
+function genDelivery(){
+ const product=$('#delProduct').value.trim()||'你的网页产品', domain=$('#delDomain').value.trim()||'https://www.example.com', browser=$('#delBrowser').value.trim()||'Chrome / Edge / Safari', contact=$('#delContact').value.trim()||'联系我并发送截图', mobile=$('#delMobile').value, wechat=$('#delWechat').value;
+ const text=`${product} 已完成域名绑定，可以通过以下链接访问：\n\n${domain}\n\n访问建议：\n1. 推荐使用 ${browser} 打开。\n2. 手机端：${mobile}。\n3. 微信内打开：${wechat}。\n4. 如果页面打不开、显示旧版本、出现 404 或证书提示，请先复制链接到浏览器打开，并把截图发给我。\n5. 域名和 HTTPS 刚配置完成时，部分地区可能存在短时间缓存，请稍后再试。\n\n售后边界：我可以协助排查访问、域名、HTTPS 和页面显示问题；不代替你处理实名认证、备案、付款、账号登录或平台审核。`;
+ $('#deliveryResult').innerHTML=`<h3>客户交付说明</h3>${codeBlock(text)}`;
+}
+document.addEventListener('click',e=>{
+ const c=e.target.closest('[data-copy]');if(c){copyText(c.getAttribute('data-copy'));c.classList.add('done');setTimeout(()=>c.classList.remove('done'),1000)}
+ const f=e.target.closest('[data-fav]');if(f){const idx=Number(f.dataset.fav);let favs=JSON.parse(localStorage.getItem('domain_favs')||'[]');favs=favs.includes(idx)?favs.filter(x=>x!==idx):[...favs,idx];localStorage.setItem('domain_favs',JSON.stringify(favs));renderErrors();toast(favs.includes(idx)?'已收藏':'已取消收藏')}
+});
+$('#themeBtn').addEventListener('click',()=>{const html=document.documentElement,next=html.dataset.theme==='dark'?'light':'dark';html.dataset.theme=next;$('#themeBtn').textContent=next==='dark'?'浅色':'深色';localStorage.setItem('domain_theme',next)});
+$('#exportChecklist').addEventListener('click',()=>{const checked=$$('#buyChecklist input').map((i,idx)=>`${i.checked?'[x]':'[ ]'} ${checklist[idx]}`).join('\n');const blob=new Blob([`Codex 域名绑定实操包｜域名购买前检查表\n\n${checked}\n\n建议：${$('#checkAdvice').textContent}`],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='codex-domain-checklist.txt';a.click();URL.revokeObjectURL(a.href)});
+$('#runDecision').addEventListener('click',runDecision);
+$('#generateDns').addEventListener('click',generateDns);
+$('#runFiling').addEventListener('click',runFiling);
+$('#genDelivery').addEventListener('click',genDelivery);
+$('#errorSearch').addEventListener('input',renderErrors);
+$('#errorFilter').addEventListener('change',renderErrors);
+$('#favFilter').addEventListener('change',renderErrors);
+const savedTheme=localStorage.getItem('domain_theme');if(savedTheme){document.documentElement.dataset.theme=savedTheme;$('#themeBtn').textContent=savedTheme==='dark'?'浅色':'深色'}
+renderRoutes();renderChecklist();renderPlatforms();renderGlossary();renderPrompts();renderErrors();renderAcceptance();renderResources();renderBoundaries();
+</script>
+</body>
+</html>

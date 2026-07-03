@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>私域成交话术生成器</title>
+  <style>
+    :root {
+      --bg: #f7f3ee;
+      --bg2: #fffaf3;
+      --card: rgba(255, 255, 255, 0.84);
+      --card-solid: #ffffff;
+      --text: #211a16;
+      --muted: #74665d;
+      --soft: #9a8c82;
+      --line: rgba(61, 43, 31, 0.12);
+      --brand: #8b5e3c;
+      --brand2: #c8905f;
+      --brand3: #f1d3b3;
+      --danger: #b44343;
+      --green: #408063;
+      --blue: #526fa3;
+      --shadow: 0 24px 70px rgba(85, 57, 36, 0.13);
+      --shadow2: 0 12px 38px rgba(85, 57, 36, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max: 1380px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+        "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 4%, rgba(255, 210, 160, .52), transparent 32%),
+        radial-gradient(circle at 90% 0%, rgba(176, 121, 75, .18), transparent 30%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 45%, #f4eee7 100%);
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    body.dark {
+      --bg: #15110f;
+      --bg2: #1f1915;
+      --card: rgba(42, 34, 29, 0.86);
+      --card-solid: #2a221d;
+      --text: #f7efe7;
+      --muted: #c5b7aa;
+      --soft: #a89585;
+      --line: rgba(255,255,255,.11);
+      --brand: #d4a16d;
+      --brand2: #e8bd8e;
+      --brand3: #4b3728;
+      --shadow: 0 24px 70px rgba(0,0,0,.34);
+      --shadow2: 0 12px 38px rgba(0,0,0,.28);
+      background:
+        radial-gradient(circle at 18% 4%, rgba(161, 103, 57, .28), transparent 32%),
+        radial-gradient(circle at 90% 0%, rgba(210, 152, 102, .16), transparent 30%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    }
+
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    textarea { resize: vertical; }
+
+    .app {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 22px 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 40px;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,255,255,.58)),
+        radial-gradient(circle at 78% 24%, rgba(200, 144, 95, .24), transparent 34%);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    body.dark .hero {
+      background:
+        linear-gradient(135deg, rgba(42,34,29,.88), rgba(42,34,29,.62)),
+        radial-gradient(circle at 78% 24%, rgba(200,144,95,.22), transparent 34%);
+    }
+
+    .hero:before {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -95px;
+      width: 280px;
+      height: 280px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(200,144,95,.36), transparent 70%);
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(139, 94, 60, .22);
+      background: rgba(255, 250, 243, .70);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    body.dark .eyebrow { background: rgba(255,255,255,.06); }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .pill-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .58);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    body.dark .pill { background: rgba(255,255,255,.06); }
+
+    .hero-side {
+      border-radius: 26px;
+      padding: 22px;
+      background: rgba(255, 250, 243, .74);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 260px;
+    }
+
+    body.dark .hero-side { background: rgba(255,255,255,.055); }
+
+    .hero-side h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 22px;
+      color: var(--brand);
+      line-height: 1.1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      color: var(--text);
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(85, 57, 36, .08);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+      user-select: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(85, 57, 36, .12);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand2) 100%);
+      box-shadow: 0 14px 30px rgba(139, 94, 60, .26);
+    }
+
+    .btn.secondary {
+      color: var(--brand);
+      border-color: rgba(139, 94, 60, .20);
+      background: rgba(255,255,255,.62);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    body.dark .btn { background: rgba(255,255,255,.08); color: var(--text); }
+    body.dark .btn.primary { color: #1d130c; background: linear-gradient(135deg, #e9bd8b, #d99c62); }
+    body.dark .btn.secondary { color: var(--brand2); background: rgba(255,255,255,.06); }
+
+    .main {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.92fr) minmax(480px, 1.08fr);
+      gap: 22px;
+      margin-top: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+    }
+
+    .panel-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .panel-body { padding: 20px 22px 22px; }
+
+    .sticky {
+      position: sticky;
+      top: 16px;
+      z-index: 2;
+    }
+
+    .section {
+      padding: 18px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .section:first-child { padding-top: 0; }
+    .section:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .hint {
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label.field {
+      display: block;
+    }
+
+    label.field span {
+      display: block;
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 11px 12px;
+      outline: none;
+      color: var(--text);
+      background: rgba(255,255,255,.72);
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    textarea { min-height: 96px; }
+
+    body.dark input, body.dark textarea, body.dark select {
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(139, 94, 60, .46);
+      box-shadow: 0 0 0 4px rgba(200, 144, 95, .14);
+      background: rgba(255,255,255,.95);
+    }
+
+    body.dark input:focus, body.dark textarea:focus, body.dark select:focus {
+      background: rgba(255,255,255,.09);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1;
+      transition: all .15s ease;
+      box-shadow: none;
+    }
+
+    .chip:hover { transform: translateY(-1px); color: var(--brand); }
+    .chip.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(139,94,60,.18);
+    }
+
+    body.dark .chip { background: rgba(255,255,255,.055); }
+    body.dark .chip.active { color: #1d130c; }
+
+    .slider-wrap {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.48);
+    }
+
+    body.dark .slider-wrap { background: rgba(255,255,255,.04); }
+
+    input[type="range"] {
+      padding: 0;
+      min-height: 22px;
+      accent-color: var(--brand);
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      color: var(--soft);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .template-card {
+      text-align: left;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.58);
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+
+    .template-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(139,94,60,.25);
+      box-shadow: 0 12px 24px rgba(85,57,36,.09);
+    }
+
+    body.dark .template-card { background: rgba(255,255,255,.055); }
+
+    .template-card b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .template-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .result-empty {
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      padding: 44px 20px;
+    }
+
+    .result-empty .icon {
+      width: 78px;
+      height: 78px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(139,94,60,.14), rgba(200,144,95,.24));
+      font-size: 32px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .score-card {
+      margin-bottom: 16px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,250,243,.58));
+    }
+
+    body.dark .score-card {
+      background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    }
+
+    .score-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .score-num {
+      font-size: 42px;
+      font-weight: 850;
+      letter-spacing: -0.06em;
+      color: var(--brand);
+      line-height: 1;
+    }
+
+    .score-title b {
+      display: block;
+      font-size: 17px;
+    }
+
+    .score-title span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .bars {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 86px 1fr 38px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bar {
+      overflow: hidden;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(139,94,60,.12);
+    }
+
+    .bar > i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      border-radius: inherit;
+      transition: width .5s ease;
+    }
+
+    .output-block {
+      margin-top: 14px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.66);
+    }
+
+    body.dark .output-block { background: rgba(255,255,255,.055); }
+
+    .output-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .output-head h3 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.025em;
+    }
+
+    .output-head .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(139,94,60,.10);
+      color: var(--brand);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .copy-mini {
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(139,94,60,.10);
+      color: var(--brand);
+      font-size: 12px;
+      border: 1px solid rgba(139,94,60,.12);
+      box-shadow: none;
+    }
+
+    .copy-mini:hover { background: rgba(139,94,60,.16); }
+
+    .output-text {
+      white-space: pre-wrap;
+      color: var(--text);
+      font-size: 14.5px;
+      line-height: 1.85;
+    }
+
+    .output-text mark {
+      padding: 2px 5px;
+      border-radius: 8px;
+      background: rgba(241, 211, 179, .62);
+      color: inherit;
+    }
+
+    body.dark .output-text mark { background: rgba(139,94,60,.34); }
+
+    .logic-map {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .logic-step {
+      min-height: 86px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      padding: 12px;
+      position: relative;
+    }
+
+    body.dark .logic-step { background: rgba(255,255,255,.045); }
+
+    .logic-step b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .logic-step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .mini-card {
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.52);
+    }
+
+    body.dark .mini-card { background: rgba(255,255,255,.045); }
+
+    .mini-card b {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    body.dark .tab { background: rgba(255,255,255,.055); }
+
+    .tab.active {
+      color: #fff;
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    body.dark .tab.active { color: #1d130c; background: var(--brand2); }
+
+    .drawer {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .drawer.active { display: block; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%) translateY(20px);
+      min-width: 160px;
+      max-width: min(520px, calc(100vw - 36px));
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(33, 26, 22, .90);
+      box-shadow: 0 18px 36px rgba(0,0,0,.18);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .footer-note {
+      margin: 24px 0 0;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.48);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    body.dark .footer-note { background: rgba(255,255,255,.045); }
+
+    .history-list {
+      display: grid;
+      gap: 9px;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      text-align: left;
+      padding: 12px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      color: var(--text);
+    }
+
+    body.dark .history-item { background: rgba(255,255,255,.045); }
+
+    .history-item b {
+      display: block;
+      font-size: 13px;
+    }
+
+    .history-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .risk-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .risk-list li { margin: 5px 0; }
+
+    .switch {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .switch input {
+      width: 42px;
+      min-height: 24px;
+      appearance: none;
+      border-radius: 999px;
+      padding: 0;
+      background: rgba(139,94,60,.18);
+      border: 1px solid var(--line);
+      position: relative;
+    }
+
+    .switch input:before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 2px;
+      border-radius: 999px;
+      background: #fff;
+      transition: left .2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,.16);
+    }
+
+    .switch input:checked {
+      background: var(--brand);
+    }
+
+    .switch input:checked:before {
+      left: 19px;
+    }
+
+    .mobile-fab {
+      display: none;
+      position: fixed;
+      right: 18px;
+      bottom: 20px;
+      z-index: 50;
+      border-radius: 999px;
+      padding: 0 18px;
+      min-height: 52px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 16px 34px rgba(139,94,60,.25);
+    }
+
+    .help-text {
+      font-size: 12px;
+      color: var(--soft);
+      margin-top: 7px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 16px 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(64,128,99,.10);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid, .main { grid-template-columns: 1fr; }
+      .sticky { position: static; }
+      .logic-map { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .app { padding: 14px 12px 36px; }
+      .hero { padding: 24px 18px; border-radius: 26px; }
+      .hero-side { min-height: auto; }
+      .grid-2, .grid-3, .template-grid { grid-template-columns: 1fr; }
+      .logic-map { grid-template-columns: 1fr; }
+      .panel-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar .btn { flex: 1; }
+      .mobile-fab { display: inline-flex; align-items: center; justify-content: center; }
+      .score-top { align-items: flex-start; }
+      .bar-row { grid-template-columns: 74px 1fr 34px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .hero, .left-panel, .toolbar, .footer-note, .mobile-fab { display: none !important; }
+      .main { display: block; }
+      .panel { box-shadow: none; border: none; }
+      .output-block, .score-card { break-inside: avoid; background: #fff; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">私域成交助手 · 微信/社群/朋友圈适用</span>
+          <h1>私域成交话术生成器</h1>
+          <p class="subtitle">
+            把“不会聊、不敢推、客户说贵、客户不回、临门一脚不知道怎么收”变成一套自然、有温度、有逻辑、可复制的成交沟通方案。
+          </p>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="scrollToForm()">开始生成话术</button>
+            <button class="btn secondary" onclick="loadDemo()">填入示例案例</button>
+            <button class="btn ghost" onclick="toggleDarkMode()">切换深浅模式</button>
+          </div>
+          <div class="pill-row">
+            <span class="pill">✅ 12类话术结果</span>
+            <span class="pill">✅ 异议处理</span>
+            <span class="pill">✅ 朋友圈辅助文案</span>
+            <span class="pill">✅ 复购/转介绍</span>
+            <span class="pill">✅ 合规风险提醒</span>
+          </div>
+        </div>
+        <aside class="hero-side">
+          <div>
+            <h3>好话术不是硬推，而是让客户更轻松地做决定。</h3>
+            <p style="color:var(--muted);margin:0 0 18px;font-size:14px;">
+              本工具按客户阶段、成交目标、顾虑点、产品信息和沟通风格自动组合话术，适合一人公司、知识付费、实体店、顾问服务、社群运营和虚拟产品售卖。
+            </p>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><b>18+</b><span>客户阶段</span></div>
+            <div class="metric"><b>20+</b><span>行业模板</span></div>
+            <div class="metric"><b>10+</b><span>常见异议</span></div>
+            <div class="metric"><b>本地</b><span>无后端运行</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <main class="main">
+      <section class="panel left-panel" id="formPanel">
+        <div class="panel-header">
+          <div>
+            <h2>填写成交场景</h2>
+            <p>信息越具体，生成的话术越像真人顾问，而不是模板套话。</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="compactMode" onchange="toggleCompactMode()">
+            精简结果
+          </label>
+        </div>
+
+        <div class="panel-body">
+          <div class="section">
+            <div class="section-title">
+              <h3>1. 业务与产品信息</h3>
+              <span class="hint">先确定你卖什么</span>
+            </div>
+
+            <div class="grid-2">
+              <label class="field">
+                <span>业务类型</span>
+                <select id="businessType">
+                  <option value="知识付费">知识付费/课程</option>
+                  <option value="咨询服务">咨询服务</option>
+                  <option value="虚拟资料">虚拟资料/资料包</option>
+                  <option value="AI工具服务">AI工具服务</option>
+                  <option value="训练营">训练营/陪跑营</option>
+                  <option value="社群服务">社群服务/会员社群</option>
+                  <option value="教育培训">教育培训</option>
+                  <option value="美业服务">美业服务</option>
+                  <option value="母婴产品">母婴产品</option>
+                  <option value="健康管理">健康管理</option>
+                  <option value="本地生活">本地生活</option>
+                  <option value="实体产品">实体产品</option>
+                  <option value="财税服务">财税服务</option>
+                  <option value="设计服务">设计服务</option>
+                  <option value="留学服务">留学服务</option>
+                  <option value="情感咨询">情感咨询</option>
+                  <option value="家政服务">家政服务</option>
+                  <option value="自定义">自定义行业</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>自定义行业/细分领域</span>
+                <input id="customIndustry" placeholder="例如：小红书账号定位课、产后修复、AI办公课" />
+              </label>
+
+              <label class="field">
+                <span>产品/服务名称</span>
+                <input id="productName" placeholder="例如：小红书私域成交陪跑营" />
+              </label>
+
+              <label class="field">
+                <span>价格/套餐</span>
+                <input id="price" placeholder="例如：399元资料包 / 2999元陪跑营 / 198元体验课" />
+              </label>
+            </div>
+
+            <label class="field" style="margin-top:12px;">
+              <span>产品亮点/交付内容</span>
+              <textarea id="productHighlights" placeholder="写清楚交付什么、适合谁、解决什么问题。例如：7天陪跑、每日作业点评、私域SOP模板、3次一对一诊断、案例库、售后答疑等。"></textarea>
+            </label>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>2. 客户阶段</h3>
+              <span class="hint">客户现在卡在哪里</span>
+            </div>
+            <div class="chips" id="stageChips"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>3. 这次沟通目标</h3>
+              <span class="hint">你希望客户下一步做什么</span>
+            </div>
+            <div class="chips" id="goalChips"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>4. 客户画像与聊天上下文</h3>
+              <span class="hint">越像真实聊天越好</span>
+            </div>
+            <div class="grid-2">
+              <label class="field">
+                <span>客户身份/人群</span>
+                <input id="customerIdentity" placeholder="例如：宝妈、副业新手、门店老板、大学生、职场人" />
+              </label>
+              <label class="field">
+                <span>客户核心痛点</span>
+                <input id="painPoint" placeholder="例如：想成交但不会私聊、笔记有流量没转化" />
+              </label>
+              <label class="field">
+                <span>客户最在意什么</span>
+                <input id="concern" placeholder="例如：能不能落地、有没有案例、会不会太难" />
+              </label>
+              <label class="field">
+                <span>已有信任素材</span>
+                <input id="proof" placeholder="例如：学员案例、客户评价、交付流程、退款规则" />
+              </label>
+            </div>
+
+            <label class="field" style="margin-top:12px;">
+              <span>客户原话</span>
+              <textarea id="customerWords" placeholder="粘贴客户发来的话。例如：我觉得有点贵，我再看看吧。"></textarea>
+            </label>
+            <div class="help-text">点击下面常见原话，可快速填入并生成针对性回复。</div>
+            <div class="chips" id="objectionChips" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>5. 话术风格</h3>
+              <span class="hint">可多选</span>
+            </div>
+            <div class="chips" id="toneChips"></div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>6. 成交力度与渠道</h3>
+              <span class="hint">控制推进感</span>
+            </div>
+            <div class="slider-wrap">
+              <label class="field">
+                <span>成交力度：<b id="intensityLabel">标准型</b></span>
+                <input type="range" min="1" max="3" value="2" id="intensity" oninput="updateIntensityLabel()" />
+              </label>
+              <div class="range-labels">
+                <span>轻柔</span>
+                <span>标准</span>
+                <span>促单</span>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top:12px;">
+              <label class="field">
+                <span>沟通渠道</span>
+                <select id="channel">
+                  <option value="微信私聊">微信私聊</option>
+                  <option value="小红书私信">小红书私信</option>
+                  <option value="社群回复">社群回复</option>
+                  <option value="朋友圈">朋友圈</option>
+                  <option value="电话后跟进">电话后跟进</option>
+                  <option value="企微私聊">企微私聊</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>客户温度</span>
+                <select id="leadTemp">
+                  <option value="冷">冷：刚认识/弱兴趣</option>
+                  <option value="温" selected>温：有兴趣/有互动</option>
+                  <option value="热">热：明确咨询/接近成交</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">
+              <h3>7. 行业模板库</h3>
+              <span class="hint">点击自动填充</span>
+            </div>
+            <div class="template-grid" id="templateGrid"></div>
+          </div>
+
+          <div class="section">
+            <button class="btn primary" style="width:100%;height:54px;font-size:16px;" onclick="generateAll()">
+              生成完整成交话术
+            </button>
+            <div class="hero-actions" style="margin-top:12px;">
+              <button class="btn secondary" onclick="regenerate()">换一种表达</button>
+              <button class="btn ghost" onclick="clearForm()">清空内容</button>
+              <button class="btn ghost" onclick="saveCurrentDraft()">保存当前输入</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel sticky">
+        <div class="panel-header">
+          <div>
+            <h2>生成结果</h2>
+            <p>每段可单独复制，也可一键复制全部。</p>
+          </div>
+          <div class="toolbar">
+            <button class="btn secondary" onclick="copyAll()">复制全部</button>
+            <button class="btn ghost" onclick="print()">打印</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="tabs">
+            <button class="tab active" onclick="switchTab('result', this)">话术结果</button>
+            <button class="tab" onclick="switchTab('logic', this)">成交逻辑</button>
+            <button class="tab" onclick="switchTab('history', this)">历史记录</button>
+            <button class="tab" onclick="switchTab('risk', this)">合规提醒</button>
+          </div>
+
+          <div class="drawer active" id="tab-result">
+            <div id="resultArea">
+              <div class="result-empty">
+                <div>
+                  <div class="icon">💬</div>
+                  <h3 style="margin:0 0 8px;">等待生成话术</h3>
+                  <p style="margin:0;max-width:420px;">
+                    先在左侧填写业务、客户阶段、客户原话和产品亮点。生成后会出现开场、需求挖掘、价值介绍、异议处理、促单、跟进、朋友圈文案等完整结果。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer" id="tab-logic">
+            <div class="logic-map">
+              <div class="logic-step"><b>1. 建立信任</b><span>先接住客户情绪，不急着卖。</span></div>
+              <div class="logic-step"><b>2. 理解需求</b><span>问清楚客户当前状态和期待。</span></div>
+              <div class="logic-step"><b>3. 匹配价值</b><span>把卖点翻译成客户收益。</span></div>
+              <div class="logic-step"><b>4. 解决顾虑</b><span>回应真实风险，而不是反驳客户。</span></div>
+              <div class="logic-step"><b>5. 降低压力</b><span>给选择、给路径、给确定感。</span></div>
+              <div class="logic-step"><b>6. 给下一步</b><span>让客户知道现在该做什么。</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="grid-2">
+              <div class="mini-card">
+                <b>成交话术的底层公式</b>
+                <p>认可客户处境 + 复述需求 + 给出判断依据 + 匹配解决方案 + 明确下一步。</p>
+              </div>
+              <div class="mini-card">
+                <b>不要只说产品好</b>
+                <p>客户买的不是功能，而是“我能不能解决眼前这个问题，并且过程是否可控”。</p>
+              </div>
+              <div class="mini-card">
+                <b>异议不是拒绝</b>
+                <p>客户说贵、怕没效果、想考虑，通常是在寻找安全感、确定性和决策理由。</p>
+              </div>
+              <div class="mini-card">
+                <b>最自然的促单</b>
+                <p>不是催，而是帮客户比较“现在行动”和“继续拖延”的差别。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer" id="tab-history">
+            <div class="history-list" id="historyList"></div>
+          </div>
+
+          <div class="drawer" id="tab-risk">
+            <div class="mini-card">
+              <b>高风险表达不要使用</b>
+              <ul class="risk-list">
+                <li>不要承诺“保证赚到钱、保证瘦、保证逆袭、保证通过”。</li>
+                <li>不要制造恐吓式焦虑，例如“再不买就完了”。</li>
+                <li>不要虚构案例、虚构库存、虚构名额、虚构限时。</li>
+                <li>不要贬低客户或同行，不要用羞辱感逼单。</li>
+                <li>医疗、健康、财税、法律、教育升学等场景，必须基于真实资质和真实交付边界表达。</li>
+              </ul>
+            </div>
+            <div class="divider"></div>
+            <div class="mini-card">
+              <b>推荐表达原则</b>
+              <p>多说“适合/不适合、可以帮你判断、先看你的情况、基于目前信息建议”，少说“一定、必然、百分百、唯一机会”。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footer-note">
+      使用提醒：本工具生成的话术仅用于提升沟通效率，请结合真实产品、真实服务和真实交付能力修改后使用。不要夸大承诺，不要虚假宣传，不要制造焦虑，尊重客户真实需求和决策节奏。
+    </div>
+  </div>
+
+  <button class="mobile-fab" onclick="generateAll()">生成话术</button>
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    const stages = [
+      "刚加微信", "看过朋友圈但没互动", "主动咨询价格", "问了但没回复", "觉得贵",
+      "犹豫不决", "说再考虑", "想要优惠", "担心效果", "担心被骗",
+      "没有时间", "需要跟家人商量", "对比同行", "已付定金", "催付尾款",
+      "成交后维护", "老客户复购", "邀请转介绍"
+    ];
+
+    const goals = [
+      "破冰建立信任", "了解客户需求", "介绍产品价值", "发送案例", "解释价格",
+      "消除顾虑", "引导预约", "邀请进群", "引导下单", "催付尾款",
+      "挽回沉默客户", "促进复购", "邀请转介绍", "售后关怀"
+    ];
+
+    const tones = [
+      "温柔真诚型", "专业顾问型", "亲切朋友型", "高价值引导型", "轻松幽默型",
+      "坚定促单型", "低压不催促型", "稀缺提醒型", "案例种草型", "售后关怀型"
+    ];
+
+    const objections = [
+      "太贵了", "我再考虑一下", "有没有优惠", "我怕没效果", "我最近没时间",
+      "我跟家人商量一下", "别人家更便宜", "我先看看", "能不能保证结果", "我现在预算不够",
+      "我怕被骗", "你们和别人有什么区别"
+    ];
+
+    const industryTemplates = [
+      {
+        title: "知识付费",
+        stage: "觉得贵",
+        goal: "解释价格",
+        productName: "小红书变现系统课",
+        price: "699元",
+        identity: "想做副业但没有系统方法的新手",
+        pain: "不知道怎么定位、发什么内容、怎么把流量变成咨询",
+        concern: "怕买了课又落不了地",
+        proof: "学员作业点评、案例拆解、陪跑答疑",
+        highlights: "包含账号定位、内容选题、爆款结构、私域承接、成交话术和7天作业点评。"
+      },
+      {
+        title: "AI工具课",
+        stage: "担心效果",
+        goal: "消除顾虑",
+        productName: "AI办公提效实战课",
+        price: "399元",
+        identity: "职场人/运营/教师/自由职业者",
+        pain: "知道AI很火，但不知道怎么用在真实工作里",
+        concern: "怕听完不会操作",
+        proof: "每节课都有可复制模板和作业案例",
+        highlights: "交付20个高频办公场景模板，包含写作、表格、PPT、日报、客户回复、资料整理。"
+      },
+      {
+        title: "母婴产品",
+        stage: "需要跟家人商量",
+        goal: "介绍产品价值",
+        productName: "宝宝辅食分阶计划包",
+        price: "129元",
+        identity: "6-24个月宝宝家长",
+        pain: "不知道每天吃什么、怎么搭配营养、怕踩雷",
+        concern: "家里老人不理解，担心不实用",
+        proof: "分月龄清单、采购表、制作步骤、注意事项",
+        highlights: "按月龄分阶段设计，包含一周食谱、食材替换、过敏观察记录和家庭协作表。"
+      },
+      {
+        title: "美业服务",
+        stage: "想要优惠",
+        goal: "引导预约",
+        productName: "皮肤管理体验套餐",
+        price: "198元体验价",
+        identity: "想改善肤质但怕踩坑的女生",
+        pain: "皮肤暗沉、闭口、毛孔粗大，不知道适合什么项目",
+        concern: "怕办卡、怕推销、怕没效果",
+        proof: "到店先检测，再给方案，不强制办卡",
+        highlights: "包含皮肤检测、清洁护理、补水修护和护理建议。"
+      },
+      {
+        title: "教育培训",
+        stage: "担心效果",
+        goal: "发送案例",
+        productName: "小学数学思维提升班",
+        price: "1280元/期",
+        identity: "三到六年级学生家长",
+        pain: "孩子会做题但不理解，遇到应用题就卡",
+        concern: "怕孩子跟不上，怕只是刷题",
+        proof: "入班测评、阶段反馈、错题分析",
+        highlights: "每周2次课，配套错题诊断和家长反馈，重点训练审题、建模和表达。"
+      },
+      {
+        title: "本地生活",
+        stage: "对比同行",
+        goal: "解释价格",
+        productName: "家庭深度保洁服务",
+        price: "399元起",
+        identity: "工作忙、没时间彻底打扫的家庭",
+        pain: "厨房油污、卫生间水垢、死角清理麻烦",
+        concern: "怕阿姨不专业、怕隐形收费",
+        proof: "明码标价、服务清单、验收标准",
+        highlights: "包含厨房、卫生间、卧室、客厅深度清洁，按面积报价，服务前确认清单。"
+      },
+      {
+        title: "咨询服务",
+        stage: "犹豫不决",
+        goal: "引导预约",
+        productName: "一人公司产品定位咨询",
+        price: "999元/次",
+        identity: "想做虚拟产品但不知道卖什么的人",
+        pain: "想法很多但不能形成产品，发内容也不聚焦",
+        concern: "怕咨询太虚，得不到结果",
+        proof: "咨询后给定位表、产品结构图和行动清单",
+        highlights: "90分钟一对一诊断，输出适合你的账号定位、产品方向、成交路径和7天执行清单。"
+      },
+      {
+        title: "虚拟资料",
+        stage: "主动咨询价格",
+        goal: "引导下单",
+        productName: "私域成交SOP资料包",
+        price: "59元",
+        identity: "小红书博主/副业新手",
+        pain: "有人咨询但不会聊，客户经常聊着聊着没了",
+        concern: "怕资料太空，不知道能不能直接用",
+        proof: "包含表格、话术、案例、跟进节奏",
+        highlights: "内含破冰话术、价格解释、异议处理、朋友圈成交文案、客户跟进表和复盘模板。"
+      },
+      {
+        title: "健康管理",
+        stage: "能不能保证结果",
+        goal: "消除顾虑",
+        productName: "21天健康饮食陪伴计划",
+        price: "599元",
+        identity: "想改善饮食和作息的人",
+        pain: "总是靠节食，容易反弹，坚持不了",
+        concern: "想知道能不能保证变瘦",
+        proof: "饮食记录、每日反馈、习惯调整，不做医疗承诺",
+        highlights: "根据日常饮食做调整建议，提供打卡反馈和购物清单，帮助建立可持续习惯。"
+      },
+      {
+        title: "财税服务",
+        stage: "担心被骗",
+        goal: "建立信任",
+        productName: "个体户记账报税服务",
+        price: "188元/月起",
+        identity: "个体户、小微老板、一人公司创业者",
+        pain: "不知道怎么报税，担心逾期和资料不全",
+        concern: "怕不专业、怕后续乱收费",
+        proof: "服务清单、合同、流程节点、资料清单",
+        highlights: "包含建账、记账、报税提醒、资料归档和月度沟通。"
+      },
+      {
+        title: "设计服务",
+        stage: "别人家更便宜",
+        goal: "解释价格",
+        productName: "品牌视觉基础套装",
+        price: "2999元",
+        identity: "准备做品牌升级的小商家",
+        pain: "视觉杂乱、没有统一风格、宣传图不专业",
+        concern: "觉得设计报价差距大",
+        proof: "初稿、修改轮次、交付源文件、使用规范",
+        highlights: "包含Logo优化、主视觉、配色字体、社媒模板和基础应用规范。"
+      },
+      {
+        title: "社群服务",
+        stage: "我先看看",
+        goal: "邀请进群",
+        productName: "一人公司成长会员社群",
+        price: "365元/年",
+        identity: "正在做副业或自由职业的人",
+        pain: "一个人做事容易断、没人交流、找不到方向",
+        concern: "怕社群不活跃",
+        proof: "每周主题共创、资源库、成员案例、作业反馈",
+        highlights: "提供每周主题讨论、资源模板、案例拆解、同频链接和月度复盘。"
+      }
+    ];
+
+    const selectors = {
+      stage: "主动咨询价格",
+      goal: "引导下单",
+      tones: ["温柔真诚型", "专业顾问型"]
+    };
+
+    let latestBlocks = [];
+    let generationCount = 0;
+
+    function init() {
+      renderChips("stageChips", stages, "stage");
+      renderChips("goalChips", goals, "goal");
+      renderChips("toneChips", tones, "tones");
+      renderObjections();
+      renderTemplates();
+      updateIntensityLabel();
+      renderHistory();
+      restoreDraft();
+    }
+
+    function renderChips(id, items, type) {
+      const box = document.getElementById(id);
+      box.innerHTML = "";
+      items.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "chip";
+        btn.textContent = item;
+        if ((type === "stage" && item === selectors.stage) ||
+            (type === "goal" && item === selectors.goal) ||
+            (type === "tones" && selectors.tones.includes(item))) {
+          btn.classList.add("active");
+        }
+        btn.onclick = () => {
+          if (type === "tones") {
+            btn.classList.toggle("active");
+            const all = [...box.querySelectorAll(".chip.active")].map(x => x.textContent);
+            selectors.tones = all.length ? all : ["专业顾问型"];
+          } else {
+            [...box.querySelectorAll(".chip")].forEach(x => x.classList.remove("active"));
+            btn.classList.add("active");
+            selectors[type] = item;
+          }
+        };
+        box.appendChild(btn);
+      });
+    }
+
+    function renderObjections() {
+      const box = document.getElementById("objectionChips");
+      box.innerHTML = "";
+      objections.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "chip";
+        btn.textContent = item;
+        btn.onclick = () => {
+          document.getElementById("customerWords").value = item;
+          selectors.stage = matchStageFromObjection(item);
+          renderChips("stageChips", stages, "stage");
+          toast("已填入客户原话");
+        };
+        box.appendChild(btn);
+      });
+    }
+
+    function renderTemplates() {
+      const box = document.getElementById("templateGrid");
+      box.innerHTML = "";
+      industryTemplates.forEach(t => {
+        const card = document.createElement("button");
+        card.className = "template-card";
+        card.innerHTML = `<b>${t.title}</b><span>${t.stage} · ${t.goal}<br>${t.productName}：${t.highlights.slice(0, 38)}...</span>`;
+        card.onclick = () => applyTemplate(t);
+        box.appendChild(card);
+      });
+    }
+
+    function applyTemplate(t) {
+      document.getElementById("businessType").value = findBusinessOption(t.title);
+      document.getElementById("customIndustry").value = t.title;
+      document.getElementById("productName").value = t.productName;
+      document.getElementById("price").value = t.price;
+      document.getElementById("customerIdentity").value = t.identity;
+      document.getElementById("painPoint").value = t.pain;
+      document.getElementById("concern").value = t.concern;
+      document.getElementById("proof").value = t.proof;
+      document.getElementById("productHighlights").value = t.highlights;
+      selectors.stage = t.stage;
+      selectors.goal = t.goal;
+      renderChips("stageChips", stages, "stage");
+      renderChips("goalChips", goals, "goal");
+      toast("已套用行业模板");
+    }
+
+    function findBusinessOption(title) {
+      const map = {
+        "知识付费": "知识付费", "AI工具课": "AI工具服务", "母婴产品": "母婴产品", "美业服务": "美业服务",
+        "教育培训": "教育培训", "本地生活": "本地生活", "咨询服务": "咨询服务", "虚拟资料": "虚拟资料",
+        "健康管理": "健康管理", "财税服务": "财税服务", "设计服务": "设计服务", "社群服务": "社群服务"
+      };
+      return map[title] || "自定义";
+    }
+
+    function matchStageFromObjection(text) {
+      if (text.includes("贵") || text.includes("便宜")) return "觉得贵";
+      if (text.includes("考虑") || text.includes("看看")) return "说再考虑";
+      if (text.includes("优惠")) return "想要优惠";
+      if (text.includes("效果") || text.includes("保证")) return "担心效果";
+      if (text.includes("时间")) return "没有时间";
+      if (text.includes("家人")) return "需要跟家人商量";
+      if (text.includes("被骗")) return "担心被骗";
+      if (text.includes("预算")) return "觉得贵";
+      return "犹豫不决";
+    }
+
+    function updateIntensityLabel() {
+      const v = document.getElementById("intensity").value;
+      const label = v === "1" ? "轻柔型" : v === "2" ? "标准型" : "促单型";
+      document.getElementById("intensityLabel").textContent = label;
+    }
+
+    function getFormData() {
+      const businessType = val("businessType");
+      const customIndustry = val("customIndustry");
+      return {
+        industry: customIndustry || businessType,
+        businessType,
+        productName: val("productName") || "你的产品/服务",
+        price: val("price") || "当前套餐价格",
+        highlights: val("productHighlights") || "完整交付内容、清晰步骤、实操模板、案例参考和后续答疑",
+        stage: selectors.stage,
+        goal: selectors.goal,
+        customerIdentity: val("customerIdentity") || "对这个问题有需求的客户",
+        painPoint: val("painPoint") || "有需求但还没找到合适解决方案",
+        concern: val("concern") || "担心是否适合自己、是否能落地、是否值得投入",
+        proof: val("proof") || "真实案例、交付流程、服务边界、客户反馈或可验证资料",
+        customerWords: val("customerWords") || "客户暂时没有明确表达，处于观望状态",
+        tones: selectors.tones,
+        intensity: Number(val("intensity")),
+        channel: val("channel"),
+        leadTemp: val("leadTemp"),
+        compact: document.getElementById("compactMode").checked
+      };
+    }
+
+    function val(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function sample(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateAll() {
+      generationCount++;
+      const d = getFormData();
+      const blocks = buildBlocks(d);
+      latestBlocks = blocks;
+
+      const score = calculateScore(d);
+      const html = `
+        ${renderScore(score, d)}
+        ${blocks.map(block => renderBlock(block)).join("")}
+      `;
+      document.getElementById("resultArea").innerHTML = html;
+      setTimeout(() => animateBars(score), 50);
+      saveToHistory(d, blocks, score.total);
+      renderHistory();
+      saveCurrentDraft(true);
+      toast("已生成完整话术");
+      document.getElementById("tab-result").scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function regenerate() {
+      if (!latestBlocks.length) {
+        generateAll();
+        return;
+      }
+      generateAll();
+      toast("已换一种表达");
+    }
+
+    function buildBlocks(d) {
+      const stageOpening = getStageOpening(d);
+      const objectionReply = getObjectionReply(d);
+      const push = getCloseScript(d);
+      const compact = d.compact;
+
+      const blocks = [
+        {
+          title: "一、推荐开场话术",
+          tag: "先接住客户",
+          text: `${stageOpening}
+
+你可以这样发：
+“${d.customerIdentity ? d.customerIdentity + "这个情况我挺理解的，" : ""}你刚刚提到‘${d.customerWords}’，我先不急着给你推荐。我想先确认一下，你现在最想解决的是【${d.painPoint}】，还是更在意【${d.concern}】？我根据你的情况判断一下，看看${d.productName}适不适合你。”`
+        },
+        {
+          title: "二、需求挖掘话术",
+          tag: "问清楚再推荐",
+          text: `为了避免一上来就推产品，可以先问这几个问题：
+
+1. “你现在做到哪一步了？是刚开始了解，还是已经试过一些方法但效果一般？”
+2. “如果这次要解决【${d.painPoint}】，你最希望先看到什么变化？”
+3. “你之前有没有买过类似的${d.industry}产品/服务？体验好的地方和不满意的地方分别是什么？”
+4. “你现在最担心的是价格、效果、时间，还是怕自己执行不下去？”
+5. “如果方案合适，你希望今天先确定下来，还是想先拿一份详细介绍再判断？”
+
+这组问题的作用不是审问客户，而是让客户感觉你在认真判断适配度。`
+        },
+        {
+          title: "三、价值介绍话术",
+          tag: "把卖点翻译成收益",
+          text: `你可以把${d.productName}这样介绍：
+
+“这个不是简单把资料/服务丢给你，而是围绕你现在的痛点【${d.painPoint}】来设计。核心交付包括：${d.highlights}。
+
+对你来说，重点不是多拿一堆东西，而是少走弯路：知道第一步做什么、过程中怎么判断对不对、遇到卡点怎么调整。尤其你现在最在意【${d.concern}】，所以我会建议你重点看我们的交付流程和案例，而不是只看价格。”`
+        },
+        {
+          title: "四、信任建立话术",
+          tag: "降低不确定感",
+          text: `可以这样补充信任感：
+
+“我也不希望你冲动下单，所以我把真实情况说清楚：${d.productName}适合的是愿意按照步骤执行、愿意反馈问题的人；如果只是想买完立刻出现夸张结果，那我反而不建议你急着买。
+
+我们能提供的是：${d.proof}。你可以先看这些内容，再判断它是不是你要的。”`
+        },
+        {
+          title: "五、客户异议处理话术",
+          tag: "针对原话回应",
+          text: objectionReply
+        },
+        {
+          title: "六、价格解释话术",
+          tag: "从成本转向价值",
+          text: `当客户关注价格时，可以这样说：
+
+“你看价格的时候，可以不要只看${d.price}这个数字，而是看它帮你省掉什么成本。比如你现在卡在【${d.painPoint}】，如果自己摸索，可能会花很多时间试错，还不一定知道问题出在哪。
+
+${d.productName}的价值在于把路径、模板、方法、反馈或服务流程整理好，让你不用从0开始。你可以先判断三件事：它是不是解决你的真实问题？你会不会用？交付方式你能不能接受？这三点匹配，再考虑下单会更稳。”`
+        },
+        {
+          title: "七、自然促单话术",
+          tag: intensityTag(d),
+          text: push
+        },
+        {
+          title: "八、沉默客户跟进话术",
+          tag: "不尴尬二次触达",
+          text: getFollowUp(d)
+        },
+        {
+          title: "九、朋友圈辅助成交文案",
+          tag: "让潜在客户主动咨询",
+          text: `今天又遇到一个很典型的咨询：客户不是没有需求，而是不知道怎么判断自己适不适合。
+
+很多人在面对【${d.painPoint}】时，会卡在三个地方：
+① 不知道第一步怎么做；
+② 看了很多方法，但不知道哪一个适合自己；
+③ 真要行动时，又担心【${d.concern}】。
+
+所以我一直觉得，好的${d.industry}产品/服务，不应该只是告诉你“买我”，而是帮你把问题拆清楚、把路径讲明白、把风险提前说清楚。
+
+如果你也在这个阶段，可以来找我，我先帮你判断适不适合${d.productName}，合适再继续，不合适也不会硬推。`
+        },
+        {
+          title: "十、社群/私信短版回复",
+          tag: "适合快速回复",
+          text: `“我理解你的顾虑。你现在主要卡在【${d.painPoint}】，而且比较在意【${d.concern}】。我建议你先别急着决定，我可以先按你的情况帮你判断一下${d.productName}是否适合。它的核心交付是${shorten(d.highlights, 58)}，价格是${d.price}。如果你愿意，我发你一个更清楚的介绍，你看完我们再决定下一步。”`
+        },
+        {
+          title: "十一、语音消息版本",
+          tag: "更像真人",
+          text: `你可以按这个结构发语音：
+
+“我刚看了你说的情况，其实你这个顾虑挺正常的。你不是完全没需求，而是担心投入之后能不能真的用起来。我的建议是，你先别只看价格，我们先看适配度。你现在的问题是${d.painPoint}，最在意的是${d.concern}。如果这两个点刚好是${d.productName}能覆盖的，那它对你就有价值；如果不是，我也不会建议你买。我先把交付内容和适合人群发你，你看完我们再判断。”`
+        },
+        {
+          title: "十二、成交后维护/复购/转介绍话术",
+          tag: "长期关系经营",
+          text: `成交后关怀：
+“欢迎加入/购买${d.productName}。你先不用着急全部看完，建议你先完成第一步：把你现在的情况整理给我，我帮你看从哪里开始最合适。”
+
+复购引导：
+“你这次执行得不错，下一步其实可以把【单点解决】升级成【系统优化】。如果你愿意，我可以根据你现在的结果，帮你看是否适合进阶方案。”
+
+转介绍邀请：
+“如果你身边也有人卡在【${d.painPoint}】，可以把我推给TA。我会先帮TA判断适不适合，不会一上来硬推。”`
+        }
+      ];
+
+      if (compact) {
+        return blocks.filter((_, idx) => [0,2,4,6,7,8].includes(idx));
+      }
+      return blocks;
+    }
+
+    function getStageOpening(d) {
+      const map = {
+        "刚加微信": [
+          `刚加上时，不要马上介绍产品，先用轻量破冰建立安全感。`,
+          `新好友阶段适合先确认来源和需求，降低陌生感。`
+        ],
+        "主动咨询价格": [
+          `客户主动问价，说明已经有兴趣，但还没有建立完整价值感。`,
+          `问价不是只回数字，要先补一句价值框架。`
+        ],
+        "觉得贵": [
+          `客户说贵，通常不是单纯没钱，而是不确定“值不值”。`,
+          `价格异议背后通常是价值感、信任感和适配度不足。`
+        ],
+        "说再考虑": [
+          `“再考虑”通常意味着还有一个没被说出来的顾虑。`,
+          `客户没有拒绝，只是还缺少一个清晰决策理由。`
+        ],
+        "担心效果": [
+          `担心效果时，重点不是保证结果，而是解释影响结果的条件和你的交付方式。`,
+          `这类客户需要边界感和确定感，不适合夸大承诺。`
+        ],
+        "担心被骗": [
+          `客户缺少安全感时，先给流程、凭证、案例和边界，不要急着成交。`,
+          `越是敏感顾虑，越要透明、克制、可验证。`
+        ],
+        "没有时间": [
+          `客户说没时间，可能是在担心使用成本太高。`,
+          `此时要把交付拆小，让客户看到最小行动路径。`
+        ],
+        "需要跟家人商量": [
+          `这类客户需要一份能转述给家人的决策依据。`,
+          `不要阻止客户商量，而是帮TA整理判断标准。`
+        ],
+        "对比同行": [
+          `客户对比同行时，不要贬低别人，要讲清楚你的适合人群和交付差异。`,
+          `对比阶段要回到适配度，而不是陷入价格战。`
+        ],
+        "催付尾款": [
+          `尾款阶段要提醒交付节点和权益，不要让客户感觉被逼。`,
+          `催付重点是确认安排，而不是催促付款。`
+        ],
+        "老客户复购": [
+          `老客户复购要先复盘已有成果，再提出下一阶段价值。`,
+          `复购不是重新销售，而是基于关系和结果做延伸。`
+        ],
+        "邀请转介绍": [
+          `转介绍要降低客户心理负担，让TA知道你会先判断适配度。`,
+          `好转介绍来自好体验，不适合用强奖励绑架。`
+        ]
+      };
+      return sample(map[d.stage] || [
+        `当前阶段最重要的是先识别真实顾虑，再决定是否推进成交。`,
+        `不要急着说服，先帮客户把问题和判断标准讲清楚。`
+      ]);
+    }
+
+    function getObjectionReply(d) {
+      const text = d.customerWords;
+      const common = {
+        expensive: `“我理解，价格确实是需要认真考虑的。你说贵的时候，我想先帮你拆一下：是觉得总价超预算，还是担心花了这笔钱但达不到预期？
+
+如果只是预算问题，我们可以看更轻量的开始方式；如果是担心值不值，我可以把${d.productName}的交付内容、适合人群和真实案例发你，你按这三点判断会更准确。我的建议不是让你马上买，而是先确认它是不是能解决你现在的【${d.painPoint}】。”`,
+        consider: `“可以的，你认真考虑是对的。为了让你不是凭感觉纠结，我帮你整理一个判断标准：第一，它能不能解决你现在最急的【${d.painPoint}】；第二，你能不能接受它的交付方式；第三，${d.price}对你来说是不是在可承受范围内。
+
+你可以按这三点看。如果你愿意，也可以把你最犹豫的点直接发我，我帮你客观判断，适合就继续，不适合我也会直接说。”`,
+        discount: `“优惠我理解，大家都希望买得更划算。但我不太想用临时降价让你冲动下单，因为真正重要的是你买完能不能用起来。
+
+目前${d.price}对应的是这些交付：${d.highlights}。如果你预算确实有限，我可以帮你看有没有更适合的轻量版本；如果你要的是完整陪伴/完整交付，那现在这个套餐会更稳。”`,
+        effect: `“这个问题问得很关键。我不能负责任地跟你说百分百保证结果，因为结果会和你的基础、执行时间、反馈频率有关。
+
+但我能明确的是：我们会提供${d.proof}，并且围绕【${d.painPoint}】给你具体路径。你可以先看交付流程，如果你觉得自己能配合执行，那成功概率会更高；如果你现在完全没时间执行，我反而建议你先别急。”`,
+        time: `“没时间我很理解，所以你要看的不是内容多不多，而是它能不能帮你节省试错时间。${d.productName}不是要求你每天投入很多，而是帮你先抓住最关键的步骤。
+
+你可以先从最小动作开始：每天留出20-30分钟，先完成第一阶段。如果连这个时间都没有，那我们可以先等你时间更合适再开始。”`,
+        family: `“可以，跟家人商量很正常。我建议你不要只跟家人说‘我要买一个${d.industry}产品’，可以换成三个信息：我现在遇到的问题是【${d.painPoint}】；这个产品交付的是【${shorten(d.highlights, 80)}】；我判断它值不值得，主要看能不能解决我的问题。
+
+我也可以帮你整理一段更适合转发给家人的说明。”`,
+        compare: `“对比是好事，说明你在认真选择。我不建议你只按价格比，因为不同产品交付深度、服务周期、反馈机制和适合人群都不一样。
+
+你可以重点对比四件事：谁更懂你的问题、谁的交付更清楚、谁的案例更接近你、谁的后续支持更具体。只要这四点适合你，再看价格就会清楚很多。”`,
+        fraud: `“你有这个担心很正常，尤其现在信息太多。我建议你不要只听我说，可以看几个可验证的信息：交付清单、服务流程、案例反馈、付款方式和售后边界。
+
+我可以先把${d.proof}发你，你不用急着决定。你看完以后，如果还有不放心的地方，直接问我，我会如实说清楚。”`,
+        guarantee: `“我不能给你做不负责任的绝对保证。更真实的说法是：${d.productName}能提供的是方法、流程、资料、反馈或服务支持，结果还取决于你的基础、投入和执行。
+
+如果你希望的是‘买完不用做就一定有结果’，那它可能不适合你；如果你愿意按步骤推进，我们可以一起把【${d.painPoint}】拆开解决。”`
+      };
+
+      if (text.includes("贵") || text.includes("预算")) return common.expensive;
+      if (text.includes("考虑") || text.includes("看看")) return common.consider;
+      if (text.includes("优惠")) return common.discount;
+      if (text.includes("效果")) return common.effect;
+      if (text.includes("时间")) return common.time;
+      if (text.includes("家人")) return common.family;
+      if (text.includes("便宜") || text.includes("区别") || text.includes("同行")) return common.compare;
+      if (text.includes("骗")) return common.fraud;
+      if (text.includes("保证")) return common.guarantee;
+
+      return `“你这个点我明白。其实我不想简单地劝你买，因为如果不适合，买了也会浪费。我们可以先回到你的真实需求：你现在最想解决的是【${d.painPoint}】，最担心的是【${d.concern}】。
+
+我的建议是，我先把${d.productName}的交付内容、适合人群和不适合人群讲清楚，你按自己的情况判断。合适我们再继续，不合适也没关系。”`;
+    }
+
+    function getCloseScript(d) {
+      const next = nextAction(d);
+      if (d.intensity === 1) {
+        return `轻柔推进版本：
+
+“你可以先不用急着决定。我的建议是，你先看一下${d.productName}的详细介绍，重点看它是否解决【${d.painPoint}】，以及你能不能接受这个交付方式。
+
+如果看完觉得匹配，我们再走下一步：${next}。如果你觉得暂时不适合，也可以直接跟我说，我不会硬推。”`;
+      }
+      if (d.intensity === 3) {
+        return `促单推进版本：
+
+“结合你现在的情况，我会比较明确地建议你可以开始了。因为你已经卡在【${d.painPoint}】，继续自己摸索的成本不一定比${d.price}低。
+
+如果你现在确定要做，我建议今天先完成${next}，我这边会按流程给你安排后续交付。你不用一下子想太多，先把第一步走起来，后面我会带你按节奏推进。”`;
+      }
+      return `标准推进版本：
+
+“我觉得你现在可以先做一个小决定：不是马上追求全部结果，而是先把【${d.painPoint}】这个问题系统处理起来。
+
+如果你认可${d.productName}的交付内容：${shorten(d.highlights, 90)}，那下一步可以${next}。我会把流程发你，你按步骤来就行。”`;
+    }
+
+    function getFollowUp(d) {
+      const lines = [
+        `第一次跟进，适合24小时内：
+“我来跟进一下，不是催你哈。主要是怕你还卡在【${d.concern}】这个点。如果你愿意，可以直接把最犹豫的地方发我，我帮你判断，不一定非要下单。”`,
+        `第二次跟进，适合2-3天后：
+“这两天你有再看${d.productName}吗？我补充一个判断角度：如果你现在最想解决的是【${d.painPoint}】，那要重点看交付是否具体；如果只是暂时好奇，可以先收藏，等需求更明确再开始。”`,
+        `最后一次轻提醒：
+“我这边先不频繁打扰你啦。后面如果你又遇到【${d.painPoint}】这个问题，可以随时来问我。我会先帮你看情况，再判断适不适合继续。”`
+      ];
+      return lines.join("\n\n");
+    }
+
+    function nextAction(d) {
+      const map = {
+        "破冰建立信任": "先把你的情况发我，我帮你做一次简单判断",
+        "了解客户需求": "回答我上面3个问题，我再给你更准确的建议",
+        "介绍产品价值": "先看详细介绍和交付清单",
+        "发送案例": "我发你一个接近你情况的案例，你对照看是否匹配",
+        "解释价格": "按交付内容、适配度和预算三个维度判断",
+        "消除顾虑": "把你最担心的点发我，我逐条说明",
+        "引导预约": "先约一个时间做初步沟通",
+        "邀请进群": "先进入体验群/说明群，看完规则再决定",
+        "引导下单": "确认套餐后完成付款，我给你安排交付",
+        "催付尾款": "补齐尾款后我马上给你确认后续安排",
+        "挽回沉默客户": "告诉我你现在还需不需要，我好判断是否继续跟进",
+        "促进复购": "看你是否适合进入下一阶段方案",
+        "邀请转介绍": "把有类似需求的朋友推给我，我先帮TA判断适配度",
+        "售后关怀": "先完成第一步动作，然后把结果反馈给我"
+      };
+      return map[d.goal] || "确认下一步动作";
+    }
+
+    function calculateScore(d) {
+      const completeness = Math.min(96, 52 + countFilled(d) * 5);
+      const match = Math.min(95, 58 + (d.stage ? 8 : 0) + (d.goal ? 8 : 0) + (d.customerWords.length > 8 ? 12 : 0) + (d.painPoint.length > 6 ? 9 : 0));
+      const trust = Math.min(94, 54 + (d.proof.length > 6 ? 15 : 0) + (d.highlights.length > 20 ? 12 : 0) + (d.price.length > 2 ? 6 : 0));
+      const natural = Math.min(96, 60 + d.tones.length * 5 + (d.leadTemp === "热" ? 4 : 8));
+      const risk = Math.max(70, 96 - riskyWords(d.highlights + d.customerWords + d.proof) * 8);
+      const total = Math.round((completeness + match + trust + natural + risk) / 5);
+      return { total, completeness, match, trust, natural, risk };
+    }
+
+    function countFilled(d) {
+      return ["productName","price","highlights","customerIdentity","painPoint","concern","proof","customerWords"].filter(k => d[k] && !String(d[k]).includes("你的") && !String(d[k]).includes("当前")).length;
+    }
+
+    function riskyWords(text) {
+      const words = ["保证", "百分百", "一定赚钱", "躺赚", "稳赚", "无效退款", "必过", "根治", "治愈", "唯一机会"];
+      return words.filter(w => text.includes(w)).length;
+    }
+
+    function renderScore(score, d) {
+      const advice = [];
+      if (score.completeness < 80) advice.push("建议补充更具体的产品交付、客户身份和客户原话。");
+      if (score.trust < 80) advice.push("建议加入真实案例、服务流程、售后边界或可验证凭证。");
+      if (score.risk < 85) advice.push("注意避免绝对化承诺，把“保证结果”改成“提供路径与支持”。");
+      if (!advice.length) advice.push("当前信息比较完整，可以直接复制使用，发送前再按真实聊天语气微调。");
+
+      return `
+        <div class="score-card">
+          <div class="score-top">
+            <div class="score-title">
+              <b>话术质量评分</b>
+              <span>${d.industry} · ${d.stage} · ${d.goal} · ${d.channel}</span>
+            </div>
+            <div class="score-num">${score.total}</div>
+          </div>
+          <div class="bars">
+            ${bar("完整度", score.completeness)}
+            ${bar("匹配度", score.match)}
+            ${bar("信任感", score.trust)}
+            ${bar("自然度", score.natural)}
+            ${bar("风险控制", score.risk)}
+          </div>
+          <div class="divider"></div>
+          <div class="badge">优化建议</div>
+          <div style="margin-top:8px;color:var(--muted);font-size:13px;">${advice.join(" ")}</div>
+        </div>`;
+    }
+
+    function bar(name, value) {
+      return `<div class="bar-row"><span>${name}</span><div class="bar" data-v="${value}"><i></i></div><span>${value}</span></div>`;
+    }
+
+    function animateBars(score) {
+      document.querySelectorAll(".bar").forEach(bar => {
+        const v = bar.getAttribute("data-v");
+        bar.querySelector("i").style.width = v + "%";
+      });
+    }
+
+    function renderBlock(block) {
+      const id = "copy_" + Math.random().toString(36).slice(2);
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.dataset.text = block.text;
+      }, 0);
+
+      return `
+        <article class="output-block">
+          <div class="output-head">
+            <div>
+              <h3>${block.title}</h3>
+              <span class="tag">${block.tag}</span>
+            </div>
+            <button class="copy-mini" id="${id}" onclick="copyDataset('${id}')">复制</button>
+          </div>
+          <div class="output-text">${escapeHTML(block.text)}</div>
+        </article>
+      `;
+    }
+
+    function intensityTag(d) {
+      return d.intensity === 1 ? "轻柔推进" : d.intensity === 3 ? "明确促单" : "自然推进";
+    }
+
+    function shorten(text, n) {
+      return text.length > n ? text.slice(0, n) + "..." : text;
+    }
+
+    function copyDataset(id) {
+      const el = document.getElementById(id);
+      copyText(el.dataset.text || "");
+    }
+
+    function copyText(text) {
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => toast("已复制"));
+    }
+
+    function copyAll() {
+      if (!latestBlocks.length) {
+        toast("请先生成话术");
+        return;
+      }
+      const all = latestBlocks.map(b => `${b.title}\n${b.text}`).join("\n\n----------------\n\n");
+      copyText(all);
+    }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    function switchTab(name, el) {
+      document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+      el.classList.add("active");
+      document.querySelectorAll(".drawer").forEach(x => x.classList.remove("active"));
+      document.getElementById("tab-" + name).classList.add("active");
+    }
+
+    function scrollToForm() {
+      document.getElementById("formPanel").scrollIntoView({behavior: "smooth"});
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("pd_dark", document.body.classList.contains("dark") ? "1" : "0");
+    }
+
+    function toggleCompactMode() {
+      toast(document.getElementById("compactMode").checked ? "已开启精简结果" : "已关闭精简结果");
+    }
+
+    function saveToHistory(d, blocks, score) {
+      const item = {
+        time: new Date().toLocaleString(),
+        title: `${d.productName} · ${d.stage}`,
+        desc: `${d.industry} / ${d.goal} / 评分 ${score}`,
+        data: d,
+        blocks,
+        score
+      };
+      const list = JSON.parse(localStorage.getItem("pd_history") || "[]");
+      list.unshift(item);
+      localStorage.setItem("pd_history", JSON.stringify(list.slice(0, 12)));
+    }
+
+    function renderHistory() {
+      const box = document.getElementById("historyList");
+      const list = JSON.parse(localStorage.getItem("pd_history") || "[]");
+      if (!list.length) {
+        box.innerHTML = `<div class="mini-card"><b>暂无历史记录</b><p>生成后会自动保留最近12条，方便复用。</p></div>`;
+        return;
+      }
+      box.innerHTML = "";
+      list.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "history-item";
+        btn.innerHTML = `<b>${escapeHTML(item.title)}</b><span>${escapeHTML(item.desc)}<br>${escapeHTML(item.time)}</span>`;
+        btn.onclick = () => loadHistory(index);
+        box.appendChild(btn);
+      });
+    }
+
+    function loadHistory(index) {
+      const list = JSON.parse(localStorage.getItem("pd_history") || "[]");
+      const item = list[index];
+      if (!item) return;
+      latestBlocks = item.blocks || [];
+      document.getElementById("resultArea").innerHTML = `${renderScore(calculateScore(item.data), item.data)}${latestBlocks.map(renderBlock).join("")}`;
+      setTimeout(() => animateBars(calculateScore(item.data)), 50);
+      toast("已载入历史话术");
+      document.querySelector(".tab").click();
+    }
+
+    function saveCurrentDraft(silent) {
+      const d = getFormData();
+      localStorage.setItem("pd_draft", JSON.stringify(d));
+      if (!silent) toast("已保存当前输入");
+    }
+
+    function restoreDraft() {
+      if (localStorage.getItem("pd_dark") === "1") document.body.classList.add("dark");
+      const raw = localStorage.getItem("pd_draft");
+      if (!raw) return;
+      try {
+        const d = JSON.parse(raw);
+        setVal("businessType", d.businessType);
+        setVal("customIndustry", d.industry !== d.businessType ? d.industry : "");
+        setVal("productName", d.productName === "你的产品/服务" ? "" : d.productName);
+        setVal("price", d.price === "当前套餐价格" ? "" : d.price);
+        setVal("productHighlights", d.highlights);
+        setVal("customerIdentity", d.customerIdentity);
+        setVal("painPoint", d.painPoint);
+        setVal("concern", d.concern);
+        setVal("proof", d.proof);
+        setVal("customerWords", d.customerWords);
+        setVal("channel", d.channel);
+        setVal("leadTemp", d.leadTemp);
+        setVal("intensity", String(d.intensity || 2));
+        selectors.stage = d.stage || selectors.stage;
+        selectors.goal = d.goal || selectors.goal;
+        selectors.tones = d.tones || selectors.tones;
+        renderChips("stageChips", stages, "stage");
+        renderChips("goalChips", goals, "goal");
+        renderChips("toneChips", tones, "tones");
+        updateIntensityLabel();
+      } catch(e) {}
+    }
+
+    function setVal(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined && value !== null) el.value = value;
+    }
+
+    function clearForm() {
+      ["customIndustry", "productName", "price", "productHighlights", "customerIdentity", "painPoint", "concern", "proof", "customerWords"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+      document.getElementById("businessType").value = "知识付费";
+      document.getElementById("channel").value = "微信私聊";
+      document.getElementById("leadTemp").value = "温";
+      document.getElementById("intensity").value = "2";
+      selectors.stage = "主动咨询价格";
+      selectors.goal = "引导下单";
+      selectors.tones = ["温柔真诚型", "专业顾问型"];
+      renderChips("stageChips", stages, "stage");
+      renderChips("goalChips", goals, "goal");
+      renderChips("toneChips", tones, "tones");
+      updateIntensityLabel();
+      latestBlocks = [];
+      document.getElementById("resultArea").innerHTML = `
+        <div class="result-empty">
+          <div>
+            <div class="icon">💬</div>
+            <h3 style="margin:0 0 8px;">等待生成话术</h3>
+            <p style="margin:0;max-width:420px;">已清空内容。重新填写后即可生成。</p>
+          </div>
+        </div>`;
+      localStorage.removeItem("pd_draft");
+      toast("已清空");
+    }
+
+    function loadDemo() {
+      applyTemplate(industryTemplates[7]);
+      document.getElementById("customerWords").value = "我觉得这个资料包有点贵，我怕买了以后用不上。";
+      selectors.stage = "觉得贵";
+      selectors.goal = "解释价格";
+      renderChips("stageChips", stages, "stage");
+      renderChips("goalChips", goals, "goal");
+      toast("已填入示例案例");
+      scrollToForm();
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    window.addEventListener("beforeunload", () => {
+      try { saveCurrentDraft(true); } catch(e) {}
+    });
+
+    init();
+  </script>
+</body>
+</html>

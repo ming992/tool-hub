@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 小白项目生成器</title>
+  <style>
+    :root{
+      --bg:#f6f8ff;
+      --card:#ffffff;
+      --text:#182033;
+      --muted:#68738a;
+      --line:#e8edfb;
+      --primary:#5b6cff;
+      --primary2:#7c4dff;
+      --accent:#13c2a3;
+      --warn:#ff9f43;
+      --danger:#ef476f;
+      --soft:#eef2ff;
+      --shadow:0 18px 45px rgba(34,45,90,.10);
+      --shadow2:0 10px 28px rgba(34,45,90,.08);
+      --radius:22px;
+      --radius2:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(91,108,255,.16), transparent 32%),
+        radial-gradient(circle at 90% 10%, rgba(19,194,163,.13), transparent 30%),
+        linear-gradient(180deg,#fbfcff 0%,var(--bg) 42%,#f8fbff 100%);
+      line-height:1.6;
+    }
+    a{color:inherit}
+    .container{width:min(1180px, calc(100% - 34px)); margin:0 auto;}
+    .topbar{position:sticky; top:0; z-index:20; backdrop-filter:blur(18px); background:rgba(255,255,255,.72); border-bottom:1px solid rgba(232,237,251,.75)}
+    .nav{height:66px; display:flex; align-items:center; justify-content:space-between; gap:18px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:850; letter-spacing:-.04em}
+    .logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:white;box-shadow:0 10px 25px rgba(91,108,255,.28)}
+    .navlinks{display:flex; gap:16px; font-size:14px; color:var(--muted)}
+    .navlinks a{text-decoration:none}
+    .hero{padding:64px 0 28px}
+    .heroGrid{display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:center}
+    .kicker{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.72);box-shadow:var(--shadow2);font-size:13px;color:#425071}
+    h1{font-size:clamp(38px,6vw,72px);line-height:1.02;margin:18px 0 16px;letter-spacing:-.07em}
+    .gradientText{background:linear-gradient(105deg,#1e2a52 10%,var(--primary) 48%,var(--accent) 92%); -webkit-background-clip:text; background-clip:text; color:transparent;}
+    .subtitle{font-size:clamp(17px,2vw,22px); color:#4c5873; max-width:750px; margin:0 0 22px}
+    .tags{display:flex; flex-wrap:wrap; gap:10px; margin:22px 0}
+    .tag{padding:8px 12px; border-radius:999px; background:var(--soft); color:#4050b5; font-weight:700; font-size:13px; border:1px solid rgba(91,108,255,.16)}
+    .ctaRow{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+    .btn{border:0; cursor:pointer; border-radius:14px; padding:13px 18px; font-weight:800; font-size:15px; font-family:inherit; transition:.2s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none}
+    .btnPrimary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;box-shadow:0 16px 28px rgba(91,108,255,.24)}
+    .btnPrimary:hover{transform:translateY(-2px);box-shadow:0 20px 34px rgba(91,108,255,.32)}
+    .btnGhost{background:#fff;color:#293755;border:1px solid var(--line);box-shadow:var(--shadow2)}
+    .btnGhost:hover{transform:translateY(-2px);border-color:#cfd8ff}
+    .btnTiny{padding:9px 12px; font-size:13px; border-radius:12px}
+    .previewCard{background:rgba(255,255,255,.78);border:1px solid rgba(232,237,251,.85);box-shadow:var(--shadow);border-radius:30px;padding:22px;position:relative;overflow:hidden}
+    .previewCard:before{content:"";position:absolute;inset:-90px -80px auto auto;width:230px;height:230px;border-radius:50%;background:rgba(91,108,255,.12)}
+    .mock{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow2)}
+    .mockTop{display:flex;align-items:center;gap:7px;margin-bottom:14px}.dot{width:9px;height:9px;border-radius:50%;background:#d7ddf2}.dot:nth-child(1){background:#ff6b6b}.dot:nth-child(2){background:#ffd166}.dot:nth-child(3){background:#06d6a0}
+    .miniLine{height:12px;border-radius:999px;background:#edf1ff;margin:10px 0}.miniLine.w70{width:70%}.miniLine.w45{width:45%}.miniLine.w90{width:90%}.miniLine.w60{width:60%}
+    .mockGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.mockBox{height:76px;border-radius:16px;background:linear-gradient(135deg,#f7f9ff,#eef3ff);border:1px solid #edf1ff;padding:12px}.mockBox b{display:block;font-size:13px}.mockBox span{font-size:12px;color:var(--muted)}
+    section{padding:34px 0}.sectionTitle{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px}.sectionTitle h2{font-size:28px;line-height:1.15;margin:0;letter-spacing:-.04em}.sectionTitle p{margin:7px 0 0;color:var(--muted)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.step,.card{background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow2)}
+    .stepNum{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;display:grid;place-items:center;font-weight:900;margin-bottom:10px}.step h3,.card h3{margin:0 0 8px;font-size:18px}.step p,.card p{margin:0;color:var(--muted);font-size:14px}
+    .mainGrid{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start}.panel{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:22px}.panelHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.panelHeader h2{margin:0;font-size:24px;letter-spacing:-.04em}.hint{font-size:13px;color:var(--muted);background:#f7f9ff;border:1px solid var(--line);padding:9px 10px;border-radius:12px}
+    .formGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1 / -1}label{font-weight:800;font-size:14px;color:#293755}.helper{font-size:12px;color:var(--muted);font-weight:500}input,select,textarea{width:100%;border:1px solid #dfe6fa;border-radius:14px;background:#fff;padding:13px 13px;font:inherit;color:var(--text);outline:none;transition:.18s ease}textarea{min-height:94px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(91,108,255,.10)}
+    .radioGroup,.switchGrid{display:flex;flex-wrap:wrap;gap:10px}.choice{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:750;color:#3a4661;cursor:pointer}.choice input{width:auto}.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;min-width:210px;flex:1}.switch span{font-weight:800;font-size:13px}.switch input{width:44px;height:24px;accent-color:var(--primary)}
+    .sideSticky{position:sticky;top:86px}.templateGrid{display:grid;grid-template-columns:1fr;gap:10px;max-height:670px;overflow:auto;padding-right:4px}.template{border:1px solid var(--line);border-radius:18px;background:#fff;padding:14px;cursor:pointer;transition:.18s ease}.template:hover{transform:translateY(-2px);border-color:#ccd6ff;box-shadow:0 12px 22px rgba(34,45,90,.08)}.template b{display:block;font-size:14px;margin-bottom:4px}.template span{display:block;font-size:12px;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.progressWrap{margin:15px 0 4px;background:#eef2ff;border-radius:999px;height:12px;overflow:hidden;border:1px solid #e2e8ff}.progressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:.25s ease}.scoreText{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.resultPanel{display:none}.resultPanel.active{display:block}.resultToolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:14px}.copyGroup{display:flex;flex-wrap:wrap;gap:10px}.resultBox{background:#fff;border:1px solid var(--line);border-radius:24px;padding:0;overflow:hidden;box-shadow:var(--shadow)}.resultContent{padding:22px}.resultContent h2{margin:20px 0 10px;font-size:24px;letter-spacing:-.04em}.resultContent h3{margin:18px 0 8px;font-size:18px}.resultContent p{margin:8px 0;color:#34405a}.resultContent ul,.resultContent ol{padding-left:22px}.resultContent li{margin:7px 0}.sectionBlock{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}.codexBlock{background:#12172a;color:#edf1ff;border-radius:20px;padding:18px;white-space:pre-wrap;font-family:var(--mono);font-size:13px;line-height:1.75;overflow:auto}.plainBlock{background:#f8faff;border:1px solid var(--line);border-radius:18px;padding:16px;white-space:pre-wrap;line-height:1.78}
+    .nextBox{display:none;margin:16px 0;background:linear-gradient(135deg,#f0fff9,#f4f6ff);border:1px solid #d7f2ea;border-radius:20px;padding:16px}.nextBox.active{display:block}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#17203a;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:0 18px 35px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:.2s ease;z-index:100}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.caseCard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow2)}.caseCard .pill{display:inline-flex;font-size:12px;font-weight:850;color:#4050b5;background:var(--soft);padding:6px 9px;border-radius:999px;margin-bottom:10px}.caseCard h3{margin:0 0 8px}.caseCard p{font-size:14px;color:var(--muted);margin:8px 0}.caseCard b{color:#293755}
+    .faq{display:grid;grid-template-columns:1fr 1fr;gap:12px}.faqItem{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow2)}.faqItem summary{font-weight:850;cursor:pointer}.faqItem p{color:var(--muted);font-size:14px;margin:10px 0 0}.footer{padding:36px 0 50px;color:var(--muted);font-size:13px;text-align:center}.divider{height:1px;background:var(--line);margin:24px 0}.smallNote{font-size:12px;color:var(--muted)}
+    @media (max-width: 980px){.heroGrid,.mainGrid{grid-template-columns:1fr}.sideSticky{position:static}.grid3,.cases{grid-template-columns:1fr}.faq{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:42px}.formGrid{grid-template-columns:1fr}.switch{min-width:100%}.panel{padding:18px}.templateGrid{max-height:none}.resultToolbar{align-items:stretch}.copyGroup,.copyGroup .btn{width:100%}.btn{width:100%}.ctaRow .btn{width:auto}}
+    @media (max-width: 540px){.container{width:min(100% - 24px,1180px)}h1{font-size:40px}.hero{padding-top:30px}.sectionTitle{display:block}.tags{gap:8px}.tag{font-size:12px}.panel,.previewCard{border-radius:22px}.resultContent{padding:16px}.codexBlock{font-size:12px}.ctaRow .btn{width:100%}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <div class="brand"><div class="logo">C</div><span>Codex 小白项目生成器</span></div>
+      <div class="navlinks"><a href="#form">开始填写</a><a href="#templates">项目模板</a><a href="#cases">案例</a><a href="#faq">FAQ</a></div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container heroGrid">
+        <div>
+          <div class="kicker">✨ 给完全不懂代码的人做项目</div>
+          <h1><span class="gradientText">把一句想法</span><br/>变成 Codex 可执行项目方案</h1>
+          <p class="subtitle">输入你的身份、需求和项目方向，自动生成产品定位、功能结构、开发步骤、测试清单、商业化包装，以及可以直接复制给 Codex 的开发提示词。</p>
+          <div class="tags">
+            <span class="tag">适合零基础</span>
+            <span class="tag">自动生成开发提示词</span>
+            <span class="tag">HTML / 小工具 / 原型</span>
+            <span class="tag">小红书虚拟产品可用</span>
+          </div>
+          <div class="ctaRow">
+            <a class="btn btnPrimary" href="#form">立即生成方案</a>
+            <a class="btn btnGhost" href="#templates">先看模板库</a>
+          </div>
+        </div>
+        <div class="previewCard">
+          <div class="mock">
+            <div class="mockTop"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="miniLine w70"></div>
+            <div class="miniLine w90"></div>
+            <div class="miniLine w60"></div>
+            <div class="mockGrid">
+              <div class="mockBox"><b>产品定位</b><span>给谁用，解决什么痛点</span></div>
+              <div class="mockBox"><b>Codex 提示词</b><span>复制后直接开始开发</span></div>
+              <div class="mockBox"><b>测试清单</b><span>检查功能、手机端、复制</span></div>
+              <div class="mockBox"><b>售卖包装</b><span>标题、封面、私信话术</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="sectionTitle">
+          <div><h2>三步生成你的第一个项目</h2><p>不用懂术语，按提示填写即可。</p></div>
+        </div>
+        <div class="grid3">
+          <div class="step"><div class="stepNum">1</div><h3>写清楚你是谁</h3><p>选择身份、目标用户、使用场景。系统会自动把模糊需求翻译成产品语言。</p></div>
+          <div class="step"><div class="stepNum">2</div><h3>选项目和风格</h3><p>选择 HTML 工具、资料生成器、报价器、打卡工具等项目类型，再确定视觉风格。</p></div>
+          <div class="step"><div class="stepNum">3</div><h3>复制给 Codex</h3><p>一键复制完整方案或 Codex 专用提示词，粘贴给 Codex 开始生成可运行代码。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="form">
+      <div class="container mainGrid">
+        <div class="panel">
+          <div class="panelHeader">
+            <div><h2>填写项目信息</h2><div class="hint">不会写也没关系，空着的地方会自动补全。</div></div>
+          </div>
+          <div class="formGrid">
+            <div class="field">
+              <label for="identity">你的身份</label>
+              <select id="identity">
+                <option>小红书博主</option><option>教师</option><option>宝妈</option><option>大学生</option><option>自由职业者</option><option>运营</option><option>产品经理</option><option>电商卖家</option><option>跨境卖家</option><option>职场办公人员</option><option>一人公司创业者</option><option>知识付费博主</option><option>培训机构</option><option>设计师</option><option>其他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="projectType">项目类型</label>
+              <select id="projectType">
+                <option>HTML 单页工具</option><option>资料生成器</option><option>表单生成器</option><option>计划表生成器</option><option>打卡工具</option><option>计算器</option><option>报价器</option><option>清单工具</option><option>文案生成器</option><option>课程工具</option><option>自动化脚本</option><option>数据整理工具</option><option>SaaS 原型</option><option>微信小程序原型</option><option>小红书虚拟产品</option><option>其他</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="projectName">项目名称</label>
+              <input id="projectName" placeholder="例如：小红书爆款标题生成器" />
+            </div>
+            <div class="field">
+              <label for="audience">目标用户</label>
+              <input id="audience" placeholder="例如：想做小红书但不会起标题的新手博主" />
+            </div>
+            <div class="field full">
+              <label for="pain">用户痛点 <span class="helper">可写口语化一点</span></label>
+              <textarea id="pain" placeholder="例如：不知道做什么内容，标题没有吸引力，发了很多笔记没人看，不知道怎么复盘"></textarea>
+            </div>
+            <div class="field full">
+              <label for="features">核心功能</label>
+              <textarea id="features" placeholder="例如：输入行业和人群，自动生成标题、封面文案、选题方向、笔记大纲"></textarea>
+            </div>
+            <div class="field full">
+              <label for="scenario">使用场景</label>
+              <textarea id="scenario" placeholder="例如：每天发笔记前，用它快速生成 20 个标题，再筛选 3 个发布"></textarea>
+            </div>
+            <div class="field">
+              <label for="style">页面风格</label>
+              <select id="style">
+                <option>极简高级</option><option>温柔治愈</option><option>商务专业</option><option>科技蓝</option><option>奶油风</option><option>小红书风</option><option>教育风</option><option>效率工具风</option><option>黑白极简</option><option>渐变高级</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="deploy">部署方式</label>
+              <select id="deploy">
+                <option>只在本地打开</option><option>部署到网页</option><option>准备上架为虚拟产品</option><option>准备做成小程序原型</option><option>准备给客户演示</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>难度等级</label>
+              <div class="radioGroup">
+                <label class="choice"><input type="radio" name="level" value="完全小白" checked> 完全小白</label>
+                <label class="choice"><input type="radio" name="level" value="稍微懂一点"> 稍微懂一点</label>
+                <label class="choice"><input type="radio" name="level" value="希望快速上线"> 希望快速上线</label>
+                <label class="choice"><input type="radio" name="level" value="希望做成商业产品"> 希望做成商业产品</label>
+              </div>
+            </div>
+            <div class="field full">
+              <label>生成选项</label>
+              <div class="switchGrid">
+                <label class="switch"><span>商业化建议</span><input type="checkbox" id="needBiz" checked></label>
+                <label class="switch"><span>小红书售卖包装</span><input type="checkbox" id="needXhs" checked></label>
+                <label class="switch"><span>Codex 专用提示词</span><input type="checkbox" id="needCodex" checked></label>
+                <label class="switch"><span>测试清单</span><input type="checkbox" id="needTest" checked></label>
+                <label class="switch"><span>迭代计划</span><input type="checkbox" id="needIter" checked></label>
+              </div>
+            </div>
+          </div>
+          <div class="progressWrap"><div id="scoreBar" class="progressBar"></div></div>
+          <div class="scoreText"><span id="scoreText">项目成熟度：0 分</span><span id="scoreTip">填写越具体，生成越好</span></div>
+          <div class="actions">
+            <button class="btn btnPrimary" id="generateBtn">🚀 一键生成我的 Codex 项目方案</button>
+            <button class="btn btnGhost" id="clearBtn">清空表单</button>
+            <button class="btn btnGhost" id="randomBtn">随机给我一个项目</button>
+          </div>
+        </div>
+
+        <aside class="panel sideSticky" id="templates">
+          <div class="panelHeader"><div><h2>快速模板</h2><div class="hint">点一下，自动填充表单。</div></div></div>
+          <div class="templateGrid" id="templateGrid"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="resultSection">
+      <div class="container">
+        <div id="nextBox" class="nextBox"><b>建议下一步：</b><span id="nextText">先生成方案，再复制 Codex 提示词。</span></div>
+        <div id="resultPanel" class="resultPanel">
+          <div class="resultToolbar">
+            <div class="sectionTitle" style="margin:0"><div><h2>生成结果</h2><p>复制完整方案做产品规划，或只复制 Codex 提示词开始开发。</p></div></div>
+            <div class="copyGroup">
+              <button class="btn btnPrimary btnTiny" id="copyAllBtn">复制完整方案</button>
+              <button class="btn btnGhost btnTiny" id="copyCodexBtn">复制 Codex 提示词</button>
+              <button class="btn btnGhost btnTiny" id="regenBtn">重新生成</button>
+            </div>
+          </div>
+          <div class="resultBox"><div id="resultContent" class="resultContent"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="container">
+        <div class="sectionTitle"><div><h2>示例案例</h2><p>看看不同身份的人如何使用这个生成器。</p></div></div>
+        <div class="cases">
+          <div class="caseCard"><span class="pill">小红书博主</span><h3>爆款选题生成器</h3><p><b>项目想法：</b>输入账号领域，自动输出选题、标题、封面文案和笔记结构。</p><p><b>商业化：</b>可做成 19-49 元资料包，也可作为私域引流赠品。</p></div>
+          <div class="caseCard"><span class="pill">教师</span><h3>学生评语生成器</h3><p><b>项目想法：</b>输入学生特点、学科表现、性格标签，生成温暖具体的期末评语。</p><p><b>商业化：</b>适合教师社群、教育资料店、班主任工具包。</p></div>
+          <div class="caseCard"><span class="pill">一人公司</span><h3>客户报价生成器</h3><p><b>项目想法：</b>输入服务类型、工作量、交付周期，自动生成报价单和合作说明。</p><p><b>商业化：</b>可作为咨询服务配套工具，提高成交和交付效率。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="sectionTitle"><div><h2>常见问题</h2><p>专门解决小白最容易卡住的地方。</p></div></div>
+        <div class="faq">
+          <details class="faqItem" open><summary>我完全不会代码能用吗？</summary><p>能用。你只需要填写想做什么、给谁用、解决什么问题，系统会生成给 Codex 的详细开发提示词。</p></details>
+          <details class="faqItem"><summary>生成的内容能直接发给 Codex 吗？</summary><p>可以。建议先复制“Codex 专用提示词”，让 Codex 先做一个可运行 MVP，再逐步追加功能。</p></details>
+          <details class="faqItem"><summary>这个工具适合做什么项目？</summary><p>适合 HTML 单页工具、资料生成器、报价器、打卡工具、表单工具、文案工具、课程工具和原型页面。</p></details>
+          <details class="faqItem"><summary>可以用来做小红书虚拟产品吗？</summary><p>可以。它会生成产品定位、封面文案、笔记标题、私信话术和交付建议，适合包装成虚拟资料或工具包。</p></details>
+          <details class="faqItem"><summary>生成的 HTML 可以上线吗？</summary><p>如果是纯前端工具，可以部署到静态网页平台。上线前要检查手机端、按钮、复制功能、错别字和隐私提示。</p></details>
+          <details class="faqItem"><summary>如果 Codex 报错怎么办？</summary><p>把报错内容完整复制给 Codex，并要求它“只修复错误，不重写整体结构”，通常能快速解决。</p></details>
+          <details class="faqItem"><summary>我能不能把生成的项目卖给别人？</summary><p>可以把你的原创需求、文案和页面包装成虚拟产品售卖，但不要使用他人版权素材，也要避免夸大宣传。</p></details>
+          <details class="faqItem"><summary>后续如何继续迭代？</summary><p>先完成最小可用版本，再逐步增加导出 PDF、本地保存、模板库、主题切换、数据统计、会员版等功能。</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer container">© Codex 小白项目生成器 · 适合学习、原型设计、虚拟产品包装与个人效率工具构思</div>
+  <div id="toast" class="toast">已复制</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const templates = [
+      {name:'小红书爆款标题生成器',identity:'小红书博主',type:'文案生成器',audience:'想做小红书但不会起标题的新手博主、素人 IP 和一人公司',pain:'不会判断标题有没有点击欲；标题太平；不知道如何结合人群、痛点、结果感和场景；每天发笔记前耗费大量时间。',features:'输入账号领域、目标人群、产品/内容主题、情绪方向，自动生成 30 个标题、10 个封面短句、5 个笔记开头、3 个完整笔记大纲。',scenario:'每天发小红书前，用它快速生成标题池，再筛选 3-5 个做 A/B 测试。',style:'小红书风'},
+      {name:'私域成交话术生成器',identity:'知识付费博主',type:'文案生成器',audience:'做私域成交的个体顾问、课程博主、社群主理人',pain:'客户咨询后不知道怎么回复；话术太硬导致客户反感；不会分辨客户处于观望、犹豫、价格异议还是急需阶段。',features:'输入产品类型、价格、客户问题、客户阶段，生成破冰话术、需求诊断、价值塑造、异议处理、催单提醒和成交收口。',scenario:'客户私信咨询课程或服务时，快速生成自然、不油腻的回复话术。',style:'商务专业'},
+      {name:'暑假计划表生成器',identity:'教师',type:'计划表生成器',audience:'中国家庭中的小学生、初中生、高中生和家长',pain:'家长不知道如何安排暑假；计划太空泛无法执行；孩子容易拖延；不同年级学习任务差异大。',features:'选择年级、目标、薄弱科目、兴趣活动和作息偏好，生成每日时间表、每周计划、学习任务、运动安排和家长监督建议。',scenario:'暑假开始前，家长和学生一起制定 30-60 天可执行计划。',style:'教育风'},
+      {name:'教师评语生成器',identity:'教师',type:'资料生成器',audience:'班主任、任课老师、培训机构老师',pain:'期末评语数量多；容易写得重复；既要真实又要鼓励；不同学生需要不同表达。',features:'输入学生性格、学习表现、进步点、不足点和语气，生成温暖具体的评语、家校沟通建议和改进方向。',scenario:'期末或阶段反馈前，批量辅助老师生成个性化评语。',style:'教育风'},
+      {name:'宝宝喂养记录工具',identity:'宝妈',type:'打卡工具',audience:'新手爸妈、双胞胎家庭、需要多人协作照护的家庭',pain:'母乳、奶粉、辅食、睡眠、便便记录分散；家庭成员交接不清楚；双胞胎容易记混。',features:'记录宝宝姓名、喂养方式、时间、奶量、睡眠、便便、备注，支持双胞胎切换、今日汇总、本地保存和提醒检查。',scenario:'家庭成员轮流照顾宝宝时，用手机打开页面记录和查看今日情况。',style:'温柔治愈'},
+      {name:'一人公司每日任务看板',identity:'一人公司创业者',type:'清单工具',audience:'一人公司创业者、自由职业者、轻创业者',pain:'事情太杂；不知道每天优先做什么；内容、产品、交付、私域混在一起；复盘困难。',features:'按获客、成交、交付、产品、复盘五类生成每日任务，支持优先级、完成勾选、今日重点和明日提醒。',scenario:'每天早上 10 分钟安排一天工作，晚上复盘完成情况。',style:'效率工具风'},
+      {name:'自媒体选题库生成器',identity:'运营',type:'资料生成器',audience:'自媒体运营、内容创作者、短视频博主',pain:'选题枯竭；不知道如何持续更新；内容缺少系列感；热点来了不会结合账号。',features:'输入领域、目标人群和账号定位，生成选题矩阵、爆款角度、系列栏目、标题、内容结构和发布时间建议。',scenario:'每周制定内容日历时，一次性生成 50-100 个选题。',style:'小红书风'},
+      {name:'课程大纲生成器',identity:'培训机构',type:'课程工具',audience:'讲师、知识博主、培训机构、企业内训人员',pain:'课程结构混乱；不知道怎么分模块；课时安排不合理；卖点不清晰。',features:'输入课程主题、目标学员、课时、交付形式，生成课程大纲、每节课目标、作业、资料清单和招生卖点。',scenario:'做新课程前，用它快速搭建课程骨架。',style:'商务专业'},
+      {name:'电商利润计算器',identity:'电商卖家',type:'计算器',audience:'淘宝、拼多多、抖店、小红书电商卖家',pain:'利润算不清；平台扣点、物流、退货、投流成本容易漏算；不知道最低售价。',features:'输入进货价、售价、物流、平台扣点、广告费、退货率，自动计算毛利、净利、利润率、盈亏平衡点。',scenario:'上架商品或调价前，快速判断这个产品能不能卖。',style:'商务专业'},
+      {name:'跨境选品分析器',identity:'跨境卖家',type:'数据整理工具',audience:'跨境电商卖家、独立站运营、TikTok Shop 卖家',pain:'选品靠感觉；不知道利润、物流、竞争、复购和风险如何综合判断。',features:'输入品类、售价、成本、重量、竞争情况、目标市场，生成选品评分、风险提醒、优化建议和上架优先级。',scenario:'每天筛选 10 个候选品，快速判断哪些值得测试。',style:'科技蓝'},
+      {name:'客户报价生成器',identity:'自由职业者',type:'报价器',audience:'设计师、顾问、代运营、自由职业者、一人公司',pain:'报价随意；怕报高丢单、报低亏钱；客户不理解价格价值；交付边界不清楚。',features:'输入服务类型、工作量、周期、客户预算和交付内容，生成报价单、服务说明、付款节点和合作边界。',scenario:'客户询价时，3 分钟生成专业报价方案。',style:'商务专业'},
+      {name:'简历优化生成器',identity:'大学生',type:'资料生成器',audience:'求职大学生、转行者、职场新人',pain:'简历表达平淡；不会量化成果；岗位匹配度低；不知道怎么改。',features:'输入岗位、经历、技能、项目，生成简历优化建议、STAR 表达、关键词补充和面试亮点。',scenario:'投递岗位前，根据 JD 快速优化简历。',style:'极简高级'},
+      {name:'面试问题训练器',identity:'大学生',type:'清单工具',audience:'求职者、转行者、应届生',pain:'面试不知道会问什么；回答没有结构；容易紧张；不会复盘。',features:'选择岗位和经验水平，生成高频问题、回答框架、追问方向、模拟评分和改进建议。',scenario:'面试前 3 天，每天练习一组问题。',style:'商务专业'},
+      {name:'家庭记账工具',identity:'职场办公人员',type:'表单生成器',audience:'年轻家庭、情侣、新婚夫妻、个人理财小白',pain:'账目分散；月底不知道钱花哪里；不会分类预算；消费复盘困难。',features:'记录收入、支出、分类、成员、备注，生成月度汇总、预算提醒、消费占比和节省建议。',scenario:'每天晚上 2 分钟记录消费，月底查看家庭财务情况。',style:'奶油风'},
+      {name:'习惯打卡工具',identity:'自由职业者',type:'打卡工具',audience:'想养成学习、运动、阅读、早睡习惯的人',pain:'坚持不下来；没有反馈；打卡工具太复杂；不知道自己连续完成几天。',features:'创建习惯、每日打卡、连续天数、完成率、激励语、本地保存和周复盘。',scenario:'每天固定时间打开页面打卡，周末查看完成情况。',style:'温柔治愈'},
+      {name:'学生学习计划生成器',identity:'教师',type:'计划表生成器',audience:'小学生、初中生、高中生、家长和任课老师',pain:'学习计划不具体；薄弱科目没拆开；任务量不合理；没有复盘机制。',features:'输入年级、科目、薄弱点、目标分数和可用时间，生成每日任务、周计划、复盘表和家长提醒。',scenario:'考试前、寒暑假、周末安排学习任务。',style:'教育风'},
+      {name:'旅行行程规划器',identity:'自由职业者',type:'计划表生成器',audience:'自由行用户、亲子游家庭、情侣旅行用户',pain:'行程安排太乱；不知道每天去哪里；预算和交通容易漏；攻略信息太多。',features:'输入目的地、天数、预算、同行人和偏好，生成每日路线、交通、餐饮、预算和备选方案。',scenario:'旅行前 1 周快速制定可执行行程。',style:'极简高级'},
+      {name:'健身饮食计划表',identity:'职场办公人员',type:'计划表生成器',audience:'想减脂、塑形、增肌但不会安排计划的人',pain:'不知道怎么吃；训练计划不稳定；容易三天打鱼两天晒网；不会根据工作日调整。',features:'输入身高体重、目标、饮食偏好、运动基础，生成一周饮食、训练安排、购物清单和打卡表。',scenario:'每周日生成下周计划，工作日照表执行。',style:'效率工具风'},
+      {name:'资料包目录生成器',identity:'知识付费博主',type:'资料生成器',audience:'卖资料包、课程资料、模板包的内容创作者',pain:'资料很多但没有体系；用户看不懂价值；售卖页缺少结构；交付混乱。',features:'输入资料主题、目标人群和已有资料，生成目录结构、模块说明、学习路径和售卖页文案。',scenario:'准备上架虚拟资料前，先整理成高价值目录。',style:'小红书风'},
+      {name:'AI 提示词管理器',identity:'一人公司创业者',type:'HTML 单页工具',audience:'经常使用 ChatGPT、Codex、Claude、Midjourney 的 AI 工具用户',pain:'提示词散落在聊天记录和文档里；找不到；不会分类；好用的提示词无法复用。',features:'创建分类、保存提示词、搜索、复制、标星、使用场景说明、本地保存和示例库。',scenario:'日常工作中快速查找并复制常用提示词。',style:'科技蓝'}
+    ];
+
+    let lastFullText = '';
+    let lastCodexPrompt = '';
+
+    function initTemplates(){
+      const box = $('templateGrid');
+      box.innerHTML = templates.map((t,i)=>`<div class="template" data-i="${i}"><b>${t.name}</b><span>${t.audience}</span></div>`).join('');
+      box.querySelectorAll('.template').forEach(el=>el.addEventListener('click',()=>applyTemplate(+el.dataset.i)));
+    }
+
+    function applyTemplate(i){
+      const t = templates[i];
+      $('identity').value = t.identity; $('projectType').value = t.type; $('projectName').value = t.name; $('audience').value = t.audience;
+      $('pain').value = t.pain; $('features').value = t.features; $('scenario').value = t.scenario; $('style').value = t.style;
+      updateScore(); toast('已填充模板：' + t.name); location.hash = '#form';
+    }
+
+    function getLevel(){ return document.querySelector('input[name="level"]:checked').value; }
+    function getData(){
+      const type = $('projectType').value;
+      const identity = $('identity').value;
+      const name = $('projectName').value.trim() || defaultProjectName(type, identity);
+      const audience = $('audience').value.trim() || defaultAudience(identity, type);
+      const pain = $('pain').value.trim() || defaultPain(audience, type);
+      const features = $('features').value.trim() || defaultFeatures(type);
+      const scenario = $('scenario').value.trim() || defaultScenario(audience, type);
+      return {identity,type,name,audience,pain,features,scenario,style:$('style').value,deploy:$('deploy').value,level:getLevel(),needBiz:$('needBiz').checked,needXhs:$('needXhs').checked,needCodex:$('needCodex').checked,needTest:$('needTest').checked,needIter:$('needIter').checked};
+    }
+    function defaultProjectName(type, identity){ return identity + '专用' + type.replace('HTML 单页工具','项目生成工具').replace('其他','效率工具'); }
+    function defaultAudience(identity, type){ return `和“${identity}”类似、想用 AI 快速做出${type}但缺少技术经验的人`; }
+    function defaultPain(audience, type){ return `${audience}常见痛点包括：想法很多但不知道如何落地；不会写需求文档；不知道该让 Codex 先做什么；担心报错后无法处理；希望快速做出一个能演示、能交付、甚至能售卖的${type}。`; }
+    function defaultFeatures(type){ return `基础信息输入、模板选择、自动生成结果、一键复制、结果分区展示、空值自动补全、移动端适配、本地可运行。`; }
+    function defaultScenario(audience, type){ return `${audience}在准备做项目、交付客户、整理资料、上线虚拟产品或训练 Codex 时使用，先生成清晰方案，再复制给 Codex 开发。`; }
+
+    function scoreData(){
+      const raw = [$('projectName').value,$('audience').value,$('pain').value,$('features').value,$('scenario').value];
+      let score = 20;
+      raw.forEach(v=>{ if(v.trim().length>0) score += 10; if(v.trim().length>40) score += 6; });
+      if($('needCodex').checked) score += 6; if($('needBiz').checked) score += 4; if($('needXhs').checked) score += 4;
+      return Math.min(100, score);
+    }
+    function updateScore(){
+      const s = scoreData(); $('scoreBar').style.width = s + '%'; $('scoreText').textContent = '项目成熟度：' + s + ' 分';
+      $('scoreTip').textContent = s < 55 ? '建议补充目标用户、痛点和核心功能' : s < 80 ? '可以生成，继续细化会更准' : '信息很完整，适合生成商业级方案';
+    }
+
+    function escapeHTML(str){ return String(str).replace(/[&<>]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[s])); }
+    function bullets(text){ return text.split(/[；;\n]/).map(x=>x.trim()).filter(Boolean); }
+    function makeList(arr){ return '<ul>' + arr.map(x=>`<li>${escapeHTML(x)}</li>`).join('') + '</ul>'; }
+    function daysByLevel(level){ return level==='完全小白'?'2-4 天做出第一版':level==='稍微懂一点'?'1-3 天做出第一版':level==='希望快速上线'?'当天完成 MVP，1-2 天优化': '3-7 天打磨成可售卖版本'; }
+
+    function buildCodexPrompt(d){
+      return `你是一位资深前端工程师、产品经理和零基础用户体验设计师。请根据以下需求，直接开发一个完整可运行的项目。\n\n【项目名称】\n${d.name}\n\n【目标用户】\n${d.audience}\n\n【用户痛点】\n${d.pain}\n\n【核心功能】\n${d.features}\n\n【使用场景】\n${d.scenario}\n\n【项目类型】\n${d.type}\n\n【视觉风格】\n${d.style}\n\n【开发要求】\n1. 使用 HTML、CSS、JavaScript 完成，优先做成单个 index.html，除非功能确实复杂。\n2. 不依赖后端，不依赖收费 API，不使用必须联网加载的资源。\n3. 页面打开即可使用，适配桌面端和手机端。\n4. 代码必须完整，不要伪代码，不要省略，不要只给思路。\n5. 表单、按钮、生成结果、复制功能都要真实可用。\n6. 输入为空时要有默认提示或自动补全，避免用户卡住。\n7. 结果区要分模块展示，排版清晰，便于复制和二次编辑。\n8. CSS 要完整，有卡片、圆角、阴影、响应式、按钮 hover 效果和清晰的视觉层级。\n9. JavaScript 要写清楚函数结构，包含必要注释，方便小白修改文案。\n10. 完成后请附上本地运行方法、常见报错处理方式和部署到静态网站的说明。\n\n【页面结构建议】\n- 顶部介绍区：说明产品价值和适合人群。\n- 输入区：让用户填写关键信息。\n- 模板区：提供常用项目模板，一键填充。\n- 生成按钮：点击后输出完整结果。\n- 结果区：展示生成内容，并支持一键复制。\n- FAQ 区：解释小白常见问题。\n- 页脚：简单说明用途。\n\n【交互要求】\n1. 所有按钮必须可点击。\n2. 点击模板可以自动填充表单。\n3. 点击生成后，要根据用户输入动态生成结果。\n4. 点击复制后，要显示“已复制”的反馈。\n5. 支持重新生成和清空表单。\n6. 移动端下表单和卡片自动变成单列。\n\n【MVP 优先级】\n第一版必须先保证：页面美观、输入可用、生成可用、复制可用、移动端可读。\n不要一开始就做登录、数据库、支付、云同步等复杂功能。\n\n请现在直接输出完整代码。`; 
+    }
+
+    function buildFullText(d, score, codexPrompt){
+      const painItems = bullets(d.pain);
+      const featureItems = bullets(d.features);
+      const mvp = featureItems.slice(0,4).join('；') || '输入表单、自动生成、复制结果、移动端适配';
+      let text = `《${d.name}》Codex 项目生成方案\n\n`;
+      text += `一、项目一句话定位\n《${d.name}》是一款面向${d.audience}的${d.type}，用于解决“${painItems[0] || d.pain}”等问题，让用户不需要复杂技术背景，也能快速获得可执行、可复制、可交付的结果。\n\n`;
+      text += `二、项目成熟度评分\n当前成熟度：${score}/100。预计难度：${daysByLevel(d.level)}。建议先做 MVP，再做商业化包装。\n\n`;
+      text += `三、目标用户画像\n1. 刚入门用户：有明确需求，但不会拆功能、不会写提示词，需要一个可照抄的工具。\n2. 效率提升用户：已经在做${d.type}相关工作，希望减少重复劳动，提高输出速度。\n3. 商业化用户：希望把工具包装成虚拟产品、客户交付品或私域引流赠品，愿意为省时间和成品感付费。\n\n`;
+      text += `四、核心痛点分析\n表层痛点：${painItems.join('；') || d.pain}\n深层痛点：用户缺少结构化方法，不知道如何把想法变成页面、功能和交互。\n场景痛点：在${d.scenario}时，用户需要立即得到结果，而不是看复杂教程。\n付费痛点：用户愿意为“省时间、少踩坑、看起来专业、能直接交付”的工具付费。\n\n`;
+      text += `五、产品功能结构\n1. 信息输入：收集目标人群、痛点、场景、功能和风格。\n2. 智能生成：根据输入自动生成定位、方案、步骤和提示词。\n3. 结果管理：分区展示结果，支持一键复制。\n4. 新手辅助：提供默认值、模板、风险提醒和报错话术。\n5. 商业化辅助：提供定价、交付、推广和小红书包装建议。\n\n`;
+      text += `六、页面模块设计\n顶部介绍区、三步引导区、项目信息输入区、模板库区、生成按钮区、结果输出区、Codex 提示词区、测试清单区、商业化建议区、FAQ 区、页脚说明。\n\n`;
+      text += `七、用户操作流程\n1. 打开页面。\n2. 选择身份和项目类型。\n3. 填写项目名称、目标用户、痛点、功能和场景。\n4. 选择页面风格和部署方式。\n5. 点击生成按钮。\n6. 查看项目定位、功能结构、开发步骤和测试清单。\n7. 复制 Codex 提示词。\n8. 发给 Codex 开始生成代码。\n9. 本地打开测试。\n10. 根据反馈继续迭代。\n\n`;
+      if(d.needCodex){ text += `八、Codex 专用开发提示词\n${codexPrompt}\n\n`; }
+      text += `九、文件结构建议\nMVP 建议使用单文件：index.html。若后续复杂化，可以拆成：index.html、style.css、script.js、README.md、assets/。小白第一版不要过度工程化，优先保证能打开、能使用、能复制。\n\n`;
+      text += `十、开发步骤\n1. 新建文件夹，命名为 ${d.name}。\n2. 新建 index.html。\n3. 把 Codex 生成的完整代码复制进去。\n4. 双击 index.html 在浏览器打开。\n5. 逐项测试输入框、模板、生成按钮和复制按钮。\n6. 用手机浏览器打开，检查是否能正常阅读和点击。\n7. 修改标题、说明文字和示例数据，让它更贴合目标用户。\n8. 截图制作封面和售卖详情页。\n9. 如果要上线，部署到静态网页平台。\n10. 收集 5 个真实用户反馈后再做第二版。\n\n`;
+      if(d.needTest){ text += `十一、测试清单\n- 功能测试：每个按钮是否可点击。\n- 输入测试：空输入、长文本、特殊符号是否影响结果。\n- 复制测试：完整方案和单独提示词是否都能复制。\n- 移动端测试：手机上是否单列展示、按钮是否够大。\n- 浏览器测试：Chrome、Edge、Safari 至少打开检查一次。\n- 视觉检查：标题、间距、颜色、错别字、空白状态。\n- 上线检查：页面标题、描述、使用说明、版权素材、隐私提示。\n\n`; }
+      if(d.needBiz){ text += `十二、商业化建议\n定价建议：基础版 19-39 元，进阶版 59-99 元，带教程和案例库可卖 129-299 元。\n适合平台：小红书、知识星球、私域社群、公众号、课程交付、咨询服务赠品。\n交付方式：HTML 文件 + 使用说明 + 示例案例 + 常见问题文档。\n升级版本：增加更多模板、本地保存、导出 PDF、主题切换、批量生成、案例库。\n成交重点：不要卖“代码”，要卖“帮用户省时间、快速做出成果、降低技术恐惧”的解决方案。\n\n`; }
+      if(d.needXhs){ text += `十三、小红书售卖包装\n标题参考：\n1. 不会代码也能做工具！我用 Codex 做出了《${d.name}》\n2. 小白也能复制的 AI 项目生成方法，附完整模板\n3. 做虚拟产品别只卖资料，这种 HTML 工具更有价值\n封面文案：输入想法 → 生成项目 → 复制给 Codex → 做出工具\n笔记大纲：痛点开场、展示工具截图、说明适合谁、演示生成结果、引导私信关键词。\n评论区引导：想要模板的可以评论“项目”，我发你小白版使用方法。\n私信话术：这个工具适合你先做一个 MVP，不需要懂代码。我给你文件、教程和示例，你照着填就能开始。\n\n`; }
+      if(d.needIter){ text += `十四、后续迭代方向\n1. 增加本地保存历史记录。\n2. 增加导出 PDF。\n3. 增加更多行业模板。\n4. 增加主题切换。\n5. 增加一键复制不同模块。\n6. 增加新手教程弹窗。\n7. 增加报错修复提示词。\n8. 增加项目成熟度评分。\n9. 增加小红书笔记生成器。\n10. 增加会员版模板库。\n\n`; }
+      text += `十五、风险提醒\n如果第一版功能太多，Codex 可能生成复杂代码并提高出错概率。建议先完成“输入、生成、复制、移动端适配”四件事，再逐步增加导出、保存、登录、支付等高级功能。`;
+      return text;
+    }
+
+    function renderResult(d, score, fullText, codexPrompt){
+      const html = `
+        <h2>《${escapeHTML(d.name)}》项目方案</h2>
+        <p><b>一句话定位：</b>面向 ${escapeHTML(d.audience)} 的 ${escapeHTML(d.type)}，帮助用户在 ${escapeHTML(d.scenario)} 中快速解决需求，并生成可复制、可执行、可交付的结果。</p>
+        <div class="sectionBlock"><h2>项目成熟度</h2><p><b>${score}/100</b> · ${escapeHTML(daysByLevel(d.level))} · 部署方向：${escapeHTML(d.deploy)}</p><p>${score<60?'建议先补充更具体的目标用户和核心功能。':score<85?'当前信息足够做 MVP，后续可以补充商业化细节。':'信息完整度高，适合直接做商业产品原型。'}</p></div>
+        <div class="sectionBlock"><h2>目标用户画像</h2>${makeList([
+          '刚入门用户：有想法但不会拆需求，需要清晰步骤和可复制提示词。',
+          '效率提升用户：经常重复处理类似任务，希望用工具减少时间消耗。',
+          '商业化用户：想把工具包装为虚拟产品、客户交付品或引流赠品。'
+        ])}</div>
+        <div class="sectionBlock"><h2>核心痛点分析</h2>${makeList(['表层痛点：'+d.pain,'深层痛点：不会把想法变成页面、功能和交互逻辑。','场景痛点：需要立刻得到结果，不想看复杂教程。','付费痛点：愿意为省时间、少踩坑、提升专业感付费。'])}</div>
+        <div class="sectionBlock"><h2>产品功能结构</h2>${makeList(['信息输入：收集项目名称、目标用户、痛点、功能、场景和风格。','智能生成：生成定位、用户画像、功能模块、开发步骤和提示词。','模板库：提供常用项目模板，一键填充表单。','复制功能：完整方案和 Codex 提示词分别复制。','新手辅助：空值自动补全、风险提醒、报错处理话术。'])}</div>
+        <div class="sectionBlock"><h2>页面模块设计</h2>${makeList(['顶部 Hero：说明产品价值、适合人群和使用场景。','三步引导：填写信息、选择模板、复制给 Codex。','表单区：让小白逐项填写，不懂也能用默认值。','结果区：用标题、列表、代码块分区展示。','FAQ：解决不会代码、报错、上线、售卖等焦虑。'])}</div>
+        ${d.needCodex ? `<div class="sectionBlock"><h2>Codex 专用开发提示词</h2><div class="codexBlock" id="codexText">${escapeHTML(codexPrompt)}</div></div>` : ''}
+        <div class="sectionBlock"><h2>完整项目方案</h2><div class="plainBlock" id="fullText">${escapeHTML(fullText)}</div></div>
+      `;
+      $('resultContent').innerHTML = html;
+    }
+
+    function generate(){
+      const d = getData(); const score = scoreData(); const codex = buildCodexPrompt(d); const full = buildFullText(d, score, codex);
+      lastFullText = full; lastCodexPrompt = codex; renderResult(d, score, full, codex);
+      $('resultPanel').classList.add('active'); $('nextBox').classList.add('active');
+      $('nextText').textContent = d.needCodex ? '复制“Codex 专用提示词”，发给 Codex，让它先生成可运行 MVP。' : '复制完整方案，先整理你的项目需求，再决定是否开发。';
+      $('resultSection').scrollIntoView({behavior:'smooth', block:'start'});
+      toast('项目方案已生成');
+    }
+
+    async function copyText(text, msg){
+      try{ await navigator.clipboard.writeText(text); toast(msg || '已复制'); }
+      catch(e){
+        const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); toast(msg || '已复制');
+      }
+    }
+    let toastTimer;
+    function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1800); }
+    function clearForm(){
+      ['projectName','audience','pain','features','scenario'].forEach(id=>$(id).value=''); $('identity').selectedIndex=0; $('projectType').selectedIndex=0; $('style').selectedIndex=0; $('deploy').selectedIndex=0;
+      document.querySelector('input[name="level"][value="完全小白"]').checked=true; ['needBiz','needXhs','needCodex','needTest','needIter'].forEach(id=>$(id).checked=true);
+      updateScore(); toast('已清空');
+    }
+    function randomTemplate(){ applyTemplate(Math.floor(Math.random()*templates.length)); }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      initTemplates(); updateScore();
+      document.querySelectorAll('input, textarea, select').forEach(el=>el.addEventListener('input',updateScore));
+      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el=>el.addEventListener('change',updateScore));
+      $('generateBtn').addEventListener('click',generate); $('regenBtn').addEventListener('click',generate); $('clearBtn').addEventListener('click',clearForm); $('randomBtn').addEventListener('click',randomTemplate);
+      $('copyAllBtn').addEventListener('click',()=>copyText(lastFullText || '请先生成方案', '完整方案已复制'));
+      $('copyCodexBtn').addEventListener('click',()=>copyText(lastCodexPrompt || '请先生成方案', 'Codex 提示词已复制'));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex 安装配置保姆包｜HTML 交互工具</title>
+  <meta name="description" content="Codex 安装配置保姆包：面向小白用户的安装路线、环境自测、报错检索、修复命令库、首次任务模板与验收清单。" />
+  <style>
+    :root{
+      --bg:#f7f7f4;
+      --bg2:#ffffff;
+      --card:rgba(255,255,255,.78);
+      --card-solid:#fff;
+      --text:#111315;
+      --muted:#626972;
+      --subtle:#8b929b;
+      --line:rgba(17,19,21,.10);
+      --line2:rgba(17,19,21,.07);
+      --accent:#111315;
+      --accent2:#7d6cff;
+      --accent3:#19c37d;
+      --warn:#ffb020;
+      --danger:#ef4444;
+      --shadow:0 24px 70px rgba(30,31,35,.10);
+      --shadow2:0 12px 30px rgba(30,31,35,.08);
+      --radius:28px;
+      --radius2:18px;
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+    }
+    html[data-theme="dark"]{
+      --bg:#0e1014;
+      --bg2:#14171d;
+      --card:rgba(25,28,36,.76);
+      --card-solid:#171b22;
+      --text:#f2f5f8;
+      --muted:#a8b0ba;
+      --subtle:#737d88;
+      --line:rgba(255,255,255,.12);
+      --line2:rgba(255,255,255,.08);
+      --accent:#f2f5f8;
+      --accent2:#9b8cff;
+      --accent3:#2ee59d;
+      --warn:#ffd166;
+      --danger:#ff6b6b;
+      --shadow:0 24px 70px rgba(0,0,0,.28);
+      --shadow2:0 12px 30px rgba(0,0,0,.22);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(125,108,255,.18), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(25,195,125,.12), transparent 28%),
+        linear-gradient(180deg,var(--bg),var(--bg2) 58%,var(--bg));
+      color:var(--text);
+      min-height:100vh;
+      line-height:1.65;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+    .shell{width:min(1180px,calc(100% - 36px));margin:0 auto}
+    .nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(22px);
+      background:color-mix(in srgb,var(--bg) 78%,transparent);
+      border-bottom:1px solid var(--line2);
+    }
+    .nav-inner{
+      width:min(1180px,calc(100% - 36px));margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:14px 0;
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}
+    .logo{
+      width:36px;height:36px;border-radius:13px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),#6c63ff);
+      color:var(--bg2);box-shadow:var(--shadow2);
+      font-weight:900;
+    }
+    .nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a,.mini-btn{
+      padding:9px 12px;border-radius:999px;color:var(--muted);
+      border:1px solid transparent;background:transparent;cursor:pointer;
+      transition:.2s ease;
+    }
+    .nav-links a:hover,.mini-btn:hover{background:var(--card);border-color:var(--line);color:var(--text)}
+    .cta{
+      background:var(--accent)!important;color:var(--bg2)!important;border-color:var(--accent)!important;
+      box-shadow:0 10px 24px rgba(17,19,21,.14);
+    }
+    .hero{padding:76px 0 42px}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--muted);border:1px solid var(--line);background:var(--card);
+      border-radius:999px;padding:8px 12px;margin-bottom:18px;
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);box-shadow:0 0 0 6px color-mix(in srgb,var(--accent3) 16%,transparent)}
+    h1{
+      font-size:clamp(42px,7.4vw,84px);line-height:.98;margin:0 0 22px;
+      letter-spacing:-.075em;font-weight:900;
+    }
+    .lead{font-size:clamp(17px,2vw,22px);color:var(--muted);max-width:720px;margin:0 0 28px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+    .btn{
+      border:1px solid var(--line);background:var(--card);color:var(--text);
+      padding:13px 18px;border-radius:999px;cursor:pointer;font-weight:700;
+      transition:.22s ease;display:inline-flex;align-items:center;gap:8px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+    .btn-primary{background:var(--accent);color:var(--bg2);border-color:var(--accent)}
+    .btn-soft{background:color-mix(in srgb,var(--accent2) 13%,var(--card))}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px}
+    .kpi{
+      background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;
+    }
+    .kpi strong{display:block;font-size:24px;letter-spacing:-.04em}
+    .kpi span{font-size:13px;color:var(--muted)}
+    .mock{
+      border:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--card-solid) 86%,transparent),var(--card));
+      border-radius:34px;box-shadow:var(--shadow);padding:18px;overflow:hidden;
+    }
+    .mock-top{display:flex;gap:8px;margin-bottom:14px}
+    .mock-top i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+    .terminal{
+      background:color-mix(in srgb,var(--text) 8%,transparent);
+      border:1px solid var(--line);
+      border-radius:22px;padding:18px;font-family:var(--mono);font-size:13px;
+      overflow:hidden;
+    }
+    .terminal .line{display:flex;justify-content:space-between;gap:18px;padding:8px 0;border-bottom:1px solid var(--line2)}
+    .terminal .line:last-child{border-bottom:0}
+    .ok{color:var(--accent3);font-weight:800}.warn{color:var(--warn);font-weight:800}.bad{color:var(--danger);font-weight:800}
+    .screen-card{margin-top:14px;border:1px solid var(--line);background:var(--card);border-radius:22px;padding:16px}
+    .progress{height:10px;background:color-mix(in srgb,var(--text) 9%,transparent);border-radius:999px;overflow:hidden}
+    .progress span{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--accent2),var(--accent3));border-radius:inherit}
+    .section{padding:48px 0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:22px}
+    .section h2{font-size:clamp(28px,4vw,48px);line-height:1.05;margin:0;letter-spacing:-.055em}
+    .section p.desc{color:var(--muted);margin:10px 0 0;max-width:760px}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .card{
+      border:1px solid var(--line);background:var(--card);border-radius:var(--radius);
+      box-shadow:var(--shadow2);padding:22px;backdrop-filter:blur(18px);
+    }
+    .card h3{margin:0 0 8px;font-size:20px;letter-spacing:-.025em}
+    .card p{margin:0;color:var(--muted)}
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 60%,transparent);
+      border-radius:999px;padding:5px 10px;font-size:12px;color:var(--muted);margin:0 6px 6px 0;
+    }
+    .route-card{cursor:pointer;transition:.22s ease;position:relative;overflow:hidden}
+    .route-card:hover,.route-card.active{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent2) 60%,var(--line));box-shadow:var(--shadow)}
+    .route-card.active:after{
+      content:"已选择";position:absolute;right:16px;top:16px;
+      padding:5px 10px;border-radius:999px;background:var(--accent);color:var(--bg2);font-size:12px;font-weight:800;
+    }
+    .route-detail{margin-top:16px}
+    .steps{display:grid;gap:12px}
+    .step{
+      display:grid;grid-template-columns:auto 1fr;gap:12px;
+      padding:16px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--bg2) 62%,transparent);
+    }
+    .num{
+      width:32px;height:32px;border-radius:12px;background:var(--accent);color:var(--bg2);
+      display:grid;place-items:center;font-weight:900;
+    }
+    .step strong{display:block;margin-bottom:4px}
+    .step small{color:var(--muted)}
+    .checklist{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;
+    }
+    .check-item{
+      display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid var(--line);
+      border-radius:16px;background:color-mix(in srgb,var(--bg2) 68%,transparent);cursor:pointer;
+    }
+    input[type="checkbox"]{width:18px;height:18px;accent-color:var(--accent)}
+    .meter-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+    .meter{height:14px;background:color-mix(in srgb,var(--text) 9%,transparent);border-radius:999px;overflow:hidden}
+    .meter span{height:100%;display:block;width:0;background:linear-gradient(90deg,var(--warn),var(--accent3));border-radius:inherit;transition:.25s}
+    .notice{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:color-mix(in srgb,var(--accent2) 10%,var(--card));color:var(--muted)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .tab{padding:10px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer;color:var(--muted)}
+    .tab.active{background:var(--accent);color:var(--bg2);border-color:var(--accent)}
+    .flow{display:none}
+    .flow.active{display:block}
+    details{
+      border:1px solid var(--line);border-radius:20px;background:var(--card);
+      padding:4px 16px;margin-bottom:12px;
+    }
+    summary{cursor:pointer;padding:14px 0;font-weight:800;letter-spacing:-.02em}
+    .detail-body{padding:0 0 16px;color:var(--muted)}
+    .codebar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:color-mix(in srgb,var(--text) 7%,transparent);
+      border:1px solid var(--line);border-radius:16px;margin:10px 0 12px;overflow:hidden;
+    }
+    pre{
+      margin:0;padding:14px;overflow:auto;font-family:var(--mono);font-size:13px;color:var(--text);
+      flex:1;
+    }
+    .copy-btn,.fav-btn{
+      border:1px solid var(--line);background:var(--card-solid);color:var(--text);
+      padding:8px 10px;border-radius:999px;cursor:pointer;margin-right:10px;font-size:12px;font-weight:800;
+    }
+    .copy-btn.done{background:var(--accent3);color:#06130d;border-color:transparent}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+    .input,.select,textarea{
+      width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);
+      border-radius:16px;padding:12px 14px;outline:none;
+    }
+    .input:focus,.select:focus,textarea:focus{border-color:color-mix(in srgb,var(--accent2) 66%,var(--line));box-shadow:0 0 0 4px color-mix(in srgb,var(--accent2) 15%,transparent)}
+    .toolbar .input{max-width:420px}.toolbar .select{max-width:190px}
+    .error-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .error-card{
+      border:1px solid var(--line);background:var(--card);border-radius:24px;padding:18px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .error-card h3{font-size:17px;margin:0;line-height:1.25}
+    .error-card p{margin:0;color:var(--muted);font-size:14px}
+    .error-actions{margin-top:auto;display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .pill{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 8px}
+    .prompt-card{
+      border:1px solid var(--line);border-radius:22px;background:var(--card);padding:18px;display:flex;flex-direction:column;gap:10px;
+    }
+    .prompt-card h3{font-size:18px;margin:0}
+    .prompt-card .prompt-text{font-size:14px;color:var(--muted);border-left:3px solid var(--accent2);padding-left:12px}
+    .diagnose-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label.field span{display:block;font-size:13px;color:var(--muted);margin:0 0 6px 2px}
+    .result-box{
+      min-height:190px;border:1px solid var(--line);border-radius:24px;background:color-mix(in srgb,var(--accent3) 8%,var(--card));padding:20px;
+    }
+    .resource{
+      display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+      border:1px solid var(--line);border-radius:22px;background:var(--card);padding:16px;
+    }
+    .icon{
+      width:44px;height:44px;border-radius:16px;display:grid;place-items:center;
+      background:linear-gradient(135deg,color-mix(in srgb,var(--accent2) 50%,transparent),color-mix(in srgb,var(--accent3) 35%,transparent));
+      font-weight:900;
+    }
+    .glossary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .term{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px}
+    .term strong{display:block;margin-bottom:4px}.term span{font-size:13px;color:var(--muted)}
+    .footer{padding:40px 0 70px;color:var(--muted)}
+    .footer-card{border-top:1px solid var(--line);padding-top:22px}
+    .print-only{display:none}
+    .toast{
+      position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+      background:var(--accent);color:var(--bg2);padding:12px 16px;border-radius:999px;
+      opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:var(--shadow2)
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:920px){
+      .hero-grid,.grid-2,.grid-3,.grid-4,.diagnose-grid{grid-template-columns:1fr}
+      .error-grid{grid-template-columns:1fr 1fr}
+      .checklist{grid-template-columns:1fr}
+      .glossary{grid-template-columns:1fr 1fr}
+      .nav-links a{display:none}
+      h1{font-size:48px}
+    }
+    @media(max-width:620px){
+      .shell,.nav-inner{width:min(100% - 24px,1180px)}
+      .hero{padding-top:44px}
+      .error-grid,.glossary{grid-template-columns:1fr}
+      .kpis{grid-template-columns:1fr}
+      .section-head{display:block}
+      .toolbar .input,.toolbar .select{max-width:none}
+      .resource{grid-template-columns:1fr}
+    }
+    @media print{
+      body{background:#fff;color:#000}
+      .nav,.hero-actions,.btn,.copy-btn,.fav-btn,.toolbar,.tabs{display:none!important}
+      .card,.error-card,.prompt-card,.term,details{box-shadow:none;border-color:#ddd;background:#fff}
+      .print-only{display:block}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top"><span class="logo">C</span><span>Codex 安装配置保姆包</span></a>
+      <div class="nav-links">
+        <a href="#routes">安装路线</a>
+        <a href="#check">环境自测</a>
+        <a href="#errors">报错库</a>
+        <a href="#diagnose">诊断器</a>
+        <a href="#glossary">术语表</a>
+        <button class="mini-btn" id="themeBtn">深色</button>
+        <a class="cta" href="#check">开始自测</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> 面向完全小白的 Codex 安装配置交互工具</div>
+          <h1>不用懂代码，也能把 Codex 装好、配好、跑起来。</h1>
+          <p class="lead">从下载安装到环境检查，从英文报错到修复命令，从首次任务到安装验收，一页完成。适合做成小红书高客单虚拟产品。</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#check">开始安装自测 →</a>
+            <a class="btn btn-soft" href="#errors">查一个报错</a>
+            <button class="btn" onclick="window.print()">打印检查表</button>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><strong>6 条</strong><span>用户分流安装路线</span></div>
+            <div class="kpi"><strong>30+</strong><span>高频报错修复卡片</span></div>
+            <div class="kpi"><strong>40+</strong><span>小白术语解释</span></div>
+          </div>
+        </div>
+        <div class="mock" aria-label="产品模拟界面">
+          <div class="mock-top"><i></i><i></i><i></i></div>
+          <div class="terminal">
+            <div class="line"><span>ChatGPT 账号</span><span class="ok">已登录</span></div>
+            <div class="line"><span>Git</span><span class="ok">可用</span></div>
+            <div class="line"><span>Node.js LTS</span><span class="warn">待确认</span></div>
+            <div class="line"><span>项目文件夹</span><span class="ok">已选择</span></div>
+            <div class="line"><span>首次任务</span><span class="bad">未运行</span></div>
+          </div>
+          <div class="screen-card">
+            <div class="meter-row"><strong>安装进度</strong><span>72%</span></div>
+            <div class="progress"><span></span></div>
+            <p style="margin:12px 0 0;color:var(--muted)">下一步：检查 node -v，确认版本后运行第一个 Codex 任务。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell">
+      <div class="grid grid-3">
+        <div class="card"><h3>小白可用</h3><p>每一步都说明“做什么、为什么、成功长什么样、失败怎么办”。</p></div>
+        <div class="card"><h3>按系统分流</h3><p>Windows、macOS、VS Code、终端、已安装但报错用户，各走各的路线。</p></div>
+        <div class="card"><h3>可持续更新</h3><p>真实错误截图、日志、修复路径可以不断扩充，形成长期护城河。</p></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="routes">
+      <div class="section-head">
+        <div>
+          <h2>先选你的安装路线</h2>
+          <p class="desc">不同用户不要看同一套教程。先分流，再执行，能减少 70% 的无效操作。</p>
+        </div>
+      </div>
+      <div class="grid grid-3" id="routeCards"></div>
+      <div class="route-detail card" id="routeDetail"></div>
+    </section>
+
+    <section class="section shell" id="check">
+      <div class="section-head">
+        <div>
+          <h2>安装前环境自测</h2>
+          <p class="desc">勾选你已经准备好的项目。低于 60% 不建议直接安装，先补齐基础环境。</p>
+        </div>
+        <button class="btn" id="exportChecklist">导出自测结果</button>
+      </div>
+      <div class="card">
+        <div class="meter-row">
+          <strong>准备完成度：<span id="checkPercent">0%</span></strong>
+          <span id="checkStatus" class="pill">还没开始</span>
+        </div>
+        <div class="meter"><span id="checkBar"></span></div>
+        <div class="checklist" id="checklist"></div>
+        <div class="notice" id="checkAdvice">先完成自测，系统会告诉你下一步该做什么。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="flows">
+      <div class="section-head">
+        <div>
+          <h2>保姆式安装流程</h2>
+          <p class="desc">把安装拆成可执行动作：操作步骤、成功标志、失败表现、解决方法。</p>
+        </div>
+      </div>
+      <div class="tabs" id="flowTabs">
+        <button class="tab active" data-flow="win">Windows</button>
+        <button class="tab" data-flow="mac">macOS</button>
+        <button class="tab" data-flow="vscode">VS Code / IDE</button>
+        <button class="tab" data-flow="cli">CLI 终端</button>
+      </div>
+      <div class="flow active" id="flow-win"></div>
+      <div class="flow" id="flow-mac"></div>
+      <div class="flow" id="flow-vscode"></div>
+      <div class="flow" id="flow-cli"></div>
+    </section>
+
+    <section class="section shell" id="templates">
+      <div class="section-head">
+        <div>
+          <h2>第一次任务模板库</h2>
+          <p class="desc">不会提问也能开始。复制下面的任务，让 Codex 先帮你检查项目、解释结构、修复页面。</p>
+        </div>
+      </div>
+      <div class="grid grid-3" id="promptGrid"></div>
+    </section>
+
+    <section class="section shell" id="errors">
+      <div class="section-head">
+        <div>
+          <h2>报错检索与修复库</h2>
+          <p class="desc">输入英文报错、中文现象或系统名称，快速定位原因和修复命令。收藏会保存在本地浏览器。</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input class="input" id="errorSearch" placeholder="搜索：command not found / 页面空白 / 权限 / npm..." />
+        <select class="select" id="systemFilter">
+          <option value="all">全部系统</option>
+          <option value="Windows">Windows</option>
+          <option value="macOS">macOS</option>
+          <option value="通用">通用</option>
+          <option value="部署">部署</option>
+        </select>
+        <select class="select" id="favFilter">
+          <option value="all">全部卡片</option>
+          <option value="fav">只看收藏</option>
+        </select>
+      </div>
+      <div class="error-grid" id="errorGrid"></div>
+    </section>
+
+    <section class="section shell" id="diagnose">
+      <div class="section-head">
+        <div>
+          <h2>一键诊断问答器</h2>
+          <p class="desc">选择你现在卡住的位置，系统生成一段“下一步该做什么”的保姆式建议。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="diagnose-grid">
+          <div class="grid">
+            <label class="field"><span>你的系统</span><select class="select" id="diagSystem"><option>Windows</option><option>macOS</option><option>不确定</option></select></label>
+            <label class="field"><span>卡在哪一步</span><select class="select" id="diagStage"><option>还没开始安装</option><option>安装 Git</option><option>安装 Node.js</option><option>登录 Codex</option><option>选择项目文件夹</option><option>运行第一个任务</option><option>部署上线前检查</option></select></label>
+            <label class="field"><span>看到的关键词</span><input class="input" id="diagKeyword" placeholder="例如：permission denied / npm / 404 / 空白" /></label>
+            <label class="field"><span>Git 是否已安装</span><select class="select" id="diagGit"><option>不知道</option><option>已安装</option><option>未安装</option></select></label>
+            <label class="field"><span>Node.js 是否已安装</span><select class="select" id="diagNode"><option>不知道</option><option>已安装</option><option>未安装</option></select></label>
+            <button class="btn btn-primary" id="runDiag">生成诊断建议</button>
+          </div>
+          <div class="result-box" id="diagResult">
+            <h3>诊断结果会显示在这里</h3>
+            <p>建议先完成左侧选择，再点击按钮。系统会给出优先排查项、下一步动作和可复制给 Codex 的求助提示词。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="acceptance">
+      <div class="section-head">
+        <div>
+          <h2>安装成功验收区</h2>
+          <p class="desc">不是“装完就算”，而是能真正跑起来、能读项目、能执行第一个任务。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="checklist" id="acceptList"></div>
+        <div class="notice" id="acceptAdvice">勾选全部后，说明你可以进入项目实战。</div>
+      </div>
+    </section>
+
+    <section class="section shell" id="resources">
+      <div class="section-head">
+        <div>
+          <h2>持续更新资料库结构</h2>
+          <p class="desc">静态 HTML 也要做成可扩展产品。你后续只要持续补充案例，就能越卖越强。</p>
+        </div>
+      </div>
+      <div class="grid" id="resourceList"></div>
+    </section>
+
+    <section class="section shell" id="glossary">
+      <div class="section-head">
+        <div>
+          <h2>小白术语表</h2>
+          <p class="desc">把吓人的技术词翻译成人话，用户才敢继续操作。</p>
+        </div>
+      </div>
+      <div class="glossary" id="glossaryGrid"></div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="footer-card">
+      <p><strong>官方信息提示：</strong>Codex 的下载入口、支持平台、登录方式和 CLI 命令可能持续变化。正式销售时，建议在页面顶部加入“以 OpenAI 官方最新文档为准”的提示，并定期校准链接。</p>
+      <p>建议售价：基础版 199–299 元；含真实错误截图与私域答疑版 499–799 元；企业团队安装 SOP 版可做 999 元以上。</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    const $ = (q, root=document) => root.querySelector(q);
+    const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+    const toast = (msg='已复制') => {
+      const t = $('#toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 1600);
+    };
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); toast('已复制到剪贴板'); }
+      catch(e){ toast('复制失败，请手动复制'); }
+    };
+
+    const routes = [
+      {id:'newbie', title:'完全小白用户', icon:'①', desc:'你不知道要装什么，只想从 0 跑通一次。', steps:['确认 ChatGPT/Codex 入口','安装 VS Code 作为项目编辑器','安装 Git 和 Node.js LTS','创建一个英文路径测试文件夹','打开 Codex 并选择该文件夹','复制首次任务模板运行一次']},
+      {id:'windows', title:'Windows 用户', icon:'W', desc:'适合 Windows 电脑，优先走桌面 App / IDE，CLI 按官方 Windows 指引。', steps:['确认系统版本与网络','安装 Git for Windows','安装 Node.js LTS','安装 VS Code','打开 PowerShell 检查版本','使用 Codex 桌面或 IDE 扩展选择项目']},
+      {id:'mac', title:'macOS 用户', icon:'M', desc:'适合 MacBook / iMac，注意终端权限和文件夹授权。', steps:['确认 macOS 版本','打开终端 Terminal','安装或检查 Git','安装 Node.js LTS 或 Homebrew','授权桌面/文稿文件夹访问','运行第一个 Codex 任务']},
+      {id:'vscode', title:'VS Code 用户', icon:'V', desc:'你主要在编辑器里做项目，希望边看代码边让 Codex 修改。', steps:['安装 VS Code','打开项目文件夹','安装官方相关扩展','登录 ChatGPT/Codex','确认终端可用','让 Codex 解释项目结构并做小修改']},
+      {id:'cli', title:'终端用户', icon:'$', desc:'你愿意复制命令，适合更稳定地检查环境与启动项目。', steps:['打开 Terminal/PowerShell','检查 git --version','检查 node -v','进入项目根目录','运行 npm install','让 Codex 读取当前项目并生成说明']},
+      {id:'broken', title:'已安装但报错', icon:'!', desc:'你已经装过，但卡在登录、权限、依赖、路径或运行错误。', steps:['复制完整报错','搜索报错库关键词','确认当前系统与路径','先修 Git/Node/权限','再修项目依赖','最后重新运行 Codex 任务']}
+    ];
+
+    const checklist = [
+      '有稳定网络，能正常打开 ChatGPT 或 Codex 官方页面',
+      '知道自己是 Windows 还是 macOS',
+      '电脑上已经安装现代浏览器，例如 Chrome / Edge / Safari',
+      '已经安装 VS Code，或愿意先安装它',
+      '已经安装 Git，或愿意按步骤安装',
+      '已经安装 Node.js LTS，或愿意按步骤安装',
+      '知道项目文件夹放在哪里',
+      '能打开终端：Windows 用 PowerShell，Mac 用 Terminal',
+      '知道复制命令后粘贴到终端再回车',
+      '准备好一个英文路径的测试文件夹，例如 codex-test',
+      '能登录自己的 ChatGPT / OpenAI 账号',
+      '愿意先做测试项目，不直接改重要文件'
+    ];
+
+    const flowData = {
+      win:[
+        ['确认入口','先确认你用的是 Codex 桌面 App、IDE 扩展，还是 CLI。小白优先桌面 App 或 VS Code 扩展。','能打开官方入口并看到登录按钮。','打不开页面：先检查网络、浏览器、账号地区与企业网络限制。','无'],
+        ['安装 Git for Windows','Git 是让项目能被管理、提交、同步的基础工具。安装时大多数选项保持默认。','PowerShell 输入 git --version 能看到版本号。','git 不是内部或外部命令：说明没有装好，或没有重启终端。','git --version'],
+        ['安装 Node.js LTS','Node.js 是很多网页项目启动、安装依赖、打包部署需要的运行环境。选择 LTS，不要选 Current。','PowerShell 输入 node -v 和 npm -v 都有版本号。','npm not recognized：重启 PowerShell；仍失败就重新安装 Node.js LTS。','node -v\nnpm -v'],
+        ['安装 VS Code','VS Code 是小白最容易管理项目文件的编辑器。安装后用 File → Open Folder 打开项目。','左侧能看到项目文件树。','打开了单个文件而不是文件夹：重新选择 Open Folder。','无'],
+        ['创建英文路径项目文件夹','先不要用中文、空格、微信下载目录。建议放在桌面或用户目录下的 codex-test。','路径类似 C:\\Users\\你的用户名\\Desktop\\codex-test。','路径太复杂导致依赖异常：移动到英文路径再试。','mkdir "$env:USERPROFILE\\Desktop\\codex-test"'],
+        ['检查项目是否可运行','进入项目根目录，看有没有 package.json。有才通常能 npm install。','能看到 package.json 或 index.html。','没有 package.json：不要盲目 npm install，先让 Codex 解释项目结构。','dir\nnpm install'],
+        ['登录 Codex 并选择项目','打开 Codex 后登录账号，选择本地项目文件夹。第一次只选测试项目。','Codex 能读取项目文件并给出回复。','无法读取文件夹：检查权限、路径、是否选择错目录。','无'],
+        ['运行第一个任务','不要一上来让它重构全站。先让它解释项目结构并生成 README。','能看到建议、diff 或文件修改。','没有响应：检查网络、账号额度、权限、项目是否过大。','请先阅读这个项目，解释每个文件的作用，并告诉我如何在本地运行。']
+      ],
+      mac:[
+        ['打开终端 Terminal','按 Command + Space 搜索 Terminal。后续检查命令都在这里完成。','看到类似 username@Mac 的命令行。','害怕终端：只复制本工具给的命令，不要乱输。','pwd'],
+        ['检查 Git','macOS 常会提示安装 Xcode Command Line Tools。按提示安装即可。','git --version 返回版本号。','xcrun 错误：按系统弹窗安装命令行工具，或重新打开终端。','git --version'],
+        ['安装 Node.js LTS','小白可以直接下载 Node.js LTS 安装包；进阶用户可用 Homebrew。','node -v 与 npm -v 都能返回版本号。','command not found：关闭终端重开，或检查安装路径。','node -v\nnpm -v'],
+        ['处理文件夹权限','macOS 可能阻止工具访问桌面、文稿、下载文件夹。','Codex 能读取所选项目文件。','folder access denied：去系统设置 → 隐私与安全性 → 文件和文件夹授权。','无'],
+        ['创建测试项目目录','建议在用户目录创建英文路径，减少中文路径和 iCloud 同步问题。','路径简单、可读写、没有特殊符号。','iCloud 同步目录报错：移动到本机用户目录。','mkdir -p ~/codex-test\ncd ~/codex-test'],
+        ['选择项目并首次运行','在 Codex 中选择项目目录，让它先读项目，而不是直接大改。','能看到项目总结和下一步建议。','无法选择目录：检查授权，或换到 ~/codex-test。','请检查这个项目的文件结构，并用小白能懂的话告诉我如何启动。']
+      ],
+      vscode:[
+        ['安装 VS Code','小白建议先用 VS Code，因为能直观看到文件。','打开后左侧能显示项目文件夹。','只打开单个文件：用 Open Folder 重新打开。','无'],
+        ['安装相关扩展','使用官方提供的 Codex / ChatGPT 相关 IDE 入口。不同版本入口可能变化，以官方页面为准。','侧边栏或命令面板能看到登录入口。','看不到扩展：检查是否安装在当前 VS Code，而不是 Insiders/其他 fork。','无'],
+        ['登录账号','使用 ChatGPT / OpenAI 账号登录。','能看到会话或项目上下文。','登录失败：换浏览器、清理缓存、检查企业网络限制。','无'],
+        ['打开项目根目录','根目录是包含 package.json、src、README 等主要文件的那一层。','Codex 能读取多个项目文件。','选错到 src 或 dist：返回上一级重新打开。','无'],
+        ['首次小任务','先让 Codex 解释结构、找启动命令、生成 README，不要直接让它重写所有代码。','有清晰说明或小改动。','改太多：要求它列计划，不要直接修改。','请只阅读项目，不要修改代码。告诉我启动命令、主要文件作用和潜在风险。']
+      ],
+      cli:[
+        ['确认你适合 CLI','CLI 更像“命令行里的 Codex”。小白可以用，但要严格复制命令。','你能打开终端并执行基础命令。','看不懂命令：先用桌面或 IDE 路线。','pwd'],
+        ['检查基础工具','Git 和 Node.js 是大多数项目需要的基础工具。','两个命令都返回版本号。','任一 command not found：回到安装流程补齐。','git --version\nnode -v\nnpm -v'],
+        ['进入项目根目录','用 cd 进入项目文件夹，根目录通常有 package.json 或 index.html。','ls / dir 能看到项目文件。','找不到目录：直接把文件夹拖进终端获取路径。','cd path/to/your-project\nls'],
+        ['安装依赖','有 package.json 的项目通常要先安装依赖。','node_modules 出现，终端没有红色报错。','npm install 失败：看报错库里的依赖安装失败。','npm install'],
+        ['启动项目','常见命令是 npm run dev / npm start。','终端显示 localhost 地址。','端口被占用：换端口或关闭占用程序。','npm run dev'],
+        ['让 Codex 介入','把项目现状、报错、你要做的目标说清楚。','Codex 给出步骤或代码修改建议。','上下文不够：让它先读取目录并总结。','请读取当前项目，先不要修改。请告诉我项目类型、启动方式、部署注意事项。']
+      ]
+    };
+
+    const prompts = [
+      ['检查项目能否运行','适合刚拿到一个项目，不知道从哪开始。','请阅读这个项目，先不要修改代码。告诉我：1）这是一个什么项目；2）应该用什么命令启动；3）我需要先安装什么；4）可能会报哪些错。'],
+      ['生成 README','适合准备交付、部署或卖资料。','请为这个项目生成一份适合小白阅读的 README，包含项目介绍、安装步骤、运行命令、常见问题和部署说明。'],
+      ['修复页面空白','适合 HTML/Vite/React 项目打开后白屏。','项目打开后页面空白。请帮我检查可能原因，包括路径、入口文件、控制台报错、依赖、路由和构建配置，并给出最小修改方案。'],
+      ['美化 HTML 页面','适合虚拟产品页面质感不够。','请在不改变核心功能的前提下，把这个 HTML 页面优化成高级、干净、有付费产品感的视觉风格，并保持移动端适配。'],
+      ['部署前检查','适合准备上传 Vercel/Netlify/Cloudflare Pages。','请帮我做部署前检查：项目结构、构建命令、输出目录、环境变量、静态资源路径、移动端展示和 404 风险。'],
+      ['解释项目结构','适合完全看不懂代码文件。','请用非技术人员能听懂的话解释这个项目每个主要文件夹和文件的作用，并告诉我哪些文件不要乱改。'],
+      ['找报错原因','适合已经复制到错误日志。','这是我遇到的报错日志，请按“最可能原因 → 如何验证 → 修复命令 → 修复后如何确认”的格式帮我分析。'],
+      ['生成启动命令','适合不知道 npm run 什么。','请检查 package.json，告诉我本地开发、构建、预览、测试分别应该运行哪些命令，并解释每个命令的作用。'],
+      ['优化移动端','适合小红书用户手机打开体验差。','请检查当前页面的移动端适配问题，重点优化字号、间距、卡片宽度、按钮点击区域和首屏展示。'],
+      ['添加搜索功能','适合资料库、错误库、提示词库。','请为当前页面添加前端搜索功能，支持按标题、标签、正文关键词筛选，并保证不依赖后端。'],
+      ['整理代码注释','适合交付给别人二次维护。','请给这个项目的核心代码添加必要注释，解释关键函数、数据结构和交互逻辑，不要写废话注释。'],
+      ['生成部署说明','适合卖给小白客户。','请根据当前项目生成一份部署说明，分别说明 Vercel、Netlify、Cloudflare Pages 和 GitHub Pages 需要填写的构建命令、输出目录和注意事项。']
+    ];
+
+    const errors = [
+      ['command not found','输入命令后提示找不到。','工具没安装、终端没重启、PATH 没生效。','通用','先检查拼写，再查版本；重启终端后重试。','git --version\nnode -v\nnpm -v'],
+      ['npm not recognized','Windows 提示 npm 不是内部或外部命令。','Node.js 没装好或 PATH 没更新。','Windows','安装 Node.js LTS，关闭 PowerShell 重新打开。','node -v\nnpm -v'],
+      ['git not found','Codex 或终端找不到 Git。','Git 未安装，或安装后没重启终端。','通用','安装 Git 后重开终端，再检查版本。','git --version'],
+      ['permission denied','没有权限访问或执行文件。','文件夹权限、执行权限或系统安全限制。','macOS','换到用户目录；必要时给脚本执行权限。','chmod +x ./script.sh'],
+      ['network error','登录或安装时网络失败。','网络不稳定、公司网络拦截、代理配置异常。','通用','换网络，关闭公司代理，重试登录。','无命令'],
+      ['login failed','Codex 登录失败。','浏览器缓存、账号异常、网络限制。','通用','换默认浏览器，清理缓存，确认账号能正常打开 ChatGPT。','无命令'],
+      ['API key invalid','提示 API Key 无效。','复制错、过期、权限不匹配。','通用','如果使用账号登录，先不要配置 API Key；如果必须用 Key，重新生成并检查权限。','无命令'],
+      ['repository not found','找不到 GitHub 仓库。','仓库私有、权限不足、地址错误。','通用','确认仓库地址、登录账号、访问权限。','git remote -v'],
+      ['folder access denied','无法读取项目文件夹。','macOS/Windows 文件夹权限不足。','通用','换到用户目录英文路径，或在系统设置里授权。','无命令'],
+      ['node version too old','Node 版本太旧。','项目要求更高版本 Node。','通用','安装 Node.js LTS，或使用版本管理工具。','node -v'],
+      ['npm install failed','依赖安装失败。','网络、锁文件冲突、Node 版本不匹配。','通用','删除 node_modules 后重装；先读具体报错。','rm -rf node_modules package-lock.json\nnpm install'],
+      ['package-lock 冲突','多人环境或旧依赖导致锁文件异常。','锁文件与 package.json 不一致。','通用','备份后删除锁文件和 node_modules 重新安装。','rm -rf node_modules package-lock.json\nnpm install'],
+      ['端口被占用','启动项目时提示 port already in use。','已有程序占用了本地端口。','通用','关闭旧终端，或换一个端口。','npm run dev -- --port 3001'],
+      ['无法启动本地预览','npm run dev 失败。','缺依赖、命令不对、项目结构不匹配。','通用','先看 package.json 的 scripts。','cat package.json'],
+      ['VS Code 找不到终端','编辑器里没有终端。','菜单隐藏或 shell 配置异常。','通用','用 Terminal → New Terminal；不行就重启 VS Code。','无命令'],
+      ['路径有中文导致异常','安装或构建时出现乱码、路径找不到。','中文、空格、特殊符号路径兼容性差。','Windows','把项目移动到英文路径。','mkdir "%USERPROFILE%\\Desktop\\codex-test"'],
+      ['桌面路径权限异常','桌面文件夹无法读写。','系统权限或云同步目录影响。','macOS','移动到用户目录，避免 iCloud 同步目录。','mkdir -p ~/codex-test'],
+      ['Windows 执行策略限制','PowerShell 不允许执行脚本。','系统策略限制脚本运行。','Windows','优先使用官方桌面/IDE；确认脚本可信后再调整策略。','Get-ExecutionPolicy'],
+      ['macOS 安全拦截','应用或脚本被系统阻止。','Gatekeeper 或隐私安全限制。','macOS','系统设置 → 隐私与安全性 → 允许打开。','无命令'],
+      ['依赖安装超时','npm install 长时间卡住。','网络慢、镜像源问题、包体积大。','通用','换网络，重试；不要反复中断。','npm install --verbose'],
+      ['项目文件夹选错','Codex 读不到关键文件。','选到了 src、dist 或子目录。','通用','重新选择包含 package.json / README 的根目录。','pwd\nls'],
+      ['没有 package.json','npm install 找不到配置。','这不是 Node 项目，或目录选错。','通用','先找根目录；纯 HTML 项目不需要 npm。','ls'],
+      ['README 缺失','不知道怎么运行项目。','项目没有说明文档。','通用','让 Codex 读取 package.json 和目录结构生成 README。','无命令'],
+      ['环境变量缺失','运行提示 missing env。','缺少 .env 文件或变量未配置。','通用','查看 .env.example，按要求创建 .env。','cp .env.example .env'],
+      ['浏览器打不开 localhost','本地地址打不开。','服务没启动、端口不对、防火墙。','通用','确认终端显示 localhost 地址。','npm run dev'],
+      ['页面空白','打开网页只有白屏。','入口错误、JS 报错、路径错误、路由配置问题。','通用','打开浏览器控制台，复制红色报错给 Codex。','无命令'],
+      ['部署后 404','本地正常，线上 404。','路由、输出目录或静态资源路径错误。','部署','检查构建命令、输出目录和 SPA rewrite。','npm run build'],
+      ['GitHub 推送失败','git push 报错。','权限、远程地址、分支名或 token 问题。','通用','检查 remote、当前分支和登录权限。','git remote -v\ngit branch'],
+      ['Codex 无法读取项目','Codex 没有上下文或文件读取失败。','项目太大、权限不足、目录选错。','通用','换小项目测试；确认选择根目录。','无命令'],
+      ['终端乱码','中文显示异常或日志看不清。','编码设置不一致。','Windows','切换 UTF-8 或使用 VS Code 终端。','chcp 65001']
+    ];
+
+    const acceptance = [
+      '能打开 Codex 桌面、IDE 或 CLI 入口',
+      '能正常登录 ChatGPT / OpenAI 账号',
+      '能选择一个本地项目文件夹',
+      'Codex 能读取项目文件并解释结构',
+      '能发出第一个任务并得到有效回复',
+      '能看到修改建议、diff 或文件变化',
+      '能运行项目启动命令或知道为什么不能运行',
+      '能把错误日志复制给 Codex 并获得修复路径',
+      '知道哪些文件不能直接乱改',
+      '知道下一步如何部署或交付'
+    ];
+
+    const resources = [
+      ['真实错误截图库','收集用户真实截图：英文报错、终端截图、部署失败图、白屏图。','高护城河'],
+      ['修复命令库','把高频命令按 Windows/macOS/通用分类，并写明风险。','可复制'],
+      ['小白术语表','把技术名词翻译成人话，降低学习焦虑。','转化强'],
+      ['安装路线图','不同人群走不同路线，避免教程越看越乱。','低退款'],
+      ['部署前检查表','从本地运行到上线部署之间的最终验收清单。','刚需'],
+      ['复制给 Codex 的提示词库','遇到问题时直接复制，让 Codex 继续带用户走。','高复用']
+    ];
+
+    const glossary = [
+      ['Codex','OpenAI 的代码协作智能体，可以帮你读代码、改代码、跑任务、解释项目。'],
+      ['终端','输入命令的窗口，Windows 常叫 PowerShell，Mac 常叫 Terminal。'],
+      ['命令行','用文字命令控制电脑做事，不用鼠标点来点去。'],
+      ['Git','管理代码版本的工具，像项目的时间机器。'],
+      ['Node.js','让 JavaScript 项目能在电脑上运行的基础环境。'],
+      ['npm','Node.js 自带的包管理工具，用来安装项目依赖。'],
+      ['VS Code','常用代码编辑器，小白也可以把它当高级文件管理器。'],
+      ['仓库','项目代码放在 GitHub 等平台上的一份集合。'],
+      ['项目文件夹','包含你的网页、代码、配置文件的主文件夹。'],
+      ['依赖','项目运行需要的外部工具包。'],
+      ['环境变量','不直接写进代码的敏感配置，例如 Key、网址、密码。'],
+      ['本地运行','在自己电脑上先把项目跑起来，不是上线。'],
+      ['部署','把项目发布到网上，让别人也能访问。'],
+      ['端口','本地服务的门牌号，例如 localhost:3000。'],
+      ['报错日志','系统告诉你哪里失败的一段文字。'],
+      ['路径','文件在电脑里的位置。'],
+      ['根目录','项目最外层目录，通常能看到 package.json 或 README。'],
+      ['package.json','Node 项目的说明书，里面有依赖和运行命令。'],
+      ['README','项目说明文档，告诉别人怎么安装、运行、部署。'],
+      ['API Key','让程序调用服务的密钥，小白先不要随便填。'],
+      ['权限','系统允许某个工具访问文件或执行操作的许可。'],
+      ['缓存','电脑临时保存的数据，出问题时可能需要清理。'],
+      ['重启','关闭再打开。很多安装不生效，重启终端就能解决。'],
+      ['复制命令','把工具给出的命令原样复制到终端，按回车执行。'],
+      ['版本号','软件当前版本，例如 node v20。'],
+      ['LTS','长期支持版，稳定优先，小白优先选它。'],
+      ['插件','给编辑器增加功能的小工具。'],
+      ['Shell','终端背后的命令解释器。'],
+      ['PowerShell','Windows 上常用的终端工具。'],
+      ['Terminal','macOS 上常用的终端工具。'],
+      ['Homebrew','Mac 上常用的软件安装工具，进阶用户常用。'],
+      ['网络代理','改变网络访问方式的设置，错误配置会导致登录失败。'],
+      ['构建','把开发版项目打包成可上线版本。'],
+      ['预览','上线前在本地查看构建后的效果。'],
+      ['404','网页找不到，通常是路径或路由问题。'],
+      ['空白页','页面打开但什么都没有，常见于 JS 报错或路径错误。'],
+      ['分支','Git 里的不同开发线，像项目的不同副本。'],
+      ['提交','把一次修改保存到 Git 记录里。'],
+      ['推送','把本地代码上传到 GitHub 等远程仓库。'],
+      ['拉取','把远程仓库的新代码下载到本地。'],
+      ['沙箱环境','隔离出来的运行环境，避免直接影响你的真实电脑或项目。']
+    ];
+
+    function renderRoutes(){
+      const wrap = $('#routeCards');
+      wrap.innerHTML = routes.map((r,i)=>`
+        <div class="card route-card ${i===0?'active':''}" data-route="${r.id}">
+          <div class="icon">${r.icon}</div>
+          <h3>${r.title}</h3>
+          <p>${r.desc}</p>
+        </div>`).join('');
+      $$('.route-card').forEach(card=>card.addEventListener('click',()=>{
+        $$('.route-card').forEach(c=>c.classList.remove('active'));
+        card.classList.add('active');
+        renderRouteDetail(card.dataset.route);
+      }));
+      renderRouteDetail('newbie');
+    }
+    function renderRouteDetail(id){
+      const r = routes.find(x=>x.id===id);
+      $('#routeDetail').innerHTML = `
+        <h3>${r.title}｜推荐执行路径</h3>
+        <div class="steps">
+          ${r.steps.map((s,i)=>`<div class="step"><span class="num">${i+1}</span><div><strong>${s}</strong><small>做完这一步再进入下一步，不要跳步。</small></div></div>`).join('')}
+        </div>`;
+    }
+
+    function renderChecklist(){
+      $('#checklist').innerHTML = checklist.map((c,i)=>`
+        <label class="check-item"><input type="checkbox" data-check="${i}" /><span>${c}</span></label>`).join('');
+      $$('#checklist input').forEach(i=>i.addEventListener('change', updateChecklist));
+      updateChecklist();
+    }
+    function updateChecklist(){
+      const total = checklist.length;
+      const checked = $$('#checklist input:checked').length;
+      const pct = Math.round(checked/total*100);
+      $('#checkPercent').textContent = pct + '%';
+      $('#checkBar').style.width = pct + '%';
+      let status='还没开始', advice='先完成自测，系统会告诉你下一步该做什么。';
+      if(pct>0 && pct<60){ status='先补基础'; advice='建议先补齐 Git、Node.js、VS Code、终端和测试文件夹。现在不要直接改真实项目。';}
+      if(pct>=60 && pct<80){ status='可以预安装'; advice='基础条件差不多了，可以进入安装流程，但首次一定用测试项目。';}
+      if(pct>=80 && pct<100){ status='可以开始'; advice='准备度很高，可以按对应系统路线开始安装。遇到报错先搜索报错库。';}
+      if(pct===100){ status='准备完成'; advice='环境准备完成。下一步：选择你的系统流程，跑通第一个 Codex 任务。';}
+      $('#checkStatus').textContent = status;
+      $('#checkAdvice').textContent = advice;
+    }
+
+    function renderFlows(){
+      Object.keys(flowData).forEach(key=>{
+        $('#flow-'+key).innerHTML = flowData[key].map((f,i)=>`
+          <details ${i===0?'open':''}>
+            <summary>${i+1}. ${f[0]}</summary>
+            <div class="detail-body">
+              <p><strong>小白解释：</strong>${f[1]}</p>
+              <p><strong>成功标志：</strong>${f[2]}</p>
+              <p><strong>失败表现：</strong>${f[3]}</p>
+              <p><strong>修复方法：</strong>${f[4]==='无'||f[4]==='无命令'?'按说明检查，不需要执行命令。':'复制下面命令检查。'}</p>
+              ${f[4] !== '无' && f[4] !== '无命令' ? codeBlock(f[4]) : ''}
+            </div>
+          </details>`).join('');
+      });
+      $$('#flowTabs .tab').forEach(tab=>tab.addEventListener('click',()=>{
+        $$('#flowTabs .tab').forEach(t=>t.classList.remove('active'));
+        $$('.flow').forEach(f=>f.classList.remove('active'));
+        tab.classList.add('active');
+        $('#flow-'+tab.dataset.flow).classList.add('active');
+      }));
+    }
+    function codeBlock(code){
+      return `<div class="codebar"><pre>${escapeHtml(code)}</pre><button class="copy-btn" data-copy="${escapeAttr(code)}">复制</button></div>`;
+    }
+
+    function renderPrompts(){
+      $('#promptGrid').innerHTML = prompts.map(p=>`
+        <div class="prompt-card">
+          <span class="tag">${p[1]}</span>
+          <h3>${p[0]}</h3>
+          <div class="prompt-text">${p[2]}</div>
+          <button class="btn" data-copy="${escapeAttr(p[2])}">复制模板</button>
+        </div>`).join('');
+    }
+
+    function renderErrors(){
+      const q = ($('#errorSearch').value || '').toLowerCase().trim();
+      const sys = $('#systemFilter').value;
+      const favOnly = $('#favFilter').value === 'fav';
+      const favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+      const filtered = errors.filter((e,idx)=>{
+        const text = e.join(' ').toLowerCase();
+        const matchQ = !q || text.includes(q);
+        const matchS = sys === 'all' || e[3] === sys;
+        const matchF = !favOnly || favs.includes(idx);
+        return matchQ && matchS && matchF;
+      });
+      $('#errorGrid').innerHTML = filtered.map(e=>{
+        const idx = errors.indexOf(e);
+        const isFav = favs.includes(idx);
+        return `<div class="error-card">
+          <div><span class="pill">${e[3]}</span></div>
+          <h3>${e[0]}</h3>
+          <p><strong>错误表现：</strong>${e[1]}</p>
+          <p><strong>可能原因：</strong>${e[2]}</p>
+          <p><strong>修复步骤：</strong>${e[4]}</p>
+          ${e[5] !== '无命令' ? codeBlock(e[5]) : '<p class="pill">无需命令，按说明检查</p>'}
+          <div class="error-actions">
+            <button class="fav-btn" data-fav="${idx}">${isFav?'★ 已收藏':'☆ 收藏'}</button>
+            <button class="copy-btn" data-copy="${escapeAttr('报错：'+e[0]+'\n表现：'+e[1]+'\n可能原因：'+e[2]+'\n请帮我按步骤修复。')}">复制求助词</button>
+          </div>
+        </div>`;
+      }).join('') || `<div class="card"><h3>没有找到匹配报错</h3><p>换一个关键词试试，例如 npm、权限、页面空白、404、Git。</p></div>`;
+    }
+
+    function renderAcceptance(){
+      $('#acceptList').innerHTML = acceptance.map((a,i)=>`
+        <label class="check-item"><input type="checkbox" data-accept="${i}" /><span>${a}</span></label>`).join('');
+      $$('#acceptList input').forEach(i=>i.addEventListener('change',()=>{
+        const total = acceptance.length, checked = $$('#acceptList input:checked').length;
+        $('#acceptAdvice').textContent = checked === total ? '安装配置完成，可以进入项目实战。建议先做一个 30 分钟小项目，不要直接改重要项目。' : `已完成 ${checked}/${total}。剩下的就是你真正需要补齐的环节。`;
+      }));
+    }
+
+    function renderResources(){
+      $('#resourceList').innerHTML = resources.map((r,i)=>`
+        <div class="resource">
+          <div class="icon">${i+1}</div>
+          <div><h3 style="margin:0">${r[0]}</h3><p style="margin:0;color:var(--muted)">${r[1]}</p></div>
+          <span class="pill">${r[2]}</span>
+        </div>`).join('');
+    }
+    function renderGlossary(){
+      $('#glossaryGrid').innerHTML = glossary.map(g=>`
+        <div class="term"><strong>${g[0]}</strong><span>${g[1]}</span></div>`).join('');
+    }
+
+    function runDiagnose(){
+      const sys = $('#diagSystem').value;
+      const stage = $('#diagStage').value;
+      const kw = $('#diagKeyword').value.trim() || '没有明确关键词';
+      const git = $('#diagGit').value;
+      const node = $('#diagNode').value;
+      const priorities = [];
+      if(git !== '已安装') priorities.push('先确认 Git：在终端输入 git --version。');
+      if(node !== '已安装') priorities.push('再确认 Node.js：输入 node -v 和 npm -v。');
+      if(stage.includes('登录')) priorities.push('登录问题优先排查网络、默认浏览器、账号状态。');
+      if(stage.includes('项目')) priorities.push('项目问题优先确认是否选择了根目录，不要选 src、dist 或单个文件。');
+      if(/permission|权限|denied/i.test(kw)) priorities.push('权限问题优先换到英文路径的用户目录，再检查系统隐私授权。');
+      if(/npm|node/i.test(kw)) priorities.push('依赖问题优先确认 Node.js LTS 版本，再重新 npm install。');
+      const prompt = `我的系统是${sys}，现在卡在【${stage}】，看到的关键词是【${kw}】。Git 状态：${git}，Node.js 状态：${node}。请按“最可能原因、如何验证、修复步骤、可复制命令、修复后验收”的格式带我一步步解决，不要一次给太多方案。`;
+      $('#diagResult').innerHTML = `
+        <h3>你的优先排查顺序</h3>
+        <ol>${(priorities.length?priorities:['先不要重装所有东西。请复制完整报错，确认系统、路径、Git、Node.js 与项目根目录。']).map(x=>`<li>${x}</li>`).join('')}</ol>
+        <p><strong>下一步动作：</strong>先做第 1 条排查；如果失败，把完整报错复制到报错库搜索。</p>
+        <div class="codebar"><pre>${escapeHtml(prompt)}</pre><button class="copy-btn" data-copy="${escapeAttr(prompt)}">复制给 Codex</button></div>
+      `;
+    }
+
+    function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+    function escapeAttr(s){return escapeHtml(s).replace(/\n/g,'&#10;');}
+
+    document.addEventListener('click',e=>{
+      const copy = e.target.closest('[data-copy]');
+      if(copy){
+        copyText(copy.getAttribute('data-copy'));
+        copy.classList.add('done');
+        setTimeout(()=>copy.classList.remove('done'), 1000);
+      }
+      const fav = e.target.closest('[data-fav]');
+      if(fav){
+        const idx = Number(fav.dataset.fav);
+        let favs = JSON.parse(localStorage.getItem('codex_favs') || '[]');
+        favs = favs.includes(idx) ? favs.filter(x=>x!==idx) : [...favs, idx];
+        localStorage.setItem('codex_favs', JSON.stringify(favs));
+        renderErrors();
+        toast(favs.includes(idx) ? '已收藏' : '已取消收藏');
+      }
+    });
+
+    $('#themeBtn').addEventListener('click',()=>{
+      const html = document.documentElement;
+      const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = next;
+      $('#themeBtn').textContent = next === 'dark' ? '浅色' : '深色';
+      localStorage.setItem('codex_theme', next);
+    });
+    $('#exportChecklist').addEventListener('click',()=>{
+      const checked = $$('#checklist input').map((i,idx)=>`${i.checked?'[x]':'[ ]'} ${checklist[idx]}`).join('\n');
+      const blob = new Blob([`Codex 安装配置保姆包｜环境自测结果\n\n${checked}\n\n建议：${$('#checkAdvice').textContent}`],{type:'text/plain;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'codex-install-checklist.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    $('#errorSearch').addEventListener('input',renderErrors);
+    $('#systemFilter').addEventListener('change',renderErrors);
+    $('#favFilter').addEventListener('change',renderErrors);
+    $('#runDiag').addEventListener('click',runDiagnose);
+
+    const savedTheme = localStorage.getItem('codex_theme');
+    if(savedTheme){document.documentElement.dataset.theme=savedTheme;$('#themeBtn').textContent=savedTheme==='dark'?'浅色':'深色';}
+    renderRoutes();
+    renderChecklist();
+    renderFlows();
+    renderPrompts();
+    renderErrors();
+    renderAcceptance();
+    renderResources();
+    renderGlossary();
+  </script>
+</body>
+</html>
